@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.3.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <link rel="preload" href="/css/first.css" as="style">
+  
+
+  <!-- 页面元数据 -->
+  
+  <title>Kubernetes-持续集成 - Random Forest</title>
+  
+    <meta name="keywords" content="Kubernetes">
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/favicon/favicon.ico">
+  
+
+  <!-- import link -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/first.css">
+
+  
+
+  
+  <link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+  
+
+  <script id="loadcss"></script>
+  <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?1f97789cb9f2111751866ebe06a8710c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+  
+<script>
+if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode))
+    document.write(
+	'<style>'+
+		'html{'+
+			'overflow-x: hidden !important;'+
+			'overflow-y: hidden !important;'+
+		'}'+
+		'.kill-ie{'+
+			'text-align:center;'+
+			'height: 100%;'+
+			'margin-top: 15%;'+
+			'margin-bottom: 5500%;'+
+		'}'+
+	'</style>'+
+    '<div class="kill-ie">'+
+        '<h1><b>抱歉，您的浏览器无法访问本站</b></h1>'+
+        '<h3>微软已经于2016年终止了对 Internet Explorer (IE) 10 及更早版本的支持，<br/>'+
+        '继续使用存在极大的安全隐患，请使用当代主流的浏览器进行访问。</h3><br/>'+
+        '<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/WindowsForBusiness/End-of-IE-support"><strong>了解详情 ></strong></a>'+
+    '</div>');
+</script>
+
+
+<noscript>
+	<style>
+		html{
+			overflow-x: hidden !important;
+			overflow-y: hidden !important;
+		}
+		.kill-noscript{
+			text-align:center;
+			height: 100%;
+			margin-top: 15%;
+			margin-bottom: 5500%;
+		}
+	</style>
+    <div class="kill-noscript">
+        <h1><b>抱歉，您的浏览器无法访问本站</b></h1>
+        <h3>本页面需要浏览器支持（启用）JavaScript</h3><br/>
+        <a target="_blank" rel="noopener" href="https://www.baidu.com/s?wd=启用JavaScript"><strong>了解详情 ></strong></a>
+    </div>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+  <body>
+    
+
+<header id="l_header" class="l_header auto floatable blur " style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/friends/
+                  
+                  
+                  
+                    id="friends"
+                  >
+                  <i class='fas fa-link fa-fw'></i>友链
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" 
+                  
+                  
+                  >
+                  <i class='fa fa-cog fa-fw'></i>更多
+                </a>
+                
+                  <ul class="list-v">
+                    
+                      
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fas fa-moon fa-fw'></i>夜间模式
+                </a>
+              <li>
+            
+          
+                    
+                      
+            
+              
+                <li>
+                  <a class="menuitem flat-box">
+                    <i class='fas fa-compact-disc fa-fw music'></i>神奇音乐
+                  </a>
+                  <ul class="list-v">
+                    <li>
+                      <div class="aplayer-container">
+                        
+
+  
+    <meting-js
+      theme='#1BCDFC'
+      autoplay='false'
+      volume='0.7'
+      loop='all'
+      order='list'
+      fixed='true'
+      list-max-height='320px'
+      server='netease'
+      type='playlist'
+      id='3165088236'
+      list-folded='true'>
+    </meting-js>
+  
+
+
+                      </div>
+                    </li>
+                  </ul>
+                <li>
+              
+            
+          
+                    
+                      
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/image/
+                  
+                  
+                  
+                    id="image"
+                  >
+                  <i class='fa fa-camera fa-fw'></i>时光相册
+                </a>
+                
+              </li>
+            
+          
+                    
+                  </ul>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+	<div id="tp-weather-widget"></div>
+<script>
+  (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+  window.SeniverseWeatherWidget('show', {
+    flavor: "slim",
+    location: "WX4DWN2X06KM",
+    geolocation: true,
+    language: "auto",
+    unit: "c",
+    theme: "auto",
+    token: "d82d90fa-4dc9-4ab2-ba17-d71c1110f5fa",
+    hover: "disabled",
+    container: "tp-weather-widget"
+  })
+</script>	
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/friends/
+                  
+                  
+                  
+                    id="friends"
+                  >
+                  <i class='fas fa-link fa-fw'></i>友链
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" 
+                  
+                  
+                  >
+                  <i class='fa fa-cog fa-fw'></i>更多
+                </a>
+                
+                  <ul class="list-v">
+                    
+                      
+            
+              <li>
+                <a class="menuitem flat-box header toggle-mode-btn">
+                  <i class='fas fa-moon fa-fw'></i>夜间模式
+                </a>
+              <li>
+            
+          
+                    
+                      
+            
+              
+            
+          
+                    
+                      
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/image/
+                  
+                  
+                  
+                    id="image"
+                  >
+                  <i class='fa fa-camera fa-fw'></i>时光相册
+                </a>
+                
+              </li>
+            
+          
+                    
+                  </ul>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+    <div id="l_body">
+      <div id="l_cover">
+  
+    
+        <div id="half" class='cover-wrapper post search' style="display: ;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/04/13/63661cbcedde9ad63832301b22609314.png"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Random Forest</p>
+    
+    
+      <p class="subtitle"> A dream of breeze and green leaves everywhere in Nanke🌿</p>
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="搜索点儿什么吧~" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a target="_blank" rel="noopener" href="https://volantis.js.org/v4/theme-settings/"
+              
+              
+              id="https:volantisjsorgv4theme-settings">
+              <p>文档</p>
+            </a>
+          
+            <a target="_blank" rel="noopener" href="https://github.com/volantis-x/hexo-theme-volantis/"
+              
+              
+              id="https:githubcomvolantis-xhexo-theme-volantis">
+              <p>源码</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+      <div id="safearea">
+        <div class="body-wrapper" id="pjax-container">
+          
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Kubernetes-持续集成
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class='new-meta-item category'>
+    <a class='notlink'>
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+    </a>
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年10月26日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="Kubernetes-持续集成"><a href="#Kubernetes-持续集成" class="headerlink" title="Kubernetes-持续集成"></a>Kubernetes-持续集成</h2><p>// 文章资源来源于<a target="_blank" rel="noopener" href="https://www.yuque.com/duduniao/k8s/gp8n04">https://www.yuque.com/duduniao/k8s/gp8n04</a> 基于此文章进行改进 有问题可以关注原作者.</p>
+<h2 id="必要的前提条件"><a href="#必要的前提条件" class="headerlink" title="必要的前提条件"></a>必要的前提条件</h2><ol>
+<li>你需要使用<code>kubelet get node -o wide</code> 查看你的集群状态信息</li>
+</ol>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# kubectl get node -o wide</span><br><span class="line">NAME                STATUS   ROLES    AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION          CONTAINER-RUNTIME</span><br><span class="line">kubernetes-master   Ready    master   37m     v1.16.2   192.168.1.177   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br><span class="line">kubernetes-node1    Ready    &lt;none&gt;   5m11s   v1.16.2   192.168.1.178   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br><span class="line">kubernetes-node2    Ready    &lt;none&gt;   5m1s    v1.16.2   192.168.1.179   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>如上状态STATUS=Ready即可进行下面的操作</strong></p>
+<ol start="2">
+<li>已经安装好Harbor并且和仓库已经集成Auth认证</li>
+<li>主机之间全部相互免密完成</li>
+<li>gitee的公钥要和你的jenkins主机私钥匹配</li>
+</ol>
+<h2 id="１-１构建工具集"><a href="#１-１构建工具集" class="headerlink" title="１.１构建工具集"></a>１.１构建工具集</h2><ul>
+<li>Jenkins</li>
+</ul>
+<p>Jenkins是一款由Java编写的开源的持续集成工具。它运行在Servlet容器中（例如Apache Tomcat）。它支持软件配置管理（SCM）工具（包括AccuRev SCM、CVS、Subversion、Git、Perforce、Clearcase和RTC），可以执行基于Apache Ant和Apache Maven的项目，以及任意的Shell脚本和Windows批处理命令。Jenkins是一个有状态的应用，如果托管在K8S中，只运行一个副本，且需要持久化存储。</p>
+<p>官网：<a target="_blank" rel="noopener" href="https://jenkins.io/zh/">https://jenkins.io/zh/</a></p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://jenkins.io/zh/download/">https://jenkins.io/zh/download/</a></p>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://jenkins.io/zh/doc/">https://jenkins.io/zh/doc/</a></p>
+<ul>
+<li>Maven</li>
+</ul>
+<p>Apache Maven，是一个软件（特别是Java软件）项目管理及自动构建工具，由Apache软件基金会所提供。Maven也可被用于构建和管理各种项目，例如C#，Ruby，Scala和其他语言编写的项目。Maven曾是Jakarta项目的子项目，现为由Apache软件基金会主持的独立Apache项目。在Devops流水线中，参与Java程序构建工具常用Maven。</p>
+<p>官网：<a target="_blank" rel="noopener" href="https://maven.apache.org/index.html">https://maven.apache.org/index.html</a></p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/maven/">https://archive.apache.org/dist/maven/</a></p>
+<p>基础教程：<a target="_blank" rel="noopener" href="https://www.runoob.com/maven/maven-setup.html">https://www.runoob.com/maven/maven-setup.html</a></p>
+<h4 id="1-2实验拓扑图"><a href="#1-2实验拓扑图" class="headerlink" title="1.2实验拓扑图"></a>1.2实验拓扑图</h4><p><img src="https://cdn.nlark.com/yuque/0/2020/png/378176/1580805984643-ca1b0818-658a-41d3-baf3-61c166672e8e.png#vwid=967&amp;vhei=381" class="lazyload placeholder" data-srcset="https://cdn.nlark.com/yuque/0/2020/png/378176/1580805984643-ca1b0818-658a-41d3-baf3-61c166672e8e.png#vwid=967&amp;vhei=381" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg"></p>
+<p><strong>基本流程</strong></p>
+<ol>
+<li>Jenkins从Github或者Gitlab拉取代码</li>
+<li>Jenkins构建完成以后自动上传到Harbor仓库</li>
+<li>Services服务集群自动拉取更新镜像</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>IP</th>
+<th>Services</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kubernetes-master</td>
+<td>192.168.1.177</td>
+<td>Harbor</td>
+</tr>
+<tr>
+<td>Kubernetes-node1</td>
+<td>192.168.1.178</td>
+<td>Gitee(公网)+NFS</td>
+</tr>
+<tr>
+<td>Kubernetes-node2</td>
+<td>192.168.1.179</td>
+<td>Jenkins+Maven</td>
+</tr>
+</tbody></table>
+<ul>
+<li>须知</li>
+<li><a target="_blank" rel="noopener" href="https://cr.console.aliyun.com/">https://cr.console.aliyun.com/</a>     // 使用阿里云当镜像仓库也可以</li>
+<li>Harbor需要搭建在master上</li>
+</ul>
+<h4 id="1-3-Jenkins持续交付到k8s上"><a href="#1-3-Jenkins持续交付到k8s上" class="headerlink" title="1.3 Jenkins持续交付到k8s上"></a>1.3 Jenkins持续交付到k8s上</h4><hr>
+<p><strong>一般都是公司自己使用持续集成,所以需要搭建私有仓库</strong></p>
+<p><strong>此处没有根据大佬吧jenkins交付到k8s上,做一个简单的持续集成jenkins</strong></p>
+<p><strong>再说一次,这个地方超级超级的难,因为要用docker来跑到k8s中</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# docker pull jenkins/jenkins:2.190.3 //我这直接用hub.docker.com的</span><br><span class="line">[root@kubernetes-master jenkins]# docker tag jenkins/jenkins:2.190.3 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 //打标签 这个192.168.1.177是你harbor仓库</span><br><span class="line">[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 // 推送到harbor仓库</span><br><span class="line">[root@kubernetes-master jenkins]# mkdir /usr/local/jenkins/</span><br><span class="line">[root@kubernetes-master jenkins]# cd /usr/local/jenkins</span><br><span class="line">[root@kubernetes-master jenkins]# cp /root/.ssh/id_rsa ./</span><br><span class="line">[root@kubernetes-master jenkins]# cp /root/.docker/config.json</span><br><span class="line">[root@kubernetes-master jenkins]# curl -fsSL get.docker.com -o get-docker.sh</span><br><span class="line">[root@kubernetes-master jenkins]# chmod +x get-docker.sh</span><br><span class="line">[root@kubernetes-master jenkins]# vim dockerfile</span><br><span class="line">[root@kubernetes-master jenkins]# docker build . -t 192.168.1.177:8077/infra/jenkins:v2.190.3 //编辑完dockerfile在构建</span><br><span class="line">[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/infra/jenkins:v2.190.3 </span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="１-４制作Dockerfile文件"><a href="#１-４制作Dockerfile文件" class="headerlink" title="１.４制作Dockerfile文件"></a>１.４<strong>制作Dockerfile文件</strong></h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM 192.168.1.177:8077/ci_cd/jenkins:v2.190.3</span><br><span class="line">USER root</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp;\</span><br><span class="line">    echo 'Asia/Shanghai' &gt; /etc/timezone</span><br><span class="line">ADD id_rsa /root/.ssh/id_rsa</span><br><span class="line">ADD config.json /root/.docker/config.json</span><br><span class="line">ADD get-docker.sh /get-docker.sh</span><br><span class="line">RUN echo "	StrictHostKeyChecking no" &gt;&gt; /etc/ssh/ssh_config &amp;&amp;\</span><br><span class="line">    /get-docker.sh</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个dockerfile主要有以下几个用途</p>
+<ul>
+<li>设置容器用户为root</li>
+<li>设置容器内的时区为UTC</li>
+<li>将ssh私钥加入(使用gitee拉取代码需要匹配,你的公钥需要加入到gitee中)</li>
+<li>加入了登录自建harbor仓库的auth认证文件</li>
+<li>修改了ssh客户端的配置 连接一台新主机需要输入yes或no 设置no以后直接取消</li>
+<li>安装一个docker客户端  只是在jenkins里面做一个客户端</li>
+</ul>
+<blockquote>
+<p>注意 由于jenkins属于私有镜像 为了安全你们要去你们的harbor上新建一个私有仓库</p>
+</blockquote>
+<p><img src="https://blog.micomint.top/usr/uploads/2020/09/697847120.png#vwid=1332&amp;vhei=672" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/697847120.png#vwid=1332&amp;vhei=672" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="image-20200923160430545"></p>
+<h4 id="1-5-检测SSh免密是否成功"><a href="#1-5-检测SSh免密是否成功" class="headerlink" title="1.5 检测SSh免密是否成功"></a>1.5 检测SSh免密是否成功</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">You've successfully authenticated 成功 [root@kubernetes-master jenkins]# docker run --rm 192.168.1.177:8077/infra/jenkins:v2.190.3 ssh -i /root/.ssh/id_rsa -T git@gitee.com //如果出现以下提示则成功 </span><br><span class="line">Warning: Permanently added 'gitee.com,212.64.62.183' (ECDSA) to the list of known hosts.</span><br><span class="line">Hi Brave (DeployKey)! You've successfully authenticated, but GITEE.COM does not provide shell access.</span><br><span class="line">Note: Perhaps the current use is DeployKey.</span><br><span class="line">Note: DeployKey only supports pull/fetch operations</span><br><span class="line">// 出现 You've successfully authenticated 成功  如图所示</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="https://blog.micomint.top/usr/uploads/2020/09/1186952419.png#vwid=1127&amp;vhei=146" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/1186952419.png#vwid=1127&amp;vhei=146" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="image-20200923200017524"></p>
+<h2 id="2-1Kubernetes创建jenkins命名空间"><a href="#2-1Kubernetes创建jenkins命名空间" class="headerlink" title="2.1Kubernetes创建jenkins命名空间"></a>2.1Kubernetes创建jenkins命名空间</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl create ns infra</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注意 此时我们需要把jenkins放入到infra这个单独的名称空间 由于jenkins放入到名称空间以后 从harbor上拉取镜像已经不仅仅需要的是docker login了。</p>
+<p>你还需要做以下操作</p>
+</blockquote>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl create secret docker-registry harbor --docker-server=192.178.1.177:8077 --docker-username=admin --docker-password=Harbor12345 -n infra //需要为jenkins创建一个secret资源,类型为docker-registry 名字为harbor</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-2-Kubernetes中Pod共享数据"><a href="#2-2-Kubernetes中Pod共享数据" class="headerlink" title="2.2 Kubernetes中Pod共享数据"></a>2.2 Kubernetes中Pod共享数据</h4><p><strong>这里准备一个共享存储,采用NFS</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# yum -y install nfs-utils</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>192.168.1.178作为共享存储的客户端,这里是重点一定是在node1节点上进行</li>
+<li>所有的Pod数据都需要挂载到共享存储</li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-node1 ~]# vim /etc/exports</span><br><span class="line">/data/nfs-volume 192.168.1.0/24(rw,ro_root_squash) //共享给主机的IP段</span><br><span class="line">[root@kubernetes-node1 ~]# mkdir /data/nfs-volume</span><br><span class="line">[root@kubernetes-node1 ~]# mkdir /data/nfs-volume/jenkins_home</span><br><span class="line">[root@kubernetes-node1 ~]# systemctl start nfs</span><br><span class="line">[root@kubernetes-node1 ~]# systemctl enable nfs</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>准备jenkins资源配置清单</strong></p>
+<ul>
+<li>deployment </li>
+<li>services</li>
+<li>ingress</li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# vim jenkins_dep.yaml</span><br><span class="line">[root@kubernetes-master jenkins]# vim service.yaml</span><br><span class="line">[root@kubernetes-master jenkins]# vim ingress.yaml</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p><strong>deployment原版</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="string">//注意</span> <span class="string">有些kubernetes版本会报错误</span> <span class="string">使用extensions/v1beta1即可</span> </span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line">  <span class="attr">labels:</span> </span><br><span class="line">    <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span> </span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span> </span><br><span class="line">        <span class="attr">app:</span> <span class="string">jenkins</span> </span><br><span class="line">        <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">nfs:</span> </span><br><span class="line">          <span class="attr">server:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.178</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/data/nfs-volume/jenkins_home</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">        <span class="attr">hostPath:</span> </span><br><span class="line">          <span class="attr">path:</span> <span class="string">/run/docker.sock</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">''</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">image:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.177</span><span class="string">:8077/infra/jenkins:v2.190.3</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8080</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">JAVA_OPTS</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">-Xmx512m</span> <span class="string">-Xms512m</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/var/jenkins_home</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/run/docker.sock</span></span><br><span class="line">      <span class="attr">imagePullSecrets:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">harbor</span></span><br><span class="line">      <span class="attr">securityContext:</span> </span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span> </span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">7</span></span><br><span class="line">  <span class="attr">progressDeadlineSeconds:</span> <span class="number">600</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>deployment注释版</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Kind:</span> <span class="string">Deployment</span> <span class="string">//Pod控制器类型</span> <span class="string">还有一种是daemonset,daemonset每个节点上都会运行一个</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="string">//注意</span> <span class="string">有些kubernetes版本会报错误</span> <span class="string">使用extensions/v1beta1即可</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespaces:</span> <span class="string">infra</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span> <span class="string">//根据replicas启动</span> <span class="string">启动1个</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">template:</span>   <span class="string">//Pod的模板</span></span><br><span class="line">    <span class="attr">metadate:</span></span><br><span class="line">      <span class="attr">lables:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">nfs:</span></span><br><span class="line">          <span class="attr">server:</span> <span class="string">kubernetes-node1</span>  <span class="string">//这个地方写NFS服务的主机名或者IP</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/data/nfs-volume/jenkins_home</span> <span class="string">//挂载目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span> </span><br><span class="line">        <span class="attr">hostpath:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/run/docker.sock</span> <span class="string">//挂载到/run/docker.sock</span> <span class="string">可以与docker服务段进行通信</span></span><br><span class="line">        <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">image:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.177</span><span class="string">:8077/infra/jenkins:v2.190.3</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="string">//分为</span> <span class="string">always</span> <span class="string">never</span> <span class="string">ifnotpresent</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8080</span> <span class="string">//往外映射端口为8080</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">JAVA_OPTS</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">-Xmx512m</span> <span class="string">-Xms512m</span> <span class="string">//赋予jenkins内存</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/var/jenkins_home</span> <span class="string">//挂载内部jenkins的/var/jenkins_home到nfs的/data</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/run/docker.sock</span> <span class="string">//</span> <span class="string">挂载内部/run/docker.sock</span> <span class="string">到docker存储</span></span><br><span class="line">      <span class="attr">imagePullSecrets:</span> <span class="string">//镜像Secrets的资源类型</span> <span class="string">只要是私有仓库都需要create</span> <span class="string">secrets</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">harbor</span>    <span class="string">//名字为harbor</span> </span><br><span class="line">      <span class="attr">securityContext:</span> </span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span>  <span class="string">//默认采用滚动升级</span></span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">7</span> <span class="string">//留几分老数据</span></span><br><span class="line">  <span class="attr">progressDeadlineSeconds:</span> <span class="number">600</span> <span class="string">//到底容器运行多少时间依旧不正常</span> <span class="string">60s为1分钟</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>service</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span> </span><br><span class="line">  <span class="attr">ports:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">8080</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30111</span> </span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">jenkins</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>service注释版</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span> <span class="string">//设置端口暴露节点的方式</span> <span class="string">NodePort和ingress</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span>    <span class="string">//集群网络的80端口</span> </span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">8080</span> <span class="string">//容器内部运行端口</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30111</span> <span class="string">//供给外部映射访问的端口为Cluster</span> <span class="string">IP+30111</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">jenkins</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>ingress</strong> 其实你也可以不用ingress 如果你没有dns解析的话</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">jenkins.k.com</span></span><br><span class="line">    <span class="attr">http:</span></span><br><span class="line">      <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">backend:</span> </span><br><span class="line">          <span class="attr">serviceName:</span> <span class="string">jenkins</span></span><br><span class="line">          <span class="attr">servicePort:</span> <span class="number">80</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>ingress注释版</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">jenkins.k.com</span> <span class="string">//注意这个地方不能用IP</span> <span class="string">需要做DNS解析</span></span><br><span class="line">    <span class="attr">http:</span></span><br><span class="line">      <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">backend:</span> </span><br><span class="line">          <span class="attr">serviceName:</span> <span class="string">jenkins</span></span><br><span class="line">          <span class="attr">servicePort:</span> <span class="number">80</span> <span class="string">//service的port必须要与ingress的端口匹配</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-3部署yaml文件"><a href="#2-3部署yaml文件" class="headerlink" title="2.3部署yaml文件"></a>2.3部署yaml文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f jenkins_dep.yaml	</span><br><span class="line">deployment.apps/jenkins created</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f service.yaml</span><br><span class="line">service/jenkins created</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f ingress.yaml</span><br><span class="line">ingress.extensions/jenkins created</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>查看部署的容器</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# kubectl get pods -n infra</span><br><span class="line">NAME                       READY   STATUS              RESTARTS   AGE</span><br><span class="line">jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m8s</span><br><span class="line">// 容器正在创建中</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">[root@kubernetes-master ~]# kubectl get all -n infra</span><br><span class="line">NAME                           READY   STATUS              RESTARTS   AGE</span><br><span class="line">pod/jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m50s</span><br><span class="line"></span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE</span><br><span class="line">service/jenkins   ClusterIP   10.1.35.175   &lt;none&gt;        80/TCP    3m5s</span><br><span class="line"></span><br><span class="line">NAME                      READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">deployment.apps/jenkins   0/1     1            0           4m50s</span><br><span class="line"></span><br><span class="line">NAME                                 DESIRED   CURRENT   READY   AGE</span><br><span class="line">replicaset.apps/jenkins-546fbb867c   1         1         0       4m50s</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h4 id="2-4错误排查"><a href="#2-4错误排查" class="headerlink" title="2.4错误排查"></a>2.4错误排查</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl describe  pods -n infra //可以查看Pod详细信息</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl get pods -n infra</span><br><span class="line">NAME                       READY   STATUS    RESTARTS   AGE</span><br><span class="line">jenkins-7bbd44dc8b-ngv8f   1/1     Running   0          4m17s</span><br><span class="line">// 如果是Running就是运行正常</span><br></pre></td></tr></tbody></table></figure>
+
+<ol>
+<li><p>如果遇到拉取镜像错误</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed       7m36s                   kubelet, kubernetes-node1  Failed to pull image "192.168.1.177:8077/infra/jenkins:v2.190.3": rpc error: code = Unknown desc = Error response from daemon: Get https://192.168.1.177:8077/v2/: http: server gave HTTP response to HTTPS client</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>解决方法1：cp /root/.docker/config.json到node节点上 因为harbor是通过认证密钥来获取镜像 这个错误大多数都是拉取不了镜像</p>
+<p>解决方法2：vim /etc/docker/daemon.json</p>
+<p>{ “insecure-registries”:[“192.168.1.177:8077”] } 写入到daemon.json  //设置不安全仓库</p>
+<p>systemctl daemon-reload</p>
+<p>systemctl restart docker </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="2-5配置Jenkins"><a href="#2-5配置Jenkins" class="headerlink" title="2.5配置Jenkins"></a>2.5配置Jenkins</h4><blockquote>
+<p>由于我们对外映射的端口是30111 所以直接访问</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.1.177:30111/">http://192.168.1.177:30111</a> 就可以访问到Jenkins<br><img src="https://blog.micomint.top/usr/uploads/2020/09/3838074187.png#vwid=1571&amp;vhei=889" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/3838074187.png#vwid=1571&amp;vhei=889" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="image-20200923160430545.png"></p>
+</blockquote>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2020/10/26/a20/>https://blog.micomint.top/2020/10/26/a20/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-29T13:47:18+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年3月29日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Kubernetes/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Kubernetes</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2020/10/26/a20/&title=Kubernetes-持续集成 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2020/10/26/a20/&title=Kubernetes-持续集成 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2020/10/26/a20/&title=Kubernetes-持续集成 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/10/26/a19/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Yum部署ELK</p>
+          <p class='content'>Yum部署ELK先前版本的准备看文章单机版ELK部署。
+1.0先安装Elasticsearch
+PS: 必须有java的环境,怎么配置看我博客文章搜java即可。
+
+优先环境准备，禁用防火墙和s...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/10/26/a21/'>
+          <p class='title'>Zabbix企业级分布式监控部署<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>Zabbix企业级分布式监控部署
+更新与2020-10-20-10.53
+
+
+
+ 本次采用Zabbix5.0LTS进行
+
+
+新数据，新架构，新服务，新监控
+
+网络监控，服务器监控，云监控，应用监...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
+</div>
+
+  </article>
+
+
+
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernetes-%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">Kubernetes-持续集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%85%E8%A6%81%E7%9A%84%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">必要的前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%EF%BC%91-%EF%BC%91%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">１.１构建工具集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2%E5%AE%9E%E9%AA%8C%E6%8B%93%E6%89%91%E5%9B%BE"><span class="toc-number">3.0.1.</span> <span class="toc-text">1.2实验拓扑图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-Jenkins%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98%E5%88%B0k8s%E4%B8%8A"><span class="toc-number">3.0.2.</span> <span class="toc-text">1.3 Jenkins持续交付到k8s上</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%91-%EF%BC%94%E5%88%B6%E4%BD%9CDockerfile%E6%96%87%E4%BB%B6"><span class="toc-number">3.0.3.</span> <span class="toc-text">１.４制作Dockerfile文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-%E6%A3%80%E6%B5%8BSSh%E5%85%8D%E5%AF%86%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F"><span class="toc-number">3.0.4.</span> <span class="toc-text">1.5 检测SSh免密是否成功</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1Kubernetes%E5%88%9B%E5%BB%BAjenkins%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">2.1Kubernetes创建jenkins命名空间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Kubernetes%E4%B8%ADPod%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE"><span class="toc-number">4.0.1.</span> <span class="toc-text">2.2 Kubernetes中Pod共享数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3%E9%83%A8%E7%BD%B2yaml%E6%96%87%E4%BB%B6"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.3部署yaml文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5"><span class="toc-number">4.0.3.</span> <span class="toc-text">2.4错误排查</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5%E9%85%8D%E7%BD%AEJenkins"><span class="toc-number">4.0.4.</span> <span class="toc-text">2.5配置Jenkins</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+		  
+		  <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="Kubernetes-持续集成";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+  // header 这里无论是否开启pjax都需要
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.remove("show");
+  
+  
+    // cover
+    var cover_wrapper=document.querySelector('.cover-wrapper');
+    
+    cover_wrapper.id="half";
+    cover_wrapper.style.display="";
+    
+  
+</script>
+
+        </div>
+        
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+  
+    <meting-js
+      theme='#1BCDFC'
+      autoplay='false'
+      volume='0.7'
+      loop='all'
+      order='list'
+      fixed='true'
+      list-max-height='320px'
+      server='netease'
+      type='playlist'
+      id='3165088236'
+      list-folded='true'>
+    </meting-js>
+  
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+          
+            
+          
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p>京ICP备20015712号-1</p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.3.1" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2019-2021 Random Forest</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+        <a id="s-top" class="fas fa-arrow-up fa-fw" href="javascript:void(0)"></a>
+      </div>
+    </div>
+    <div>
+      <script>
+/************这个文件存放不需要重载的全局变量和全局函数*********/
+window.volantis={};
+window.volantis.loadcss=document.getElementById("loadcss");
+/******************** Pjax ********************************/
+function VPjax(){
+	this.list=[] // 存放回调函数
+	this.start=()=>{
+	  for(var i=0;i<this.list.length;i++){
+		this.list[i].run();
+	  }
+	}
+	this.push=(fn,name)=>{
+		var f=new PjaxItem(fn,name);
+		this.list.push(f);
+	}
+	// 构造一个可以run的对象
+	function PjaxItem(fn,name){
+		// 函数名称
+		this.name = name || fn.name
+		// run方法
+		this.run=()=>{
+			fn()
+		}
+	}
+}
+volantis.pjax={}
+volantis.pjax.method={
+	complete: new VPjax(),
+	error: new VPjax(),
+	send: new VPjax()
+}
+volantis.pjax={
+	...volantis.pjax,
+	push: volantis.pjax.method.complete.push,
+	error: volantis.pjax.method.error.push,
+	send: volantis.pjax.method.send.push
+}
+/********************脚本懒加载函数********************************/
+// 已经加入了setTimeout
+function loadScript(src, cb) {
+	setTimeout(function() {
+		var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+		var script = document.createElement('script');
+		script.setAttribute('type','text/javascript');
+		if (cb) script.onload = cb;
+		script.setAttribute('src', src);
+		HEAD.appendChild(script);
+	});
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<script>
+  
+  loadCSS("https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css", window.volantis.loadcss);
+  
+  
+  
+  loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
+  
+  
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+  function Pjax_SCload_fancybox(){
+	if (typeof $.fancybox == "undefined") {
+	 SCload_fancybox();
+    } else {
+	 pjax_fancybox();
+    }
+  }
+  volantis.pjax.push(Pjax_SCload_fancybox)
+  volantis.pjax.send(()=>{
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+  },'fancybox')
+</script>
+
+
+<!-- internal -->
+
+
+
+
+<script>
+  function loadIssuesJS() {
+    if ($(".md").find(".issues-api").length == 0) return;
+	
+	  loadScript('/js/issues.js');
+	
+  };
+  $(function () {
+    loadIssuesJS();
+  });
+  volantis.pjax.push(()=>{
+	if (typeof IssuesAPI == "undefined") {
+	  loadIssuesJS();
+	}
+  },"IssuesJS")
+</script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+
+<script>
+  window.FPConfig = {
+	delay: 0,
+	ignoreKeywords: [],
+	maxRPS: 5,
+	hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+
+
+
+
+
+
+
+
+
+  <script>
+  let APlayerController = new Object();
+  APlayerController.id = '3165088236';  // 设定全局音乐播放ID
+  APlayerController.volume = '0.7';
+  loadCSS("https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css", window.volantis.loadcss);
+  // APlayer 需要在  MetingJS 之前加载
+  loadScript("https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js")
+  window.volantis.APlayerLoaded=0 // APlayer加载完成状态
+  var checkAPlayer = setInterval(function () {
+    if (!window.APlayer) return // APlayer加载完成？
+	  if ($("#safearea").css("display")!="block") return // 文章内容加载完成？ see: source/css/first.styl
+    clearInterval(checkAPlayer)
+	  if (!window.volantis.APlayerLoaded&&!window.MetingJSElement){ // APlayer只能加载一次
+      window.volantis.APlayerLoaded=1 // APlayer加载完成
+      loadScript("https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js") // 加载 MetingJS
+	  }
+  }, 2500) // 按照网速调节差分2.5s
+  // rightmenu see: layout/_partial/rightmenu.ejs
+
+</script>
+
+
+
+
+  
+  
+<script src="/js/valine.js"></script>
+
+
+<script>
+  function emoji(path, idx, ext) {
+    return path + "/" + path + "-" + idx + "." + ext;
+  }
+  var emojiMaps = {};
+  for (var i = 1; i <= 54; i++) {
+    emojiMaps['tieba-' + i] = emoji('tieba', i, 'png');
+  }
+  for (var i = 1; i <= 101; i++) {
+    emojiMaps['qq-' + i] = emoji('qq', i, 'gif');
+  }
+  for (var i = 1; i <= 116; i++) {
+    emojiMaps['aru-' + i] = emoji('aru', i, 'gif');
+  }
+  for (var i = 1; i <= 125; i++) {
+    emojiMaps['twemoji-' + i] = emoji('twemoji', i, 'png');
+  }
+  for (var i = 1; i <= 4; i++) {
+    emojiMaps['weibo-' + i] = emoji('weibo', i, 'png');
+  }
+  function pjax_valine() {
+    if(!document.querySelectorAll("#valine_container")[0])return;
+    let pagePlaceholder = pdata.commentPlaceholder || "快来评论吧~";
+    let path = pdata.commentPath;
+    if (path.length == 0) {
+      let defaultPath = '';
+      path = defaultPath || decodeURI(window.location.pathname);
+    }
+    var valine = new Valine();
+    valine.init(Object.assign({"path":null,"placeholder":"快来评论吧~","appId":"gAx5TSdRIxjuI0Q3fdsx3S6J-gzGzoHsz","appKey":"SJT3wGFsVoEEk2RkgsBhVM2b","meta":["nick","mail","link"],"requiredFields":["nick","mail"],"enableQQ":true,"recordIP":false,"avatar":"robohash","pageSize":10,"lang":"zh-cn","highlight":true,"mathJax":false}, {
+      el: '#valine_container',
+      path: path,
+      placeholder: pagePlaceholder,
+      emojiCDN: 'https://cdn.jsdelivr.net/gh/volantis-x/cdn-emoji/valine/',
+      emojiMaps: emojiMaps,
+    }))
+  }
+  $(function () {
+    pjax_valine();
+  });
+  volantis.pjax.push(pjax_valine);
+</script>
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+
+$('.input.u-search-input').one('focus',function(){
+	
+		loadScript('/js/search/hexo.js',setSearchService);
+	
+})
+
+function listenSearch(){
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+}
+function setSearchService() {
+	listenSearch();
+	
+		document.addEventListener("pjax:success", listenSearch);
+	
+}
+</script>
+
+
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+<script type="text/javascript">
+$(function () {
+  Waves.attach('.flat-btn', ['waves-button']);
+  Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+  Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+  Waves.attach('.flat-box', ['waves-block']);
+  Waves.attach('.float-box', ['waves-block', 'waves-float']);
+  Waves.attach('.waves-image');
+  Waves.init();
+});
+</script>
+
+
+
+
+
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+    localStorage.setItem(k, v);
+};
+
+const removeLS = (k) => {
+    localStorage.removeItem(k);
+};
+
+const getLS = (k) => {
+    return localStorage.getItem(k);
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+var btn=$("#wrapper .toggle-mode-btn,#rightmenu-wrapper .toggle-mode-btn");
+function bindToggleButton() {
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+volantis.pjax.push(bindToggleButton);
+volantis.pjax.send(()=>{
+	btn.unbind('click');
+},'toggle-mode-btn-unbind');
+</script>
+
+
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+ 
+	   
+	    
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+	  // 使用 volantis.pjax.send 方法传入pjax:send回调函数 参见layout/_partial/scripts/global.ejs
+	  volantis.pjax.method.send.start();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+		// 使用 volantis.pjax.push 方法传入重载函数 参见layout/_partial/scripts/global.ejs
+		volantis.pjax.method.complete.start();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+	  // 使用 volantis.pjax.error 方法传入pjax:error回调函数 参见layout/_partial/scripts/global.ejs
+	  volantis.pjax.method.error.start();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+ 
+	  
+    </div>
+  </body>
+</html>
