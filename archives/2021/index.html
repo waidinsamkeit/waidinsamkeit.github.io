@@ -59,7 +59,7 @@
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?1f97789cb9f2111751866ebe06a8710c";
+  hm.src = "https://hm.baidu.com/hm.js?33c33d60f62810a119a7bb0408483ff1";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
@@ -492,6 +492,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
         
           
+        
+          
+        
+          
             <div class='post-wrapper'>
               <div class="post post-v3 white-box reveal shadow">
   
@@ -565,13 +569,102 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         
           
         
-          
-        
-          
-        
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/05/24/a84/">
+        关于Kubernetes构建Redis集群
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        DockerFile
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546FROM centos:8# add our user and group first to make sure their IDs get assigned consistently, regardles...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-05-24</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/05/24/a84/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/05/12/a83/">
+        Spider爬取页面关键字数据信息
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        
+简单的Spider获取关键字数据
+学习用
+
+
+
+12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-05-12</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/05/12/a83/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -948,115 +1041,6 @@ Kubernetes 中的卷有明确的寿命 ——...
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/12/a75/">
-        SSH漏洞修复-升级openssh
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        修复解决漏洞
-解决OPenssh7.x以前的绝大多数问题
-OpenSSH 命令注入漏洞(CVE-2020-15778)
-OpenSSH 用户枚举漏洞(CVE-2018-15919)
-OpenSSH 安全漏洞(CVE-2017-15906)
-升级能解决绝大多数的问题
-
-
-
-安装依赖环境1yum -y install rpm-build gcc gcc-c++ glibc glibc-devel...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-12</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/12/a75/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/04/a73/">
-        Kubernetes之持久化存储数据(二)
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        持久化存储-Pv与PVC
-PV：持久化存储,对存储资源进行抽象,对外提供可以调用的地方(可以理解成生产者)
-PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者)
-
-实现流程应用部署—-&gt;定义PVC(绑定PV)—-&gt;定义PV(服务器IP或者路径)
-
-根据容量和读写模式进行匹配
-
-部署PV与PVC12345678910111213vim pv.yamlapiVersion:...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-04</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/04/a73/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1158,7 +1142,7 @@ PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
     </div>
   </section>
 

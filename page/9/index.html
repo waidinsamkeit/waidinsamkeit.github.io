@@ -61,7 +61,7 @@
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?1f97789cb9f2111751866ebe06a8710c";
+  hm.src = "https://hm.baidu.com/hm.js?33c33d60f62810a119a7bb0408483ff1";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
@@ -493,6 +493,129 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2020/10/26/a7/">
+        MySQL常用存储引擎之MyISAM
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        MySQL常用存储引擎之MyISAMMySQL5.5版本之前的默认存储引擎就是MyISAM
+
+系统表
+临时表(查询优化器建立的临时表)
+
+MyISAM存储引擎表由MYD和MYI组成
+
+MyISAM的特性
+并发性与锁级别
+
+
+ 对于读写混合的并发性不会太好
+
+
+表损坏修复
+
+
+通过 check table tablename 进行检查
+通过 repair table tablename 进行恢...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-10-26</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/10/26/a7/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2020/10/26/a8/">
+        MySQL常用存储引擎之InnoDB
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        MySQL常用存储引擎之InnoDBMySQL5.5机及以后版本的默认存储引擎
+
+支持事物的ACID特性
+Innodb使用表空间存储 
+innodb_file_per_table (如果此参数为ON)
+则会创建一个独立的表空间:tablename.ibd
+系统表空间:ibdataX(如果参数为OFF) X表示一个数字
+
+
+
+
+
+演示参数ON
+1234567891011mysql&gt; sh...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-10-26</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/10/26/a8/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/10/26/a9/">
         MySQL服务器参数
       </a>
@@ -635,7 +758,7 @@ MySQL最多只能关联61个表
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
     </div>
   </section>
 
