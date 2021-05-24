@@ -22,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>kubernetes-Nacos - Random Forest</title>
+  <title>编写你的第一个Django应用 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -485,7 +487,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
     
       <h1 class="title">
-        kubernetes-Nacos
+        编写你的第一个Django应用
       </h1>
       <div class='new-meta-box'>
         
@@ -509,7 +511,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
             <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年3月29日</p>
+    <p>发布于：2021年5月12日</p>
   </a>
 </div>
 
@@ -527,73 +529,67 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h2 id="简单安装使用"><a href="#简单安装使用" class="headerlink" title="简单安装使用"></a>简单安装使用</h2><blockquote>
-<p> 最新版本应该是1.4.1</p>
-</blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/nacos-group/nacos-k8s.git</span><br></pre></td></tr></tbody></table></figure>
+  <h2 id="编写你的第一个-Django-应用"><a href="#编写你的第一个-Django-应用" class="headerlink" title="编写你的第一个 Django 应用"></a>编写你的第一个 Django 应用</h2><p>让我们通过示例来学习。</p>
+<p>通过这个教程，我们将带着你创建一个基本的投票应用程序。</p>
+<p>它将由两部分组成：</p>
+<ul>
+<li>一个让人们查看和投票的公共站点。</li>
+<li>一个让你能添加、修改和删除投票的管理站点。</li>
+</ul>
+<p>我们假定你已经阅读了 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/intro/install/">安装 Django</a>。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m django --version</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果这行命令输出了一个版本号，证明你已经安装了此版本的 Django；如果你得到的是一个“No module named django”的错误提示，则表明你还未安装。</p>
+<p>这个教程是为了 Django 3.1 写的，它支持 Python 3.6 和后续版本。如果 Django 的版本不匹配，你可以通过页面右下角的版本切换器切换到对应你版本的教程，或更新至最新版本。如果你正在使用一个较老版本的 Python，在  <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/faq/install/#faq-python-version-support">我应该使用哪个版本的 Python 来配合 Django?</a> 查找一个合适的 Django 版本。</p>
+<p>你可以查看文档 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/install/">如何安装 Django</a> 来获得关于移除旧版本，安装新版本的流程和建议。</p>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>如果这是你第一次使用 Django 的话，你需要一些初始化设置。也就是说，你需要用一些自动生成的代码配置一个 Django <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/glossary/#term-project">project</a> —— 即一个  Django 项目实例需要的设置项集合，包括数据库配置、Django 配置和应用程序配置。</p>
+<p>打开命令行，<code>cd</code> 到一个你想放置你代码的目录，然后运行以下命令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject django-admin</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">django-admin/</span><br><span class="line">    manage.py</span><br><span class="line">    dijango-admin/</span><br><span class="line">        __init__.py</span><br><span class="line">        settings.py</span><br><span class="line">        urls.py</span><br><span class="line">        asgi.py</span><br><span class="line">        wsgi.py</span><br></pre></td></tr></tbody></table></figure>
 
 <ul>
-<li>简单使用</li>
+<li>最外层的 <code>mysite/</code> 根目录只是你项目的容器， 根目录名称对 Django 没有影响，你可以将它重命名为任何你喜欢的名称。</li>
+<li><code>manage.py</code>: 一个让你用各种方式管理 Django 项目的命令行工具。你可以阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/django-admin/">django-admin 和 manage.py</a> 获取所有 <code>manage.py</code> 的细节。</li>
+<li>里面一层的 <code>mysite/</code>  目录包含你的项目，它是一个纯 Python 包。它的名字就是当你引用它内部任何东西时需要用到的 Python 包名。 (比如 <code>mysite.urls</code>).</li>
+<li><code>mysite/__init__.py</code>：一个空文件，告诉 Python 这个目录应该被认为是一个 Python 包。如果你是 Python 初学者，阅读官方文档中的 <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html#tut-packages">更多关于包的知识</a>。</li>
+<li><code>mysite/settings.py</code>：Django 项目的配置文件。如果你想知道这个文件是如何工作的，请查看 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/settings/">Django 配置</a> 了解细节。</li>
+<li><code>mysite/urls.py</code>：Django 项目的 URL 声明，就像你网站的“目录”。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/http/urls/">URL调度器</a> 文档来获取更多关于 URL 的内容。</li>
+<li><code>mysite/asgi.py</code>：作为你的项目的运行在 ASGI 兼容的 Web 服务器上的入口。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/howto/deployment/asgi/">如何使用 ASGI 来部署</a> 了解更多细节。</li>
+<li><code>mysite/wsgi.py</code>：作为你的项目的运行在 WSGI 兼容的Web服务器上的入口。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/howto/deployment/wsgi/">如何使用 WSGI 进行部署</a> 了解更多细节。</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd nacos-k8s</span><br><span class="line">chmod +x quick-startup.sh</span><br><span class="line">./quick-startup.sh</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="用于开发的简易服务器"><a href="#用于开发的简易服务器" class="headerlink" title="用于开发的简易服务器"></a>用于开发的简易服务器</h2><p>让我们来确认一下你的 Django 项目是否真的创建成功了。如果你的当前目录不是外层的 <code>mysite</code> 目录的话，请切换到此目录，然后运行下面的命令：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
 
-<div class="note danger"><p>如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!</p></div>
+<h2 id="创建投票应用"><a href="#创建投票应用" class="headerlink" title="创建投票应用"></a>创建投票应用</h2><p>你的应用可以存放在任何 <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html#tut-searchpath">Python 路径</a> 中定义的路径。在这个教程中，我们将在你的 <code>manage.py</code> 同级目录下创建投票应用。这样它就可以作为顶级模块导入，而不是 <code>django-admin</code> 的子模块。</p>
+<p>请确定你现在处于 <code>manage.py</code> 所在的目录下，然后运行这行命令来创建一个应用：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py startapp polls</span><br><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li>演示使用</li>
-<li><strong>服务注册</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT 'http://cluster-ip:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080'</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>服务发现</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://cluster-ip:8848/nacos/v1/ns/instance/list?serviceName=nacos.naming.serviceName'</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>发布配置</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>获取配置</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h2><blockquote>
-<p>在高级使用中,Nacos在K8S拥有自动扩容缩容和数据持久特性,请注意如果需要使用这部分功能请使用PVC持久卷,Nacos的自动扩容缩容需要依赖持久卷,以及数据持久化也是一样,本例中使用的是NFS来使用PVC.</p>
-</blockquote>
-<h3 id="部署NFS"><a href="#部署NFS" class="headerlink" title="部署NFS"></a>部署NFS</h3><p>nfs-client-provisioner 可动态为kubernetes提供pv卷，是Kubernetes的简易NFS的外部provisioner，本身不提供NFS，需要现有的NFS服务器提供存储。持久卷目录的命名规则为: <code>${namespace}-${pvcName}-${pvName}</code></p>
-<p><strong>创建角色</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/nfs/rbac.yaml</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="编写第一个视图"><a href="#编写第一个视图" class="headerlink" title="编写第一个视图"></a>编写第一个视图</h2><p>让我们开始编写第一个视图吧。打开 <code>polls/views.py</code>，把下面这些 Python 代码输入进去</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">"Hello, world. You're at the polls index."</span>)</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>修改NFS的yaml</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">nacos-k8s/deploy/nfs/deployment.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">Recreate</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">serviceAccount:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">quay.io/external_storage/nfs-client-provisioner:latest</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span></span><br><span class="line">              <span class="attr">mountPath:</span> <span class="string">/persistentvolumes</span></span><br><span class="line">          <span class="attr">env:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">PROVISIONER_NAME</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">fuseim.pri/ifs</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_SERVER</span></span><br><span class="line">              <span class="attr">value:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.93</span> <span class="comment"># 修改NFS的IP为你本地的NFSIP地址</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_PATH</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">/server/nacos</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span></span><br><span class="line">          <span class="attr">nfs:</span></span><br><span class="line">            <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.93</span> <span class="comment"># 同上</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/server/nacos</span></span><br></pre></td></tr></tbody></table></figure>
+<p>这是 Django 中最简单的视图。如果想看见效果，我们需要将一个 URL 映射到它——这就是我们需要 URLconf 的原因了。</p>
+<p>为了创建 URLconf，请在 polls 目录里新建一个 <code>urls.py</code>  文件。你的应用目录现在看起来应该是这样：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    urls.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>部署NFS-client</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">kubectl</span> <span class="string">create</span> <span class="string">-f</span> <span class="string">deploy/nfs/deployment.yaml</span></span><br></pre></td></tr></tbody></table></figure>
+<p>在 <code>polls/urls.py</code> 中，输入如下代码：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">''</span>, views.index, name=<span class="string">'index'</span>),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>部署NFS StorageClass</strong></p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/nfs/class.yaml</span><br></pre></td></tr></tbody></table></figure>
+<p>下一步是要在根 URLconf 文件中指定我们创建的 <code>polls.urls</code> 模块。在 <code>mysite/urls.py</code> 文件的 <code>urlpatterns</code> 列表里插入一个 <code>include()</code>， 如下：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> include, path</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'polls/'</span>, include(<span class="string">'polls.urls'</span>)),</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>验证nfs-client-provisioner是否成功</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod -l app=nfs-client-provisioner</span><br></pre></td></tr></tbody></table></figure>
+<p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 允许引用其它 URLconfs。每当 Django 遇到 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 时，它会截断与此项匹配的 URL 的部分，并将剩余的字符串发送到 URLconf 以供进一步处理。</p>
+<p>我们设计 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 的理念是使其可以即插即用。因为投票应用有它自己的 URLconf( <code>polls/urls.py</code> )，他们能够被放在 “/polls/“ ， “/fun_polls/“ ，”/content/polls/“，或者其他任何路径下，这个应用都能够正常工作。</p>
+<p>你现在把 <code>index</code> 视图添加进了 URLconf。通过以下命令验证是否正常工作：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/mysql/mysql-nfs.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="部署Nacos"><a href="#部署Nacos" class="headerlink" title="部署Nacos"></a>部署Nacos</h3><ul>
-<li>修改 <strong>deploy/nacos/nacos-pvc-nfs.yaml</strong> </li>
-</ul>
-<blockquote>
-<p>可以自行选择更改</p>
-</blockquote>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">mysql.master.db.name:</span> <span class="string">"主库名称"</span></span><br><span class="line">  <span class="attr">mysql.master.port:</span> <span class="string">"主库端口"</span></span><br><span class="line">  <span class="attr">mysql.slave.port:</span> <span class="string">"从库端口"</span></span><br><span class="line">  <span class="attr">mysql.master.user:</span> <span class="string">"主库用户名"</span></span><br><span class="line">  <span class="attr">mysql.master.password:</span> <span class="string">"主库密码"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><strong>创建Nacos</strong></li>
-</ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f nacos-k8s/deploy/nacos/nacos-pvc-nfs.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="扩容测试"><a href="#扩容测试" class="headerlink" title="扩容测试"></a>扩容测试</h3><ul>
-<li>在扩容前，使用 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec"><code>kubectl exec</code></a>获取在pod中的Nacos集群配置文件信息</li>
-</ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in 0 1; do echo nacos-$i; kubectl exec nacos-$i cat conf/cluster.conf; done</span><br></pre></td></tr></tbody></table></figure>
-
-<p>StatefulSet控制器根据其序数索引为每个Pod提供唯一的主机名。 主机名采用 - 的形式。 因为nacos StatefulSet的副本字段设置为3，所以当前集群文件中只有三个Nacos节点地址</p>
-<ul>
-<li>使用kubectl scale 对Nacos动态扩容</li>
-</ul>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale sts nacos --replicas=5</span><br></pre></td></tr></tbody></table></figure>
-
-<div class="checkbox yellow"><input type="radio">
-            <p>注意：一台主机上调度的时候只能分配一个Nacos</p>
-            </div>
+<p>用你的浏览器访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:8000/polls/%EF%BC%8C%E4%BD%A0%E5%BA%94%E8%AF%A5%E8%83%BD%E5%A4%9F%E7%9C%8B%E8%A7%81">http://127.0.0.1:8000/polls/，你应该能够看见</a> “<em>Hello, world. You’re at the polls index.</em>“ ，这是你在 <code>index</code> 视图中定义的。</p>
+<p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.path"><code>path()</code></a> 具有四个参数，两个必须参数：<code>route</code> 和 <code>view</code>，两个可选参数：<code>kwargs</code> 和 <code>name</code>。现在，是时候来研究这些参数的含义了。</p>
+<h2 id="path-参数：-route"><a href="#path-参数：-route" class="headerlink" title="path() 参数： route"></a>path() 参数： <code>route</code></h2><p><code>route</code> 是一个匹配 URL 的准则（类似正则表达式）。当 Django 响应一个请求时，它会从 <code>urlpatterns</code> 的第一项开始，按顺序依次匹配列表中的项，直到找到匹配的项。</p>
+<p>这些准则不会匹配 GET 和 POST 参数或域名。例如，URLconf 在处理请求 <code>https://www.example.com/myapp/</code> 时，它会尝试匹配 <code>myapp/</code> 。处理请求 <code>https://www.example.com/myapp/?page=3</code> 时，也只会尝试匹配 <code>myapp/</code>。</p>
+<h2 id="path-参数：-view"><a href="#path-参数：-view" class="headerlink" title="path() 参数： view"></a>path() 参数： <code>view</code></h2><p>当 Django 找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/request-response/#django.http.HttpRequest"><code>HttpRequest</code></a> 对象作为第一个参数，被“捕获”的参数以关键字参数的形式传入。稍后，我们会给出一个例子。</p>
+<h2 id="path-参数：-kwargs"><a href="#path-参数：-kwargs" class="headerlink" title="path() 参数： kwargs"></a>path() 参数： <code>kwargs</code></h2><p>任意个关键字参数可以作为一个字典传递给目标视图函数。本教程中不会使用这一特性。</p>
+<h2 id="path-参数：-name"><a href="#path-参数：-name" class="headerlink" title="path()参数： name"></a>path()参数： <code>name</code></h2><p>为你的 URL 取名能使你在 Django 的任意地方唯一地引用它，尤其是在模板中。这个有用的特性允许你只改一个文件就能全局地修改某个 URL 模式。</p>
 
   
   
@@ -611,7 +607,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
               
             
               
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/03/29/a82/>https://blog.micomint.top/2021/03/29/a82/</a></p>
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/05/12/a79/>https://blog.micomint.top/2021/05/12/a79/</a></p>
               
             
           </blockquote>
@@ -628,10 +624,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-29T11:39:50+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T14:05:28+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年3月29日</p>
+    <p>更新于：2021年3月26日</p>
   </a>
 </div>
 
@@ -639,6 +635,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
+
 
         
       
@@ -650,7 +649,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/03/29/a82/&title=kubernetes-Nacos - Random Forest&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/05/12/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
           
           >
           
@@ -662,7 +661,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/03/29/a82/&title=kubernetes-Nacos - Random Forest&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/05/12/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
           
           >
           
@@ -674,7 +673,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/03/29/a82/&title=kubernetes-Nacos - Random Forest&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/05/12/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
           
           >
           
@@ -704,34 +703,21 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     <div class="prev-next">
       
-        <a class='prev' href='/2021/05/12/a83/'>
-          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Spider爬取页面关键字数据信息</p>
-          <p class='content'>
-简单的Spider获取关键字数据
-学习用
-
-
-
-12345678910111213141516171819202122232425262728293031323334# -*- coding:...</p>
+        <a class='prev' href='/2021/05/24/a84/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>关于Kubernetes构建Redis集群</p>
+          <p class='content'>DockerFile
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546FRO...</p>
         </a>
       
       
-        <a class='next' href='/2021/03/26/a81/'>
-          <p class='title'>kubernetes-Rbac<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>
-Kubernetes中的基于角色的访问控制
-Role ClusterRole(角色)
-主体如下
-User
-Group
-ServiceAccount
+        <a class='next' href='/2021/05/12/a80/'>
+          <p class='title'>kubernetes-PvandPvc<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>PV
+简单的叙述
 
-
-
-
-一般选择角色与主体进行绑定
-
-角色当...</p>
+后端服务为NFS-创建PV-Pod调用Pv
+是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
+PV是Volume之类的卷插件,但具有...</p>
         </a>
       
     </div>
@@ -774,7 +760,7 @@ ServiceAccount
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">简单安装使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">高级用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2NFS"><span class="toc-number">2.1.</span> <span class="toc-text">部署NFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2mysql"><span class="toc-number">2.2.</span> <span class="toc-text">部署mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2Nacos"><span class="toc-number">2.3.</span> <span class="toc-text">部署Nacos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9%E6%B5%8B%E8%AF%95"><span class="toc-number">2.4.</span> <span class="toc-text">扩容测试</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-Django-%E5%BA%94%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">编写你的第一个 Django 应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.</span> <span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">用于开发的简易服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%8A%95%E7%A5%A8%E5%BA%94%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">创建投票应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BE"><span class="toc-number">5.</span> <span class="toc-text">编写第一个视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-route"><span class="toc-number">6.</span> <span class="toc-text">path() 参数： route</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-view"><span class="toc-number">7.</span> <span class="toc-text">path() 参数： view</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-kwargs"><span class="toc-number">8.</span> <span class="toc-text">path() 参数： kwargs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-name"><span class="toc-number">9.</span> <span class="toc-text">path()参数： name</span></a></li></ol>
     </div>
   </section>
 
@@ -793,7 +779,7 @@ ServiceAccount
 <script>
   window.pdata={}
   pdata.ispage=true;
-  pdata.postTitle="kubernetes-Nacos";
+  pdata.postTitle="编写你的第一个Django应用";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

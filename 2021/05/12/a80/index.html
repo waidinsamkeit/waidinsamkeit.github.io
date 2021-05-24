@@ -22,7 +22,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>kubernetes-Rbac - Random Forest</title>
+  <title>kubernetes-PvandPvc - Random Forest</title>
   
 
   
@@ -485,7 +485,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
     
       <h1 class="title">
-        kubernetes-Rbac
+        kubernetes-PvandPvc
       </h1>
       <div class='new-meta-box'>
         
@@ -509,7 +509,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
             <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年3月26日</p>
+    <p>发布于：2021年5月12日</p>
   </a>
 </div>
 
@@ -527,40 +527,84 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <ul>
-<li>Kubernetes中的基于角色的访问控制</li>
-<li>Role ClusterRole(角色)<ul>
-<li>主体如下</li>
-<li>User</li>
-<li>Group</li>
-<li>ServiceAccount</li>
+  <h2 id="PV"><a href="#PV" class="headerlink" title="PV"></a>PV</h2><blockquote>
+<p>简单的叙述</p>
+</blockquote>
+<p>后端服务为NFS-创建PV-Pod调用Pv</p>
+<p><strong>是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。</strong></p>
+<p><strong>PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。此API对象包含存储实现的细节</strong></p>
+<p><strong>即NFS、ISCSI或特定于云供应商存储系统</strong> </p>
+<ul>
+<li>静态PV: 集群管理员创建一些PV ,他们带有可供集群用户使用的实际存储的细节。,他们存在于KubernetesAPI中</li>
+<li>动态PV：当管理员创建的静态PV都不匹配用户的persistenVolumeClaim时候,集群可能会尝试动态的为PVC创建卷。此配置基于<code>StorageClasses</code>也就是说PVC必须请求<code>StorangeClasses</code>并且管理员必须创建并且配置类才能动态创建</li>
+<li>绑定：master中的控制环路监视新的PVC,寻找匹配的PV(如果可能),并将它们绑定在一起。如果为新的PVC动态调配PV,则该环路将始终会把PV绑定到PVC,否则,用户总会得到它们所请求的存储,但是容量可能超出要求的数量。一旦PV和PVC绑定完成之后 不管他们是如何绑定的 PVC和PV是一对一的映射。</li>
+<li></li>
 </ul>
-</li>
+<h2 id="PVC"><a href="#PVC" class="headerlink" title="PVC"></a>PVC</h2><ul>
+<li>根据容量和读写模式进行匹配</li>
+</ul>
+<p>使用户存储的请求。它与Pod相似。Pod消耗节点资源,PVC消耗PV资源,Pod可以请求特定级别的CPU和内存</p>
+<p>PVC可以请求特定的大小和访问模式。</p>
+<h2 id="持久化卷声明的保护"><a href="#持久化卷声明的保护" class="headerlink" title="持久化卷声明的保护"></a>持久化卷声明的保护</h2><p>PVC保护的目的是确保Pod正在使用的PVC不会从系统中移除</p>
+<p>当启用PVC保护alpha的功能时候,如果用户删除了一个Pod正在使用的PVC,则该PVC不会被立即删除</p>
+<p>,PVC的删除将会被延迟,直到PVC不再被任何Pod使用</p>
+<h2 id="持久化卷类型"><a href="#持久化卷类型" class="headerlink" title="持久化卷类型"></a>持久化卷类型</h2><p><code>PersistentVolume</code></p>
+<ul>
+<li>GcePersistentDisk</li>
+<li>FlexVolume</li>
+<li>Cinder</li>
+<li>HostPath</li>
+</ul>
+<h2 id="PV创建"><a href="#PV创建" class="headerlink" title="PV创建"></a>PV创建</h2><p>选择NFS作为PV的底层存储</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">web-pv</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">capacity:</span></span><br><span class="line">   <span class="attr">storage:</span> <span class="string">6Gi</span></span><br><span class="line"> <span class="attr">volumeMode:</span> <span class="string">Filesystem</span></span><br><span class="line"> <span class="attr">accessModes:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">ReadWriteOnce</span> <span class="comment"># 仅读写一人</span></span><br><span class="line"> <span class="attr">persistentVolumeReclaimPolicy:</span> <span class="string">Recyle</span> <span class="comment"># 回收策略</span></span><br><span class="line"> <span class="attr">storageClassName:</span> <span class="string">slow</span> <span class="comment"># 类的名字</span></span><br><span class="line"> <span class="attr">mountOptions:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">hard</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">nfsvers=4.1</span></span><br><span class="line"> <span class="attr">nfs:</span></span><br><span class="line">   <span class="attr">path:</span> <span class="string">/tmp</span></span><br><span class="line">   <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.110</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="PV访问模式"><a href="#PV访问模式" class="headerlink" title="PV访问模式"></a>PV访问模式</h2><p><code>PersistentVolume</code>可以以资源提供者支持的任何方式挂载到主机上。如下图所示</p>
+<p>供应商具有不同的功能,每个PV的访问模式都将被设置为该卷支持的特定模式。</p>
+<blockquote>
+<p>注意：并不是所有的插件都支持多个读/写客户端</p>
+</blockquote>
+<p>例如可以指定NFS的PV只能以读的方式导出到服务器上.</p>
+<ul>
+<li>ReadWriteOnce：该卷可以被单个Pod以读/写模式挂载</li>
+<li>ReadOnlyMany：该卷可以被多个Pod以只读模式挂载</li>
+<li>ReadWriteMany：该卷可以被多个Pod以读/写模式挂载</li>
+</ul>
+<h2 id="回收策略"><a href="#回收策略" class="headerlink" title="回收策略"></a>回收策略</h2><ul>
+<li>Retain：保留–手动回收</li>
+<li>Recycle：回收–基本擦除(差不多类似于rm -rf /*) 新版本已经删除了</li>
+<li>Delete(删除)–关联的存储资产(例如AWS EBS)</li>
+</ul>
+<p>当前只有NFS和HostPath支持回收策略 AWS EBS Azure Disk支持删除</p>
+<h2 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h2><p>卷可以处于以下某种的状态</p>
+<ul>
+<li>Available：可用-一块空闲资源还没有被任何声明绑定.</li>
+<li>Bound：已绑定-卷已经声明绑定</li>
+<li>Released：已释放-声明被删除,但是资源还未被集群重新声明</li>
+<li>Failed：失败-该卷的自动回收失败</li>
+</ul>
+<h2 id="PVC创建"><a href="#PVC创建" class="headerlink" title="PVC创建"></a>PVC创建</h2><blockquote>
+<p>安装NFS的我就不写了</p>
+</blockquote>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先部署PV</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-pvalksjdf2</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">1Gi</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">"nfs"</span></span><br><span class="line">  <span class="attr">nfs:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data</span></span><br><span class="line">    <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.110</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>创建服务并且使用Pvc</strong></p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-dep</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span> </span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">        <span class="attr">persistentVolumeClaim:</span></span><br><span class="line">          <span class="attr">claimName:</span> <span class="string">my-pvc</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">"nfs"</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">requests:</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">1Gi</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="什么是StorageClass"><a href="#什么是StorageClass" class="headerlink" title="什么是StorageClass"></a>什么是StorageClass</h2><p>面介绍的PV和PVC模式是需要运维人员先创建好PV，然后开发人员定义好PVC进行一对一的Bond，但是如果PVC请求成千上万，那么就需要创建成千上万的PV，对于运维人员来说维护成本很高，Kubernetes提供一种自动创建PV的机制，叫StorageClass，它的作用就是创建PV的模板。</p>
+<p>具体来说，StorageClass会定义一下两部分：</p>
+<ol>
+<li>PV的属性 ，比如存储的大小、类型等；</li>
+<li>创建这种PV需要使用到的存储插件，比如Ceph等；</li>
+</ol>
+<p>有了这两部分信息，Kubernetes就能够根据用户提交的PVC，找到对应的StorageClass，然后Kubernetes就会调用 StorageClass声明的存储插件，创建出需要的PV。</p>
+<p>这里我们以NFS为例，要使用NFS，我们就需要一个nfs-client的自动装载程序，我们称之为Provisioner，这个程序会使用我们已经配置好的NFS服务器自动创建持久卷，也就是自动帮我们创建PV。<br>说明：</p>
+<ul>
+<li>自动创建的PV会以${namespace}-${pvcName}-${pvName}的目录格式放到NFS服务器上；</li>
+<li>如果这个PV被回收，则会以archieved-${namespace}-${pvcName}-${pvName}这样的格式存放到NFS服务器上；</li>
 </ul>
 <blockquote>
-<p>一般选择角色与主体进行绑定</p>
+<p>StorageClass 后期更新</p>
 </blockquote>
-<h2 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h2><p>当角色可以做什么事情的时候,主体就可以做什么操作</p>
-<ul>
-<li>Role：特定的命名空间的访问权限</li>
-<li>Cluster Role: 所有命名空间的访问权限</li>
-</ul>
-<h2 id="角色绑定"><a href="#角色绑定" class="headerlink" title="角色绑定"></a>角色绑定</h2><ul>
-<li>roleBinding: 角色绑定到主体</li>
-<li>ClusterRoleBinding: 集群角色绑定到主体</li>
-</ul>
-<h2 id="主体"><a href="#主体" class="headerlink" title="主体"></a>主体</h2><ul>
-<li>user：用户</li>
-<li>group：用户组</li>
-<li>ServiceAccount：服务账户(一般用于Pod访问)</li>
-</ul>
-<h1 id="Rbac"><a href="#Rbac" class="headerlink" title="Rbac"></a>Rbac</h1><h2 id="创建命名空间"><a href="#创建命名空间" class="headerlink" title="创建命名空间"></a>创建命名空间</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create ns roletest</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="在新的空间中创建Pod"><a href="#在新的空间中创建Pod" class="headerlink" title="在新的空间中创建Pod"></a>在新的空间中创建Pod</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-dep</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建一个角色"><a href="#创建一个角色" class="headerlink" title="创建一个角色"></a>创建一个角色</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Pod-role</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">""</span>] </span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">"pods"</span>] <span class="comment"># 只对pods有权限</span></span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">"get"</span>,<span class="string">"watch"</span>,<span class="string">"list"</span>] <span class="comment"># 只拥有get watch list权限</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="绑定一个用户"><a href="#绑定一个用户" class="headerlink" title="绑定一个用户"></a>绑定一个用户</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">read-pods</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">alex</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Pod-role</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></tbody></table></figure>
 
   
   
@@ -578,7 +622,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
               
             
               
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/03/26/a81/>https://blog.micomint.top/2021/03/26/a81/</a></p>
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/05/12/a80/>https://blog.micomint.top/2021/05/12/a80/</a></p>
               
             
           </blockquote>
@@ -595,7 +639,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T16:22:09+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T15:24:36+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年3月26日</p>
@@ -617,7 +661,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/03/26/a81/&title=kubernetes-Rbac - Random Forest&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/05/12/a80/&title=kubernetes-PvandPvc - Random Forest&summary="
           
           >
           
@@ -629,7 +673,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/03/26/a81/&title=kubernetes-Rbac - Random Forest&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/05/12/a80/&title=kubernetes-PvandPvc - Random Forest&summary="
           
           >
           
@@ -641,7 +685,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/03/26/a81/&title=kubernetes-Rbac - Random Forest&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/05/12/a80/&title=kubernetes-PvandPvc - Random Forest&summary="
           
           >
           
@@ -671,28 +715,33 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     <div class="prev-next">
       
-        <a class='prev' href='/2021/03/29/a82/'>
-          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>kubernetes-Nacos</p>
-          <p class='content'>简单安装使用
- 最新版本应该是1.4.1
+        <a class='prev' href='/2021/05/12/a79/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>编写你的第一个Django应用</p>
+          <p class='content'>编写你的第一个 Django 应用让我们通过示例来学习。
+通过这个教程，我们将带着你创建一个基本的投票应用程序。
+它将由两部分组成：
 
-1git clone https://github.com/nacos-group/nacos-k8s.git
-
-
-简单使用
-
-123cd nacos...</p>
+一个让人们查看和投票的公共站点。
+一个让你能添加、修改和删...</p>
         </a>
       
       
-        <a class='next' href='/2021/03/26/a80/'>
-          <p class='title'>kubernetes-PvandPvc<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>PV
-简单的叙述
+        <a class='next' href='/2021/05/12/a81/'>
+          <p class='title'>kubernetes-Rbac<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>
+Kubernetes中的基于角色的访问控制
+Role ClusterRole(角色)
+主体如下
+User
+Group
+ServiceAccount
 
-后端服务为NFS-创建PV-Pod调用Pv
-是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
-PV是Volume之类的卷插件,但具有...</p>
+
+
+
+一般选择角色与主体进行绑定
+
+角色当...</p>
         </a>
       
     </div>
@@ -735,7 +784,7 @@ PV是Volume之类的卷插件,但具有...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%92%E8%89%B2"><span class="toc-number">1.</span> <span class="toc-text">角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E7%BB%91%E5%AE%9A"><span class="toc-number">2.</span> <span class="toc-text">角色绑定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E4%BD%93"><span class="toc-number">3.</span> <span class="toc-text">主体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">创建命名空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%96%B0%E7%9A%84%E7%A9%BA%E9%97%B4%E4%B8%AD%E5%88%9B%E5%BB%BAPod"><span class="toc-number">5.</span> <span class="toc-text">在新的空间中创建Pod</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%A7%92%E8%89%B2"><span class="toc-number">6.</span> <span class="toc-text">创建一个角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E4%B8%80%E4%B8%AA%E7%94%A8%E6%88%B7"><span class="toc-number">7.</span> <span class="toc-text">绑定一个用户</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PV"><span class="toc-number">1.</span> <span class="toc-text">PV</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PVC"><span class="toc-number">2.</span> <span class="toc-text">PVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E5%8D%B7%E5%A3%B0%E6%98%8E%E7%9A%84%E4%BF%9D%E6%8A%A4"><span class="toc-number">3.</span> <span class="toc-text">持久化卷声明的保护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E5%8D%B7%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">持久化卷类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PV%E5%88%9B%E5%BB%BA"><span class="toc-number">5.</span> <span class="toc-text">PV创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PV%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F"><span class="toc-number">6.</span> <span class="toc-text">PV访问模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">回收策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81"><span class="toc-number">8.</span> <span class="toc-text">状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PVC%E5%88%9B%E5%BB%BA"><span class="toc-number">9.</span> <span class="toc-text">PVC创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFStorageClass"><span class="toc-number">10.</span> <span class="toc-text">什么是StorageClass</span></a></li></ol>
     </div>
   </section>
 
@@ -754,7 +803,7 @@ PV是Volume之类的卷插件,但具有...</p>
 <script>
   window.pdata={}
   pdata.ispage=true;
-  pdata.postTitle="kubernetes-Rbac";
+  pdata.postTitle="kubernetes-PvandPvc";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

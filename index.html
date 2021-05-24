@@ -515,7 +515,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
     <div class='headimg-div'>
-      <a class='headimg-a' href="/2021/03/26/Glole/">
+      <a class='headimg-a' href="/2021/05/12/Glole/">
         <img class='headimg' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg'/>
       </a>
     </div>
@@ -523,7 +523,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/26/Glole/">
+      <a href="/2021/05/12/Glole/">
         本站公告
       </a>
     </h2>
@@ -554,12 +554,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-26</time>
+        <time>2021-05-12</time>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/03/26/Glole/'>
+          <a class='readmore' href='/2021/05/12/Glole/'>
             阅读全文
           </a>
         </div>
@@ -842,21 +842,23 @@ Pyth...
   
     
     <h2 class="article-title" >
-      <a href="/2021/05/12/a83/">
-        Spider爬取页面关键字数据信息
+      <a href="/2021/05/12/a79/">
+        编写你的第一个Django应用
       </a>
     </h2>
   
   <div class='md'>
     
       
-        
-简单的Spider获取关键字数据
-学习用
+        编写你的第一个 Django 应用让我们通过示例来学习。
+通过这个教程，我们将带着你创建一个基本的投票应用程序。
+它将由两部分组成：
 
+一个让人们查看和投票的公共站点。
+一个让你能添加、修改和删除投票的管理站点。
 
-
-12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
+我们假定你已经阅读了 安装 Django。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令
+1python3 -m django --version...
       
     
   </div>
@@ -869,7 +871,7 @@ Pyth...
       </div>
       
         <div>
-          <a class='readmore' href='/2021/05/12/a83/'>
+          <a class='readmore' href='/2021/05/12/a79/'>
             阅读全文
           </a>
         </div>
@@ -891,29 +893,23 @@ Pyth...
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/29/a82/">
-        kubernetes-Nacos
+      <a href="/2021/05/12/a80/">
+        kubernetes-PvandPvc
       </a>
     </h2>
   
   <div class='md'>
     
       
-        简单安装使用
- 最新版本应该是1.4.1
+        PV
+简单的叙述
 
-1git clone https://github.com/nacos-group/nacos-k8s.git
+后端服务为NFS-创建PV-Pod调用Pv
+是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
+PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。此API对象包含存储实现的细节
+即NFS、ISCSI或特定于云供应商存储系统 
 
-
-简单使用
-
-123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
-
-如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
-
-
-演示使用
-...
+静态PV: 集群管理员创建一些PV ,他们带有可供集群用户使用的实际存储的细节。,他...
       
     
   </div>
@@ -921,12 +917,12 @@ Pyth...
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-29</time>
+        <time>2021-05-12</time>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/03/29/a82/'>
+          <a class='readmore' href='/2021/05/12/a80/'>
             阅读全文
           </a>
         </div>
@@ -948,7 +944,7 @@ Pyth...
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/26/a81/">
+      <a href="/2021/05/12/a81/">
         kubernetes-Rbac
       </a>
     </h2>
@@ -984,12 +980,12 @@ Clus...
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-26</time>
+        <time>2021-05-12</time>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/03/26/a81/'>
+          <a class='readmore' href='/2021/05/12/a81/'>
             阅读全文
           </a>
         </div>
@@ -1011,23 +1007,29 @@ Clus...
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/26/a80/">
-        kubernetes-PvandPvc
+      <a href="/2021/05/12/a82/">
+        kubernetes-Nacos
       </a>
     </h2>
   
   <div class='md'>
     
       
-        PV
-简单的叙述
+        简单安装使用
+ 最新版本应该是1.4.1
 
-后端服务为NFS-创建PV-Pod调用Pv
-是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
-PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。此API对象包含存储实现的细节
-即NFS、ISCSI或特定于云供应商存储系统 
+1git clone https://github.com/nacos-group/nacos-k8s.git
 
-静态PV: 集群管理员创建一些PV ,他们带有可供集群用户使用的实际存储的细节。,他...
+
+简单使用
+
+123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
+
+如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
+
+
+演示使用
+...
       
     
   </div>
@@ -1035,12 +1037,12 @@ PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-26</time>
+        <time>2021-05-12</time>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/03/26/a80/'>
+          <a class='readmore' href='/2021/05/12/a82/'>
             阅读全文
           </a>
         </div>
@@ -1062,23 +1064,21 @@ PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/26/a79/">
-        编写你的第一个Django应用
+      <a href="/2021/05/12/a83/">
+        Spider爬取页面关键字数据信息
       </a>
     </h2>
   
   <div class='md'>
     
       
-        编写你的第一个 Django 应用让我们通过示例来学习。
-通过这个教程，我们将带着你创建一个基本的投票应用程序。
-它将由两部分组成：
+        
+简单的Spider获取关键字数据
+学习用
 
-一个让人们查看和投票的公共站点。
-一个让你能添加、修改和删除投票的管理站点。
 
-我们假定你已经阅读了 安装 Django。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令
-1python3 -m django --version...
+
+12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
       
     
   </div>
@@ -1086,12 +1086,12 @@ PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-26</time>
+        <time>2021-05-12</time>
         
       </div>
       
         <div>
-          <a class='readmore' href='/2021/03/26/a79/'>
+          <a class='readmore' href='/2021/05/12/a83/'>
             阅读全文
           </a>
         </div>

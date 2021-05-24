@@ -22,9 +22,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>编写你的第一个Django应用 - Random Forest</title>
-  
-    <meta name="keywords" content="Python">
+  <title>本站公告 - Random Forest</title>
   
 
   
@@ -482,12 +480,38 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   
+    <div class='headimg-div'>
+      <a class='headimg-a'>
+        <img class='headimg' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg'/>
+      </a>
+    </div>
+  
   <div class="article-meta" id="top">
     
+      
+
+  
+    <meting-js
+      mini='true'
+      volume='0.7'
+      loop='all'
+      order='list'
+      server='netease'
+      type='song'
+      id='16846091'>
+    </meting-js>
+  
+
+
+    
+    
+      <a title='本站公告' href='/2021/05/12/Glole/'>
+        <img class='thumbnail' src='https://img.vim-cn.com/17/0c7b02722686d1527a1df807dae0794d995860.png'>
+      </a>
     
     
       <h1 class="title">
-        编写你的第一个Django应用
+        本站公告
       </h1>
       <div class='new-meta-box'>
         
@@ -511,7 +535,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
             <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年3月26日</p>
+    <p>发布于：2021年5月12日</p>
   </a>
 </div>
 
@@ -529,67 +553,27 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h2 id="编写你的第一个-Django-应用"><a href="#编写你的第一个-Django-应用" class="headerlink" title="编写你的第一个 Django 应用"></a>编写你的第一个 Django 应用</h2><p>让我们通过示例来学习。</p>
-<p>通过这个教程，我们将带着你创建一个基本的投票应用程序。</p>
-<p>它将由两部分组成：</p>
+  <h2 id="关于本站说明"><a href="#关于本站说明" class="headerlink" title="关于本站说明"></a>关于本站说明</h2><p><span class="github-emoji"><span>🐷</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f437.png?v8" class="lazyload placeholder" data-srcset="https://github.githubassets.com/images/icons/emoji/unicode/1f437.png?v8" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🌔</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f314.png?v8" class="lazyload placeholder" data-srcset="https://github.githubassets.com/images/icons/emoji/unicode/1f314.png?v8" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
 <ul>
-<li>一个让人们查看和投票的公共站点。</li>
-<li>一个让你能添加、修改和删除投票的管理站点。</li>
+<li><p>没啥可说明的…一个日常分享运维日常的博客</p>
+</li>
+<li><p>希望得到大家的喜欢,不定时会分享自己觉得非常<span class="github-emoji"><span>🤙</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f919.png?v8" class="lazyload placeholder" data-srcset="https://github.githubassets.com/images/icons/emoji/unicode/1f919.png?v8" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>的项目</p>
+<h2 id="2020-12-8更新"><a href="#2020-12-8更新" class="headerlink" title="2020-12-8更新"></a>2020-12-8更新</h2></li>
+<li><p>投稿邮箱：<a href="mailto:beilanzhisen@163.com">beilanzhisen@163.com</a></p>
+</li>
+<li><p>站长联系：3441789878</p>
+</li>
+<li><p>新年愿望：祝大家在新的一年里越来越好</p>
+</li>
+<li><p>最后感谢各位一年多以来的阅读陪伴<span class="github-emoji"><span>🌃</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f303.png?v8" class="lazyload placeholder" data-srcset="https://github.githubassets.com/images/icons/emoji/unicode/1f303.png?v8" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+</li>
 </ul>
-<p>我们假定你已经阅读了 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/intro/install/">安装 Django</a>。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m django --version</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="最近更新"><a href="#最近更新" class="headerlink" title="最近更新"></a>最近更新</h2><p>最近不会更新太多的运维相关的知识了,博主这几天要备考了<br>一些文章都是自动提交生成的…..</p>
+<div class="timeline"><p class="p h2">Itchat开发进度</p>
+<div class="timenode"><div class="meta"><p></p><p>2019-02-19</p>
+<p></p></div><div class="body"><p>1.由于精力原因不在继续二次开发itchat相关内容<br>2.感谢一路走来的陪伴,让他继续留在开源的舞台</p></div></div></div>
+<h2 id="最新friam"><a href="#最新friam" class="headerlink" title="最新friam"></a>最新friam</h2><div class="video-wrap"><div class="frame-wrap" id="iphone11" part="top"><video poster="https://7.dusays.com/2020/09/28/baa33914a34ec.jpg" playsinline="" muted="" loop="" autoplay="" preload="metadata"><source src="https://7.dusays.com/2020/09/28/39db723f1e200.mp4" type="video/mp4"></video><div class="frame"></div></div></div>
 
-<p>如果这行命令输出了一个版本号，证明你已经安装了此版本的 Django；如果你得到的是一个“No module named django”的错误提示，则表明你还未安装。</p>
-<p>这个教程是为了 Django 3.1 写的，它支持 Python 3.6 和后续版本。如果 Django 的版本不匹配，你可以通过页面右下角的版本切换器切换到对应你版本的教程，或更新至最新版本。如果你正在使用一个较老版本的 Python，在  <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/faq/install/#faq-python-version-support">我应该使用哪个版本的 Python 来配合 Django?</a> 查找一个合适的 Django 版本。</p>
-<p>你可以查看文档 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/install/">如何安装 Django</a> 来获得关于移除旧版本，安装新版本的流程和建议。</p>
-<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>如果这是你第一次使用 Django 的话，你需要一些初始化设置。也就是说，你需要用一些自动生成的代码配置一个 Django <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/glossary/#term-project">project</a> —— 即一个  Django 项目实例需要的设置项集合，包括数据库配置、Django 配置和应用程序配置。</p>
-<p>打开命令行，<code>cd</code> 到一个你想放置你代码的目录，然后运行以下命令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject django-admin</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">django-admin/</span><br><span class="line">    manage.py</span><br><span class="line">    dijango-admin/</span><br><span class="line">        __init__.py</span><br><span class="line">        settings.py</span><br><span class="line">        urls.py</span><br><span class="line">        asgi.py</span><br><span class="line">        wsgi.py</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>最外层的 <code>mysite/</code> 根目录只是你项目的容器， 根目录名称对 Django 没有影响，你可以将它重命名为任何你喜欢的名称。</li>
-<li><code>manage.py</code>: 一个让你用各种方式管理 Django 项目的命令行工具。你可以阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/django-admin/">django-admin 和 manage.py</a> 获取所有 <code>manage.py</code> 的细节。</li>
-<li>里面一层的 <code>mysite/</code>  目录包含你的项目，它是一个纯 Python 包。它的名字就是当你引用它内部任何东西时需要用到的 Python 包名。 (比如 <code>mysite.urls</code>).</li>
-<li><code>mysite/__init__.py</code>：一个空文件，告诉 Python 这个目录应该被认为是一个 Python 包。如果你是 Python 初学者，阅读官方文档中的 <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html#tut-packages">更多关于包的知识</a>。</li>
-<li><code>mysite/settings.py</code>：Django 项目的配置文件。如果你想知道这个文件是如何工作的，请查看 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/settings/">Django 配置</a> 了解细节。</li>
-<li><code>mysite/urls.py</code>：Django 项目的 URL 声明，就像你网站的“目录”。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/http/urls/">URL调度器</a> 文档来获取更多关于 URL 的内容。</li>
-<li><code>mysite/asgi.py</code>：作为你的项目的运行在 ASGI 兼容的 Web 服务器上的入口。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/howto/deployment/asgi/">如何使用 ASGI 来部署</a> 了解更多细节。</li>
-<li><code>mysite/wsgi.py</code>：作为你的项目的运行在 WSGI 兼容的Web服务器上的入口。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/howto/deployment/wsgi/">如何使用 WSGI 进行部署</a> 了解更多细节。</li>
-</ul>
-<h2 id="用于开发的简易服务器"><a href="#用于开发的简易服务器" class="headerlink" title="用于开发的简易服务器"></a>用于开发的简易服务器</h2><p>让我们来确认一下你的 Django 项目是否真的创建成功了。如果你的当前目录不是外层的 <code>mysite</code> 目录的话，请切换到此目录，然后运行下面的命令：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建投票应用"><a href="#创建投票应用" class="headerlink" title="创建投票应用"></a>创建投票应用</h2><p>你的应用可以存放在任何 <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html#tut-searchpath">Python 路径</a> 中定义的路径。在这个教程中，我们将在你的 <code>manage.py</code> 同级目录下创建投票应用。这样它就可以作为顶级模块导入，而不是 <code>django-admin</code> 的子模块。</p>
-<p>请确定你现在处于 <code>manage.py</code> 所在的目录下，然后运行这行命令来创建一个应用：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py startapp polls</span><br><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="编写第一个视图"><a href="#编写第一个视图" class="headerlink" title="编写第一个视图"></a>编写第一个视图</h2><p>让我们开始编写第一个视图吧。打开 <code>polls/views.py</code>，把下面这些 Python 代码输入进去</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">"Hello, world. You're at the polls index."</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这是 Django 中最简单的视图。如果想看见效果，我们需要将一个 URL 映射到它——这就是我们需要 URLconf 的原因了。</p>
-<p>为了创建 URLconf，请在 polls 目录里新建一个 <code>urls.py</code>  文件。你的应用目录现在看起来应该是这样：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    urls.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
-
-<p>在 <code>polls/urls.py</code> 中，输入如下代码：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">''</span>, views.index, name=<span class="string">'index'</span>),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<p>下一步是要在根 URLconf 文件中指定我们创建的 <code>polls.urls</code> 模块。在 <code>mysite/urls.py</code> 文件的 <code>urlpatterns</code> 列表里插入一个 <code>include()</code>， 如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> include, path</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'polls/'</span>, include(<span class="string">'polls.urls'</span>)),</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
-
-<p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 允许引用其它 URLconfs。每当 Django 遇到 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 时，它会截断与此项匹配的 URL 的部分，并将剩余的字符串发送到 URLconf 以供进一步处理。</p>
-<p>我们设计 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 的理念是使其可以即插即用。因为投票应用有它自己的 URLconf( <code>polls/urls.py</code> )，他们能够被放在 “/polls/“ ， “/fun_polls/“ ，”/content/polls/“，或者其他任何路径下，这个应用都能够正常工作。</p>
-<p>你现在把 <code>index</code> 视图添加进了 URLconf。通过以下命令验证是否正常工作：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
-
-<p>用你的浏览器访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:8000/polls/%EF%BC%8C%E4%BD%A0%E5%BA%94%E8%AF%A5%E8%83%BD%E5%A4%9F%E7%9C%8B%E8%A7%81">http://127.0.0.1:8000/polls/，你应该能够看见</a> “<em>Hello, world. You’re at the polls index.</em>“ ，这是你在 <code>index</code> 视图中定义的。</p>
-<p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.path"><code>path()</code></a> 具有四个参数，两个必须参数：<code>route</code> 和 <code>view</code>，两个可选参数：<code>kwargs</code> 和 <code>name</code>。现在，是时候来研究这些参数的含义了。</p>
-<h2 id="path-参数：-route"><a href="#path-参数：-route" class="headerlink" title="path() 参数： route"></a>path() 参数： <code>route</code></h2><p><code>route</code> 是一个匹配 URL 的准则（类似正则表达式）。当 Django 响应一个请求时，它会从 <code>urlpatterns</code> 的第一项开始，按顺序依次匹配列表中的项，直到找到匹配的项。</p>
-<p>这些准则不会匹配 GET 和 POST 参数或域名。例如，URLconf 在处理请求 <code>https://www.example.com/myapp/</code> 时，它会尝试匹配 <code>myapp/</code> 。处理请求 <code>https://www.example.com/myapp/?page=3</code> 时，也只会尝试匹配 <code>myapp/</code>。</p>
-<h2 id="path-参数：-view"><a href="#path-参数：-view" class="headerlink" title="path() 参数： view"></a>path() 参数： <code>view</code></h2><p>当 Django 找到了一个匹配的准则，就会调用这个特定的视图函数，并传入一个 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/request-response/#django.http.HttpRequest"><code>HttpRequest</code></a> 对象作为第一个参数，被“捕获”的参数以关键字参数的形式传入。稍后，我们会给出一个例子。</p>
-<h2 id="path-参数：-kwargs"><a href="#path-参数：-kwargs" class="headerlink" title="path() 参数： kwargs"></a>path() 参数： <code>kwargs</code></h2><p>任意个关键字参数可以作为一个字典传递给目标视图函数。本教程中不会使用这一特性。</p>
-<h2 id="path-参数：-name"><a href="#path-参数：-name" class="headerlink" title="path()参数： name"></a>path()参数： <code>name</code></h2><p>为你的 URL 取名能使你在 Django 的任意地方唯一地引用它，尤其是在模板中。这个有用的特性允许你只改一个文件就能全局地修改某个 URL 模式。</p>
 
   
   
@@ -607,7 +591,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
               
             
               
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/03/26/a79/>https://blog.micomint.top/2021/03/26/a79/</a></p>
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/05/12/Glole/>https://blog.micomint.top/2021/05/12/Glole/</a></p>
               
             
           </blockquote>
@@ -624,7 +608,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T14:05:28+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T13:47:24+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年3月26日</p>
@@ -635,9 +619,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         
           
-  
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
-
 
         
       
@@ -649,7 +630,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/03/26/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/05/12/Glole/&title=本站公告 - Random Forest&pics=https://img.vim-cn.com/17/0c7b02722686d1527a1df807dae0794d995860.png&summary="
           
           >
           
@@ -661,7 +642,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/03/26/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/05/12/Glole/&title=本站公告 - Random Forest&pics=https://img.vim-cn.com/17/0c7b02722686d1527a1df807dae0794d995860.png&summary="
           
           >
           
@@ -673,7 +654,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/03/26/a79/&title=编写你的第一个Django应用 - Random Forest&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/05/12/Glole/&title=本站公告 - Random Forest&pics=https://img.vim-cn.com/17/0c7b02722686d1527a1df807dae0794d995860.png&summary="
           
           >
           
@@ -703,26 +684,22 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     <div class="prev-next">
       
-        <a class='prev' href='/2021/03/26/a80/'>
-          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>kubernetes-PvandPvc</p>
-          <p class='content'>PV
-简单的叙述
+        <a class='prev' href='/2021/05/12/a83/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Spider爬取页面关键字数据信息</p>
+          <p class='content'>
+简单的Spider获取关键字数据
+学习用
 
-后端服务为NFS-创建PV-Pod调用Pv
-是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
-PV是Volume之类的卷插件,但具有...</p>
+
+
+12345678910111213141516171819202122232425262728293031323334# -*- coding:...</p>
         </a>
       
       
-        <a class='next' href='/2021/03/26/Glole/'>
-          <p class='title'>本站公告<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>关于本站说明🐷🌔
-
-没啥可说明的…一个日常分享运维日常的博客
-
-希望得到大家的喜欢,不定时会分享自己觉得非常🤙的项目
-2020-12-8更新
-投稿邮箱：beilanzhisen@163.c...</p>
+        <a class='next' href='/2021/03/25/a78/'>
+          <p class='title'>Kubernetes-volume<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>Volume详解
+容器磁盘上的文件的生命周期是短暂的，这就使得在容器中运行重要应用时会出现一些问题。首先，当容器崩溃时，kubelet 会重启它，但是容器中的文件将丢失——容器以干净的状态（镜像...</p>
         </a>
       
     </div>
@@ -765,7 +742,7 @@ PV是Volume之类的卷插件,但具有...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-Django-%E5%BA%94%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">编写你的第一个 Django 应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.</span> <span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E5%BC%80%E5%8F%91%E7%9A%84%E7%AE%80%E6%98%93%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">用于开发的简易服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%8A%95%E7%A5%A8%E5%BA%94%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">创建投票应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BE"><span class="toc-number">5.</span> <span class="toc-text">编写第一个视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-route"><span class="toc-number">6.</span> <span class="toc-text">path() 参数： route</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-view"><span class="toc-number">7.</span> <span class="toc-text">path() 参数： view</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-kwargs"><span class="toc-number">8.</span> <span class="toc-text">path() 参数： kwargs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#path-%E5%8F%82%E6%95%B0%EF%BC%9A-name"><span class="toc-number">9.</span> <span class="toc-text">path()参数： name</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99%E8%AF%B4%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">关于本站说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2020-12-8%E6%9B%B4%E6%96%B0"><span class="toc-number">2.</span> <span class="toc-text">2020-12-8更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E8%BF%91%E6%9B%B4%E6%96%B0"><span class="toc-number">3.</span> <span class="toc-text">最近更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E6%96%B0friam"><span class="toc-number">4.</span> <span class="toc-text">最新friam</span></a></li></ol>
     </div>
   </section>
 
@@ -784,7 +761,7 @@ PV是Volume之类的卷插件,但具有...</p>
 <script>
   window.pdata={}
   pdata.ispage=true;
-  pdata.postTitle="编写你的第一个Django应用";
+  pdata.postTitle="本站公告";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

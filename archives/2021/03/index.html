@@ -492,72 +492,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
         
           
-            <div class='post-wrapper'>
-              <div class="post post-v3 white-box reveal shadow">
-  
-  
-    <div class='pin'>
-      <img src='https://cdn.jsdelivr.net/gh/twitter/twemoji@13.0/assets/svg/1f4cc.svg'/>
-    </div>
-  
-  
-    <div class='headimg-div'>
-      <a class='headimg-a' href="/2021/03/26/Glole/">
-        <img class='headimg' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg'/>
-      </a>
-    </div>
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/26/Glole/">
-        本站公告
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        关于本站说明🐷🌔
-
-没啥可说明的…一个日常分享运维日常的博客
-
-希望得到大家的喜欢,不定时会分享自己觉得非常🤙的项目
-2020-12-8更新
-投稿邮箱：beilanzhisen@163.com
-
-站长联系：3441789878
-
-新年愿望：祝大家在新的一年里越来越好
-
-最后感谢各位一年多以来的阅读陪伴🌃
-
-
-最近更新最近不会更新太多的运维相关的知识了,博主这几天要备考了一些文章都是自...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-26</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/26/Glole/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-            </div>
-          
         
           
         
@@ -572,230 +506,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
     
     
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/29/a82/">
-        kubernetes-Nacos
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        简单安装使用
- 最新版本应该是1.4.1
-
-1git clone https://github.com/nacos-group/nacos-k8s.git
-
-
-简单使用
-
-123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
-
-如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
-
-
-演示使用
-...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-29</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/29/a82/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/26/a81/">
-        kubernetes-Rbac
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-Kubernetes中的基于角色的访问控制
-Role ClusterRole(角色)
-主体如下
-User
-Group
-ServiceAccount
-
-
-
-
-一般选择角色与主体进行绑定
-
-角色当角色可以做什么事情的时候,主体就可以做什么操作
-
-Role：特定的命名空间的访问权限
-Cluster Role: 所有命名空间的访问权限
-
-角色绑定
-roleBinding: 角色绑定到主体
-Clus...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-26</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/26/a81/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/26/a80/">
-        kubernetes-PvandPvc
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        PV
-简单的叙述
-
-后端服务为NFS-创建PV-Pod调用Pv
-是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
-PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。此API对象包含存储实现的细节
-即NFS、ISCSI或特定于云供应商存储系统 
-
-静态PV: 集群管理员创建一些PV ,他们带有可供集群用户使用的实际存储的细节。,他...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-26</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/26/a80/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/26/a79/">
-        编写你的第一个Django应用
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        编写你的第一个 Django 应用让我们通过示例来学习。
-通过这个教程，我们将带着你创建一个基本的投票应用程序。
-它将由两部分组成：
-
-一个让人们查看和投票的公共站点。
-一个让你能添加、修改和删除投票的管理站点。
-
-我们假定你已经阅读了 安装 Django。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令
-1python3 -m django --version...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-26</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/26/a79/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
       
         
           <div class='post-wrapper'>
@@ -1045,6 +755,280 @@ PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者
       
         <div>
           <a class='readmore' href='/2021/03/04/a73/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/03/04/a74/">
+        Kubernetes集群资源监控
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        集群资源监控
+监控指标
+节点资源利用率
+节点数
+运行Pod
+
+
+监控平台
+Pod监控
+容器指标
+应用程序
+
+
+
+监控平台搭建方案
+Prometheus+Grafana
+
+部署Prometheus1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-04</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/04/a74/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/03/04/a72/">
+        Kubernetes之持久化存储数据(一)
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        持久化存储-NFS
+Emptydir：是本地存储,Pod重启,数据不存在了
+
+Nfs：网络存储,Pod重启后,数据还是存在的
+
+
+部署NFS服务器
+可以单独设置一台服务器为NFS服务器
+
+12yum -y install nfs-utilssystemctl start nfs
+
+设置挂载目录123mkdir /data/k8s_nfs -pvim /etc/exports/data/k8s...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-04</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/04/a72/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/03/03/a71/">
+        Ansible部署k8s集群
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \         -i.bak \         /et...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-02</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Ansible/">Ansible</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/03/a71/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/03/02/a70/">
+        Kubernete-Helm包管理工具
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        核心技术-Helm
+适用场景
+
+
+比如部署微服务项目,可能有十几个服务,每个服务都有一套yaml文件,需要大量维护yaml文件,版本管理特别不方便.
+
+概念Helm是一个Kubernetes的包管理工具,就像Linux下的包管理工具,可以很方便的将之前打包好的yaml文件部署到Kubernetes上.
+Helm可以解决那些问题
+使用Helm可以把这些yaml作为一个整体管理
+实现yaml高效...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-02</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/02/a70/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/03/01/a68/">
+        Kubernete-Secret资源
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        Secret加密数据存在ETCD里面,让Pod容器以挂载Volume的方式进行访问.
+
+创建Secret
+
+12345678apiVersion: v1kind: Secretmetadata:   name: mysecrettype: Opaquedate:   username: YWRtaW4=  password: MTc2MTE0NjY1MTdBYmM=
+
+
+挂载方式(变量方式)...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-01</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/01/a68/'>
             阅读全文
           </a>
         </div>
