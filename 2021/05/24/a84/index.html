@@ -536,7 +536,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">appendonly yes</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">dir /usr/local/redis/</span><br><span class="line">port 6379</span><br><span class="line">daemonize no</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>redis-cluster.yaml</strong></p>
-<div class="note"><p>warning,请根据自己的需求更改yaml配置</p></div>
+<div class="note warning"><p>请根据自己的需求更改yaml配置</p></div>
 
 <blockquote>
 <p>提醒您: 请挂载数据卷配置,注意保存数据,防止数据丢失！！！</p>
@@ -559,7 +559,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 <p>因为<code>redis</code>不支持主机名加入集群,你可以使用<code>dig </code>命令将主机名解析成IP后,以解析结果为IP的方式加入。</p>
 <p><strong>如下所示</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@redis-0 data]# redis-cli --cluster create `dig +short redis-0.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">  `dig +short redis-1.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line"><span class="bash">&gt;  `dig +short redis-2.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line"><span class="bash">&gt;  `dig +short redis-3.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line"><span class="bash">&gt;  `dig +short redis-4.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line"><span class="bash">&gt;  `dig +short redis-5.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line"><span class="bash">&gt; --cluster-replicas 1</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@redis-0 data]<span class="comment"># redis-cli --cluster create `dig +short redis-0.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line">&gt;  `dig +short redis-1.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-2.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-3.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-4.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-5.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt; --cluster-replicas 1</span><br></pre></td></tr></tbody></table></figure>
 
   
   
@@ -594,7 +594,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-24T17:07:59+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-24T17:09:26+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月24日</p>
