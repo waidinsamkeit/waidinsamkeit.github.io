@@ -493,6 +493,55 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2020/10/26/a6/">
+        Centos系统参数优化
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        centos系统参数优化
+内核相关参数(/etc/sysctl.cof)
+
+12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目net.ipv4.tcp_max_syn_b...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-10-26</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Linux/">Linux</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/10/26/a6/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/10/26/a7/">
         MySQL常用存储引擎之MyISAM
       </a>
