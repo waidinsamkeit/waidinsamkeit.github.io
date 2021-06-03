@@ -493,6 +493,59 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2020/11/24/a29/">
+        Linux Shell 文本处理工具集锦-find篇
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件1find . ( -name "*.txt"-o -name "*.pdf") -print
+
+2 正则方式查找.txt和pdf1find . -regex  ".*(.txt|.pdf)$"
+
+3 否定参数查找所有非txt文本
+1find . ! -name "*.txt" -print
+
+4 指定搜索深度打印...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-11-24</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Linux/">Linux</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/11/24/a29/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/11/24/a30/">
         Linux Shell 文本处理工具集锦-grep+xargs
       </a>
@@ -951,57 +1004,6 @@ logstash-6.3.2
       
         <div>
           <a class='readmore' href='/2020/10/26/a15/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a16/">
-        NGinx优化-常规优化
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        NGinx优化-常规优化1.1nginx连接数优化1234events {    worker_connections  65530;  //设置nginx最大连接,最多为65535    use epoll; //采用epoll模型，作用于event的I/O异步}
-
-
-进程优化
-
-1234worker_processes 8;//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a16/'>
             阅读全文
           </a>
         </div>

@@ -5,6 +5,8 @@
   <!-- SEO相关 -->
   
     
+      <meta name="robots" content="noindex,follow">
+    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -22,9 +24,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Kubernetes-volume - Random Forest</title>
-  
-    <meta name="keywords" content="Kubernetes">
+  <title>标签：Python - Random Forest</title>
   
 
   
@@ -419,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper post search' style="display: ;">
+        <div id="half" class='cover-wrapper  search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -476,320 +476,90 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <div class="body-wrapper" id="pjax-container">
           
 
+
 <div class='l_main'>
-  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-
-
+    
+      
+  <section class="post-list">
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
   
-  <div class="article-meta" id="top">
+  
+  
+  
     
+    <h2 class="article-title" >
+      <a href="/2020/11/24/a32/">
+        Python可变数据类型与不变数据类型
+      </a>
+    </h2>
+  
+  <div class='md'>
     
-    
-      <h1 class="title">
-        Kubernetes-volume
-      </h1>
-      <div class='new-meta-box'>
-        
-          
-            
-<div class='new-meta-item author'>
-  <a class='author' href="/" rel="nofollow">
-    <img no-lazy src="">
-    <p>Rainy City</p>
-  </a>
-</div>
+      
+        Python可变数据类型与不变数据类型1 关于可变与不变数据类型的解释
+以下所有的内容都是基于内存地址进行解释的
 
-          
-        
-          
-            
-  <div class='new-meta-item category'>
-    <a class='notlink'>
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-    </a>
+不可变数据类型： 当该数据类型的对应变量的值发生了改变，那么它对应的内存地址也会发生改变，对于这种数据类型，就称不可变数据类型。
+可变数据类型  ：当该数据类型的对应变量的值发生了改变，那么它对应的内存地址不发生改变，对于这种数据类型，就称可变数据类型.
+ 总而言之：不可变数据...
+      
+    
   </div>
-
-
-          
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
         
-          
-            <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年3月25日</p>
-  </a>
+        <time>2020-11-24</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Python/">Python</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/11/24/a32/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
 </div>
 
-          
+          </div>
         
-          
-            
-
-          
+      
+    
+  </section>
+  
+    
+      <br>
+      <div class="prev-next">
+        
+          <a class="prev" rel="prev" href="/tags/Python/">
+            <section class="post prev white-box shadow" >
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
+            </section>
+          </a>
+        
+        <p class="current">
+          2 / 2
+        </p>
         
       </div>
     
-  </div>
-
-
   
-  
-  <h1 id="Volume详解"><a href="#Volume详解" class="headerlink" title="Volume详解"></a>Volume详解</h1><ol>
-<li>容器磁盘上的文件的生命周期是短暂的，这就使得在容器中运行重要应用时会出现一些问题。首先，当容器崩溃时，kubelet 会重启它，但是容器中的文件将丢失——容器以干净的状态（镜像最初的状态）重新启动。其次，在<code>Pod</code>中同时运行多个容器时，这些容器之间通常需要共享文件。Kubernetes 中的Volume抽象就很好的解决了这些问题</li>
-<li>Kubernetes 中的卷有明确的寿命 —— 与封装它的 Pod 相同。所f以，卷的生命比 Pod 中的所有容器都长，当这个容器重启时数据仍然得以保存。当然，当 Pod 不再存在时，卷也将不复存在。也许更重要的是，Kubernetes支持多种类型的卷，Pod 可以同时使用任意数量的卷</li>
-</ol>
-<h1 id="卷的类型"><a href="#卷的类型" class="headerlink" title="卷的类型"></a>卷的类型</h1><p><strong>kubernetes支持以下类型的卷</strong></p>
-<ul>
-<li>emptyDir</li>
-<li>hostPath</li>
-<li>gcePersistentDisk</li>
-<li>awsElasticBlockStore</li>
-<li>nfs</li>
-<li>iscsi</li>
-<li>fc (fibre channel)</li>
-<li>flocker</li>
-<li>glusterfs</li>
-<li>rbd</li>
-<li>cephfs</li>
-<li>gitRepo</li>
-<li>secret</li>
-<li>persistentVolumeClaim</li>
-<li>downwardAPI</li>
-<li>projected</li>
-<li>azureFileVolume</li>
-<li>azureDisk</li>
-<li>vsphereVolume</li>
-<li>Quobyte</li>
-<li>PortworxVolume</li>
-<li>ScaleIO</li>
-<li>StorageOS</li>
-<li>local</li>
-</ul>
-<h2 id="emptyDir"><a href="#emptyDir" class="headerlink" title="emptyDir"></a>emptyDir</h2><p>当Pod被分配给节点的时候,首先会创建<code>emptyDir</code>卷,并且只要该Pod在该节点上运行,该卷就会存在。</p>
-<p>正如卷的名字所述,他最初是空的.Pod中的容器可以读取和写入<code>emptyDir</code>卷中相同文件,尽管该卷</p>
-<p>可以挂在到每个容器的相同或不同路径上。当出于任何原因从节点删除Pod的时候<code>emptyDir</code>的数据将会被永久的删除</p>
-<blockquote>
-<p>注意：Kubernetes中的Volume是跟随Pod而不是跟随容器.</p>
-</blockquote>
-<p><code>emptyDir</code>的用法</p>
-<ul>
-<li>暂存空间</li>
-<li>用作长时间崩溃的检查点</li>
-<li>Web服务容器提供数据时,保存内容管理器容器提取的文件</li>
-</ul>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">test-pd</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">test-conatiners</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/cache</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">cache-volume</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cache-volume</span></span><br><span class="line">    <span class="attr">emptyDir:</span> {}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="hostPath"><a href="#hostPath" class="headerlink" title="hostPath"></a>hostPath</h2><p><code>hostPath</code>卷将主机节点的文件系统的文件或目录挂载到集群中</p>
-<p><code>hostPath</code>的用途如下</p>
-<ul>
-<li>运行需要访问Docker内部的容器：适用/var/lib/docker的hostPath</li>
-<li>在容器中运行cAdvisor：适用/dev/cgroups的hostPath</li>
-</ul>
-<p>除了所需要的<code>Path</code>属性之外,用户还可以为<code>hostPath</code>卷指定<code>type</code></p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td>空字符串(默认),用于向后兼容,这意味着挂载hostPath不会进行任何检查</td>
-</tr>
-<tr>
-<td>DirectoryOrCreate</td>
-<td>如果在给定的路径上没有任何东西存在,那么将根据需要在哪里创建一个空目录,权限设置为0755,与kubectl具有相同的组合权限</td>
-</tr>
-<tr>
-<td>Directory</td>
-<td>给定的路径必须存在目录</td>
-</tr>
-<tr>
-<td>FileOrCreate</td>
-<td>如果没有则创建,设置的权限为0644</td>
-</tr>
-<tr>
-<td>File</td>
-<td>给定的路径下必须存在文件</td>
-</tr>
-<tr>
-<td>Socket</td>
-<td>给定的路径必须存在Unix套接字</td>
-</tr>
-<tr>
-<td>CharDevice</td>
-<td>给定的路径下必须存在字符设备</td>
-</tr>
-<tr>
-<td>BlockDevice</td>
-<td>给定的路径下必须存在块儿设备</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>使用这种卷类型的请注意</p>
-</blockquote>
-<ul>
-<li>由于每个节点上的文件都不同,具有相同配置</li>
-<li>当Kubernetes按照计划添加资源或者感知调度的时候,将无法考虑hostPath的资源</li>
-<li>在底层主机创建的文件或者目录只能由Root写入,你需要在特权容器中以root身份运行进程,或者秀太主机上的文件权限</li>
-</ul>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">host-pd</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hosts-test</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/test-pd</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">test-volume</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">test-volume</span></span><br><span class="line">    <span class="attr">hostPath:</span></span><br><span class="line">      <span class="attr">path:</span> <span class="string">/data</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">Directory</span></span><br></pre></td></tr></tbody></table></figure>
 
 
-
-  
-  
     
-    <div class='footer'>
-      
-      
-      
-        <div class='copyright'>
-          <blockquote>
-            
-              
-                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
-
-              
-            
-              
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/03/25/a78/>https://blog.micomint.top/2021/03/25/a78/</a></p>
-              
-            
-          </blockquote>
-        </div>
-      
-      
-    </div>
   
-  
-    
-
-
-  <div class='article-meta' id="bottom">
-    <div class='new-meta-box'>
-      
-        
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-26T13:16:13+08:00">
-  <a class='notlink'>
-    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年3月26日</p>
-  </a>
-</div>
-
-        
-      
-        
-          
-  
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Kubernetes/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Kubernetes</p></a></div>
-
-
-        
-      
-        
-          
-  <div class="new-meta-item share -mob-share-list">
-  <div class="-mob-share-list share-body">
-    
-      
-        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/03/25/a78/&title=Kubernetes-volume - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/03/25/a78/&title=Kubernetes-volume - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/03/25/a78/&title=Kubernetes-volume - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-
-
-        
-      
-    </div>
-  </div>
-
-
-  
-  
-
-  
-    <div class="prev-next">
-      
-        <a class='prev' href='/2021/05/12/on/'>
-          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>本站公告</p>
-          <p class='content'>关于本站说明🐷🌔
-
-没啥可说明的…一个日常分享运维日常的博客
-
-希望得到大家的喜欢,不定时会分享自己觉得非常🤙的项目
-2020-12-8更新
-投稿邮箱：beilanzhisen@163.c...</p>
-        </a>
-      
-      
-        <a class='next' href='/2021/03/25/a77/'>
-          <p class='title'>Kubernetes持久化配置文件<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>configMap 描述信息描述信息ConfigMap 功能在 Kubernetes1.2 版本中引入，许多应用程序会从配置文件、命令行参数或环境变量中读取配置信息。ConfigMap API ...</p>
-        </a>
-      
-    </div>
-  
-</article>
-
-
-  
-
-  <article class="post white-box reveal shadow" id="comments">
-    <p ct><i class='fas fa-comments'></i> 评论</p>
-    
-    <div id="valine_container" class="valine_thread">
-  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
-</div>
-
-  </article>
-
-
-
-
-
-
 </div>
 <aside class='l_side'>
   
@@ -797,19 +567,243 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
     
 
+<section class="widget blogger floatable desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/'>
+          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">Random Forest</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="mailto:ailunbolinkenasi@gmail.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/volantis-x/"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="/"
+              class="social fas fa-headphones-alt flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
 
+  
 
-  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
+  
+    
+    
+  
+
+  <section class="widget tagcloud floatable desktop mobile">
     
   <header>
     
-      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
     
   </header>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#emptyDir"><span class="toc-number">1.</span> <span class="toc-text">emptyDir</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hostPath"><span class="toc-number">2.</span> <span class="toc-text">hostPath</span></a></li></ol>
+      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+<section class="widget grid floatable desktop mobile">
+  
+  <header>
+    
+      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="grid navigation fixed">
+      
+        <a class="flat-box" title="/friends" href="/friends"
+          
+          
+          id="friends">
+          
+            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
+          
+          友链申请
+        </a>
+      
+        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
+          
+            rel="external nofollow noopener noreferrer"
+          
+          
+            target="_blank"
+          
+          id="https:githubcomvolantis-xhexo-theme-volantis">
+          
+            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
+          
+          主题源码
+        </a>
+      
+        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
+          
+          
+          id="https:music163com">
+          
+            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
+          
+          听个音乐
+        </a>
+      
+        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
+          
+          
+          id="https:insmicominttop">
+          
+            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
+          
+          资讯站点
+        </a>
+      
+        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
+          
+          
+          id="https:imagemicominttop">
+          
+            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
+          
+          时光相册
+        </a>
+      
+    </div>
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget category floatable desktop">
+    
+  <header>
+    
+      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <ul class="entry navigation">
+        
+          <li><a class="flat-box"
+            title="/categories/Ansible/" href="/categories/Ansible/"
+            id="categoriesAnsible"
+            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/DevOps/" href="/categories/DevOps/"
+            id="categoriesDevOps"
+            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Docker/" href="/categories/Docker/"
+            id="categoriesDocker"
+            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
+            id="categoriesElasticsearch"
+            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Java/" href="/categories/Java/"
+            id="categoriesJava"
+            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
+            id="categoriesKubernetes"
+            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Linux/" href="/categories/Linux/"
+            id="categoriesLinux"
+            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/MYSQL/" href="/categories/MYSQL/"
+            id="categoriesMYSQL"
+            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Nacos/" href="/categories/Nacos/"
+            id="categoriesNacos"
+            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Python/" href="/categories/Python/"
+            id="categoriesPython"
+            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Redis/" href="/categories/Redis/"
+            id="categoriesRedis"
+            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
+            id="categoriesSpring-Cloud"
+            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
+            id="categoriesE998BFE9878CE4BA91"
+            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
+        
+      </ul>
     </div>
   </section>
 
@@ -820,15 +814,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </aside>
 
 
-
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=true;
-  pdata.postTitle="Kubernetes-volume";
+  pdata.ispage=false;
+  pdata.postTitle="";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
