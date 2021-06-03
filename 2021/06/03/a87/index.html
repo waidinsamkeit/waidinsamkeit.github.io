@@ -659,11 +659,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li><p>浏览器输入URL回车后</p>
 </li>
-<li><p>```html<br>&lt;a href=”地址”?参数=值&gt;</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - form表单中的`method`为GET</span><br><span class="line"></span><br><span class="line">`GET`请求方式中,如果有数据需要传递给后端服务器,通常会用查询字符串`Query String`传递[不要传递敏感数据]</span><br><span class="line"></span><br><span class="line">- URL：http://127.0.0.1/login/page1?user=value&amp;password=value</span><br><span class="line"></span><br><span class="line">### 取GET内容的值</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">request.GET['Key'] # QueryDict</span><br><span class="line">request.GET.get['Key','Value']</span><br><span class="line">request.GET.getlist('Key')</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
+<li><p><code>html   &lt;a href="地址"?参数=值&gt;</code></p>
+</li>
+<li><p>form表单中的<code>method</code>为GET<br><code>GET</code>请求方式中,如果有数据需要传递给后端服务器,通常会用查询字符串<code>Query String</code>传递[不要传递敏感数据]</p>
 </li>
 </ul>
+</li>
+<li><p>URL：<a target="_blank" rel="noopener" href="http://127.0.0.1/login/page1?user=value&amp;password=value">http://127.0.0.1/login/page1?user=value&amp;password=value</a></p>
+</li>
+</ul>
+<h3 id="取GET内容的值"><a href="#取GET内容的值" class="headerlink" title="取GET内容的值"></a>取GET内容的值</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.GET[<span class="string">'Key'</span>] <span class="comment"># QueryDict</span></span><br><span class="line">request.GET.get[<span class="string">'Key'</span>,<span class="string">'Value'</span>]</span><br><span class="line">request.GET.getlist(<span class="string">'Key'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
 <h3 id="POST处理"><a href="#POST处理" class="headerlink" title="POST处理"></a>POST处理</h3><ul>
 <li>POST请求动作,一般用与向服务器提交大量/隐私数据</li>
 <li>客户端通过表单等POST请求将数据传给服务器</li>
@@ -704,7 +710,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-03T15:58:39+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-03T16:21:53+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年6月3日</p>
@@ -834,7 +840,7 @@ Django找到ur...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-number">1.</span> <span class="toc-text">请求与响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">请求方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">Django中的请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.</span> <span class="toc-text">Django中的响应对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET%E4%B8%8EPost"><span class="toc-number">3.</span> <span class="toc-text">GET与Post</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET%E5%A4%84%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">GET处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST%E5%A4%84%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">POST处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96POST%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE"><span class="toc-number">3.3.</span> <span class="toc-text">取POST客户端数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-number">1.</span> <span class="toc-text">请求与响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">请求方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">Django中的请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.</span> <span class="toc-text">Django中的响应对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET%E4%B8%8EPost"><span class="toc-number">3.</span> <span class="toc-text">GET与Post</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET%E5%A4%84%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">GET处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96GET%E5%86%85%E5%AE%B9%E7%9A%84%E5%80%BC"><span class="toc-number">3.2.</span> <span class="toc-text">取GET内容的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">POST处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96POST%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE"><span class="toc-number">3.4.</span> <span class="toc-text">取POST客户端数据</span></a></li></ol></li></ol>
     </div>
   </section>
 
