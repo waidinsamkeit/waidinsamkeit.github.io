@@ -5,10 +5,6 @@
   <!-- SEO相关 -->
   
     
-      
-        <meta name="robots" content="noindex,follow">
-      
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -26,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>Random Forest</title>
+  <title>Django如何处理URL请求 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -421,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -479,570 +477,251 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
 
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-  <section class="post-list">
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/03/a38/">
-        Python嵌套函数与匿名函数
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python函数高级用法
-函数的嵌套调用是在”函数调用中再调用其他函数”。也就是说:函数嵌套允许在一个函数中调用另外一个函数。如下：
 
-12345678910111213name = "Forest"def change():    name = "Forest1"    def change2():        # global name  如果声明了这句，下面的name改的是最外层的全...
-      
-    
-  </div>
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django如何处理URL请求
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2020-12-03</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
         
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月3日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <blockquote>
+<p><a target="_blank" rel="noopener" href="http://127.0.0.1/apps/django/1">http://127.0.0.1/apps/django/1</a></p>
+</blockquote>
+<ol>
+<li>Django从配置文件中根据<code>ROOT_URLCONF</code>找到主路由文件,也就是我们的主目录下的<code>urls.py</code></li>
+<li>Django找到<code>urls.py</code>中的<code>urlpatterns</code>变量,该内容是一个包含多个路由的数组.</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"><span class="comment"># 项目的主路由配置-HTTP进入请求Django后,优先调用urls</span></span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">    path(<span class="string">'apps/django/'</span>,views.apps_dijango),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>依次匹配<code>urlpatternes</code>中的<code>path</code></li>
+<li>匹配成功-调用对应函数视图</li>
+<li>匹配失败-返回404</li>
+</ol>
+<h2 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h2><p>视图函数是一个用来接收浏览器请求(HttpRequest)对象并通过<code>HttpRequest</code>对象返回响应函数。此函数可以接收浏览器请求并根据业务逻辑返回相应的内容.</p>
+<p>语法</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一个参数必须为Request,其他参数可以依次向后写</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">api_tools</span>(<span class="params">request</span>):</span> </span><br><span class="line">    <span class="keyword">return</span> HttpResponse</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line">ali = {</span><br><span class="line">    path(route,views,name=<span class="literal">None</span>),</span><br><span class="line">    path(route2,views.page2)</span><br><span class="line">}</span><br><span class="line">参数;</span><br><span class="line"><span class="number">1.</span> route: 字符串类型,匹配请求路径</span><br><span class="line"><span class="number">2.</span> views: 指定路径对应视图处理函数的名称,需要与views匹配</span><br><span class="line"><span class="number">3.</span> name: 为地址起别名,在模板中地址反向解析时使用</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Path转换器"><a href="#Path转换器" class="headerlink" title="Path转换器"></a>Path转换器</h3><p>语法</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;转换器类型:自定义名&gt;</span><br><span class="line">path(<span class="string">'page/&lt;int:page&gt;'</span>,views.page)</span><br><span class="line"><span class="comment"># 以下是视图函数内容</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">request,page_num</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(page_num)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>作用：若转换器类型匹配到对应类型的数据,则将数据按照关键字传参的方式传递给视图函数。</p>
+<p><strong>转换器类型</strong></p>
+<ul>
+<li><code>str</code>：匹配除了<code>/</code>之外的非空字符串 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;<span class="built_in">str</span>:toolsname&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/coretools</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>int</code>:  匹配或任何整数,可以返回一个Int</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;<span class="built_in">int</span>:page&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/<span class="number">100</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>slug</code>： 匹配任意由ASCII字母或数字以及连字符和下划线组成的短标签</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;slug:sl&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/this-<span class="keyword">is</span>-user_list</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><code>path</code>：匹配非空字段,包括路径分隔符<code>/</code></li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;path:ph&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/a/b/c</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="re-path"><a href="#re-path" class="headerlink" title="re_path"></a>re_path</h3><p>在url的匹配过程中可以使用正则表达式进行精确匹配</p>
+<p>语法</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> re_path</span><br><span class="line"></span><br><span class="line">re_path(reg,view,name=xxx)</span><br><span class="line"><span class="comment"># 正则表达式为命名分组模式(?P&lt;name&gt;pattern)匹配提取参数后用关键字传参方式传递给视图函数</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2020/12/03/a38/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/03/djan/>https://blog.micomint.top/2021/06/03/djan/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-03T14:39:20+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月3日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/02/a37/">
-        挂载OSS到ECS服务器
-      </a>
-    </h2>
-  
-  <div class='md'>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
     
       
-        挂载 oss 到 Linux本地阿里云 OSS 是对象存储服务，价格也比较便宜，算得上是一个免费的 CDN，我们可以利用 OSSFS 这个工具，将 OSS 挂载到阿里云 ECS 服务器上，可以达到存储、备份的目的。当然，最主要的是可以减轻服务器的压力。
-
-注意阿里云 OSS 下行流量没有免费额度，都需要收费。
-本次仅针对Centos7.x
-
-
-Centos8目前不支持挂载OSS存储
-
-OSS...
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/03/djan/&title=Django如何处理URL请求 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/03/djan/&title=Django如何处理URL请求 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/03/djan/&title=Django如何处理URL请求 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
       
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-02</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/02/a37/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
 </div>
 
-          </div>
+
+
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/30/a35/">
-        多云环境下更好用的堡垒机
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        JumpServer 多云环境下更好用的堡垒机JumpServer 是全球首款开源的堡垒机，使用 GNU GPL v2.0 开源协议，是符合 4A 规范的运维安全审计系统。
-JumpServer 使用 Python / Django 为主进行开发，遵循 Web 2.0 规范，配备了业界领先的 Web Terminal 方案，交互界面美观、用户体验好。
-JumpServer 采纳分布式架构，支...
-      
-    
+    </div>
   </div>
+
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-30</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
+  
+
+  
+    <div class="prev-next">
       
-        <div>
-          <a class='readmore' href='/2020/11/30/a35/'>
-            阅读全文
-          </a>
-        </div>
       
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/27/a1/">
-        MYSQL8.0安装
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        MySQL8.0安装嘤嘤嘤….学习MySQL当然是从安装开始学起来啦！！！
-
-Ps: 如果yum什么的都不会配置…..建议从0开始学Linux
-
-１.下载安装包
-为了不让你们再去官网寻找
-我已经给你们整理出来了
-就下这个！！！
-用YUM多方便呢.
+        <a class='next' href='/2021/05/26/a85/'>
+          <p class='title'>Kubernetes-离线部署skywalking<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>
+功能：离线部署skywalking
 
 
-PS: 以下包版本只适合Redhat和Centos以及Oracle
-我觉得这样安装速度还是不错的,可以根据自己的正常网速下载
+请各位记住把所有离线包全拿到本地!!!
 
-1234wge...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-27</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/27/a1/'>
-            阅读全文
-          </a>
-        </div>
+在线部署chartmuseum直接使用最简单的 docker run 方式，使用local 本地存储方式，通过...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/27/a2/">
-        大促中的数据库性能影响----第二章
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        哪些会影响服务器性能？究竟哪些东西可以影响到我们服务器的性能呢？
-无非就是：CPU、磁盘IO、内存等等一系列硬件,我们讲讲特殊的
-在研究性能时候,先带大家来了解三个术语
-
-QPS：每秒查询率QPS是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准,简言之就是数据库每秒能查多少数据
-
-TPS: 服务器每秒处理的事务数。TPS包括一条消息入和一条消息出，加上一次用户数据库访问。（业务T...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-27</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/27/a2/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/27/a3/">
-        Kubernetes1.6.2安装
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        不是脚本 自己根据教程安装https://github.com/waidinsamkeit/Kubernetes
-
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-27</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/27/a3/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/27/a4/">
-        MySQL8.0源码安装
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-先说下源码和Yum的区别吧、
+  </article>
 
 
 
 
-Yum/源码
-优点
-缺点
-
-
-
-Yum
-安装东西，方便快捷，特别是不用考虑包依赖。
-安装过程，人为无法干预，不能按需，安装。源里面有什么就安装什么，安装的版本也比较低
-
-
-源码
-编译安装过程，可以设定参数，按照需求，进行安装，并且安装的版本，可以自己选择，灵活性比较大
-于安装包过新或者是其他问题，导致依赖的包没有，或者版本过低。这个时候就要解决包的依赖...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-27</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/27/a4/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/26/a33/">
-        Coturn穿透服务器搭建
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Coturn穿透服务器搭建这个具体干嘛的你们百度….
-1yum -y install libevent-devel openssl-devel
-
-1.1下载编译安装coturn1234git clone https://github.com/coturn/coturncd coturn ./configure  --prefix=/usr/local/coturnmake install
-
-...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/26/a33/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/24/a27/">
-        Weave Scope容器实时监控
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Weave Scope容器实时监控     
-官网地址: https://github.com/weaveworks/scope
-
-真的很好用的一个容器监控系统
-
-实时了解您的Docker容器
-选择您的容器基础架构的概述，或专注于特定的微服务。轻松识别并纠正问题，以确保容器化应用程序的稳定性和性能。
-上下文细节和深层链接
-查看容器的上下文指标，标签和元数据。毫不费力地在容器内部的进程之间导航...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Docker/">Docker</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/24/a27/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/24/a29/">
-        Linux Shell 文本处理工具集锦-find篇
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件1find . ( -name "*.txt"-o -name "*.pdf") -print
-
-2 正则方式查找.txt和pdf1find . -regex  ".*(.txt|.pdf)$"
-
-3 否定参数查找所有非txt文本
-1find . ! -name "*.txt" -print
-
-4 指定搜索深度打印...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/24/a29/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-          <a class="prev" rel="prev" href="/page/5/">
-            <section class="post prev white-box shadow" >
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
-            </section>
-          </a>
-        
-        <p class="current">
-          6 / 9
-        </p>
-        
-          <a class="next" rel="next" href="/page/7/">
-            <section class="post next white-box shadow">
-              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
-        
-      </div>
-    
-  
 
 
 </div>
@@ -1052,243 +731,19 @@ Yum
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">视图函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">路由配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Path%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">Path转换器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#re-path"><span class="toc-number">2.2.</span> <span class="toc-text">re_path</span></a></li></ol></li></ol>
     </div>
   </section>
 
@@ -1306,8 +761,8 @@ Yum
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django如何处理URL请求";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
