@@ -22,9 +22,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Django请求与响应 - Random Forest</title>
-  
-    <meta name="keywords" content="Python">
+  <title>Random Forest</title>
   
 
   
@@ -486,44 +484,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
     
     
-      <h1 class="title">
-        Django请求与响应
-      </h1>
-      <div class='new-meta-box'>
-        
-          
-            
-<div class='new-meta-item author'>
-  <a class='author' href="/" rel="nofollow">
-    <img no-lazy src="">
-    <p>Rainy City</p>
-  </a>
-</div>
-
-          
-        
-          
-            
-
-          
-        
-          
-            <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年6月3日</p>
-  </a>
-</div>
-
-          
-        
-          
-            
-
-          
-        
-      </div>
-    
   </div>
 
 
@@ -653,20 +613,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
 <h3 id="GET处理"><a href="#GET处理" class="headerlink" title="GET处理"></a>GET处理</h3><ul>
-<li><p><code>GET</code>请求动作,一般用与向服务器获取数据</p>
-</li>
-<li><p>能够产生<code>GET</code>请求的场景:</p>
-<ul>
-<li><p>浏览器输入URL回车后</p>
-</li>
-<li><p><code>html   &lt;a href="地址"?参数=值&gt;</code></p>
-</li>
-<li><p>form表单中的<code>method</code>为GET<br><code>GET</code>请求方式中,如果有数据需要传递给后端服务器,通常会用查询字符串<code>Query String</code>传递[不要传递敏感数据]</p>
-</li>
+<li><code>GET</code>请求动作,一般用与向服务器获取数据</li>
+<li>能够产生<code>GET</code>请求的场景:<ul>
+<li>浏览器输入URL回车后</li>
+<li><code>html &lt;a href="地址"?参数=值&gt;</code></li>
+<li>form表单中的<code>method</code>为GET</li>
 </ul>
 </li>
-<li><p>URL：<a target="_blank" rel="noopener" href="http://127.0.0.1/login/page1?user=value&amp;password=value">http://127.0.0.1/login/page1?user=value&amp;password=value</a></p>
-</li>
+</ul>
+<p><code>GET</code>请求方式中,如果有数据需要传递给后端服务器,通常会用查询字符串<code>Query String</code>传递[不要传递敏感数据]</p>
+<ul>
+<li>URL：<a target="_blank" rel="noopener" href="http://127.0.0.1/login/page1?user=value&amp;password=value">http://127.0.0.1/login/page1?user=value&amp;password=value</a></li>
 </ul>
 <h3 id="取GET内容的值"><a href="#取GET内容的值" class="headerlink" title="取GET内容的值"></a>取GET内容的值</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.GET[<span class="string">'Key'</span>] <span class="comment"># QueryDict</span></span><br><span class="line">request.GET.get[<span class="string">'Key'</span>,<span class="string">'Value'</span>]</span><br><span class="line">request.GET.getlist(<span class="string">'Key'</span>)</span><br></pre></td></tr></tbody></table></figure>
 
@@ -675,7 +632,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>客户端通过表单等POST请求将数据传给服务器</li>
 </ul>
 <h3 id="取POST客户端数据"><a href="#取POST客户端数据" class="headerlink" title="取POST客户端数据"></a>取POST客户端数据</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.POST[<span class="string">'Key'</span>] <span class="comment"># QueryDict</span></span><br><span class="line">request.POST.get(<span class="string">'Key'</span>,<span class="string">'Value'</span>)</span><br><span class="line">request.POST.getlist(<span class="string">'key'</span>)</span><br></pre></td></tr></tbody></table></figure>
-
 
   
   
@@ -710,7 +666,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-03T16:21:53+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-03T16:24:43+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年6月3日</p>
@@ -721,9 +677,6 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         
           
-  
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
-
 
         
       
@@ -735,7 +688,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/03/a87/&title=Django请求与响应 - Random Forest&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/03/a87/&title= - Random Forest&summary="
           
           >
           
@@ -747,7 +700,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/03/a87/&title=Django请求与响应 - Random Forest&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/03/a87/&title= - Random Forest&summary="
           
           >
           
@@ -759,7 +712,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/03/a87/&title=Django请求与响应 - Random Forest&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/03/a87/&title= - Random Forest&summary="
           
           >
           
@@ -858,8 +811,8 @@ Django找到ur...</p>
 
 <script>
   window.pdata={}
-  pdata.ispage=true;
-  pdata.postTitle="Django请求与响应";
+  pdata.ispage=false;
+  pdata.postTitle="";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
