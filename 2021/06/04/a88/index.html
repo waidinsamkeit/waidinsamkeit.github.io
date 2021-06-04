@@ -5,10 +5,6 @@
   <!-- SEO相关 -->
   
     
-      
-        <meta name="robots" content="noindex,follow">
-      
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -26,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>Random Forest</title>
+  <title>Django的设计模式 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -421,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -479,414 +477,293 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
 
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-  <section class="post-list">
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a25/">
-        Spug自动化运维平台搭建
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Spug自动化运维平台搭建12020-10-20更新日志
 
 
-:smail:首页新增最近登录记录同时移除应用部署图表
-? 优化分页支持显示总条数 #208
-? 优化角色发布权限设置和克隆发布支持搜索
-? 优化页面在不同权限下的展示效果
-? 修复某些情况下websocket无法正常建立连接的问题
-
-​                                               ...
-      
-    
-  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django的设计模式
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2020-10-26</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
         
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月4日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="传统的MVC"><a href="#传统的MVC" class="headerlink" title="传统的MVC"></a>传统的MVC</h2><p>MVC代表Model-View-Controller(模型-视图-控制器)模式</p>
+<ul>
+<li>M(模型层)：主要对数据库层的封装</li>
+<li>V(视图层)：用于向用户展示数据</li>
+<li>C(控制层)：用于处理用户请求、获取数据、返回结果(重要)</li>
+</ul>
+<blockquote>
+<p>作用：降低模块之间的耦合性(解耦)</p>
+</blockquote>
+<h2 id="DJango的MTV模式"><a href="#DJango的MTV模式" class="headerlink" title="DJango的MTV模式"></a>DJango的MTV模式</h2><p>MTV代表Model-Template-View(模型-模板-视图)模式</p>
+<ul>
+<li>M(模型层)：负责与数据库进行交互</li>
+<li>T(模板层)：负责呈现内容到浏览器</li>
+<li>V(视图层)：核心,负责接受请求、获取数据、返回结果</li>
+</ul>
+<h2 id="什么是模板？"><a href="#什么是模板？" class="headerlink" title="什么是模板？"></a>什么是模板？</h2><ol>
+<li>模板是可以根据字典数据动态变化的HTML网页</li>
+<li>模板可以根据视图中传递的字典数据动态生成相应的HTML</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    {</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>, <span class="comment"># 模板引擎</span></span><br><span class="line">        <span class="string">'DIRS'</span>: [BASE_DIR / <span class="string">'templates'</span>] <span class="comment"># 模板的搜索目录,可以是多个</span></span><br><span class="line">        ,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="literal">True</span>, <span class="comment"># 是否要在应用中的template文件夹中搜索模板文件</span></span><br><span class="line">        <span class="string">'OPTIONS'</span>: { <span class="comment"># 有关模板的选项</span></span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                <span class="string">'django.contrib.auth.context_processors.auth'</span>,</span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">            ],</span><br><span class="line">        },</span><br><span class="line">    },</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="模板的载入方式"><a href="#模板的载入方式" class="headerlink" title="模板的载入方式"></a>模板的载入方式</h2><ol>
+<li>第一种方法</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> loader</span><br><span class="line"><span class="comment"># 1.通过loader加载模板</span></span><br><span class="line">t = loader.get_template(<span class="string">"模板名称"</span>)</span><br><span class="line"><span class="comment"># 2.将t转成HTML字符串</span></span><br><span class="line">html = t.render(字典数据)</span><br><span class="line"><span class="comment"># 3.用响应对象将转换的字符串内容返回给浏览器</span></span><br><span class="line"><span class="keyword">return</span> HttpResponse(html)</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>第二种方法</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span>  render</span><br><span class="line"><span class="keyword">return</span>  render(request,<span class="string">'index.html'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="视图层与模板层的交互"><a href="#视图层与模板层的交互" class="headerlink" title="视图层与模板层的交互"></a>视图层与模板层的交互</h2><ol>
+<li>视图函数可以将<code>python</code>变量封装到字典中传到模板内部</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">template_view</span>(<span class="params">request</span>):</span></span><br><span class="line">    cpu_info = {</span><br><span class="line">        <span class="string">"CPU_Core"</span>: psutil.cpu_count,</span><br><span class="line">        <span class="string">"CPU_Used"</span>: psutil.cpu_percent</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span>  render(request,<span class="string">'index.html'</span>,cpu_info) <span class="comment"># 需要把cpu_info返回</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>模板中可以使用的语法 调用视图传进来的变量</li>
+</ol>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">blockquote</span> <span class="attr">class</span>=<span class="string">"layui-elem-quote layui-quote-nm"</span>&gt;</span></span><br><span class="line">  处理器信息：{{ CPU_Core }} <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  处理器使用率: {{ CPU_Used }}</span><br><span class="line"><span class="tag">&lt;/<span class="name">blockquote</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="模板的变量"><a href="#模板的变量" class="headerlink" title="模板的变量"></a>模板的变量</h2><p>可以传到模板中的数据类型</p>
+<div class="note warning"><p>注意以下调用方法不是对应类型的调用方法,只是告诉你有这些调用方法</p></div>
+
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>调用方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>int整形</td>
+<td></td>
+</tr>
+<tr>
+<td>list列表</td>
+<td></td>
+</tr>
+<tr>
+<td>tuple元祖</td>
+<td></td>
+</tr>
+<tr>
+<td>dict字典</td>
+<td></td>
+</tr>
+<tr>
+<td>func方法</td>
+<td></td>
+</tr>
+<tr>
+<td>obj实例化对象</td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>只不过是取值的时候会有不同</p>
+</blockquote>
+<p><strong>模板取值</strong></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_request</span>(<span class="params">request</span>):</span></span><br><span class="line">    dic = {}</span><br><span class="line">    dic[<span class="string">'int'</span>] = <span class="number">100</span></span><br><span class="line">    dic[<span class="string">'str'</span>] = <span class="string">'Alex'</span></span><br><span class="line">    dic[<span class="string">'list'</span>] = [<span class="string">'Addr'</span>,<span class="string">'Beijing'</span>]</span><br><span class="line">    dic[<span class="string">'dict'</span>] = {<span class="string">"name"</span>,<span class="string">"Alex"</span>}</span><br><span class="line">    dic[<span class="string">'func'</span>] = say_hi</span><br><span class="line">    dic[<span class="string">'class_obj'</span>] = Dog()</span><br><span class="line">    <span class="built_in">print</span>(dic)</span><br><span class="line">    <span class="keyword">return</span>  render(request,<span class="string">'test.html'</span>,dic)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say_hi</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"HHHH"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">say</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span>  <span class="string">"wang wang wang !"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> int是 {{ int }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt;</span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> str是 {{ str }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt;</span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> list是 {{ list.0 }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt; // 取列表值下标0</span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> dict是 {{ dict }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt;</span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> function 是 {{ func }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt; </span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span> class_obj 是 {{ class_obj.say }}<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>&gt; # 调用class_obj下的say方法</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="模板标签"><a href="#模板标签" class="headerlink" title="模板标签"></a>模板标签</h2><p>作用：将一些服务器端的功能嵌入到模板中,例如<code>if </code></p>
+<p>标签语法<code>if</code></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">{% if 表达式1 %}</span><br><span class="line">...</span><br><span class="line">{% elif 表达式2 %}</span><br><span class="line">...</span><br><span class="line">{% else %}</span><br><span class="line">{% endif %}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>标签语法<code>for</code></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">{% for 变量 in 可迭代对象 %}</span><br><span class="line">...循环</span><br><span class="line">{% empty %}</span><br><span class="line">可迭代对象无数据的语句</span><br><span class="line">{% endfor %}</span><br></pre></td></tr></tbody></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2020/10/26/a25/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/04/a88/>https://blog.micomint.top/2021/06/04/a88/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-04T10:56:12+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月4日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a26/">
-        Docker镜像加速
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Docker镜像加速国内从 DockerHub 拉取镜像有时会遇到困难，此时可以配置镜像加速器。Docker 官方和国内很多云服务商都提供了国内加速器服务，例如：
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
 
-网易：https://hub-mirror.c.163.com/
-阿里云：https://&lt;你的ID&gt;.mirror.aliyuncs.com
-七牛云加速器：https://reg-mirror.qiniu.com
-...
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/04/a88/&title=Django的设计模式 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/04/a88/&title=Django的设计模式 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/04/a88/&title=Django的设计模式 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
       
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Docker/">Docker</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a26/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
 </div>
 
-          </div>
+
+
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a5/">
-        MySQL大事务----第三章
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        什么是事务1.事务：事务是数据库系统区别于其他一切文件系统的重要特性之一
-2.事务是一组具有原子性的SQL语句,或是一个独立的工作单元
-
-原子性(ATOMICITY)：SQL要么全部执行完成,要么全部失败,不可能执行部分语句。
-
-举个例子 如果要去中国银行向建设银行存钱
-1.查看中国银行中的账户余额是否大于2000元
-2.从中国银行的帐户中转出2000元
-3.在建设银行的账户上增加2000元...
-      
-    
+    </div>
   </div>
+
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a5/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
   
 
-</div>
+  
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2021/06/04/a87/'>
+          <p class='title'>Django的请求与响应<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>请求与响应
+请求是指浏览器通过HTTP协议发送给服务端的数据
+响应指的是服务端收到响应后做相应处理后再返回给浏览器
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a6/">
-        Centos系统参数优化
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        centos系统参数优化
-内核相关参数(/etc/sysctl.cof)
-
-12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目net.ipv4.tcp_max_syn_b...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a6/'>
-            阅读全文
-          </a>
-        </div>
+请求样例
+12345678910111213141516GET /user/...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a7/">
-        MySQL常用存储引擎之MyISAM
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        MySQL常用存储引擎之MyISAMMySQL5.5版本之前的默认存储引擎就是MyISAM
-
-系统表
-临时表(查询优化器建立的临时表)
-
-MyISAM存储引擎表由MYD和MYI组成
-
-MyISAM的特性
-并发性与锁级别
-
-
- 对于读写混合的并发性不会太好
-
-
-表损坏修复
-
-
-通过 check table tablename 进行检查
-通过 repair table tablename 进行恢...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a7/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a8/">
-        MySQL常用存储引擎之InnoDB
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        MySQL常用存储引擎之InnoDBMySQL5.5机及以后版本的默认存储引擎
-
-支持事物的ACID特性
-Innodb使用表空间存储 
-innodb_file_per_table (如果此参数为ON)
-则会创建一个独立的表空间:tablename.ibd
-系统表空间:ibdataX(如果参数为OFF) X表示一个数字
+  </article>
 
 
 
 
-
-演示参数ON
-1234567891011mysql&gt; sh...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a8/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a9/">
-        MySQL服务器参数
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        MySQL服务器参数其他常用配置参数
-12345sync_binlog 控制mysql如何向磁盘刷新binlog- 防止主DB崩溃以后Cache同步不到binlog日志tmp_table_size和max_heap_table_size - 控制内存临时表大小max_connections 控制运行的最大连接数
-
-数据库设计对性能的印象
-MySQL最多只能关联61个表
-过分的反范式化为表建立...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a9/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-          <a class="prev" rel="prev" href="/page/8/">
-            <section class="post prev white-box shadow" >
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
-            </section>
-          </a>
-        
-        <p class="current">
-          9 / 9
-        </p>
-        
-      </div>
-    
-  
 
 
 </div>
@@ -896,243 +773,19 @@ MySQL最多只能关联61个表
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84MVC"><span class="toc-number">1.</span> <span class="toc-text">传统的MVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DJango%E7%9A%84MTV%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">DJango的MTV模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E6%9D%BF%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">什么是模板？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BD%BD%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">模板的载入方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E5%B1%82%E4%B8%8E%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="toc-number">5.</span> <span class="toc-text">视图层与模板层的交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%8F%98%E9%87%8F"><span class="toc-number">6.</span> <span class="toc-text">模板的变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%A0%87%E7%AD%BE"><span class="toc-number">7.</span> <span class="toc-text">模板标签</span></a></li></ol>
     </div>
   </section>
 
@@ -1150,8 +803,8 @@ MySQL最多只能关联61个表
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的设计模式";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

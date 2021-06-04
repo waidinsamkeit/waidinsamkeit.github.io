@@ -493,6 +493,53 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/01/04/a51/">
+        Redis哨兵模式搭建
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        Redis哨兵（Sentinel）模式主从切换技术的方法是：当主服务器宕机后，需要手动把一台从服务器切换为主服务器，这就需要人工干预，费事费力，还会造成一段时间内服务不可用。这不是一种推荐的方式，更多时候，我们优先考虑哨兵模式。
+哨兵模式哨兵模式是一种特殊的模式，首先Redis提供了哨兵的命令，哨兵是一个独立的进程，作为进程，它会独立运行。其原理是哨兵通过发送命令，等待Redis服务器响应，...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-01-04</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Redis/">Redis</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/01/04/a51/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/12/30/a49/">
         Nacos_Update1.4.0
       </a>
@@ -940,59 +987,6 @@ extundelete恢复原理：
       
         <div>
           <a class='readmore' href='/2020/12/09/a41/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/08/a40/">
-        Python-Namespace
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python名称空间
-Python使用叫做命名空间的东西来记录变量的轨迹。命名空间是一个 字典（dictionary），
-它的键就是变量名，它的值就是那些变量的值🛰
-
-简单地了解下Python的四种Name spaceLEGB
-
-local：函数内部的名字空间,一般包括函数的局部变量以及形式参数
-enclosing function：在嵌套函数中外部函数的名称空间,若func2嵌套在fun...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-08</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/08/a40/'>
             阅读全文
           </a>
         </div>
