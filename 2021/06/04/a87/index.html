@@ -5,8 +5,6 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -24,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>归档：2021/6 - Random Forest</title>
+  <title>Django的请求与响应 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -419,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -477,126 +477,346 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
 
 <div class='l_main'>
-	
-		
-  <section class="post-list">
-    
-      
-        
-          
-        
-          
-        
-      
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/04/a87/">
-        Django的请求与响应
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        请求与响应
-请求是指浏览器通过HTTP协议发送给服务端的数据
-响应指的是服务端收到响应后做相应处理后再返回给浏览器
 
-请求样例
-12345678910111213141516GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行Host: 127.0.0.1:8000   ---&gt; 请求头Connection: keep-alivesec-ch-ua: " ...
-      
-    
-  </div>
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django的请求与响应
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2021-06-04</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月4日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="请求与响应"><a href="#请求与响应" class="headerlink" title="请求与响应"></a>请求与响应</h2><ul>
+<li>请求是指浏览器通过HTTP协议发送给服务端的数据</li>
+<li>响应指的是服务端收到响应后做相应处理后再返回给浏览器</li>
+</ul>
+<p><strong>请求样例</strong></p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行</span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8000   ---&gt; 请求头</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">sec-ch-ua</span><span class="punctuation">: </span>" Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"</span><br><span class="line"><span class="attribute">sec-ch-ua-mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>none</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>navigate</span><br><span class="line"><span class="attribute">Sec-Fetch-User</span><span class="punctuation">: </span>?1</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>document</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>csrftoken=eOANN43FZcrKEyrhBtbyiRsQ9tdXjQky5DK7uurZ0ziC9uA94OH1TXfRoQtAfBod</span><br><span class="line">{"username":"TETSTQIQUQ"} ---&gt; 请求体</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h3><ul>
+<li><code>HTTP1.0</code>定义了三种请求方法： <code>GET</code>、 <code>POST</code>、 <code>HEAD</code></li>
+<li><code>HTTP1.1</code> 新增了五种请求方法： <code>OPTIONS</code>、<code>PUT</code>、<code>DELETE</code>、<code>TRACE</code>以及<code>CONNECT</code>方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>请求指定页面信息,并且返回实体。</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>类似于GET请求,只不过返回的响应中没有具体内容,只返回响应头。</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>向指定资源提交数据进行处理请求,数据被包含在请求体中。</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>从客户端向服务器发送的数据取代指定文档中的内容。</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>请求服务器删除指定的页面。</td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>预留的管道连接代理服务器。</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>允许客户端查看服务器性能。</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>用于显示服务器收到的请求。</td>
+</tr>
+</tbody></table>
+<h3 id="Django中的请求"><a href="#Django中的请求" class="headerlink" title="Django中的请求"></a>Django中的请求</h3><p><code>path_info</code>: URL字符串,即当前请求的路径</p>
+<p><code>method</code>: 字符串,表示http的请求方法</p>
+<p><code>GET</code>: QueryDict查询字典的对象,包含get请求方式的所有资源</p>
+<p><code>POST</code>: QueryDict查询字典对象,包含post请求方式的所有数据</p>
+<p><code>FILES</code>: 类似于字典的对象,包含所有的上传文件信息</p>
+<p><code>COOKIES</code>:  Python字典,包含当前所有的cookie</p>
+<p><code>session</code>:  类似于字典对象,表示当前会话</p>
+<p><code>body</code>: 字符串,请求体的内容</p>
+<p><code>scheme</code>： 请求协议 <code>http</code>or<code>https</code></p>
+<p><code>request.get_full_path</code>:  请求完整路径</p>
+<p><code>request.META</code>:  请求中的元数据(消息头) <code>request.META['REMOTE_ADDR']</code>可以请求到客户端地址,当然你可以请求META中的任何信息.</p>
+<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><p><strong>响应案例</strong></p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK  ---&gt;起始行</span><br><span class="line"><span class="attribute">Bdpagetype</span><span class="punctuation">: </span>1         ---&gt; header内容</span><br><span class="line"><span class="attribute">Bdqid</span><span class="punctuation">: </span>0xc15b41b2000e57f6</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>private</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">Content-Encoding</span><span class="punctuation">: </span>gzip</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html;charset=utf-8</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Thu, 03 Jun 2021 06:20:28 GMT</span><br><span class="line"><span class="attribute">Expires</span><span class="punctuation">: </span>Thu, 03 Jun 2021 06:19:36 GMT</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>BWS/1.1</span><br><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>BDSVRTM=0; path=/</span><br><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>BD_HOME=1; path=/</span><br><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>H_PS_PSSID=34099_33971_31253_33848_33607_26350_22157; path=/; domain=.baidu.com</span><br><span class="line"><span class="attribute">Strict-Transport-Security</span><span class="punctuation">: </span>max-age=172800</span><br><span class="line"><span class="attribute">Traceid</span><span class="punctuation">: </span>1622701228048364826613932802104961685494</span><br><span class="line"><span class="attribute">X-Ua-Compatible</span><span class="punctuation">: </span>IE=Edge,chrome=1</span><br><span class="line"><span class="attribute">Transfer-Encoding</span><span class="punctuation">: </span>chunked</span><br><span class="line">{"code":200,"username":"Alex"} ---&gt; body内容</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>常见状态码就不说了…</p>
+</blockquote>
+<h3 id="Django中的响应对象"><a href="#Django中的响应对象" class="headerlink" title="Django中的响应对象"></a>Django中的响应对象</h3><p>构造函数格式：</p>
+<p><code>HttpResponse</code>(content=响应体,content_type=响应体数据类型,statue=状态码)</p>
+<p>Content-Type类型如下</p>
+<ul>
+<li><code>'text/html'</code>： 默认的Html文件</li>
+<li><code>'text/plain'</code>: 纯文本</li>
+<li><code>'text/css'</code>”：css文件</li>
+<li><code>'text/javascript'</code> : js文件</li>
+<li><code>'application/json'</code>: json传输</li>
+<li><code>'application/xml'</code>： XML文件</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+<th>状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HttpResponseRedirect</td>
+<td>重定向</td>
+<td>302</td>
+</tr>
+<tr>
+<td>HttpResponseNotModified</td>
+<td>未修改</td>
+<td>304</td>
+</tr>
+<tr>
+<td>HttpResponseBadRequest</td>
+<td>错误请求</td>
+<td>400</td>
+</tr>
+<tr>
+<td>HttpResponseNotFound</td>
+<td>没有对应资源</td>
+<td>404</td>
+</tr>
+<tr>
+<td>HttpResponseForbidden</td>
+<td>请求被禁止</td>
+<td>403</td>
+</tr>
+<tr>
+<td>HttpResponseServerError</td>
+<td>服务器错误</td>
+<td>500</td>
+</tr>
+</tbody></table>
+<h2 id="GET与Post"><a href="#GET与Post" class="headerlink" title="GET与Post"></a>GET与Post</h2><p>无论是<code>Get</code>还是<code>Post</code>,都统一用视图函数接受请求,通过判断<code>request.method</code>区分具体的请求动作.</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> request.method == <span class="string">"GET"</span>:</span><br><span class="line">    处理GET请求内容</span><br><span class="line"><span class="keyword">elif</span> request.method == <span class="string">"POST"</span>:</span><br><span class="line">    处理POST请求内容</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h3 id="GET处理"><a href="#GET处理" class="headerlink" title="GET处理"></a>GET处理</h3><ul>
+<li><code>GET</code>请求动作,一般用与向服务器获取数据</li>
+<li>能够产生<code>GET</code>请求的场景:<ul>
+<li>浏览器输入URL回车后</li>
+<li><code>html &lt;a href="地址"?参数=值&gt;</code></li>
+<li>form表单中的<code>method</code>为GET</li>
+</ul>
+</li>
+</ul>
+<p><code>GET</code>请求方式中,如果有数据需要传递给后端服务器,通常会用查询字符串<code>Query String</code>传递[不要传递敏感数据]</p>
+<ul>
+<li>URL：<a target="_blank" rel="noopener" href="http://127.0.0.1/login/page1?user=value&amp;password=value">http://127.0.0.1/login/page1?user=value&amp;password=value</a></li>
+</ul>
+<h3 id="取GET内容的值"><a href="#取GET内容的值" class="headerlink" title="取GET内容的值"></a>取GET内容的值</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.GET[<span class="string">'Key'</span>] <span class="comment"># QueryDict</span></span><br><span class="line">request.GET.get[<span class="string">'Key'</span>,<span class="string">'Value'</span>]</span><br><span class="line">request.GET.getlist(<span class="string">'Key'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="POST处理"><a href="#POST处理" class="headerlink" title="POST处理"></a>POST处理</h3><ul>
+<li>POST请求动作,一般用与向服务器提交大量/隐私数据</li>
+<li>客户端通过表单等POST请求将数据传给服务器</li>
+</ul>
+<h3 id="取POST客户端数据"><a href="#取POST客户端数据" class="headerlink" title="取POST客户端数据"></a>取POST客户端数据</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">request.POST[<span class="string">'Key'</span>] <span class="comment"># QueryDict</span></span><br><span class="line">request.POST.get(<span class="string">'Key'</span>,<span class="string">'Value'</span>)</span><br><span class="line">request.POST.getlist(<span class="string">'key'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2021/06/04/a87/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/04/a87/>https://blog.micomint.top/2021/06/04/a87/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-04T09:15:48+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月4日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/03/a86/">
-        Django如何处理URL请求
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
+
+
+        
       
         
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/04/a87/&title=Django的请求与响应 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/04/a87/&title=Django的请求与响应 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/04/a87/&title=Django的请求与响应 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2021/06/03/a86/'>
+          <p class='title'>Django如何处理URL请求<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>
 http://127.0.0.1/apps/django/1
 
 
 Django从配置文件中根据ROOT_URLCONF找到主路由文件,也就是我们的主目录下的urls.py
-Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由的数组.
-
-123456789from django.contrib import adminfrom django.urls imp...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-03</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/03/a86/'>
-            阅读全文
-          </a>
-        </div>
+Django找到ur...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-    
-  </section>
-  
-    
-  
+  </article>
 
 
-	
+
+
+
+
 </div>
 <aside class='l_side'>
   
@@ -604,243 +824,19 @@ Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由�
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-number">1.</span> <span class="toc-text">请求与响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">请求方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">Django中的请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Django%E4%B8%AD%E7%9A%84%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.1.</span> <span class="toc-text">Django中的响应对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GET%E4%B8%8EPost"><span class="toc-number">3.</span> <span class="toc-text">GET与Post</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET%E5%A4%84%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">GET处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96GET%E5%86%85%E5%AE%B9%E7%9A%84%E5%80%BC"><span class="toc-number">3.2.</span> <span class="toc-text">取GET内容的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">POST处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96POST%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE"><span class="toc-number">3.4.</span> <span class="toc-text">取POST客户端数据</span></a></li></ol></li></ol>
     </div>
   </section>
 
@@ -851,14 +847,15 @@ Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由�
 </aside>
 
 
+
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的请求与响应";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
