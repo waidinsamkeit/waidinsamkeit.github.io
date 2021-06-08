@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django的静态文件</title>
+      <link href="2021/06/08/a90/"/>
+      <url>2021/06/08/a90/</url>
+      
+        <content type="html"><![CDATA[<h2 id="什么是静态文件？"><a href="#什么是静态文件？" class="headerlink" title="什么是静态文件？"></a>什么是静态文件？</h2><ul><li>比如网站内部的<code>css</code>、<code>html</code>、<code>音频和视频文件</code>等</li><li>需要配置静态文件的访问路径,即<code>STATIC_URL='/static'</code></li></ul><p>指定访问静态文件是需要通过<code>/static/xxx</code>或者<a href="http://127.0.0.1:8000/static/xxx">http://127.0.0.1:8000/static/xxx</a> </p><h3 id="静态文件配置"><a href="#静态文件配置" class="headerlink" title="静态文件配置"></a>静态文件配置</h3><ul><li>配置静态文件的存储路径为<code>STATICFILES_DIRS</code>是保存在服务器端的存储位置</li></ul><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># django请求静态文件的地址</span></span><br><span class="line">STATIC_URL = <span class="string">'/static/'</span></span><br><span class="line"><span class="comment"># 添加静态文件存储路径</span></span><br><span class="line">STATICFILES_DIRS = [</span><br><span class="line">    BASE_DIR / <span class="string">"static"</span>,</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure><h3 id="静态文件加载访问"><a href="#静态文件加载访问" class="headerlink" title="静态文件加载访问"></a>静态文件加载访问</h3><ul><li>通过<code>{% static %}</code>标签访问静态文件</li><li>1.加载<code>static-{% load static %}</code></li><li>2.使用静态资源 - <code>{% static '静态资源路径' %}</code></li><li>方便动态的更改Django静态请求的路径</li></ul><figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">{% load static %}</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"{% static 'image/index.jpg' %}"</span> <span class="attr">alt</span>=<span class="string">"My image"</span><span class="attr">width</span>=<span class="string">"200px"</span><span class="attr">height</span>=<span class="string">"200px"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的URL反向解析</title>
       <link href="2021/06/08/a89/"/>
       <url>2021/06/08/a89/</url>

@@ -492,6 +492,63 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/05/12/a82/">
+        kubernetes-Nacos
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        简单安装使用
+ 最新版本应该是1.4.1
+
+1git clone https://github.com/nacos-group/nacos-k8s.git
+
+
+简单使用
+
+123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
+
+如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
+
+
+演示使用
+...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-05-12</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/05/12/a82/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/05/12/a83/">
         Spider爬取页面关键字数据信息
       </a>
@@ -902,52 +959,6 @@ Nfs：网络存储,Pod重启后,数据还是存在的
       
         <div>
           <a class='readmore' href='/2021/03/04/a72/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/03/a71/">
-        Ansible部署k8s集群
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \         -i.bak \         /et...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-02</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Ansible/">Ansible</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/03/a71/'>
             阅读全文
           </a>
         </div>

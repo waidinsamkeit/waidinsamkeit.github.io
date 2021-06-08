@@ -5,8 +5,6 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -24,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>标签：Python - Random Forest</title>
+  <title>Django的静态文件 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -419,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -476,250 +476,219 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <div class="body-wrapper" id="pjax-container">
           
 
-
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-    
-      
-  <section class="post-list">
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/08/a40/">
-        Python-Namespace
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python名称空间
-Python使用叫做命名空间的东西来记录变量的轨迹。命名空间是一个 字典（dictionary），
-它的键就是变量名，它的值就是那些变量的值🛰
 
-简单地了解下Python的四种Name spaceLEGB
 
-local：函数内部的名字空间,一般包括函数的局部变量以及形式参数
-enclosing function：在嵌套函数中外部函数的名称空间,若func2嵌套在fun...
-      
-    
-  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django的静态文件
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2020-12-08</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
         
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月8日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="什么是静态文件？"><a href="#什么是静态文件？" class="headerlink" title="什么是静态文件？"></a>什么是静态文件？</h2><ul>
+<li>比如网站内部的<code>css</code>、<code>html</code>、<code>音频和视频文件</code>等</li>
+<li>需要配置静态文件的访问路径,即<code>STATIC_URL='/static'</code></li>
+</ul>
+<p>指定访问静态文件是需要通过<code>/static/xxx</code>或者<a target="_blank" rel="noopener" href="http://127.0.0.1:8000/static/xxx">http://127.0.0.1:8000/static/xxx</a> </p>
+<h3 id="静态文件配置"><a href="#静态文件配置" class="headerlink" title="静态文件配置"></a>静态文件配置</h3><ul>
+<li>配置静态文件的存储路径为<code>STATICFILES_DIRS</code>是保存在服务器端的存储位置</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># django请求静态文件的地址</span></span><br><span class="line">STATIC_URL = <span class="string">'/static/'</span></span><br><span class="line"><span class="comment"># 添加静态文件存储路径</span></span><br><span class="line">STATICFILES_DIRS = [</span><br><span class="line">    BASE_DIR / <span class="string">"static"</span>,</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="静态文件加载访问"><a href="#静态文件加载访问" class="headerlink" title="静态文件加载访问"></a>静态文件加载访问</h3><ul>
+<li>通过<code>{% static %}</code>标签访问静态文件</li>
+<li>1.加载<code>static-{% load static %}</code></li>
+<li>2.使用静态资源 - <code>{% static '静态资源路径' %}</code></li>
+<li>方便动态的更改Django静态请求的路径</li>
+</ul>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">{% load static %}</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"{% static 'image/index.jpg' %}"</span> <span class="attr">alt</span>=<span class="string">"My image"</span><span class="attr">width</span>=<span class="string">"200px"</span><span class="attr">height</span>=<span class="string">"200px"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2020/12/08/a40/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/08/a90/>https://blog.micomint.top/2021/06/08/a90/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-08T16:16:07+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月8日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/03/a38/">
-        Python嵌套函数与匿名函数
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python函数高级用法
-函数的嵌套调用是在”函数调用中再调用其他函数”。也就是说:函数嵌套允许在一个函数中调用另外一个函数。如下：
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
 
-12345678910111213name = "Forest"def change():    name = "Forest1"    def change2():        # global name  如果声明了这句，下面的name改的是最外层的全...
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/08/a90/&title=Django的静态文件 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/08/a90/&title=Django的静态文件 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/08/a90/&title=Django的静态文件 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
       
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-03</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/03/a38/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
 </div>
 
-          </div>
+
+
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/24/a31/">
-        Pythonday1-列表
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python列表相关操作
-长话短说
-列表python基础数据类型之一
-list可以存放各种数据(超大量数据) 可索引、可切片
-列表中的元素
-整形、字符串类型、浮点、列表、元祖、字典、对
-
-
-
-1.0 创建一个list12lists = ['uuid',100,True,{'name','uuid'},(22,23)]print(lists)
-
-1.1 索引切片主要是说索引切片这个问题
-123...
-      
-    
+    </div>
   </div>
+
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
+  
+
+  
+    <div class="prev-next">
       
-        <div>
-          <a class='readmore' href='/2020/11/24/a31/'>
-            阅读全文
-          </a>
-        </div>
+      
+        <a class='next' href='/2021/06/08/a89/'>
+          <p class='title'>Django的URL反向解析<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>有关绝对地址和相对地址先说一下有关绝对路径和相对路径吧
+1234567891. 绝对地址http://127.0.0.1:8000/api/userlist2.相对地址/api/userlist...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/24/a32/">
-        Python可变数据类型与不变数据类型
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python可变数据类型与不变数据类型1 关于可变与不变数据类型的解释
-以下所有的内容都是基于内存地址进行解释的
-
-不可变数据类型： 当该数据类型的对应变量的值发生了改变，那么它对应的内存地址也会发生改变，对于这种数据类型，就称不可变数据类型。
-可变数据类型  ：当该数据类型的对应变量的值发生了改变，那么它对应的内存地址不发生改变，对于这种数据类型，就称可变数据类型.
- 总而言之：不可变数据...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/24/a32/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-          <a class="prev" rel="prev" href="/tags/Python/">
-            <section class="post prev white-box shadow" >
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
-            </section>
-          </a>
-        
-        <p class="current">
-          2 / 2
-        </p>
-        
-      </div>
-    
-  
+  </article>
 
 
-    
-  
+
+
+
+
 </div>
 <aside class='l_side'>
   
@@ -727,243 +696,19 @@ list可以存放各种数据(超大量数据) 可索引、可切片
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是静态文件？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">静态文件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E8%AE%BF%E9%97%AE"><span class="toc-number">1.2.</span> <span class="toc-text">静态文件加载访问</span></a></li></ol></li></ol>
     </div>
   </section>
 
@@ -974,14 +719,15 @@ list可以存放各种数据(超大量数据) 可索引、可切片
 </aside>
 
 
+
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的静态文件";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
