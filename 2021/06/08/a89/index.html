@@ -5,10 +5,6 @@
   <!-- SEO相关 -->
   
     
-      
-        <meta name="robots" content="noindex,follow">
-      
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -26,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>Random Forest</title>
+  <title>Django的URL反向解析 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -421,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/06/01/d2af257367b574c9bb787553b5fedeed.png"></div>
           
@@ -479,514 +477,228 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
 
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-  <section class="post-list">
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/05/12/a83/">
-        Spider爬取页面关键字数据信息
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-简单的Spider获取关键字数据
-学习用
 
 
-
-12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
-      
-    
-  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django的URL反向解析
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2021-05-12</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月8日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h3 id="有关绝对地址和相对地址"><a href="#有关绝对地址和相对地址" class="headerlink" title="有关绝对地址和相对地址"></a>有关绝对地址和相对地址</h3><p>先说一下有关绝对路径和相对路径吧</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. 绝对地址</span><br><span class="line">http://127.0.0.1:8000/api/userlist</span><br><span class="line">2.相对地址</span><br><span class="line">/api/userlist = 浏览器会把当前地址栏的协议+地址+端口 + 地址 </span><br><span class="line">相对地址的标识结果最终为: http://127.0.0.1:8000 + /api/userlist</span><br><span class="line">3. 没有`/`的相对地址</span><br><span class="line">api/userlist = 浏览器会根据当前地址栏的地址url的最后一个`/`之前的内容,并且加上该地址进行访问</span><br><span class="line">如果当前地址栏的地址为http://127.0.0.1:8000/contract/<span class="built_in">test</span></span><br><span class="line">最终结果标识为:http://127.0.0.1:8000/contract/ + api/userlist</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_url</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="keyword">return</span> render(request,<span class="string">'test.html'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_url_result</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="keyword">return</span>  HttpResponse(<span class="string">"welecome i dele "</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>This is Test Url<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://127.0.0.1:8000/test_url_result"</span>&gt;</span>绝对地址<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/test_url_result"</span>&gt;</span>带/的相对地址<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"test_url_result"</span>&gt;</span>不带/的相对地址<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urls.py</span><br><span class="line">path(<span class="string">'test/url'</span>,views.test_url),</span><br><span class="line">path(<span class="string">'test_url_result'</span>,views.test_url_result)</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="反向解析"><a href="#反向解析" class="headerlink" title="反向解析"></a>反向解析</h3><p>url反向解析指的是在视图或者模板中,用path定义的名称来动态查找或计算出相应的路由</p>
+<p><code>re_path</code>的语法</p>
+<figure class="highlight py"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">re_path(<span class="string">'music'</span>,views.music_views,name=<span class="string">'music_url'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>根据path中的<code>name</code>关键字传参给url确定了一个卫衣确定的名字,在视图或者模板中,可以通过这个名字反向推断出此url的信息</li>
+</ul>
+<h3 id="模板中通过url标签实现反向解析"><a href="#模板中通过url标签实现反向解析" class="headerlink" title="模板中通过url标签实现反向解析"></a>模板中通过url标签实现反向解析</h3><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">{% url '别名' %}</span><br><span class="line">{% url '别名' '参数值1' '参数值2' %}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">index.html</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">{%</span>  <span class="attr">url</span> '<span class="attr">tr</span>' %}&gt;</span>反向解析<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">urls.py</span><br><span class="line">path(<span class="string">'test_url_result'</span>,views.test_url_result,name=<span class="string">'tr'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="视图中通过url反向解析"><a href="#视图中通过url反向解析" class="headerlink" title="视图中通过url反向解析"></a>视图中通过url反向解析</h3><p>在视图中可以进行调用<code>django</code>的<code>reverse</code>方法</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse,HttpResponseRedirect</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> reverse</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_url_result</span>(<span class="params">request,age</span>):</span></span><br><span class="line">    <span class="comment"># 302跳转,当有请求调用test_url_result视图的时候,302到'base'模板中</span></span><br><span class="line">    url = reverse(<span class="string">'base'</span>)</span><br><span class="line">    <span class="keyword">return</span>  HttpResponseRedirect(url)</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">urls.py</span><br><span class="line">re_path(<span class="string">'base'</span>,views.base,name=<span class="string">'base'</span>),</span><br></pre></td></tr></tbody></table></figure>
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2021/05/12/a83/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/08/a89/>https://blog.micomint.top/2021/06/08/a89/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-08T14:56:26+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月8日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
+
+
+        
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/25/a78/">
-        Kubernetes-volume
-      </a>
-    </h2>
-  
-  <div class='md'>
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
     
       
-        Volume详解
-容器磁盘上的文件的生命周期是短暂的，这就使得在容器中运行重要应用时会出现一些问题。首先，当容器崩溃时，kubelet 会重启它，但是容器中的文件将丢失——容器以干净的状态（镜像最初的状态）重新启动。其次，在Pod中同时运行多个容器时，这些容器之间通常需要共享文件。Kubernetes 中的Volume抽象就很好的解决了这些问题
-Kubernetes 中的卷有明确的寿命 ——...
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
       
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/25/a78/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
 </div>
 
-          </div>
+
+
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/25/a77/">
-        Kubernetes持久化配置文件
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        configMap 描述信息描述信息ConfigMap 功能在 Kubernetes1.2 版本中引入，许多应用程序会从配置文件、命令行参数或环境变量中读取配置信息。ConfigMap API 给我们提供了向容器中注入配置信息的机制，ConfigMap 可以被用来保存单个属性，也可以用来保存整个配置文件或者 JSON 二进制大对象
-有点儿类似于zookeeper nacos这种服务注册中心
-...
-      
-    
+    </div>
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/25/a77/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/24/a76/">
-        基于 Kubernetes 的微服务项目设计与实现
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-本文目的
 
 
- 设计一个前后端分离的项目
- 部署在Kubernetes集群上
- 具有可靠性、可用性、强壮性、扩展性
-
-第一章：为服务项目的设计
-微服务是一种设计思想，它并不局限于任何开发语言，在本例中我们选择java的spring boot 框架来实现微服务。微服务之间的 RPC 方案也很多，我们这里选择RESTFUL 这种最常见的方案。为了项目的简洁，项目也没有涉及数据库和缓存，配置中心...
-      
-    
-  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
+  
+
+  
+    <div class="prev-next">
       
-        <div>
-          <a class='readmore' href='/2021/03/24/a76/'>
-            阅读全文
-          </a>
-        </div>
+      
+        <a class='next' href='/2021/06/04/a88/'>
+          <p class='title'>Django的设计模式<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>传统的MVCMVC代表Model-View-Controller(模型-视图-控制器)模式
+
+M(模型层)：主要对数据库层的封装
+V(视图层)：用于向用户展示数据
+C(控制层)：用于处理用户请求...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/12/a75/">
-        SSH漏洞修复-升级openssh
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        修复解决漏洞
-解决OPenssh7.x以前的绝大多数问题
-OpenSSH 命令注入漏洞(CVE-2020-15778)
-OpenSSH 用户枚举漏洞(CVE-2018-15919)
-OpenSSH 安全漏洞(CVE-2017-15906)
-升级能解决绝大多数的问题
+  </article>
 
 
 
-安装依赖环境1yum -y install rpm-build gcc gcc-c++ glibc glibc-devel...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-12</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/12/a75/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
 
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/04/a73/">
-        Kubernetes之持久化存储数据(二)
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        持久化存储-Pv与PVC
-PV：持久化存储,对存储资源进行抽象,对外提供可以调用的地方(可以理解成生产者)
-PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者)
-
-实现流程应用部署—-&gt;定义PVC(绑定PV)—-&gt;定义PV(服务器IP或者路径)
-
-根据容量和读写模式进行匹配
-
-部署PV与PVC12345678910111213vim pv.yamlapiVersion:...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-04</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/04/a73/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/04/a74/">
-        Kubernetes集群资源监控
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        集群资源监控
-监控指标
-节点资源利用率
-节点数
-运行Pod
-
-
-监控平台
-Pod监控
-容器指标
-应用程序
-
-
-
-监控平台搭建方案
-Prometheus+Grafana
-
-部署Prometheus1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-04</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/04/a74/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/04/a72/">
-        Kubernetes之持久化存储数据(一)
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        持久化存储-NFS
-Emptydir：是本地存储,Pod重启,数据不存在了
-
-Nfs：网络存储,Pod重启后,数据还是存在的
-
-
-部署NFS服务器
-可以单独设置一台服务器为NFS服务器
-
-12yum -y install nfs-utilssystemctl start nfs
-
-设置挂载目录123mkdir /data/k8s_nfs -pvim /etc/exports/data/k8s...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-04</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/04/a72/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/03/a71/">
-        Ansible部署k8s集群
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \         -i.bak \         /et...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-02</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Ansible/">Ansible</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/03/a71/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-          <a class="prev" rel="prev" href="/">
-            <section class="post prev white-box shadow" >
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
-            </section>
-          </a>
-        
-        <p class="current">
-          2 / 9
-        </p>
-        
-          <a class="next" rel="next" href="/page/3/">
-            <section class="post next white-box shadow">
-              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
-        
-      </div>
-    
-  
 
 
 </div>
@@ -996,243 +708,19 @@ Nfs：网络存储,Pod重启后,数据还是存在的
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E7%BB%9D%E5%AF%B9%E5%9C%B0%E5%9D%80%E5%92%8C%E7%9B%B8%E5%AF%B9%E5%9C%B0%E5%9D%80"><span class="toc-number">1.</span> <span class="toc-text">有关绝对地址和相对地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">反向解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E4%B8%AD%E9%80%9A%E8%BF%87url%E6%A0%87%E7%AD%BE%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">模板中通过url标签实现反向解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E4%B8%AD%E9%80%9A%E8%BF%87url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">视图中通过url反向解析</span></a></li></ol>
     </div>
   </section>
 
@@ -1250,8 +738,8 @@ Nfs：网络存储,Pod重启后,数据还是存在的
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的URL反向解析";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
