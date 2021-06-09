@@ -598,8 +598,46 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="微服务项目的具体实现"><a href="#微服务项目的具体实现" class="headerlink" title="微服务项目的具体实现"></a>微服务项目的具体实现</h2><p>从前端向后端开始实现</p>
 <p>前端站点的逻辑很简单，就是显示一个页面，页面中有一个按键。当你点击按键的时候，前端页面发起ajax请求，访问前端站点本身的一个接口，这个接口被nginx代理，转发到a.demo.com 微服务上，a. demo.com 微服务再将请求转发到b. demo.com, b. demo.com 再将请求转发到c. demo.com. 最终将结果返回给前端。前端站点再将结果显示在页面上。我们通过</p>
 <p>结果显示，就能知道 这次请求通过了那些服务器，每台服务器的服务运行时间大概是多少。</p>
-<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./lib/vue.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./lib/vue-resource.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"shortcut icon"</span> <span class="attr">href</span>=<span class="string">"/favicon.ico"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"bookmark"</span> <span class="attr">href</span>=<span class="string">"/favicon.ico"</span> <span class="attr">type</span>=<span class="string">"image/x-icon"</span> 　 /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">v-html</span>=<span class="string">"msg"</span>&gt;</span>{{ msg }}<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"get请求"</span> @<span class="attr">click</span>=<span class="string">"getClick"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue({</span></span><br><span class="line"><span class="javascript">            el: <span class="string">"#box"</span>,</span></span><br><span class="line">            data: {</span><br><span class="line"><span class="javascript">                msg: <span class="string">""</span></span></span><br><span class="line">            },</span><br><span class="line">            methods: {</span><br><span class="line"><span class="javascript">                <span class="function"><span class="title">getClick</span>(<span class="params"></span>)</span> {</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">                    <span class="built_in">this</span>.$http.get(<span class="string">"http://www.demo.com/api/helloa"</span>).then(<span class="function"><span class="params">result</span> =&gt;</span> {</span></span><br><span class="line"><span class="javascript">                        <span class="keyword">let</span> aaa = result.bodyText;</span></span><br><span class="line"><span class="javascript">                        aaa = aaa.split(<span class="string">'\n'</span>).join(<span class="string">'&lt;br/&gt;'</span>);</span></span><br><span class="line"><span class="javascript">                        aaa = aaa.replaceAll(<span class="string">' '</span>, <span class="string">'&amp;nbsp;'</span>);</span></span><br><span class="line"><span class="javascript">                        <span class="built_in">this</span>.msg = aaa;</span></span><br><span class="line">                    });</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
+    &lt;title&gt;Demo&lt;/title&gt;
+    &lt;script src="./lib/vue.js"&gt;&lt;/script&gt;
+    &lt;script src="./lib/vue-resource.js"&gt;&lt;/script&gt;
+    &lt;link rel="shortcut icon" href="/favicon.ico" /&gt;
+    &lt;link rel="bookmark" href="/favicon.ico" type="image/x-icon" 　 /&gt;
+&lt;/head&gt;
 
+&lt;body&gt;
+    &lt;div id="box"&gt;
+        &lt;div v-html="msg"&gt;{{ msg }}&lt;/div&gt;
+        &lt;input type="button" value="get请求" @click="getClick"&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+        var vm = new Vue({
+            el: "#box",
+            data: {
+                msg: ""
+            },
+            methods: {
+                getClick() {
+
+                    this.$http.get("http://www.demo.com/api/helloa").then(result =&gt; {
+                        let aaa = result.bodyText;
+                        aaa = aaa.split('\n').join('&lt;br/&gt;');
+                        aaa = aaa.replaceAll(' ', '&amp;nbsp;');
+                        this.msg = aaa;
+                    });
+                }
+            }
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <p>。。。未完待续</p>
 
   
@@ -1000,7 +1038,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

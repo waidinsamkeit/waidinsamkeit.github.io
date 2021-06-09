@@ -541,44 +541,181 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="configMap的创建"><a href="#configMap的创建" class="headerlink" title="configMap的创建"></a>configMap的创建</h2><blockquote>
 <p>使用目录创建</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ ls docs/user-guide/configmap/kubectl/</span><br><span class="line">game.properties</span><br><span class="line">ui.properties</span><br><span class="line"></span><br><span class="line">$ cat docs/user-guide/configmap/kubectl/game.properties</span><br><span class="line">enemies=aliens</span><br><span class="line">lives=3</span><br><span class="line">enemies.cheat=<span class="literal">true</span></span><br><span class="line">enemies.cheat.level=noGoodRotten</span><br><span class="line">secret.code.passphrase=UUDDLRLRBABAS</span><br><span class="line">secret.code.allowed=<span class="literal">true</span></span><br><span class="line">secret.code.lives=30</span><br><span class="line"></span><br><span class="line">$ cat docs/user-guide/configmap/kubectl/ui.properties</span><br><span class="line">color.good=purple</span><br><span class="line">color.bad=yellow</span><br><span class="line">allow.textmode=<span class="literal">true</span></span><br><span class="line">how.nice.to.look=fairlyNice</span><br><span class="line"></span><br><span class="line">$ kubectl create configmap game-config --from-file=docs/user-guide/configmap/kubectl</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">$ ls docs/user-guide/configmap/kubectl/
+game.properties
+ui.properties
 
+$ cat docs/user-guide/configmap/kubectl/game.properties
+enemies=aliens
+lives=3
+enemies.cheat=true
+enemies.cheat.level=noGoodRotten
+secret.code.passphrase=UUDDLRLRBABAS
+secret.code.allowed=true
+secret.code.lives=30
+
+$ cat docs/user-guide/configmap/kubectl/ui.properties
+color.good=purple
+color.bad=yellow
+allow.textmode=true
+how.nice.to.look=fairlyNice
+
+$ kubectl create configmap game-config --from-file=docs/user-guide/configmap/kubectl
+</code></pre>
 <p><code>--from-file</code>指定的目录下的所有文件都会配置在configMap中以,以键值对的方式存在.</p>
 <h2 id="使用文件创建"><a href="#使用文件创建" class="headerlink" title="使用文件创建"></a>使用文件创建</h2><p>只要指定为一个文件就可以从单个文件中创建 ConfigMap</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap game-config-2 --from-file=docs/user-guide/configmap/kubectl/game.properties</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">kubectl create configmap game-config-2 --from-file=docs/user-guide/configmap/kubectl/game.properties
+</code></pre>
 <p><code>game.properties</code>是一个文件</p>
-<h2 id="使用字面值创建"><a href="#使用字面值创建" class="headerlink" title="使用字面值创建"></a>使用字面值创建</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create configmap special-config --from-literal=special.how=very --from-literal=special.type=charm</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="使用字面值创建"><a href="#使用字面值创建" class="headerlink" title="使用字面值创建"></a>使用字面值创建</h2><pre><code class="bash">kubectl create configmap special-config --from-literal=special.how=very --from-literal=special.type=charm
+</code></pre>
 <p><code>special.how</code>键名 <code>very</code>键值</p>
 <h2 id="Pod中使用ConfigMap"><a href="#Pod中使用ConfigMap" class="headerlink" title="Pod中使用ConfigMap"></a>Pod中使用ConfigMap</h2><ol>
 <li>使用ConfigMap代替环境变量</li>
 </ol>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">special-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">	<span class="attr">special.how:</span> <span class="string">very</span></span><br><span class="line">	<span class="attr">special.type:</span> <span class="string">charm</span></span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">env-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">log_level:</span> <span class="string">INFO</span></span><br><span class="line">  </span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dapi-test-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">test-api</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">"/bin/sh"</span>,<span class="string">"-c"</span>,<span class="string">"env"</span>]</span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SPECIAL_LEVEL_KEY</span></span><br><span class="line">          <span class="attr">valueFrom:</span> </span><br><span class="line">            <span class="attr">configMapKeyRef:</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">spacial-config</span></span><br><span class="line">              <span class="attr">key:</span> <span class="string">special.how</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SPECIAL_TYPE_KEY</span></span><br><span class="line">          <span class="attr">valueFrom:</span></span><br><span class="line">            <span class="attr">configMapKeyRef:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">special-config</span></span><br><span class="line">            <span class="attr">key:</span> <span class="string">special.type</span></span><br><span class="line">      <span class="attr">envFrom:</span> </span><br><span class="line">        <span class="bullet">-</span> <span class="string">configMapRef</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">env-config</span></span><br><span class="line">    <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="使用configMap设置命令行参数"><a href="#使用configMap设置命令行参数" class="headerlink" title="使用configMap设置命令行参数"></a>使用configMap设置命令行参数</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">special-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">	<span class="attr">special.how:</span> <span class="string">very</span></span><br><span class="line">	<span class="attr">special.type:</span> <span class="string">charm</span></span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dapi-test-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">test-api</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">"/bin/sh"</span>,<span class="string">"-c"</span>,<span class="string">"echo $($SPECIAL_LEVEL_KEY)$(SPECIAL_TYPE_KEY)"</span>]</span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SPECIAL_LEVEL_KEY</span></span><br><span class="line">          <span class="attr">valueFrom:</span> </span><br><span class="line">            <span class="attr">configMapKeyRef:</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">spacial-config</span></span><br><span class="line">              <span class="attr">key:</span> <span class="string">special.how</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SPECIAL_TYPE_KEY</span></span><br><span class="line">          <span class="attr">valueFrom:</span></span><br><span class="line">            <span class="attr">configMapKeyRef:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">special-config</span></span><br><span class="line">            <span class="attr">key:</span> <span class="string">special.type</span></span><br><span class="line">      <span class="attr">envFrom:</span> </span><br><span class="line">        <span class="bullet">-</span> <span class="string">configMapRef</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">env-config</span></span><br><span class="line">    <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: special-config
+  namespace: default
+data:
+    special.how: very
+    special.type: charm
+</code></pre>
+<pre><code class="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+  namespace: default
+data:
+  log_level: INFO
+  
+</code></pre>
+<pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-api
+      image: nginx:1.7.9
+      command: ["/bin/sh","-c","env"]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom: 
+            configMapKeyRef:
+              name: spacial-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+            name: special-config
+            key: special.type
+      envFrom: 
+        - configMapRef
+            name: env-config
+    restartPolicy: Never
+</code></pre>
+<h2 id="使用configMap设置命令行参数"><a href="#使用configMap设置命令行参数" class="headerlink" title="使用configMap设置命令行参数"></a>使用configMap设置命令行参数</h2><pre><code class="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: special-config
+  namespace: default
+data:
+    special.how: very
+    special.type: charm
+</code></pre>
+<pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-api
+      image: nginx:1.7.9
+      command: ["/bin/sh","-c","echo $($SPECIAL_LEVEL_KEY)$(SPECIAL_TYPE_KEY)"]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom: 
+            configMapKeyRef:
+              name: spacial-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+            name: special-config
+            key: special.type
+      envFrom: 
+        - configMapRef
+            name: env-config
+    restartPolicy: Never
+</code></pre>
 <h2 id="通过数据卷插件方式使用configMap"><a href="#通过数据卷插件方式使用configMap" class="headerlink" title="通过数据卷插件方式使用configMap"></a>通过数据卷插件方式使用configMap</h2><p><strong>在数据卷里面使用configMap,有不同的选项。最基本的就是将文件填入数据卷中,键就是文件名，键值就是文件内容</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dapi-test-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">test-api</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">      <span class="attr">command:</span> [<span class="string">"/bin/sh"</span>,<span class="string">"-c"</span>,<span class="string">"cat /etc/config/special.how"</span>]</span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/etc/config</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">        <span class="attr">configMap:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">special-config</span></span><br><span class="line">    <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="configMap的热更新"><a href="#configMap的热更新" class="headerlink" title="configMap的热更新"></a>configMap的热更新</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span>  </span><br><span class="line">  <span class="attr">name:</span> <span class="string">log-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">log_level:</span> <span class="string">INFO</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">my-nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">mynginx</span></span><br><span class="line">      <span class="attr">spec:</span></span><br><span class="line">        <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-nginx</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">            <span class="attr">mountPath:</span> <span class="string">/etc/config</span></span><br><span class="line">        <span class="attr">volumes:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">            <span class="string">configMap</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">log-config</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-api
+      image: nginx:1.7.9
+      command: ["/bin/sh","-c","cat /etc/config/special.how"]
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+    volumes:
+      - name: config-volume
+        configMap:
+          name: special-config
+    restartPolicy: Never
+</code></pre>
+<h2 id="configMap的热更新"><a href="#configMap的热更新" class="headerlink" title="configMap的热更新"></a>configMap的热更新</h2><pre><code class="yaml">apiVersion: v1
+kind: ConfigMap
+metadata:  
+  name: log-config
+  namespace: default
+data:
+  log_level: INFO
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+name: my-nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mynginx
+      spec:
+        containers:
+        - name: my-nginx
+          image: nginx:1.7.9
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+        volumes:
+          - name: config-volume
+            configMap
+              name: log-config
+</code></pre>
 <p><strong>修改configMap</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit configmap log-comfig</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">kubectl edit configmap log-comfig
+</code></pre>
 <p><strong>修改<code>log_level</code>的值为DEBUG等待大概10秒</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:  </span><br><span class="line">  name: log-config</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  log_level: DEBUG</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">apiVersion: v1
+kind: ConfigMap
+metadata:  
+  name: log-config
+  namespace: default
+data:
+  log_level: DEBUG
+</code></pre>
 <p><strong>滚动更新Pod</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deployment my-nginx --patch<span class="string">'{"spec": {"template": {"metadata": {"annotations":{"version/config": "20190411" }}}}}'</span></span><br></pre></td></tr></tbody></table></figure>
-
-
+<pre><code class="bash">kubectl patch deployment my-nginx --patch'{"spec": {"template": {"metadata": {"annotations":{"version/config": "20190411" }}}}}'
+</code></pre>
 
   
   
@@ -984,7 +1121,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

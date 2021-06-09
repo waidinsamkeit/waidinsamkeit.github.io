@@ -541,80 +541,193 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>PS: 必须有java的环境,怎么配置看我博客文章搜java即可。</p>
 </blockquote>
 <p>优先环境准备，禁用防火墙和selinux</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">sed -i '/^SELINUX=/s/enforcing/disabled/' /etc/selinux/config</span><br><span class="line">grep '^SELINUX=' /etc/selinux/config</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">systemctl stop firewalld
+systemctl disable firewalld
+sed -i '/^SELINUX=/s/enforcing/disabled/' /etc/selinux/config
+grep '^SELINUX=' /etc/selinux/config
+</code></pre>
 <p>设置TCP连接数和最大打开文件数</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat&gt;&gt;/etc/security/limits.conf&lt;&lt;EOF</span><br><span class="line">* soft nofile 655350</span><br><span class="line">* hard nofile 655350</span><br><span class="line">EOF</span><br><span class="line">[root@localhost ~]# echo "vm.max_map_count=655360" &gt;&gt; /etc/sysctl.conf</span><br><span class="line">[root@localhost ~]# reboot</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost ~]# cat&gt;&gt;/etc/security/limits.conf&lt;&lt;EOF
+* soft nofile 655350
+* hard nofile 655350
+EOF
+[root@localhost ~]# echo "vm.max_map_count=655360" &gt;&gt; /etc/sysctl.conf
+[root@localhost ~]# reboot
+</code></pre>
 <p>必看内容</p>
 <p>[hidden]如果JAVA报错[/hidden]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/java/bin/* /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">ln -s /usr/local/java/bin/* /usr/bin/
+</code></pre>
 <h3 id="1-1导入Elasticsearch-PGP密钥"><a href="#1-1导入Elasticsearch-PGP密钥" class="headerlink" title="1.1导入Elasticsearch PGP密钥"></a>1.1导入Elasticsearch PGP密钥</h3><p>我们使用带有指纹的Elasticsearch签名密钥（PGP密钥<a target="_blank" rel="noopener" href="https://pgp.mit.edu/pks/lookup?op=vindex&amp;search=0xD27D666CD88E42B4">D88E42B4</a>，可从<a target="_blank" rel="noopener" href="https://pgp.mit.edu/">https://pgp.mit.edu获得</a>）对所有软件包进行签名 ：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4609 5ACC 8548 582C 1A26 99A9 D27D 666C D88E 42B4</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>4609 5ACC 8548 582C 1A26 99A9 D27D 666C D88E 42B4
+</code></pre>
 <p>下载并安装公共签名密钥：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+</code></pre>
 <h3 id="1-2从RPM存储库安装"><a href="#1-2从RPM存储库安装" class="headerlink" title="1.2从RPM存储库安装"></a>1.2从RPM存储库安装</h3><p>对于基于RedHat的发行版，在目录中创建一个文件<code>elasticsearch.repo</code>；<code>/etc/yum.repos.d/</code>对于基于<code>/etc/zypp/repos.d/</code>OpenSuSE的发行版，在目录中创建一个文件，其中包含：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/yum.repos.d/elasticsearch.repo</span><br><span class="line">写入一下内容</span><br><span class="line">[elasticsearch-6.3]</span><br><span class="line">name=Elasticsearch repository for 6.x packages</span><br><span class="line">baseurl=https://artifacts.elastic.co/packages/6.x/yum</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch</span><br><span class="line">enabled=1</span><br><span class="line">autorefresh=1</span><br><span class="line">type=rpm-md</span><br><span class="line">[root@localhost ~]# yum makecache //建立缓存元数据</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="1-3安装Elasticsearch-Kibana-Logstash"><a href="#1-3安装Elasticsearch-Kibana-Logstash" class="headerlink" title="1.3安装Elasticsearch+Kibana+Logstash"></a>1.3安装Elasticsearch+Kibana+Logstash</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost yum.repos.d]# yum -y install elasticsearch logstash kibana</span><br><span class="line">// 安装完成以后的版本应该都是6.8.1</span><br><span class="line">// 友情提醒： 操作前记得备份yml文件</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost ~]# vim /etc/yum.repos.d/elasticsearch.repo
+写入一下内容
+[elasticsearch-6.3]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+[root@localhost ~]# yum makecache //建立缓存元数据
+</code></pre>
+<h3 id="1-3安装Elasticsearch-Kibana-Logstash"><a href="#1-3安装Elasticsearch-Kibana-Logstash" class="headerlink" title="1.3安装Elasticsearch+Kibana+Logstash"></a>1.3安装Elasticsearch+Kibana+Logstash</h3><pre><code class="shell">[root@localhost yum.repos.d]# yum -y install elasticsearch logstash kibana
+// 安装完成以后的版本应该都是6.8.1
+// 友情提醒： 操作前记得备份yml文件
+</code></pre>
 <h3 id="1-4修改Elasticsearch配置文件"><a href="#1-4修改Elasticsearch配置文件" class="headerlink" title="1.4修改Elasticsearch配置文件"></a>1.4修改Elasticsearch配置文件</h3><p>先修改Elasticsearch</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir -p /etc/elasticsearch/{data,log}</span><br><span class="line">[root@localhost ~]# vim /etc/elasticsearch/elasticsearch.yml</span><br><span class="line">[root@localhost ~]# systemctl status elasticsearch</span><br><span class="line"></span><br><span class="line">更改内容</span><br><span class="line">node.name: node-1 //取消注释</span><br><span class="line">path.data: /var/lib/elasticsearch 更改为 path.data: /etc/elasticsearch/data</span><br><span class="line">path.logs: /var/log/elasticsearch 更改为 path.logs: /etc/elasticsearch/log</span><br><span class="line">network.host: 192.168.1.100 //取消注释改为本机IP</span><br><span class="line">http.port: 9200 //取消注释</span><br><span class="line">http.cors.enabled: true       //添加到http.port下一行</span><br><span class="line">http.cors.allow-origin: "*"   //添加到http.cors.enabled下面</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">[root@localhost ~]# mkdir -p /etc/elasticsearch/{data,log}
+[root@localhost ~]# vim /etc/elasticsearch/elasticsearch.yml
+[root@localhost ~]# systemctl status elasticsearch
 
+更改内容
+node.name: node-1 //取消注释
+path.data: /var/lib/elasticsearch 更改为 path.data: /etc/elasticsearch/data
+path.logs: /var/log/elasticsearch 更改为 path.logs: /etc/elasticsearch/log
+network.host: 192.168.1.100 //取消注释改为本机IP
+http.port: 9200 //取消注释
+http.cors.enabled: true       //添加到http.port下一行
+http.cors.allow-origin: "*"   //添加到http.cors.enabled下面
+</code></pre>
 <ul>
 <li>启动</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# systemctl daemon-reload</span><br><span class="line">[root@localhost ~]# systemctl enable elasticsearch.service //加入开机自启</span><br><span class="line">[root@localhost ~]# systemctl start elasticsearch</span><br><span class="line">[root@localhost ~]# systemctl status elasticsearch</span><br><span class="line">[root@bogon ~]# netstat -altnp|grep 9200</span><br><span class="line">tcp6       0      0 192.168.1.100:9200      :::*                    LISTEN      1693/java</span><br><span class="line">// 产看到有java进程跑得即可</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost ~]# systemctl daemon-reload
+[root@localhost ~]# systemctl enable elasticsearch.service //加入开机自启
+[root@localhost ~]# systemctl start elasticsearch
+[root@localhost ~]# systemctl status elasticsearch
+[root@bogon ~]# netstat -altnp|grep 9200
+tcp6       0      0 192.168.1.100:9200      :::*                    LISTEN      1693/java
+// 产看到有java进程跑得即可
+</code></pre>
 <p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.100:9200/">http://192.168.1.100:9200</a></p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/2020-10-14%2016-57-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png#vwid=1149&amp;vhei=854#vwid=1149&amp;vhei=854" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/2020-10-14%2016-57-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png#vwid=1149&amp;vhei=854#vwid=1149&amp;vhei=854" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="es"></p>
 <h3 id="1-5修改Kibana配置文件"><a href="#1-5修改Kibana配置文件" class="headerlink" title="1.5修改Kibana配置文件"></a>1.5修改Kibana配置文件</h3><p>修改Kibana</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon kibana]# vim /etc/kibana/kibana.yml</span><br><span class="line">server.port: 5601 //取消注释</span><br><span class="line">server.host: "192.168.1.100" // 取消注释,改为本机IP</span><br><span class="line">elasticsearch.hosts: ["http://192.168.1.100:9200"] //取消注释,更改为elasticsearch地址</span><br><span class="line">kibana.index: ".kibana"  //默认创建kibana索引</span><br><span class="line">elasticsearch.username: "elastic"  //登录els的用户</span><br><span class="line">elasticsearch.password: "123.com" // 登录els的密码</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon kibana]# vim /etc/kibana/kibana.yml
+server.port: 5601 //取消注释
+server.host: "192.168.1.100" // 取消注释,改为本机IP
+elasticsearch.hosts: ["http://192.168.1.100:9200"] //取消注释,更改为elasticsearch地址
+kibana.index: ".kibana"  //默认创建kibana索引
+elasticsearch.username: "elastic"  //登录els的用户
+elasticsearch.password: "123.com" // 登录els的密码
+</code></pre>
 <ul>
 <li>启动</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon kibana]# systemctl start kibana</span><br><span class="line">[root@bogon kibana]# systemctl enable kibana</span><br><span class="line">[root@bogon kibana]# systemctl status kibana</span><br><span class="line">[root@bogon kibana]# netstat -altnp|grep 5601</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon kibana]# systemctl start kibana
+[root@bogon kibana]# systemctl enable kibana
+[root@bogon kibana]# systemctl status kibana
+[root@bogon kibana]# netstat -altnp|grep 5601
+</code></pre>
 <p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.100:5601/">http://192.168.1.100:5601/</a></p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/2020-10-14%2016-57-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png#vwid=1149&amp;vhei=854#vwid=1149&amp;vhei=854" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/2020-10-14%2016-57-37%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png#vwid=1149&amp;vhei=854#vwid=1149&amp;vhei=854" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="kibana"></p>
 <h3 id="1-6修改Logstash配置文件"><a href="#1-6修改Logstash配置文件" class="headerlink" title="1.6修改Logstash配置文件"></a>1.6修改Logstash配置文件</h3><p>修改Logstash</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost logstash]# mkdir /etc/logstash/{data,log}</span><br><span class="line">[root@localhost ~]# vim /etc/logstash/logstash.yml</span><br><span class="line">path.data: /var/lib/logstash 更改为 /etc/logstash/data</span><br><span class="line">path.logs: /var/log/logstash 更改为 /etc/logstash/log</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-6-1-处理本机messages-信息为例，如下"><a href="#1-6-1-处理本机messages-信息为例，如下" class="headerlink" title="1.6.1 处理本机messages 信息为例，如下"></a>1.6.1 处理本机messages 信息为例，如下</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost logstash]# vim /etc/logstash/conf.d/messages.conf</span><br><span class="line">input {</span><br><span class="line"> </span><br><span class="line">file {</span><br><span class="line"> </span><br><span class="line">path =&gt; "/var/log/messages"</span><br><span class="line"> </span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line">output {</span><br><span class="line"> </span><br><span class="line">elasticsearch {</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash">hosts =&gt; [<span class="string">"192.168.157.142:9200"</span>,<span class="string">"192.168.157.142:9200"</span>]</span></span><br><span class="line"> </span><br><span class="line">hosts =&gt; ["192.168.1.100:9200"]</span><br><span class="line"> </span><br><span class="line">index =&gt; "messages-%{+YYYY.MM.dd}"</span><br><span class="line"> </span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line">stdout {</span><br><span class="line"> </span><br><span class="line"><span class="meta">#</span><span class="bash"> codec =&gt; rubydebug</span></span><br><span class="line"> </span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost logstash]# mkdir /etc/logstash/{data,log}
+[root@localhost ~]# vim /etc/logstash/logstash.yml
+path.data: /var/lib/logstash 更改为 /etc/logstash/data
+path.logs: /var/log/logstash 更改为 /etc/logstash/log
+</code></pre>
+<h4 id="1-6-1-处理本机messages-信息为例，如下"><a href="#1-6-1-处理本机messages-信息为例，如下" class="headerlink" title="1.6.1 处理本机messages 信息为例，如下"></a>1.6.1 处理本机messages 信息为例，如下</h4><pre><code class="shell">[root@localhost logstash]# vim /etc/logstash/conf.d/messages.conf
+input {
+ 
+file {
+ 
+path =&gt; "/var/log/messages"
+ 
+}
+ 
+}
+ 
+output {
+ 
+elasticsearch {
+ 
+#hosts =&gt; ["192.168.157.142:9200","192.168.157.142:9200"]
+ 
+hosts =&gt; ["192.168.1.100:9200"]
+ 
+index =&gt; "messages-%{+YYYY.MM.dd}"
+ 
+}
+ 
+stdout {
+ 
+# codec =&gt; rubydebug
+ 
+}
+</code></pre>
 <ul>
 <li>启动</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line"> </span><br><span class="line">systemctl enable logstash</span><br><span class="line"> </span><br><span class="line">systemctl start logstash</span><br><span class="line"> </span><br><span class="line">systemctl status logstash</span><br><span class="line">htpasswd -bc /etc/nginx/conf.d/htpasswd.users admin 123456</span><br><span class="line">elasticsearch.username: "elastic"</span><br><span class="line">elasticsearch.password: "123.com"</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">systemctl daemon-reload
+ 
+systemctl enable logstash
+ 
+systemctl start logstash
+ 
+systemctl status logstash
+htpasswd -bc /etc/nginx/conf.d/htpasswd.users admin 123456
+elasticsearch.username: "elastic"
+elasticsearch.password: "123.com"
+</code></pre>
 <h3 id="2-1-Nginx代理kibana"><a href="#2-1-Nginx代理kibana" class="headerlink" title="2.1 Nginx代理kibana"></a>2.1 Nginx代理kibana</h3><hr>
 <p>由于kibana5.x以后取消了验证,并且进行了集成,所以我们需要通过使用nginx代理验证</p>
 <ul>
 <li>Nginx我用源码包安装的,你们用yum也可以</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]#  yum -y install httpd-tools</span><br><span class="line">[root@bogon ~]# mkdir /usr/local/nginx/conf/conf.d/</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">[root@bogon ~]#  yum -y install httpd-tools
+[root@bogon ~]# mkdir /usr/local/nginx/conf/conf.d/
+</code></pre>
+<h4 id="2-1-1配置nginx文件"><a href="#2-1-1配置nginx文件" class="headerlink" title="2.1.1配置nginx文件"></a>2.1.1配置nginx文件</h4><pre><code class="shell">[root@bogon ~]# vim /usr/local/nginx/conf/nginx.conf
+添加以下内容到gzip on;下一行
+include /usr/local/nginx/conf/conf.d/*.conf;
+</code></pre>
+<h4 id="2-1-2编写kibana代理文件"><a href="#2-1-2编写kibana代理文件" class="headerlink" title="2.1.2编写kibana代理文件"></a>2.1.2编写kibana代理文件</h4><pre><code class="shell">[root@bogon ~]# vim /usr/local/nginx/conf/conf.d/kibana.conf 
+写入以下内容
+upstream kibana_server {
+    server 192.168.1.100:5601 weight=1 max_fails=3 fail_timeout=60;
+}
 
-<h4 id="2-1-1配置nginx文件"><a href="#2-1-1配置nginx文件" class="headerlink" title="2.1.1配置nginx文件"></a>2.1.1配置nginx文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">添加以下内容到gzip on;下一行</span><br><span class="line">include /usr/local/nginx/conf/conf.d/*.conf;</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-2编写kibana代理文件"><a href="#2-1-2编写kibana代理文件" class="headerlink" title="2.1.2编写kibana代理文件"></a>2.1.2编写kibana代理文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# vim /usr/local/nginx/conf/conf.d/kibana.conf </span><br><span class="line">写入以下内容</span><br><span class="line">upstream kibana_server {</span><br><span class="line">    server 192.168.1.100:5601 weight=1 max_fails=3 fail_timeout=60;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">server {</span><br><span class="line">    listen 8888;  //监听端口为8888</span><br><span class="line">    server_name _;</span><br><span class="line">    auth_basic "Restricted Access";    // 网页认证登录提示</span><br><span class="line">    auth_basic_user_file /usr/local/nginx/conf/htpasswd.users;   //此位置为存放密码位置</span><br><span class="line">    location / {</span><br><span class="line">        proxy_pass http://kibana_server;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection 'upgrade';</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_cache_bypass $http_upgrade;</span><br><span class="line">    }	</span><br><span class="line">}</span><br><span class="line">简言之就是，nginx监听外部的8888的端口，然后转发到后端的server 192.168.1.100:5601</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-3配置密码文件"><a href="#2-1-3配置密码文件" class="headerlink" title="2.1.3配置密码文件"></a>2.1.3配置密码文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# htpasswd -bc /usr/local/nginx/conf/htpasswd.users elastic 123.com</span><br><span class="line">// 设置用户为elastic 密码为123.com</span><br><span class="line">[root@bogon ~]# nginx -s reload //平滑重启nginx</span><br></pre></td></tr></tbody></table></figure>
-
+server {
+    listen 8888;  //监听端口为8888
+    server_name _;
+    auth_basic "Restricted Access";    // 网页认证登录提示
+    auth_basic_user_file /usr/local/nginx/conf/htpasswd.users;   //此位置为存放密码位置
+    location / {
+        proxy_pass http://kibana_server;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }    
+}
+简言之就是，nginx监听外部的8888的端口，然后转发到后端的server 192.168.1.100:5601
+</code></pre>
+<h4 id="2-1-3配置密码文件"><a href="#2-1-3配置密码文件" class="headerlink" title="2.1.3配置密码文件"></a>2.1.3配置密码文件</h4><pre><code class="shell">[root@bogon ~]# htpasswd -bc /usr/local/nginx/conf/htpasswd.users elastic 123.com
+// 设置用户为elastic 密码为123.com
+[root@bogon ~]# nginx -s reload //平滑重启nginx
+</code></pre>
 <p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.100:8888/">http://192.168.1.100:8888</a></p>
 <p>出现以下界面成功</p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/passwd.jpg#vwid=995&amp;vhei=333" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/passwd.jpg#vwid=995&amp;vhei=333" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg"></p>
 <p>输入密码登录以后进入kibana界面即成功</p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/1.png#vwid=1166&amp;vhei=738" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/1.png#vwid=1166&amp;vhei=738" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg"></p>
 <h1 id="附加排错内容"><a href="#附加排错内容" class="headerlink" title="附加排错内容"></a>附加排错内容</h1><p>如果NGINX访问验证通过以后出现如下错误</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Kibana did not load properly.Check the server output for more information</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">Kibana did not load properly.Check the server output for more information
+</code></pre>
 <p>查看NGINX日志发现</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2020/10/15 13:06:59 [crit] 850969#0: *1437 open() "/var/lib/nginx/tmp/proxy/8/00/0000000008" failed (13: Permission denied) while reading upstream, client: 123.118.103.126, server: _, request: "GET /built_assets/dlls/vendors.bundle.dll.js HTTP/1.1", upstream: "http://192.168.1.100:5601/built_assets/dlls/vendors.bundle.dll.js", host: "192.168.1.100:8889", referrer: "http://192.168.1.100:8889/app/kibana"</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">2020/10/15 13:06:59 [crit] 850969#0: *1437 open() "/var/lib/nginx/tmp/proxy/8/00/0000000008" failed (13: Permission denied) while reading upstream, client: 123.118.103.126, server: _, request: "GET /built_assets/dlls/vendors.bundle.dll.js HTTP/1.1", upstream: "http://192.168.1.100:5601/built_assets/dlls/vendors.bundle.dll.js", host: "192.168.1.100:8889", referrer: "http://192.168.1.100:8889/app/kibana"
+</code></pre>
 <p>原因是<code>/var/lib/nginx/tmp/proxy/</code>没有权限</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 -R /var/lib/nginx/tmp/proxy/</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">chmod 777 -R /var/lib/nginx/tmp/proxy/
+</code></pre>
 
   
   
@@ -737,7 +850,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 从IP：192.168.1.101
 准备配置如下，每台服务器都执行
 
-12345678sudo echo "n...</p>
+sudo echo "never" &g...</p>
         </a>
       
       
@@ -1019,7 +1132,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

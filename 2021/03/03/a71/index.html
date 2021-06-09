@@ -536,30 +536,171 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h2 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更换清华源</span></span><br><span class="line">sudo sed -e <span class="string">'s|^mirrorlist=|#mirrorlist=|g'</span> \</span><br><span class="line">         -e <span class="string">'s|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g'</span> \</span><br><span class="line">         -i.bak \</span><br><span class="line">         /etc/yum.repos.d/CentOS-*.repo</span><br><span class="line"><span class="comment"># 更换阿里epel</span></span><br><span class="line">curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line">yum -y install vim wget ansible</span><br></pre></td></tr></tbody></table></figure>
+  <h2 id="安装Ansible"><a href="#安装Ansible" class="headerlink" title="安装Ansible"></a>安装Ansible</h2><pre><code class="bash"># 更换清华源
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \
+         -i.bak \
+         /etc/yum.repos.d/CentOS-*.repo
+# 更换阿里epel
+curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+yum -y install vim wget ansible
+</code></pre>
+<h2 id="管理机配置host"><a href="#管理机配置host" class="headerlink" title="管理机配置host"></a>管理机配置host</h2><pre><code class="shell">vim /etc/hosts
+172.16.87.100 kubernetes-master
+172.16.87.101 kubernetes-node1
+172.16.87.102 kubernetes-node2
+</code></pre>
+<h2 id="Ansible添加主机节点"><a href="#Ansible添加主机节点" class="headerlink" title="Ansible添加主机节点"></a>Ansible添加主机节点</h2><pre><code class="bash">vim /etc/ansible/hosts
+[k8s_all]
+172.16.87.100
+172.16.87.101
+172.16.87.102
 
-<h2 id="管理机配置host"><a href="#管理机配置host" class="headerlink" title="管理机配置host"></a>管理机配置host</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line">172.16.87.100 kubernetes-master</span><br><span class="line">172.16.87.101 kubernetes-node1</span><br><span class="line">172.16.87.102 kubernetes-node2</span><br></pre></td></tr></tbody></table></figure>
+[k8s_master]
+172.16.87.100
 
-<h2 id="Ansible添加主机节点"><a href="#Ansible添加主机节点" class="headerlink" title="Ansible添加主机节点"></a>Ansible添加主机节点</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ansible/hosts</span><br><span class="line">[k8s_all]</span><br><span class="line">172.16.87.100</span><br><span class="line">172.16.87.101</span><br><span class="line">172.16.87.102</span><br><span class="line"></span><br><span class="line">[k8s_master]</span><br><span class="line">172.16.87.100</span><br><span class="line"></span><br><span class="line">[k8s_node]</span><br><span class="line">172.16.87.101</span><br><span class="line">172.16.87.102</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="更改其他主机host"><a href="#更改其他主机host" class="headerlink" title="更改其他主机host"></a>更改其他主机host</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vim alter_hosts.yaml</span><br><span class="line">- hosts: k8s_node</span><br><span class="line">  remote_user: root</span><br><span class="line">  tasks:</span><br><span class="line">    - name: backup /etc/hosts</span><br><span class="line">      shell: mv /etc/hosts /etc/host_bak</span><br><span class="line">    - name: copy localhosts file to remote</span><br><span class="line">      copy: src=/etc/hosts dest=/etc/ owner=root group=root mode=0644</span><br><span class="line">ansible-playbook alter_hosts.yaml <span class="comment"># 执行命令</span></span><br></pre></td></tr></tbody></table></figure>
-
+[k8s_node]
+172.16.87.101
+172.16.87.102
+</code></pre>
+<h2 id="更改其他主机host"><a href="#更改其他主机host" class="headerlink" title="更改其他主机host"></a>更改其他主机host</h2><pre><code class="bash">vim alter_hosts.yaml
+- hosts: k8s_node
+  remote_user: root
+  tasks:
+    - name: backup /etc/hosts
+      shell: mv /etc/hosts /etc/host_bak
+    - name: copy localhosts file to remote
+      copy: src=/etc/hosts dest=/etc/ owner=root group=root mode=0644
+ansible-playbook alter_hosts.yaml # 执行命令
+</code></pre>
 <blockquote>
 <p>更改完成后请重启主机</p>
 </blockquote>
-<h2 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">install_docker.yaml</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">hosts:</span> <span class="string">k8s_all</span></span><br><span class="line">  <span class="attr">remote_user:</span> <span class="string">root</span></span><br><span class="line">  <span class="attr">tasks:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">install</span> <span class="string">dependencies</span></span><br><span class="line">      <span class="attr">yum:</span> <span class="string">state=installed</span></span><br><span class="line">      <span class="attr">args:</span></span><br><span class="line">        <span class="attr">name:</span> [<span class="string">'ntp'</span>,<span class="string">'yum-utils'</span>,<span class="string">'device-mapper-persistent-data'</span>,<span class="string">'lvm2'</span>]</span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Add</span> <span class="string">docker-repo</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">yum-config-manager</span> <span class="string">--add-repo</span> <span class="string">https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">docker</span></span><br><span class="line">      <span class="attr">yum:</span> <span class="string">name=docker-ce</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Start</span> <span class="string">docker</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">systemctl</span> <span class="string">start</span> <span class="string">docker;systemctl</span> <span class="string">enable</span> <span class="string">docker</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h2><pre><code class="yaml">vim install_docker.yaml
+- hosts: k8s_all
+  remote_user: root
+  tasks:
+    - name: install dependencies
+      yum: state=installed
+      args:
+        name: ['ntp','yum-utils','device-mapper-persistent-data','lvm2']
+    - name: Add docker-repo
+      shell: yum-config-manager --add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+    - name: Install docker
+      yum: name=docker-ce
+    - name: Start docker
+      shell: systemctl start docker;systemctl enable docker
+</code></pre>
+<h2 id="info-sh"><a href="#info-sh" class="headerlink" title="info.sh"></a>info.sh</h2><pre><code class="bash">#!/bin/bash
+# 防火墙
+systemctl disable firewalld
+systemctl stop firewalld
+setenforce 0
+sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
 
-<h2 id="info-sh"><a href="#info-sh" class="headerlink" title="info.sh"></a>info.sh</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line">sed -i <span class="string">'s/^SELINUX=enforcing$/SELINUX=disabled/'</span> /etc/selinux/config</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#禁用swap</span></span><br><span class="line">swapoff -a</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"vm.swappiness =0"</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改内核参数</span></span><br><span class="line">modprobe br_netfilter</span><br><span class="line">cat &lt;&lt;<span class="string">EOF &gt;  /etc/sysctl.conf</span></span><br><span class="line"><span class="string">net.bridge.bridge-nf-call-ip6tables = 1</span></span><br><span class="line"><span class="string">net.bridge.bridge-nf-call-iptables = 1</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#重新加载配置文件</span></span><br><span class="line">sysctl -p</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置阿里k8s yum源</span></span><br><span class="line">cat &lt;&lt;<span class="string">EOF &gt; /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line"><span class="string">[kubernetes]</span></span><br><span class="line"><span class="string">name=Kubernetes</span></span><br><span class="line"><span class="string">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span></span><br><span class="line"><span class="string">enabled=1</span></span><br><span class="line"><span class="string">gpgcheck=1</span></span><br><span class="line"><span class="string">repo_gpgcheck=1</span></span><br><span class="line"><span class="string">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#更新缓存</span></span><br><span class="line">yum clean all -y &amp;&amp; yum makecache -y &amp;&amp; yum repolist -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署镜像</span></span><br><span class="line">docker pull bluersw/kube-apiserver:v1.16.2 </span><br><span class="line">docker pull bluersw/kube-controller-manager:v1.16.2</span><br><span class="line">docker pull bluersw/kube-scheduler:v1.16.2</span><br><span class="line">docker pull bluersw/kube-proxy:v1.16.2</span><br><span class="line">docker pull bluersw/pause:3.1</span><br><span class="line">docker pull bluersw/etcd:3.3.15-0</span><br><span class="line">docker pull bluersw/coredns:1.6.2</span><br><span class="line">docker pull bluersw/flannel:v0.11.0-amd64 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 还原</span></span><br><span class="line">docker tag bluersw/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">docker tag bluersw/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">docker tag bluersw/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">docker tag bluersw/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">docker tag bluersw/pause:3.1 k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag bluersw/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">docker tag bluersw/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2</span><br><span class="line">docker tag bluersw/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64</span><br><span class="line">docker images | grep bluersw | awk <span class="string">'{print "docker rmi ",$1":"$2}'</span> | sh -x</span><br></pre></td></tr></tbody></table></figure>
 
-<h2 id="deploy-master-yaml"><a href="#deploy-master-yaml" class="headerlink" title="deploy_master.yaml"></a>deploy_master.yaml</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">hosts:</span> <span class="string">k8s_master</span></span><br><span class="line">  <span class="attr">remote_user:</span> <span class="string">root</span></span><br><span class="line">  <span class="attr">vars:</span></span><br><span class="line">    <span class="attr">kube_version:</span> <span class="number">1.16</span><span class="number">.2</span></span><br><span class="line">    <span class="attr">k8s_version:</span> <span class="string">v1.16.2</span></span><br><span class="line">    <span class="attr">k8s_master:</span> <span class="number">172.16</span><span class="number">.87</span><span class="number">.100</span></span><br><span class="line">  <span class="attr">tasks:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Exec</span> <span class="string">Info</span></span><br><span class="line">      <span class="attr">script:</span> <span class="string">./info.sh</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">install</span> <span class="string">Kubernetes</span></span><br><span class="line">      <span class="attr">yum:</span> <span class="string">name={{item}}</span> <span class="string">state=present</span></span><br><span class="line">      <span class="attr">with_items:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">kubectl-{{kube_version}}</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">kubeadm-{{kube_version}}</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">kubelet-{{kube_version}}</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Init</span> <span class="string">Kubernetes</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">kubeadm</span> <span class="string">init</span>  <span class="string">--kubernetes-version={{k8s_version}}</span> <span class="string">--apiserver-advertise-address={{k8s_master}}</span> <span class="string">--pod-network-cidr=10.244.0.0/16</span> <span class="string">--service-cidr=10.1.0.0/16</span> <span class="string">--token-ttl</span> <span class="number">0</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span> <span class="string">kube</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">mkdir</span> <span class="string">-p</span> <span class="string">$HOME/.kube</span> <span class="string">&amp;&amp;</span> <span class="string">cp</span> <span class="string">-i</span> <span class="string">/etc/kubernetes/admin.conf</span> <span class="string">$HOME/.kube/config</span> <span class="string">&amp;&amp;</span> <span class="string">chown</span> <span class="string">$(id</span> <span class="string">-u):$(id</span> <span class="string">-g)</span> <span class="string">$HOME/.kube/config</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Apply</span> <span class="string">flannel</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">kubectl</span> <span class="string">apply</span> <span class="string">-f</span> <span class="string">https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">get</span> <span class="string">join</span> <span class="string">command</span></span><br><span class="line">      <span class="attr">shell:</span> <span class="string">kubeadm</span> <span class="string">token</span> <span class="string">create</span> <span class="string">--print-join-command</span> </span><br><span class="line">      <span class="attr">register:</span> <span class="string">join_command</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">show</span> <span class="string">join</span> <span class="string">command</span></span><br><span class="line">      <span class="attr">debug:</span> <span class="string">var=join_command</span> <span class="string">verbosity=0</span></span><br></pre></td></tr></tbody></table></figure>
+#禁用swap
+swapoff -a
+echo "vm.swappiness =0" &gt;&gt; /etc/sysctl.conf
 
-<h2 id="deploy-node-yaml"><a href="#deploy-node-yaml" class="headerlink" title="deploy_node.yaml"></a>deploy_node.yaml</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- hosts: k8s_node</span><br><span class="line">  remote_user: root</span><br><span class="line">  vars:</span><br><span class="line">    kube_version: 1.16.2</span><br><span class="line">  tasks:</span><br><span class="line">    - name: Exec Info</span><br><span class="line">      script: ./info.sh</span><br><span class="line">    - name: install Kubernetes</span><br><span class="line">      yum: name={{item}} state=present</span><br><span class="line">      with_items:</span><br><span class="line">        - kubeadm-{{kube_version}}</span><br><span class="line">        - kubelet-{{kube_version}}</span><br><span class="line">    - name: start kubelet</span><br><span class="line">      shell: systemctl <span class="built_in">enable</span> kubelet &amp;&amp; systemctl start kubelet</span><br><span class="line">    - name: join cluster</span><br><span class="line">      shell: kubeadm join 172.16.87.100:6443 --token vwsx61.rxzjukcfdnd2zob2     --discovery-token-ca-cert-hash sha256:cd53a381768b059f822f4d85f21041c73bf9c67e5b4f61eafbdfe6abb9ac65cb </span><br></pre></td></tr></tbody></table></figure>
+#修改内核参数
+modprobe br_netfilter
+cat &lt;&lt;EOF &gt;  /etc/sysctl.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
 
+#重新加载配置文件
+sysctl -p
+
+#配置阿里k8s yum源
+cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+#更新缓存
+yum clean all -y &amp;&amp; yum makecache -y &amp;&amp; yum repolist -y
+
+# 部署镜像
+docker pull bluersw/kube-apiserver:v1.16.2 
+docker pull bluersw/kube-controller-manager:v1.16.2
+docker pull bluersw/kube-scheduler:v1.16.2
+docker pull bluersw/kube-proxy:v1.16.2
+docker pull bluersw/pause:3.1
+docker pull bluersw/etcd:3.3.15-0
+docker pull bluersw/coredns:1.6.2
+docker pull bluersw/flannel:v0.11.0-amd64 
+
+# 还原
+docker tag bluersw/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2
+docker tag bluersw/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2
+docker tag bluersw/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2
+docker tag bluersw/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2
+docker tag bluersw/pause:3.1 k8s.gcr.io/pause:3.1
+docker tag bluersw/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0
+docker tag bluersw/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2
+docker tag bluersw/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64
+docker images | grep bluersw | awk '{print "docker rmi ",$1":"$2}' | sh -x
+</code></pre>
+<h2 id="deploy-master-yaml"><a href="#deploy-master-yaml" class="headerlink" title="deploy_master.yaml"></a>deploy_master.yaml</h2><pre><code class="yaml">- hosts: k8s_master
+  remote_user: root
+  vars:
+    kube_version: 1.16.2
+    k8s_version: v1.16.2
+    k8s_master: 172.16.87.100
+  tasks: 
+    - name: Exec Info
+      script: ./info.sh
+    - name: install Kubernetes
+      yum: name={{item}} state=present
+      with_items:
+        - kubectl-{{kube_version}}
+        - kubeadm-{{kube_version}}
+        - kubelet-{{kube_version}}
+    - name: Init Kubernetes
+      shell: kubeadm init  --kubernetes-version={{k8s_version}} --apiserver-advertise-address={{k8s_master}} --pod-network-cidr=10.244.0.0/16 --service-cidr=10.1.0.0/16 --token-ttl 0
+    - name: config kube
+      shell: mkdir -p $HOME/.kube &amp;&amp; cp -i /etc/kubernetes/admin.conf $HOME/.kube/config &amp;&amp; chown $(id -u):$(id -g) $HOME/.kube/config
+    - name: Apply flannel
+      shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml 
+    - name: get join command
+      shell: kubeadm token create --print-join-command 
+      register: join_command
+    - name: show join command
+      debug: var=join_command verbosity=0
+</code></pre>
+<h2 id="deploy-node-yaml"><a href="#deploy-node-yaml" class="headerlink" title="deploy_node.yaml"></a>deploy_node.yaml</h2><pre><code class="bash">- hosts: k8s_node
+  remote_user: root
+  vars:
+    kube_version: 1.16.2
+  tasks:
+    - name: Exec Info
+      script: ./info.sh
+    - name: install Kubernetes
+      yum: name={{item}} state=present
+      with_items:
+        - kubeadm-{{kube_version}}
+        - kubelet-{{kube_version}}
+    - name: start kubelet
+      shell: systemctl enable kubelet &amp;&amp; systemctl start kubelet
+    - name: join cluster
+      shell: kubeadm join 172.16.87.100:6443 --token vwsx61.rxzjukcfdnd2zob2     --discovery-token-ca-cert-hash sha256:cd53a381768b059f822f4d85f21041c73bf9c67e5b4f61eafbdfe6abb9ac65cb 
+</code></pre>
 <ul>
 <li>Token：需要到Master查看Ansible返回的执行信息</li>
 </ul>
-<h2 id="验证集群"><a href="#验证集群" class="headerlink" title="验证集群"></a>验证集群</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]<span class="comment"># kubectl get node</span></span><br><span class="line">NAME                STATUS   ROLES    AGE     VERSION</span><br><span class="line">kubernetes-master   Ready    master   14m     v1.16.2</span><br><span class="line">kubernetes-node1    Ready    &lt;none&gt;   5m1s    v1.16.2</span><br><span class="line">kubernetes-node2    Ready    &lt;none&gt;   6m47s   v1.16.2</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="验证集群"><a href="#验证集群" class="headerlink" title="验证集群"></a>验证集群</h2><pre><code class="bash">[root@kubernetes-master ~]# kubectl get node
+NAME                STATUS   ROLES    AGE     VERSION
+kubernetes-master   Ready    master   14m     v1.16.2
+kubernetes-node1    Ready    &lt;none&gt;   5m1s    v1.16.2
+kubernetes-node2    Ready    &lt;none&gt;   6m47s   v1.16.2
+</code></pre>
 
   
   
@@ -684,7 +825,7 @@ Nfs：网络存储,Pod重启后,数据还是存在的
 部署NFS服务器
 可以单独设置一台服务器为NFS服务器
 
-12y...</p>
+yum...</p>
         </a>
       
       
@@ -970,7 +1111,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

@@ -563,12 +563,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>源码采用<code>JDK1.8</code>版本进行编写，请注意修改使用项目的<code>JDK</code>版本，<a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK 1.8下载地址</a></p>
 <p>需本地安装<code>Maven</code>环境，<a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">Maven 下载地址</a></p>
 <p>因<code>logging-admin-ui</code>所需<code>vue-cli-service</code>命令支持，本地需要安装<code>vue-cli</code>。</p>
-<h3 id="拉取源码到本地"><a href="#拉取源码到本地" class="headerlink" title="拉取源码到本地"></a>拉取源码到本地</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/minbox-projects/minbox-logging.git</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="安装到本地Maven仓库"><a href="#安装到本地Maven仓库" class="headerlink" title="安装到本地Maven仓库"></a>安装到本地Maven仓库</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn install</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="编译-amp-打包生成jar包"><a href="#编译-amp-打包生成jar包" class="headerlink" title="编译 &amp; 打包生成jar包"></a>编译 &amp; 打包生成jar包</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package</span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="拉取源码到本地"><a href="#拉取源码到本地" class="headerlink" title="拉取源码到本地"></a>拉取源码到本地</h3><pre><code class="bash">git clone https://gitee.com/minbox-projects/minbox-logging.git
+</code></pre>
+<h3 id="安装到本地Maven仓库"><a href="#安装到本地Maven仓库" class="headerlink" title="安装到本地Maven仓库"></a>安装到本地Maven仓库</h3><pre><code class="bash">mvn install
+</code></pre>
+<h3 id="编译-amp-打包生成jar包"><a href="#编译-amp-打包生成jar包" class="headerlink" title="编译 &amp; 打包生成jar包"></a>编译 &amp; 打包生成jar包</h3><pre><code class="bash">mvn clean package
+</code></pre>
 <h2 id="Maven仓库依赖构建"><a href="#Maven仓库依赖构建" class="headerlink" title="Maven仓库依赖构建"></a>Maven仓库依赖构建</h2><p><code>MinBox Logging</code>内的模块都已经上传到<code>Apache Maven Center</code>中央仓库，添加对应的依赖到<code>pom.xml</code>会自动下载到本地。</p>
 <h2 id="欢迎提交贡献代码"><a href="#欢迎提交贡献代码" class="headerlink" title="欢迎提交贡献代码"></a>欢迎提交贡献代码</h2><p><code>MinBox Logging</code>欢迎广大开发者创建<code>Pull Request</code>来贡献代码，代码通过审核后会被合并到<code>master</code>主分支。</p>
 <h2 id="开源许可"><a href="#开源许可" class="headerlink" title="开源许可"></a>开源许可</h2><p><code>MinBox Logging</code>采用<code>Apache2</code>开源许可。</p>
@@ -690,7 +690,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>
 别丢银哈哈哈
 
-1234567891011121314[root@bogon ~]# kill -l 1) SIGHUP       2) SIGINT       3) SIGQUIT   ...</p>
+[root@bogon ~]# kill -l
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL      ...</p>
         </a>
       
       
@@ -977,7 +978,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

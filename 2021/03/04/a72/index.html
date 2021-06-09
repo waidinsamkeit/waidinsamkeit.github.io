@@ -545,15 +545,48 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="部署NFS服务器"><a href="#部署NFS服务器" class="headerlink" title="部署NFS服务器"></a>部署NFS服务器</h2><blockquote>
 <p>可以单独设置一台服务器为NFS服务器</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nfs-utils</span><br><span class="line">systemctl start nfs</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="设置挂载目录"><a href="#设置挂载目录" class="headerlink" title="设置挂载目录"></a>设置挂载目录</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /data/k8s_nfs -p</span><br><span class="line">vim /etc/exports</span><br><span class="line">/data/k8s_nfs *(rw,no_root_squash)</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="在K8S节点上安装NFS"><a href="#在K8S节点上安装NFS" class="headerlink" title="在K8S节点上安装NFS"></a>在K8S节点上安装NFS</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nfs-utils</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="部署应用挂载NFS"><a href="#部署应用挂载NFS" class="headerlink" title="部署应用挂载NFS"></a>部署应用挂载NFS</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">nginx-nfs.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-dep1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html</span> <span class="comment"># NFS挂载到内部的目录</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">          <span class="attr">nfs:</span></span><br><span class="line">            <span class="attr">server:</span> <span class="number">172.16</span><span class="number">.87</span><span class="number">.100</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/data/k8s_nfs</span> <span class="comment"># NFS文件夹地址</span></span><br><span class="line">            </span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f nginx-nfs.yaml</span><br><span class="line"><span class="comment"># 注意,你需要进入到/data/k8s_nfs创建一个Index.html然后进入到容器中才能验证效果</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">yum -y install nfs-utils
+systemctl start nfs
+</code></pre>
+<h2 id="设置挂载目录"><a href="#设置挂载目录" class="headerlink" title="设置挂载目录"></a>设置挂载目录</h2><pre><code class="bash">mkdir /data/k8s_nfs -p
+vim /etc/exports
+/data/k8s_nfs *(rw,no_root_squash)
+</code></pre>
+<h2 id="在K8S节点上安装NFS"><a href="#在K8S节点上安装NFS" class="headerlink" title="在K8S节点上安装NFS"></a>在K8S节点上安装NFS</h2><pre><code class="bash">yum -y install nfs-utils
+</code></pre>
+<h2 id="部署应用挂载NFS"><a href="#部署应用挂载NFS" class="headerlink" title="部署应用挂载NFS"></a>部署应用挂载NFS</h2><pre><code class="yaml">vim nginx-nfs.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: wwwroot
+          mountPath: /usr/share/nginx/html # NFS挂载到内部的目录
+        ports:
+        - containerPort: 80
+      volumes:
+        - name: wwwroot
+          nfs:
+            server: 172.16.87.100
+            path: /data/k8s_nfs # NFS文件夹地址
+            
+</code></pre>
+<pre><code class="bash">kubectl apply -f nginx-nfs.yaml
+# 注意,你需要进入到/data/k8s_nfs创建一个Index.html然后进入到容器中才能验证效果
+</code></pre>
 
   
   
@@ -692,7 +725,9 @@ Prometheus+Grafana
       
         <a class='next' href='/2021/03/03/a71/'>
           <p class='title'>Ansible部署k8s集群<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=htt...</p>
+          <p class='content'>安装Ansible# 更换清华源
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mi...</p>
         </a>
       
     </div>
@@ -966,7 +1001,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

@@ -540,19 +540,54 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>[notice]由于Spring Cloud基本上都是基于JAVA的所以需要安装JDK环境[/notice]</p>
 <p>[notice]文章中//后面带文字的都表示为注释[/notice]<br>[notice]1-3操作都是在两台机器上进行相同操作[/notice]</p>
 <h3 id="1-安装JDK环境以及Maven"><a href="#1-安装JDK环境以及Maven" class="headerlink" title="1.安装JDK环境以及Maven"></a>1.安装JDK环境以及Maven</h3><p><strong>下载jdk的包和Maven的包</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.由于JDK没有直链地址我把官网的地址放下面---注意一定要下载JDK8</span><br><span class="line">https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html</span><br><span class="line">2.Maven下载地址</span><br><span class="line">系统环境需求: Java开发套件（JDK）    Maven 3.3+需要JDK 1.7或更高版本才能执行-它们仍然允许您使用工具链针对1.3和其他JDK版本进行构建</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">1.由于JDK没有直链地址我把官网的地址放下面---注意一定要下载JDK8
+https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+2.Maven下载地址
+系统环境需求: Java开发套件（JDK）    Maven 3.3+需要JDK 1.7或更高版本才能执行-它们仍然允许您使用工具链针对1.3和其他JDK版本进行构建
+wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+</code></pre>
 <p><strong>安装JDK</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">我下载的JDK版本是这个jdk-8u201-linux-x64.tar.gz 你们可以下这个</span><br><span class="line">[root@MySQL8 ~]# tar -zxf jdk-8u201-linux-x64.tar.gz</span><br><span class="line">[root@MySQL8 ~]# mv jdk1.8.0_201/ /usr/local/java</span><br><span class="line">echo '</span><br><span class="line">export JAVA_HOME=/usr/local/java</span><br><span class="line">export JRE_HOME=/usr/local/java/jre</span><br><span class="line">export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin</span><br><span class="line">' &gt;&gt; /etc/profile</span><br><span class="line">[root@MySQL8 ~]# source /etc/profile</span><br><span class="line">// 使用java -verison出现版本信息即可</span><br><span class="line">[root@MySQL8 ~]# java -version</span><br><span class="line">java version "1.8.0_201"</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_201-b09)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">我下载的JDK版本是这个jdk-8u201-linux-x64.tar.gz 你们可以下这个
+[root@MySQL8 ~]# tar -zxf jdk-8u201-linux-x64.tar.gz
+[root@MySQL8 ~]# mv jdk1.8.0_201/ /usr/local/java
+echo '
+export JAVA_HOME=/usr/local/java
+export JRE_HOME=/usr/local/java/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+' &gt;&gt; /etc/profile
+[root@MySQL8 ~]# source /etc/profile
+// 使用java -verison出现版本信息即可
+[root@MySQL8 ~]# java -version
+java version "1.8.0_201"
+Java(TM) SE Runtime Environment (build 1.8.0_201-b09)
+Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)
+</code></pre>
 <p><strong>安装Maven</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@MySQL8 ~]# tar -zxf apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">[root@MySQL8 ~]# mv apache-maven-3.6.3 /usr/local/maven</span><br><span class="line">[root@MySQL8 ~]# echo "export PATH=$PATH:/usr/local/maven/bin" &gt;&gt; /etc/profile</span><br><span class="line">[root@MySQL8 ~]# source /etc/profile</span><br><span class="line">// 使用mvn -v 出现maven的配置信息即可</span><br><span class="line">[root@MySQL8 ~]# mvn -v</span><br><span class="line">Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)</span><br><span class="line">Maven home: /usr/local/maven</span><br><span class="line">Java version: 1.8.0_201, vendor: Oracle Corporation, runtime: /usr/local/java/jre</span><br><span class="line">Default locale: en_US, platform encoding: UTF-8</span><br><span class="line">OS name: "linux", version: "3.10.0-862.el7.x86_64", arch: "amd64", family: "unix"</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@MySQL8 ~]# tar -zxf apache-maven-3.6.3-bin.tar.gz
+[root@MySQL8 ~]# mv apache-maven-3.6.3 /usr/local/maven
+[root@MySQL8 ~]# echo "export PATH=$PATH:/usr/local/maven/bin" &gt;&gt; /etc/profile
+[root@MySQL8 ~]# source /etc/profile
+// 使用mvn -v 出现maven的配置信息即可
+[root@MySQL8 ~]# mvn -v
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: /usr/local/maven
+Java version: 1.8.0_201, vendor: Oracle Corporation, runtime: /usr/local/java/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "3.10.0-862.el7.x86_64", arch: "amd64", family: "unix"
+</code></pre>
 <p><strong>Maven镜像加速</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/maven/conf/settings.xml</span><br><span class="line">// 找到&lt;/mirrors&gt; 在上面一行写入就行,不要问！！肯定对</span><br><span class="line">&lt;mirror&gt;</span><br><span class="line">  &lt;id&gt;aliyun&lt;/id&gt;</span><br><span class="line">  &lt;name&gt;aliyun maven&lt;/name&gt;</span><br><span class="line">  &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;</span><br><span class="line">  &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;</span><br><span class="line">&lt;/mirror&gt; // 保存退出</span><br><span class="line"></span><br><span class="line">mvn archetype:generate -DgroupId=cn.kgc.kgcweb -Dartifacd=kgcweb -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false //使用此命令查看构建镜像源是否使用aliyun</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">vim /usr/local/maven/conf/settings.xml
+// 找到&lt;/mirrors&gt; 在上面一行写入就行,不要问！！肯定对
+&lt;mirror&gt;
+  &lt;id&gt;aliyun&lt;/id&gt;
+  &lt;name&gt;aliyun maven&lt;/name&gt;
+  &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;
+  &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
+&lt;/mirror&gt; // 保存退出
 
-
-
+mvn archetype:generate -DgroupId=cn.kgc.kgcweb -Dartifacd=kgcweb -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false //使用此命令查看构建镜像源是否使用aliyun
+</code></pre>
 <h2 id="2-构建Spring-Cloud-Eureka"><a href="#2-构建Spring-Cloud-Eureka" class="headerlink" title="2.构建Spring-Cloud-Eureka"></a>2.构建Spring-Cloud-Eureka</h2><p>[notice]由于我们是两个注册中心[/notice]<br>可能会有以下问题</p>
 <ul>
 <li><pre><code>Eureka相互进行注册
@@ -578,19 +613,60 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </tr>
 </tbody></table>
 <p><strong>部署Eureka</strong>f</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">yum -y install git </span><br><span class="line">git clone https://gitee.com/brave_heart_one/spring-cloud-examples.git</span><br><span class="line">// 配置一个注册中心[Eureka(注册发现)]</span><br><span class="line">[root@MySQL8 ~]# cd spring-cloud-examples/spring-cloud-eureka/spring-cloud-eureka</span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@MySQL8 spring-cloud-eureka]# vim src/main/resources/application.properties</span><br><span class="line">eureka.client.register-with-eureka=true //应用是否到注册中心注册</span><br><span class="line">eureka.client.fetch-registry=true //应用是否从注册中心收集消息</span><br><span class="line">eureka.client.serviceUrl.defaultZone=http://192.168.1.177:8000/eureka,http://192.168.1.178/eureka //到注册中心注册的客户端地址</span><br><span class="line">[root@MySQL8 spring-cloud-eureka]# mvn clean package //构建注册中心</span><br><span class="line">//最后出现 BUILD SUCCESS即可</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  18.059 s</span><br><span class="line">[INFO] Finished at: 2020-09-18T12:00:36-04:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">// 打包完以后你的target目录会出现一个jar包target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar</span><br><span class="line">//接下来我们运行这个jar包</span><br><span class="line">[root@MySQL8 spring-cloud-eureka]# java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar //注意 此种运行方法需要占用前端屏幕打印springlog日志</span><br><span class="line">//如果需要后台运行 执行如下命令</span><br><span class="line">[root@MySQL8 spring-cloud-eureka]# nohup java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar &gt; log.file 2&gt;&amp;1 &amp;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum -y install git 
+git clone https://gitee.com/brave_heart_one/spring-cloud-examples.git
+// 配置一个注册中心[Eureka(注册发现)]
+[root@MySQL8 ~]# cd spring-cloud-examples/spring-cloud-eureka/spring-cloud-eureka
+//编辑配置文件
+[root@MySQL8 spring-cloud-eureka]# vim src/main/resources/application.properties
+eureka.client.register-with-eureka=true //应用是否到注册中心注册
+eureka.client.fetch-registry=true //应用是否从注册中心收集消息
+eureka.client.serviceUrl.defaultZone=http://192.168.1.177:8000/eureka,http://192.168.1.178/eureka //到注册中心注册的客户端地址
+[root@MySQL8 spring-cloud-eureka]# mvn clean package //构建注册中心
+//最后出现 BUILD SUCCESS即可
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.059 s
+[INFO] Finished at: 2020-09-18T12:00:36-04:00
+[INFO] ------------------------------------------------------------------------
+// 打包完以后你的target目录会出现一个jar包target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar
+//接下来我们运行这个jar包
+[root@MySQL8 spring-cloud-eureka]# java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar //注意 此种运行方法需要占用前端屏幕打印springlog日志
+//如果需要后台运行 执行如下命令
+[root@MySQL8 spring-cloud-eureka]# nohup java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar &gt; log.file 2&gt;&amp;1 &amp;
+</code></pre>
 <p><strong>解析</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">将运行的jar 错误日志信息输出到log.file文件中，然后（&gt;&amp;1）就是继续输出到标准输出(前面加的&amp;，是为了让系统识别是标准输出)，最后一个&amp;,表示在后台运行。</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">将运行的jar 错误日志信息输出到log.file文件中，然后（&gt;&amp;1）就是继续输出到标准输出(前面加的&amp;，是为了让系统识别是标准输出)，最后一个&amp;,表示在后台运行。
+</code></pre>
 <p><strong>然后访问eureka就行</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">访问 192.168.1.177:8000或192.168.1.178:8000</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">访问 192.168.1.177:8000或192.168.1.178:8000
+</code></pre>
 <p><img src="https://blog.micomint.top/usr/uploads/2020/09/4096449889.jpg#vwid=1748&amp;vhei=833" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/4096449889.jpg#vwid=1748&amp;vhei=833" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="eureka.jpg"><br>[notice]如果访问其中的一个Eureka报错如下[/notice]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE.</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY'RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE.
+</code></pre>
 <p>解决方法：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">直接取消掉Eureka的自我保护机制,如果是双server则两方的Eureka都需要执行</span><br><span class="line">vim src/main/resources/application.properties</span><br><span class="line">eureka.server.enableSelfPreservation=false //加上这个</span><br><span class="line">[root@localhost spring-cloud-eureka]# mvn clean</span><br><span class="line">	[root@localhost spring-cloud-eureka]# mvn clean package //重新构建就行</span><br><span class="line">	[root@localhost spring-cloud-eureka]# kill -9 18129 //结束掉你的eureka的进程</span><br><span class="line">	[root@localhost spring-cloud-eureka]# nohup java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar &gt; log.file 2&gt;&amp;1 &amp;</span><br><span class="line">解决完成以后会出现以下一个红色提示信息</span><br><span class="line">THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS.</span><br><span class="line">不用理他！</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">直接取消掉Eureka的自我保护机制,如果是双server则两方的Eureka都需要执行
+vim src/main/resources/application.properties
+eureka.server.enableSelfPreservation=false //加上这个
+[root@localhost spring-cloud-eureka]# mvn clean
+    [root@localhost spring-cloud-eureka]# mvn clean package //重新构建就行
+    [root@localhost spring-cloud-eureka]# kill -9 18129 //结束掉你的eureka的进程
+    [root@localhost spring-cloud-eureka]# nohup java -jar target/spring-cloud-eureka-0.0.1-SNAPSHOT.jar &gt; log.file 2&gt;&amp;1 &amp;
+解决完成以后会出现以下一个红色提示信息
+THE SELF PRESERVATION MODE IS TURNED OFF.THIS MAY NOT PROTECT INSTANCE EXPIRY IN CASE OF NETWORK/OTHER PROBLEMS.
+不用理他！
+</code></pre>
 <p><strong>原因</strong></p>
-<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 因为Eureka server和client之间每隔30秒会进行一次心跳通信，告诉server，client还活着。由此引出两个名词： </span><br><span class="line">Renews threshold：server期望在每分钟中收到的心跳次数 </span><br><span class="line">Renews (last min)：上一分钟内收到的心跳次数。</span><br><span class="line">2. 禁止注册server自己为client，不管server是否禁止，阈值（threshold）是1。client个数为n，阈值为1+2*n（此为一个server且禁止自注册的情况） </span><br><span class="line">如果是多个server，且开启了自注册，那么就和client一样，是对于其他的server来说就是client，是要*2的</span><br><span class="line">3. Eurake有一个配置参数eureka.server.renewalPercentThreshold，定义了renews 和renews threshold的比值，默认值为0.85。当server在15分钟内，比值低于percent，即少了15%的微服务心跳，server会进入自我保护状态，Self-Preservation。在此状态下，server不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。 </span><br><span class="line">这种保护状态实际上是考虑了client和server之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息</span><br><span class="line">4. Eureka在CAP理论中属于AP，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="text">1. 因为Eureka server和client之间每隔30秒会进行一次心跳通信，告诉server，client还活着。由此引出两个名词： 
+Renews threshold：server期望在每分钟中收到的心跳次数 
+Renews (last min)：上一分钟内收到的心跳次数。
+2. 禁止注册server自己为client，不管server是否禁止，阈值（threshold）是1。client个数为n，阈值为1+2*n（此为一个server且禁止自注册的情况） 
+如果是多个server，且开启了自注册，那么就和client一样，是对于其他的server来说就是client，是要*2的
+3. Eurake有一个配置参数eureka.server.renewalPercentThreshold，定义了renews 和renews threshold的比值，默认值为0.85。当server在15分钟内，比值低于percent，即少了15%的微服务心跳，server会进入自我保护状态，Self-Preservation。在此状态下，server不会删除注册信息，这就有可能导致在调用微服务时，实际上服务并不存在。 
+这种保护状态实际上是考虑了client和server之间的心跳是因为网络问题，而非服务本身问题，不能简单的删除注册信息
+4. Eureka在CAP理论中属于AP，只要有一台Eureka还在，就能保证注册服务可用(保证可用性)，只不过查到的信息可能不是最新的(不保证强一致性)。
+</code></pre>
 
   
   
@@ -1000,7 +1076,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

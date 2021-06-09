@@ -548,45 +548,91 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li>三台同配服务器</li>
 </ul>
-<h2 id="更换阿里云yum地址"><a href="#更换阿里云yum地址" class="headerlink" title="更换阿里云yum地址"></a>更换阿里云yum地址</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak</span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.bak</span><br><span class="line">curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="更换阿里云yum地址"><a href="#更换阿里云yum地址" class="headerlink" title="更换阿里云yum地址"></a>更换阿里云yum地址</h2><pre><code class="bash">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.bak
+curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+</code></pre>
 <h2 id="安装Docker并且校对时间"><a href="#安装Docker并且校对时间" class="headerlink" title="安装Docker并且校对时间"></a>安装Docker并且校对时间</h2><ol>
 <li>校对时间</li>
 </ol>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install ntp</span><br><span class="line">ntpdate ntp1.aliyun.com</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">yum -y install ntp
+ntpdate ntp1.aliyun.com
+</code></pre>
 <ol start="2">
 <li>安装Docker</li>
 </ol>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">yum -y install docker-ce</span><br><span class="line">systemctl start docker.service</span><br><span class="line">systemctl <span class="built_in">enable</span> docker.service <span class="comment"># 设置开机自启</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="禁止防火墙与Selinux"><a href="#禁止防火墙与Selinux" class="headerlink" title="禁止防火墙与Selinux"></a>禁止防火墙与Selinux</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i <span class="string">'s/^SELINUX=enforcing$/SELINUX=disabled/'</span> /etc/selinux/config</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="禁用Swap分区"><a href="#禁用Swap分区" class="headerlink" title="禁用Swap分区"></a>禁用Swap分区</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a  </span><br><span class="line">cp /etc/fstab /etc/fstab_bak</span><br><span class="line">vim /etc/fstab</span><br><span class="line">对当前的swap分区进行注释,开机不自动挂载                                   </span><br><span class="line"><span class="comment"># /dev/mapper/centos-swap swap                    swap    defaults        0 0         # 对此内容进行注释</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"vm.swappiness =0"</span> &gt;&gt; /etc/sysctl.conf <span class="comment"># 彻底关闭swap</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="激活bridge流量"><a href="#激活bridge流量" class="headerlink" title="激活bridge流量"></a>激活bridge流量</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"net.bridge.bridge-nf-call-iptables = 1"</span> &gt;&gt; /etc/sysctl.conf </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"net.bridge.bridge-nf-call-ip6tables = 1"</span> &gt;&gt; /etc/sysctl.conf </span><br><span class="line">sysctl -p</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum -y install docker-ce
+systemctl start docker.service
+systemctl enable docker.service # 设置开机自启
+</code></pre>
+<h2 id="禁止防火墙与Selinux"><a href="#禁止防火墙与Selinux" class="headerlink" title="禁止防火墙与Selinux"></a>禁止防火墙与Selinux</h2><pre><code class="bash">setenforce 0
+sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
+systemctl disable firewalld
+</code></pre>
+<h2 id="禁用Swap分区"><a href="#禁用Swap分区" class="headerlink" title="禁用Swap分区"></a>禁用Swap分区</h2><pre><code class="bash">swapoff -a  
+cp /etc/fstab /etc/fstab_bak
+vim /etc/fstab
+对当前的swap分区进行注释,开机不自动挂载                                   
+# /dev/mapper/centos-swap swap                    swap    defaults        0 0         # 对此内容进行注释
+echo "vm.swappiness =0" &gt;&gt; /etc/sysctl.conf # 彻底关闭swap
+</code></pre>
+<h2 id="激活bridge流量"><a href="#激活bridge流量" class="headerlink" title="激活bridge流量"></a>激活bridge流量</h2><pre><code class="bash">echo "net.bridge.bridge-nf-call-iptables = 1" &gt;&gt; /etc/sysctl.conf 
+echo "net.bridge.bridge-nf-call-ip6tables = 1" &gt;&gt; /etc/sysctl.conf 
+sysctl -p
+</code></pre>
 <p>注意错误：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl: cannot <span class="built_in">stat</span> /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory</span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">modprobe br_netfilter <span class="comment"># 重新载入模块即可.</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="更改主机名"><a href="#更改主机名" class="headerlink" title="更改主机名"></a>更改主机名</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">更改主机名</span><br><span class="line">vim /etc/hosts</span><br><span class="line">在原有的后面位置进行追加以下内容                                  </span><br><span class="line">172.16.87.10 kubernetes-master</span><br><span class="line">172.16.87.11 kubernetes-node1</span><br><span class="line">172.16.87.12 kubernetes-node2</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot <span class="comment"># 重启主机</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="部署Kubelete"><a href="#部署Kubelete" class="headerlink" title="部署Kubelete"></a>部署Kubelete</h1><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/yum.repos.d/kubernets.repo                                  </span><br><span class="line">[aliyun.k8s]</span><br><span class="line">name=aliyun</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0 </span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install kubelet-1.16.2 kubeadm-1.16.2 kubectl-1.16.2 --disableexcludes=kubernetns</span><br><span class="line">systemctl start kubelet</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet <span class="comment"># 设置kubelet开机自启</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory
+</code></pre>
+<pre><code class="bash">modprobe br_netfilter # 重新载入模块即可.
+</code></pre>
+<h2 id="更改主机名"><a href="#更改主机名" class="headerlink" title="更改主机名"></a>更改主机名</h2><pre><code class="bash">更改主机名
+vim /etc/hosts
+在原有的后面位置进行追加以下内容                                  
+172.16.87.10 kubernetes-master
+172.16.87.11 kubernetes-node1
+172.16.87.12 kubernetes-node2
+</code></pre>
+<pre><code class="bash">reboot # 重启主机
+</code></pre>
+<h1 id="部署Kubelete"><a href="#部署Kubelete" class="headerlink" title="部署Kubelete"></a>部署Kubelete</h1><pre><code class="bash">vim /etc/yum.repos.d/kubernets.repo                                  
+[aliyun.k8s]
+name=aliyun
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=0 
+</code></pre>
+<pre><code class="bash">yum -y install kubelet-1.16.2 kubeadm-1.16.2 kubectl-1.16.2 --disableexcludes=kubernetns
+systemctl start kubelet
+systemctl enable kubelet # 设置kubelet开机自启
+</code></pre>
 <ul>
 <li><code>--disableexcludes=kubernetns </code>: 表示禁用官网的kubernets安装 使用我们自己配置的安装</li>
 </ul>
-<h2 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker pull bluersw/kube-apiserver:v1.16.2 </span><br><span class="line">docker pull bluersw/kube-controller-manager:v1.16.2</span><br><span class="line">docker pull bluersw/kube-scheduler:v1.16.2</span><br><span class="line">docker pull bluersw/kube-proxy:v1.16.2</span><br><span class="line">docker pull bluersw/pause:3.1</span><br><span class="line">docker pull bluersw/etcd:3.3.15-0</span><br><span class="line">docker pull bluersw/coredns:1.6.2</span><br><span class="line">docker pull bluersw/flannel:v0.11.0-amd64 </span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker tag bluersw/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2</span><br><span class="line">docker tag bluersw/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2</span><br><span class="line">docker tag bluersw/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2</span><br><span class="line">docker tag bluersw/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2</span><br><span class="line">docker tag bluersw/pause:3.1 k8s.gcr.io/pause:3.1</span><br><span class="line">docker tag bluersw/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0</span><br><span class="line">docker tag bluersw/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2</span><br><span class="line">docker tag bluersw/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64    </span><br><span class="line"><span class="comment"># 如果你看别的bluersw的镜像碍眼 那么接下来把他删掉</span></span><br><span class="line">docker images | grep bluersw | awk <span class="string">'{print "docker rmi ",$1":"$2}'</span> | sh -x</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="节点信息初始化"><a href="#节点信息初始化" class="headerlink" title="节点信息初始化"></a>节点信息初始化</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init  --kubernetes-version=v1.16.2 --apiserver-advertise-address=172.16.87.10 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.1.0.0/16 <span class="comment"># Master节点执行</span></span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h2><pre><code class="bash">docker pull bluersw/kube-apiserver:v1.16.2 
+docker pull bluersw/kube-controller-manager:v1.16.2
+docker pull bluersw/kube-scheduler:v1.16.2
+docker pull bluersw/kube-proxy:v1.16.2
+docker pull bluersw/pause:3.1
+docker pull bluersw/etcd:3.3.15-0
+docker pull bluersw/coredns:1.6.2
+docker pull bluersw/flannel:v0.11.0-amd64 
+</code></pre>
+<h2 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h2><pre><code class="bash">docker tag bluersw/kube-apiserver:v1.16.2 k8s.gcr.io/kube-apiserver:v1.16.2
+docker tag bluersw/kube-controller-manager:v1.16.2 k8s.gcr.io/kube-controller-manager:v1.16.2
+docker tag bluersw/kube-scheduler:v1.16.2 k8s.gcr.io/kube-scheduler:v1.16.2
+docker tag bluersw/kube-proxy:v1.16.2 k8s.gcr.io/kube-proxy:v1.16.2
+docker tag bluersw/pause:3.1 k8s.gcr.io/pause:3.1
+docker tag bluersw/etcd:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0
+docker tag bluersw/coredns:1.6.2 k8s.gcr.io/coredns:1.6.2
+docker tag bluersw/flannel:v0.11.0-amd64 quay.io/coreos/flannel:v0.11.0-amd64    
+# 如果你看别的bluersw的镜像碍眼 那么接下来把他删掉
+docker images | grep bluersw | awk '{print "docker rmi ",$1":"$2}' | sh -x
+</code></pre>
+<h2 id="节点信息初始化"><a href="#节点信息初始化" class="headerlink" title="节点信息初始化"></a>节点信息初始化</h2><pre><code class="bash">kubeadm init  --kubernetes-version=v1.16.2 --apiserver-advertise-address=172.16.87.10 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.1.0.0/16 # Master节点执行
+</code></pre>
 <ul>
 <li><p><code>--apiserver-advertise-address=172.16.87.10</code> : IP 地址为MasterIP</p>
 </li>
@@ -600,16 +646,24 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="创建密钥配置文件"><a href="#创建密钥配置文件" class="headerlink" title="创建密钥配置文件"></a>创建密钥配置文件</h2><blockquote>
 <p>每次启动自动加载$HOME/.kube/config下的密钥配置文件</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config </span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="部署Flannel网络"><a href="#部署Flannel网络" class="headerlink" title="部署Flannel网络"></a>部署Flannel网络</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml                                  </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config 
+</code></pre>
+<h2 id="部署Flannel网络"><a href="#部署Flannel网络" class="headerlink" title="部署Flannel网络"></a>部署Flannel网络</h2><pre><code class="bash">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml                                  
+</code></pre>
 <h2 id="加入集群"><a href="#加入集群" class="headerlink" title="加入集群"></a>加入集群</h2><blockquote>
 <p>在节点信息初始化完成的时候,会给予你密钥信息</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join 172.16.87.10:6443 --token sqff7s.dtykq7ipdi54fsbp \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:2fc44adc1db1f4539e99d799ae348e248c042d8696baa47999e4945de0096557</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="验证节点"><a href="#验证节点" class="headerlink" title="验证节点"></a>验证节点</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]<span class="comment"># kubectl get nodes</span></span><br><span class="line">NAME                STATUS   ROLES    AGE    VERSION</span><br><span class="line">kubernetes-master   Ready    master   3m5s   v1.16.2</span><br><span class="line">kubernetes-node1    Ready    &lt;none&gt;   87s    v1.16.2</span><br><span class="line">kubernetes-node2    Ready    &lt;none&gt;   86s    v1.16.2</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">kubeadm join 172.16.87.10:6443 --token sqff7s.dtykq7ipdi54fsbp \
+    --discovery-token-ca-cert-hash sha256:2fc44adc1db1f4539e99d799ae348e248c042d8696baa47999e4945de0096557
+</code></pre>
+<h2 id="验证节点"><a href="#验证节点" class="headerlink" title="验证节点"></a>验证节点</h2><pre><code class="bash">[root@kubernetes-master ~]# kubectl get nodes
+NAME                STATUS   ROLES    AGE    VERSION
+kubernetes-master   Ready    master   3m5s   v1.16.2
+kubernetes-node1    Ready    &lt;none&gt;   87s    v1.16.2
+kubernetes-node2    Ready    &lt;none&gt;   86s    v1.16.2
+</code></pre>
 
   
   
@@ -730,14 +784,18 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 管理Pod和ReplicaSet
 部署、滚动升级
 
-Pod资源限制1234567resource: # 调度时候资源配置大小  re...</p>
+Pod资源限制resource: # 调度时候资源配置大小
+  requests...</p>
         </a>
       
       
         <a class='next' href='/2021/02/20/a64/'>
           <p class='title'>Python模拟RabbitMQ生产者与消费者<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
           <p class='content'>Producer
-123456789101112131415161718192021222324252627282930# -*- coding: utf-8 -*- # @Time : 202...</p>
+# -*- coding: utf-8 -*- 
+# @Time : 2021/2/20 9:19 上午 
+# @Author : Forest
+# @File : Produ...</p>
         </a>
       
     </div>
@@ -1011,7 +1069,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

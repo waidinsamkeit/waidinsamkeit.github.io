@@ -554,16 +554,43 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li><strong>以下操作全部两台都执行</strong></li>
 </ul>
-<h4 id="1-1-准备环境搭建"><a href="#1-1-准备环境搭建" class="headerlink" title="1.1 准备环境搭建"></a>1.1 准备环境搭建</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# yum -y install gcc glibc-devel make ncurses-devel openssl-devel xmlto socat epel-release</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="1-1-准备环境搭建"><a href="#1-1-准备环境搭建" class="headerlink" title="1.1 准备环境搭建"></a>1.1 准备环境搭建</h4><pre><code class="shell">[root@localhost ~]# yum -y install gcc glibc-devel make ncurses-devel openssl-devel xmlto socat epel-release
+</code></pre>
+<h4 id="1-2-安装erlang"><a href="#1-2-安装erlang" class="headerlink" title="1.2 安装erlang"></a>1.2 安装erlang</h4><pre><code class="shell">wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+[root@bogon ~]# rpm -ivh erlang-solutions-1.0-1.noarch.rpm
+[root@localhost ~]# yum -y install erlang 
+// 默认安装的erlang应该是最新版,所以需要对应最新版的rabbitmq
+</code></pre>
+<h4 id="1-3-安装rabbitmq"><a href="#1-3-安装rabbitmq" class="headerlink" title="1.3 安装rabbitmq"></a>1.3 安装rabbitmq</h4><pre><code class="shell">[root@bogon ~]# vim /etc/yum.repos.d/rabbitmq.repo
+[rabbitmq_rabbitmq-server]
+name=rabbitmq_rabbitmq-server
+baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/7/$basearch
+repo_gpgcheck=1
+gpgcheck=0
+enabled=1
+gpgkey=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
 
-<h4 id="1-2-安装erlang"><a href="#1-2-安装erlang" class="headerlink" title="1.2 安装erlang"></a>1.2 安装erlang</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm</span><br><span class="line">[root@bogon ~]# rpm -ivh erlang-solutions-1.0-1.noarch.rpm</span><br><span class="line">[root@localhost ~]# yum -y install erlang </span><br><span class="line">// 默认安装的erlang应该是最新版,所以需要对应最新版的rabbitmq</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-3-安装rabbitmq"><a href="#1-3-安装rabbitmq" class="headerlink" title="1.3 安装rabbitmq"></a>1.3 安装rabbitmq</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# vim /etc/yum.repos.d/rabbitmq.repo</span><br><span class="line">[rabbitmq_rabbitmq-server]</span><br><span class="line">name=rabbitmq_rabbitmq-server</span><br><span class="line">baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/7/$basearch</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br><span class="line"></span><br><span class="line">[rabbitmq_rabbitmq-server-source]</span><br><span class="line">name=rabbitmq_rabbitmq-server-source</span><br><span class="line">baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/7/SRPMS</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey</span><br><span class="line">sslverify=1</span><br><span class="line">sslcacert=/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line">metadata_expire=300</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# yum -y install rabbitmq-server-3.8.8-1.el7</span><br><span class="line">[root@bogon ~]# systemctl start rabbitmq-server</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-4-启动管理插件"><a href="#1-4-启动管理插件" class="headerlink" title="1.4 启动管理插件"></a>1.4 启动管理插件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# rabbitmq-plugins enable rabbitmq_management	</span><br><span class="line">[root@bogon ~]# rabbitmqctl add_user admin 123.com //设置用户名为admin 密码123.com</span><br><span class="line">[root@bogon ~]# rabbitmqctl set_user_tags admin administrator //给予管理员权限</span><br></pre></td></tr></tbody></table></figure>
-
+[rabbitmq_rabbitmq-server-source]
+name=rabbitmq_rabbitmq-server-source
+baseurl=https://packagecloud.io/rabbitmq/rabbitmq-server/el/7/SRPMS
+repo_gpgcheck=1
+gpgcheck=0
+enabled=1
+gpgkey=https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+</code></pre>
+<pre><code class="shell">[root@bogon ~]# yum -y install rabbitmq-server-3.8.8-1.el7
+[root@bogon ~]# systemctl start rabbitmq-server
+</code></pre>
+<h4 id="1-4-启动管理插件"><a href="#1-4-启动管理插件" class="headerlink" title="1.4 启动管理插件"></a>1.4 启动管理插件</h4><pre><code class="shell">[root@localhost ~]# rabbitmq-plugins enable rabbitmq_management    
+[root@bogon ~]# rabbitmqctl add_user admin 123.com //设置用户名为admin 密码123.com
+[root@bogon ~]# rabbitmqctl set_user_tags admin administrator //给予管理员权限
+</code></pre>
 <h3 id="2-1-部署rabbitmq集群"><a href="#2-1-部署rabbitmq集群" class="headerlink" title="2.1  部署rabbitmq集群"></a>2.1  部署rabbitmq集群</h3><ul>
 <li><p> 在上述的两台机器上安装rabbitmq完成之后，你可以看到你的机器中有如下1个文件。路径在$HOME中或者在/var/lib/rabbitmq中，文件名称为.erlang.cookie,他是一个隐藏文件</p>
 </li>
@@ -572,21 +599,33 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><p>必须使集群中两台机器的.erlang.cookie文件中cookie值一致，且权限为owner只读。</p>
 </li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cd /var/lib/rabbitmq/</span><br><span class="line">[root@localhost rabbitmq]# cat .erlang.cookie </span><br><span class="line">// 将两个值设置成一样就行</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-1-设置权限"><a href="#2-1-1-设置权限" class="headerlink" title="2.1.1 设置权限"></a>2.1.1 设置权限</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl set_permissions -p "/" admin ".*" ".*" ".*"</span><br><span class="line">// 添加权限（使admin用户对虚拟主机“/” 具有所有权限）:</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-2-加入集群"><a href="#2-1-2-加入集群" class="headerlink" title="2.1.2 加入集群"></a>2.1.2 加入集群</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 先用次命令查看集群名称</span><br><span class="line">[root@bogon rabbitmq]# rabbitmqctl cluster_status</span><br><span class="line">Cluster name: rabbit@bogon //此为我的集群名称</span><br><span class="line">[root@bogon rabbitmq]# rabbitmqctl stop_app //先停止运行</span><br><span class="line">[root@localhost mnesia]# rabbitmqctl join_cluster --ram rabbit@bogon //此操作在slave执行</span><br><span class="line">[root@localhost mnesia]# rabbitmqctl start_app</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost ~]# cd /var/lib/rabbitmq/
+[root@localhost rabbitmq]# cat .erlang.cookie 
+// 将两个值设置成一样就行
+</code></pre>
+<h4 id="2-1-1-设置权限"><a href="#2-1-1-设置权限" class="headerlink" title="2.1.1 设置权限"></a>2.1.1 设置权限</h4><pre><code class="shell">rabbitmqctl set_permissions -p "/" admin ".*" ".*" ".*"
+// 添加权限（使admin用户对虚拟主机“/” 具有所有权限）:
+</code></pre>
+<h4 id="2-1-2-加入集群"><a href="#2-1-2-加入集群" class="headerlink" title="2.1.2 加入集群"></a>2.1.2 加入集群</h4><pre><code class="shell">// 先用次命令查看集群名称
+[root@bogon rabbitmq]# rabbitmqctl cluster_status
+Cluster name: rabbit@bogon //此为我的集群名称
+[root@bogon rabbitmq]# rabbitmqctl stop_app //先停止运行
+[root@localhost mnesia]# rabbitmqctl join_cluster --ram rabbit@bogon //此操作在slave执行
+[root@localhost mnesia]# rabbitmqctl start_app
+</code></pre>
 <blockquote>
 <p>注意</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">由于我没有设置主机名,你们要是也不设置的话需要在slave的hosts上指定master。例如以下内容</span><br><span class="line">[root@localhost mnesia]# vim /etc/hosts</span><br><span class="line">192.168.20.10 bogon </span><br><span class="line">[IP] [主机名] </span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Clustering node rabbit@localhost with rabbit@bogo //表示集群加入成功</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-3-验证集群"><a href="#2-1-3-验证集群" class="headerlink" title="2.1.3 验证集群"></a>2.1.3 验证集群</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">以上操作都没有问题的话,开始验证集群</span><br><span class="line">访问 http://192.168.20.10:15672</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">由于我没有设置主机名,你们要是也不设置的话需要在slave的hosts上指定master。例如以下内容
+[root@localhost mnesia]# vim /etc/hosts
+192.168.20.10 bogon 
+[IP] [主机名] 
+</code></pre>
+<pre><code class="shell">Clustering node rabbit@localhost with rabbit@bogo //表示集群加入成功
+</code></pre>
+<h4 id="2-1-3-验证集群"><a href="#2-1-3-验证集群" class="headerlink" title="2.1.3 验证集群"></a>2.1.3 验证集群</h4><pre><code class="shell">以上操作都没有问题的话,开始验证集群
+访问 http://192.168.20.10:15672
+</code></pre>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/rabbitmq.png#vwid=1462&amp;vhei=559" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/rabbitmq.png#vwid=1462&amp;vhei=559" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="rabbit"></p>
 
   
@@ -719,7 +758,8 @@ Nacos支持基于DNS和基于RPC（Dubbo / gRPC）的服务发现...</p>
 
 2台机器也能做
 
-1.1更改mongo配置文件1234567[root@localhost mongo]# vim conf/mongo.c...</p>
+1.1更改mongo配置文件[root@localhost mongo]# vim conf/mongo.conf
+por...</p>
         </a>
       
     </div>
@@ -993,7 +1033,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

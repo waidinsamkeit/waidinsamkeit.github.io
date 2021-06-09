@@ -555,19 +555,21 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <blockquote>
 <p>选择 <code>ossfs_1.80.5_centos7.0_x86_64.rpm</code></p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y localinstall ossfs_1.80.5_centos7.0_x86_64.rpm </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum -y localinstall ossfs_1.80.5_centos7.0_x86_64.rpm 
+</code></pre>
 <h2 id="1-1-配置OSSFS"><a href="#1-1-配置OSSFS" class="headerlink" title="1.1 配置OSSFS"></a>1.1 配置OSSFS</h2><p>首先需要拿到阿里云的 <code>AccesskeyID</code> 和 <code>Accesskeysecret</code>。登录阿里云账号，然后打开<a target="_blank" rel="noopener" href="https://usercenter.console.aliyun.com/#/manage/ak">密钥管理</a>页面，然后在列表里随便选择一个并记录下来。然后还需要去 oss 控制台创建一个 bucket，我这里 bucket 的名称叫做 test-dev</p>
 <h3 id="例如"><a href="#例如" class="headerlink" title="例如"></a>例如</h3><p>为了演示假如我的 AccessKey ID 为 <code>OIUASIODN89821NK</code>， Access Key Secret 为 <code>76&amp;*NQWEUIIOQW</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"test-dev:OIUASIODN89821NK:76&amp;*NQWEUIIOQW"</span> &gt; /etc/passwd-ossfs</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">echo "test-dev:OIUASIODN89821NK:76&amp;*NQWEUIIOQW" &gt; /etc/passwd-ossfs
+</code></pre>
 <p>在系统上创建一个系统目录比如为 <code>/dev/mount</code> , 将此目录作为 ossfs 的挂载目录</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ossfs test-dev /dev/mount -ourl=oss-cn-hangzhou-internal.aliyuncs.com -o allow_other</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">ossfs test-dev /dev/mount -ourl=oss-cn-hangzhou-internal.aliyuncs.com -o allow_other
+</code></pre>
 <p><code>-ourl</code> 表示的是 oss 的 EndPoint 地址</p>
 <p><code>-o</code> 表示运行非 root 用户使用此目录</p>
 <h2 id="1-2-开机启动挂载"><a href="#1-2-开机启动挂载" class="headerlink" title="1.2 开机启动挂载"></a>1.2 开机启动挂载</h2><p>这里需要用到<code>rc.local</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /etc/rc.local</span><br><span class="line">echo "ossfs test-dev /dev/mount -ourl=oss-cn-hangzhou-internal.aliyuncs.com -o allow_other" &gt;&gt; /etc/rc.local</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">chmod +x /etc/rc.local
+echo "ossfs test-dev /dev/mount -ourl=oss-cn-hangzhou-internal.aliyuncs.com -o allow_other" &gt;&gt; /etc/rc.local
+</code></pre>
 
   
   
@@ -686,7 +688,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>Python函数高级用法
 函数的嵌套调用是在”函数调用中再调用其他函数”。也就是说:函数嵌套允许在一个函数中调用另外一个函数。如下：
 
-12345678910111213name = "Fore...</p>
+name = "Forest"
+def change():...</p>
         </a>
       
       
@@ -967,7 +970,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

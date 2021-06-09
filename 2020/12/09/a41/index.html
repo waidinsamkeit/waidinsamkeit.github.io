@@ -550,8 +550,26 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li>请准备好docker和docker-compose</li>
 </ul>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.7"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">node-red:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nodered/node-red:latest</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Europe/Amsterdam</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">"1880:1880"</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">node-red-net</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">node-red-data:/data</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">node-red-data:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">node-red-net:</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="yaml">version: "3.7"
 
+services:
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Amsterdam
+    ports:
+      - "1880:1880"
+    networks:
+      - node-red-net
+    volumes:
+      - node-red-data:/data
+
+volumes:
+  node-red-data:
+
+networks:
+  node-red-net:
+</code></pre>
 <blockquote>
 <p>访问 <a target="_blank" rel="noopener" href="http://localhost:1880/">http://localhost:1880</a></p>
 </blockquote>
@@ -573,8 +591,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 <p>双击函数节点</p>
 <p>在函数内容中写入以下语句</p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">msg.payload = ['1','aure','87']</span><br><span class="line">msg.topic = "INSERT INTO student_info (student_id,student_name,student_credit) VALUES (?,?,?);"</span><br><span class="line">return msg;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="json">msg.payload = ['1','aure','87']
+msg.topic = "INSERT INTO student_info (student_id,student_name,student_credit) VALUES (?,?,?);"
+return msg;
+</code></pre>
 <ul>
 <li> <code>msg.topic是</code>SQL语句</li>
 <li><code>msg.payload</code>是参量</li>
@@ -582,8 +602,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 <p>点击右上角<code>部署</code></p>
 <p>然后在面板中注入时间戳,点击右边的debug窗口</p>
-<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{<span class="attr">"fieldCount"</span>:<span class="number">0</span>,<span class="attr">"affectedRows"</span>:<span class="number">1</span>,<span class="attr">"insertId"</span>:<span class="number">0</span>,<span class="attr">"serverStatus"</span>:<span class="number">2</span>,<span class="attr">"warningCount"</span>:<span class="number">0</span>,<span class="attr">"message"</span>:<span class="string">""</span>,<span class="attr">"protocol41"</span>:<span class="literal">true</span>,<span class="attr">"changedRows"</span>:<span class="number">0</span>}</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="json">{"fieldCount":0,"affectedRows":1,"insertId":0,"serverStatus":2,"warningCount":0,"message":"","protocol41":true,"changedRows":0}
+</code></pre>
 <p>返回数据库查询数据即可</p>
 
   
@@ -991,7 +1011,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

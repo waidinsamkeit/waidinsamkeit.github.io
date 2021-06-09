@@ -530,21 +530,143 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <p><strong>DockerFile</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:8</span><br><span class="line"></span><br><span class="line"><span class="comment"># add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added</span></span><br><span class="line">RUN groupadd -r -g 1000 redis &amp;&amp; useradd -r -g redis -u 1000 redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis信息 注意SHA校验</span></span><br><span class="line">ENV REDIS_VERSION 6.0.8</span><br><span class="line">ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-6.0.8.tar.gz</span><br><span class="line">ENV REDIS_DOWNLOAD_SHA 98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b</span><br><span class="line"></span><br><span class="line"><span class="comment"># set -eux 以Debug的方式执行shell 遇到错误会退出</span></span><br><span class="line">RUN <span class="built_in">set</span> -eux; \</span><br><span class="line">     \</span><br><span class="line">     sed -e <span class="string">'s|^mirrorlist=|#mirrorlist=|g'</span> \</span><br><span class="line">         -e <span class="string">'s|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g'</span> \</span><br><span class="line">         -i.bak \</span><br><span class="line">         /etc/yum.repos.d/CentOS-*.repo</span><br><span class="line"></span><br><span class="line">RUN <span class="built_in">set</span> -eux; \</span><br><span class="line">    \</span><br><span class="line">	yum makecache; \</span><br><span class="line">	yum -y install zlib-devel \</span><br><span class="line">        openssl-devel \</span><br><span class="line">        gcc \</span><br><span class="line">        wget \</span><br><span class="line">        make \</span><br><span class="line">        gcc-c++;\</span><br><span class="line">	wget -O redis.tar.gz <span class="string">"<span class="variable">$REDIS_DOWNLOAD_URL</span>"</span>; \</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$REDIS_DOWNLOAD_SHA</span> *redis.tar.gz"</span> | sha1sum ; \</span><br><span class="line">	mkdir -p /usr/<span class="built_in">local</span>/redis; \</span><br><span class="line">	tar -xzf redis.tar.gz -C /usr/<span class="built_in">local</span>/redis --strip-components=1; \</span><br><span class="line">	rm redis.tar.gz; \</span><br><span class="line">    make -C /usr/<span class="built_in">local</span>/redis; \</span><br><span class="line">    make -C /usr/<span class="built_in">local</span>/redis install;</span><br><span class="line"></span><br><span class="line">chown redis:redis /data</span><br><span class="line">VOLUME /usr/<span class="built_in">local</span>/redis</span><br><span class="line">WORKDIR /usr/<span class="built_in">local</span>/redis</span><br><span class="line">COPY redis.conf /usr/<span class="built_in">local</span>/redis/</span><br><span class="line"><span class="comment">#COPY docker-entrypoint.sh /usr/local/bin/</span></span><br><span class="line"><span class="comment">#ENTRYPOINT ["docker-entrypoint.sh"]</span></span><br><span class="line"><span class="comment"># 可选</span></span><br><span class="line"><span class="comment"># RUN chmod -R 777 /usr/local/redis</span></span><br><span class="line">EXPOSE 6379</span><br><span class="line"><span class="comment"># ENTRPOINT 参数可选 可以直接运行 也可以在yaml指定command</span></span><br><span class="line">ENTRYPOINT [<span class="string">"redis-server"</span>,<span class="string">"/usr/local/redis/redis.conf"</span>,<span class="string">"--protected-mode"</span>,<span class="string">"no"</span>]</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">FROM centos:8
 
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r -g 1000 redis &amp;&amp; useradd -r -g redis -u 1000 redis
+
+# Redis信息 注意SHA校验
+ENV REDIS_VERSION 6.0.8
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-6.0.8.tar.gz
+ENV REDIS_DOWNLOAD_SHA 98ed7d532b5e9671f5df0825bb71f0f37483a16546364049384c63db8764512b
+
+# set -eux 以Debug的方式执行shell 遇到错误会退出
+RUN set -eux; \
+     \
+     sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \
+         -i.bak \
+         /etc/yum.repos.d/CentOS-*.repo
+
+RUN set -eux; \
+    \
+    yum makecache; \
+    yum -y install zlib-devel \
+        openssl-devel \
+        gcc \
+        wget \
+        make \
+        gcc-c++;\
+    wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"; \
+    echo "$REDIS_DOWNLOAD_SHA *redis.tar.gz" | sha1sum ; \
+    mkdir -p /usr/local/redis; \
+    tar -xzf redis.tar.gz -C /usr/local/redis --strip-components=1; \
+    rm redis.tar.gz; \
+    make -C /usr/local/redis; \
+    make -C /usr/local/redis install;
+
+chown redis:redis /data
+VOLUME /usr/local/redis
+WORKDIR /usr/local/redis
+COPY redis.conf /usr/local/redis/
+#COPY docker-entrypoint.sh /usr/local/bin/
+#ENTRYPOINT ["docker-entrypoint.sh"]
+# 可选
+# RUN chmod -R 777 /usr/local/redis
+EXPOSE 6379
+# ENTRPOINT 参数可选 可以直接运行 也可以在yaml指定command
+ENTRYPOINT ["redis-server","/usr/local/redis/redis.conf","--protected-mode","no"]
+</code></pre>
 <p><strong>redis.conf</strong></p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">appendonly yes</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">dir /usr/local/redis/</span><br><span class="line">port 6379</span><br><span class="line">daemonize no</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="cobol">appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+dir /usr/local/redis/
+port 6379
+daemonize no
+</code></pre>
 <p><strong>redis-cluster.yaml</strong></p>
 <div class="note warning"><p>请根据自己的配置修改yaml文件</p></div>
 
 <blockquote>
 <p>提醒您: 请挂载数据卷配置,注意保存数据,防止数据丢失！！！</p>
 </blockquote>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">redis-headless</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">production-contract</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">kubesphere.io/alias-name:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">kubesphere.io/creator:</span> <span class="string">admin</span></span><br><span class="line">    <span class="attr">kubesphere.io/serviceType:</span> <span class="string">statefulservice</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http-redis</span> </span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">      <span class="attr">targetPort:</span> <span class="number">6379</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">clusterIP:</span> <span class="string">None</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ClusterIP</span></span><br><span class="line">  <span class="attr">sessionAffinity:</span> <span class="string">None</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StatefulSet</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">production-contract</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">kubesphere.io/creator:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">6</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">creationTimestamp:</span> <span class="literal">null</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">redis</span></span><br><span class="line">      <span class="attr">annotations:</span></span><br><span class="line">        <span class="attr">kubesphere.io/containerSecrets:</span> <span class="string">'{"container-u4km8f":"harbor"}'</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">container-u4km8f</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">'10.1.6.15/apps/redis:prod'</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http-redis</span></span><br><span class="line">              <span class="attr">containerPort:</span> <span class="number">6379</span></span><br><span class="line">              <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">          <span class="attr">resources:</span> {}</span><br><span class="line">          <span class="attr">terminationMessagePath:</span> <span class="string">/dev/termination-log</span></span><br><span class="line">          <span class="attr">terminationMessagePolicy:</span> <span class="string">File</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Always</span></span><br><span class="line">      <span class="attr">terminationGracePeriodSeconds:</span> <span class="number">30</span></span><br><span class="line">      <span class="attr">dnsPolicy:</span> <span class="string">ClusterFirst</span></span><br><span class="line">      <span class="attr">serviceAccountName:</span> <span class="string">default</span></span><br><span class="line">      <span class="attr">serviceAccount:</span> <span class="string">default</span></span><br><span class="line">      <span class="attr">securityContext:</span> {}</span><br><span class="line">      <span class="attr">imagePullSecrets:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">harbor</span></span><br><span class="line">      <span class="attr">affinity:</span> {}</span><br><span class="line">      <span class="attr">schedulerName:</span> <span class="string">default-scheduler</span></span><br><span class="line">  <span class="attr">serviceName:</span> <span class="string">redis-headless</span></span><br><span class="line">  <span class="attr">podManagementPolicy:</span> <span class="string">OrderedReady</span></span><br><span class="line">  <span class="attr">updateStrategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span></span><br><span class="line">      <span class="attr">partition:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">10</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="yaml">---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-headless
+  namespace: production-contract
+  labels:
+    app: redis
+  annotations:
+    kubesphere.io/alias-name: redis
+    kubesphere.io/creator: admin
+    kubesphere.io/serviceType: statefulservice
+spec:
+  ports:
+    - name: http-redis 
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
+  clusterIP: None
+  type: ClusterIP
+  sessionAffinity: None
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: redis
+  namespace: production-contract
+  labels:
+    app: redis
+  annotations:
+    kubesphere.io/creator: admin
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: redis
+      annotations:
+        kubesphere.io/containerSecrets: '{"container-u4km8f":"harbor"}'
+    spec:
+      containers:
+        - name: container-u4km8f
+          image: '10.1.6.15/apps/redis:prod'
+          ports:
+            - name: http-redis
+              containerPort: 6379
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      imagePullSecrets:
+        - name: harbor
+      affinity: {}
+      schedulerName: default-scheduler
+  serviceName: redis-headless
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  revisionHistoryLimit: 10
+</code></pre>
 <h2 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h2><h3 id="关于容器启动退出问题"><a href="#关于容器启动退出问题" class="headerlink" title="关于容器启动退出问题"></a>关于容器启动退出问题</h3><div class="note info"><p>启动容器直接Exited</p></div>
 
 <ol>
@@ -553,13 +675,20 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><p>redis.conf中的<code>daemonize</code>不要设置为<code>yes</code></p>
 </li>
 </ol>
-<h3 id="关于kubernetes内部加入Redis集群错误"><a href="#关于kubernetes内部加入Redis集群错误" class="headerlink" title="关于kubernetes内部加入Redis集群错误"></a>关于kubernetes内部加入Redis集群错误</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERR Invalid node address specified: redis-1.redis-headless.production-contract.svc.cluster.local:6379 </span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="关于kubernetes内部加入Redis集群错误"><a href="#关于kubernetes内部加入Redis集群错误" class="headerlink" title="关于kubernetes内部加入Redis集群错误"></a>关于kubernetes内部加入Redis集群错误</h3><pre><code class="shell">ERR Invalid node address specified: redis-1.redis-headless.production-contract.svc.cluster.local:6379 
+</code></pre>
 <div class="note danger"><p>请不要使用headless直接加入</p></div>
 
 <p>因为<code>redis</code>不支持主机名加入集群,你可以使用<code>dig </code>命令将主机名解析成IP后,以解析结果为IP的方式加入。</p>
 <p><strong>如下所示</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@redis-0 data]<span class="comment"># redis-cli --cluster create `dig +short redis-0.redis-headless.production-contract.svc.cluster.local`:6379 \</span></span><br><span class="line">&gt;  `dig +short redis-1.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-2.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-3.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-4.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt;  `dig +short redis-5.redis-headless.production-contract.svc.cluster.local`:6379 \</span><br><span class="line">&gt; --cluster-replicas 1</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">[root@redis-0 data]# redis-cli --cluster create `dig +short redis-0.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt;  `dig +short redis-1.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt;  `dig +short redis-2.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt;  `dig +short redis-3.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt;  `dig +short redis-4.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt;  `dig +short redis-5.redis-headless.production-contract.svc.cluster.local`:6379 \
+&gt; --cluster-replicas 1
+</code></pre>
 
   
   
@@ -966,7 +1095,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

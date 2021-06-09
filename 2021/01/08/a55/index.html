@@ -540,8 +540,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <blockquote>
 <p>这就是搞心态就是,直接重启docker服务就能解决….<br>上面方法别直接用…</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker: Error response from daemon: driver failed programming external connectivity on endpoint quizzical_thompson (c2b238f6b003b1f789c989db0d789b4bf3284ff61152ba40dacd0e01bd984653):  (iptables failed: iptables --wait -t filter -A DOCKER ! -i docker0 -o docker0 -p tcp -d 172.17.0.3 --dport 24224 -j ACCEPT: iptables: No chain/target/match by that name.</span><br><span class="line"> (exit status 1)).</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">docker: Error response from daemon: driver failed programming external connectivity on endpoint quizzical_thompson (c2b238f6b003b1f789c989db0d789b4bf3284ff61152ba40dacd0e01bd984653):  (iptables failed: iptables --wait -t filter -A DOCKER ! -i docker0 -o docker0 -p tcp -d 172.17.0.3 --dport 24224 -j ACCEPT: iptables: No chain/target/match by that name.
+ (exit status 1)).
+</code></pre>
 <h2 id="大概原因"><a href="#大概原因" class="headerlink" title="大概原因"></a>大概原因</h2><ul>
 <li><p>目前探测到的应该是docker网桥与iptables转发规则之间的冲突</p>
 </li>
@@ -551,23 +552,25 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ol>
 <li>清空<code>NAT表</code>中所有的链条</li>
 </ol>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -F</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">iptables -t nat -F
+</code></pre>
 <ol start="2">
 <li>停止docker默认网桥docker0</li>
 </ol>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig docker0 down</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">ifconfig docker0 down
+</code></pre>
 <ol start="3">
 <li>删除docker0网桥</li>
 </ol>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brctl delbr docker0</span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果没有此命令使用以下进行安装</span></span><br><span class="line">yum install bridge-utils -y</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">brctl delbr docker0
+# 如果没有此命令使用以下进行安装
+yum install bridge-utils -y
+</code></pre>
 <ol start="4">
 <li>重启docker和容器</li>
 </ol>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">systemctl restart docker
+</code></pre>
 <p>emmm…<span class="github-emoji"><span>📟</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f4df.png?v8" class="lazyload placeholder" data-srcset="https://github.githubassets.com/images/icons/emoji/unicode/1f4df.png?v8" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span>怎么说呢…其实这个问题直接重启docker服务就能解决..这种方法算是比较保险</p>
 
   
@@ -977,7 +980,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

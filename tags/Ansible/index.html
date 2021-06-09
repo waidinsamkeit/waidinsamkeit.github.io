@@ -510,7 +510,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <div class='md'>
     
       
-        安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \         -i.bak \         /et...
+        安装Ansible# 更换清华源
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \
+         -i.bak \
+         /etc/yu...
       
     
   </div>
@@ -557,7 +561,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
       
         Ansible远程执行寻找不到环境变量问题问题Ansible调用shell远程启动java包，找不到JAVA_HOME或者直接输出为空。 
-123[root@bogon ~]# ansible testserver -m shell -a "nohup java -jar /server/share-0.0.1-SNAPSHOT.jar --spring.profiles.active=te...
+[root@bogon ~]# ansible testserver -m shell -a "nohup java -jar /server/share-0.0.1-SNAPSHOT.jar --spring.profiles.active=test3...
       
     
   </div>
@@ -1068,7 +1072,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

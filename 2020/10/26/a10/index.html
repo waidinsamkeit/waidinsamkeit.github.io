@@ -568,16 +568,46 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </li>
 </ol>
 <p>查看日志使用的格式</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">"binlog_format"</span>;</span></span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| binlog_format | ROW   |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">set session binlog_format=statement; # 改成基于段的格式</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> flush logs; <span class="comment"># 刷新日志</span></span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show binary logs;</span></span><br><span class="line">+------------------+-----------+</span><br><span class="line">| Log_name         | File_size |</span><br><span class="line">+------------------+-----------+</span><br><span class="line">| mysql_bin.000001 |       201 |</span><br><span class="line">| mysql_bin.000002 |       154 |</span><br><span class="line">+------------------+-----------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">mysql&gt; show variables like "binlog_format";
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| binlog_format | ROW   |
++---------------+-------+
+1 row in set (0.00 sec)
+set session binlog_format=statement; # 改成基于段的格式
+mysql&gt; flush logs; # 刷新日志
+mysql&gt; show binary logs;
++------------------+-----------+
+| Log_name         | File_size |
++------------------+-----------+
+| mysql_bin.000001 |       201 |
+| mysql_bin.000002 |       154 |
++------------------+-----------+
+2 rows in set (0.00 sec)
+</code></pre>
 <p>[redbar]错误解决[/redbar]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1381 (HY000): You are not using binary logging </span><br><span class="line">请在mysql的配置文件中加入</span><br><span class="line">server-id=1</span><br><span class="line">log_bin=mysql_bin 重启mysql就行</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="shell">ERROR 1381 (HY000): You are not using binary logging 
+请在mysql的配置文件中加入
+server-id=1
+log_bin=mysql_bin 重启mysql就行
+</code></pre>
 <p><strong>查看二进制日志所记录的内容</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> create database crn;</span></span><br><span class="line">Query OK, 1 row affected (0.07 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> use crn</span></span><br><span class="line">Database changed</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> create table t(id int,name varchar(20));</span></span><br><span class="line">Query OK, 0 rows affected (0.90 sec)</span><br><span class="line"></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> insert into t values(1,<span class="string">'nica'</span>),(2,<span class="string">'logs'</span>);</span></span><br><span class="line">Query OK, 2 rows affected (0.15 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">[root@MySQL8-slave2 ~]# cd /var/lib/mysql</span><br><span class="line">[root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000002 # 里面可以看到所有的操作记录 是基于段的</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">mysql&gt; create database crn;
+Query OK, 1 row affected (0.07 sec)
 
+mysql&gt; use crn
+Database changed
+mysql&gt; create table t(id int,name varchar(20));
+Query OK, 0 rows affected (0.90 sec)
+
+mysql&gt; insert into t values(1,'nica'),(2,'logs');
+Query OK, 2 rows affected (0.15 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+[root@MySQL8-slave2 ~]# cd /var/lib/mysql
+[root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000002 # 里面可以看到所有的操作记录 是基于段的
+</code></pre>
 <ol start="2">
 <li><p>基于行的日志格式binlog_formart=ROW</p>
 <ul>
@@ -594,7 +624,38 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>缺点</p>
 </li>
 <li><p>记录日志量较大</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">     binlog_row_image=[full|minimal|noblob]</span><br><span class="line">     full表述全部记录</span><br><span class="line">     minimage只记录列的修改</span><br><span class="line">     noblob不会记录text的值</span><br><span class="line">     mysql&gt; alter table t add c2 text;#加入一个c2列 字段类型为text</span><br><span class="line">     mysql&gt; insert into t values(3,'ee','bbb');</span><br><span class="line">     查看你的mysqlbinlog日志</span><br><span class="line">     [root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000003</span><br><span class="line">     # 单独的用mysqlbinary完全看不到row里面的数据</span><br><span class="line">     </span><br><span class="line">     [root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000003 -vv # 加入-vv参数就可以看到row格式的binlog日志记录方式</span><br><span class="line">     2.这个时候我们更改一下binlog_row_image的参数为minimal</span><br><span class="line">     mysql&gt; set session binlog_row_image=minimal;</span><br><span class="line">     mysql&gt; update t set c2='this 2' where id=2; # 更改数据</span><br><span class="line">     再次查看mysql_binlog.000003里面的数据</span><br><span class="line">     ### UPDATE `crn`.`t` //可以看到minimal是这样的</span><br><span class="line">     3.更改binlog_row_image的参</span><br><span class="line">blob</span><br><span class="line">     mysql&gt; set session binlog_row_image=noblob; //注意这个时候不能用text格式</span><br><span class="line">     mysql&gt; update t set name='blob' where id=3;</span><br><span class="line">     再次查看mysql_binlog.000003里面的数据</span><br><span class="line">     ### SET</span><br><span class="line">     ###   @1=3 /* INT meta=0 nullable=1 is_null=0 */</span><br><span class="line">     ###   @2='blob' /* VARSTRING(20) meta=20 nullable=1 is_null=0 */</span><br><span class="line">     # at 1092</span><br><span class="line">     #200918 10:18:03 server id 1  end_log_pos 1123 CRC32 0x707bd6dc         Xid = 61</span><br><span class="line">     COMMIT/*!*/;</span><br><span class="line">     SET @@SESSION.GTID_NEXT= 'AUTOMATIC' /* added by mysqlbinlog */ /*!*/;</span><br><span class="line">     DELIMITER ;</span><br><span class="line">     # End of log file  //其实和ROW的方式差不多的 因为没更新text的列 所以SET后面没有数据</span><br></pre></td></tr></tbody></table></figure></li>
+<pre><code class="shell">binlog_row_image=[full|minimal|noblob]
+full表述全部记录
+minimage只记录列的修改
+noblob不会记录text的值
+mysql&gt; alter table t add c2 text;#加入一个c2列 字段类型为text
+mysql&gt; insert into t values(3,'ee','bbb');
+查看你的mysqlbinlog日志
+[root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000003
+# 单独的用mysqlbinary完全看不到row里面的数据
+
+[root@MySQL8-slave2 mysql]# mysqlbinlog mysql_bin.000003 -vv # 加入-vv参数就可以看到row格式的binlog日志记录方式
+2.这个时候我们更改一下binlog_row_image的参数为minimal
+mysql&gt; set session binlog_row_image=minimal;
+mysql&gt; update t set c2='this 2' where id=2; # 更改数据
+再次查看mysql_binlog.000003里面的数据
+### UPDATE `crn`.`t` //可以看到minimal是这样的
+3.更改binlog_row_image的参
+blob
+mysql&gt; set session binlog_row_image=noblob; //注意这个时候不能用text格式
+mysql&gt; update t set name='blob' where id=3;
+再次查看mysql_binlog.000003里面的数据
+### SET
+###   @1=3 /* INT meta=0 nullable=1 is_null=0 */
+###   @2='blob' /* VARSTRING(20) meta=20 nullable=1 is_null=0 */
+# at 1092
+#200918 10:18:03 server id 1  end_log_pos 1123 CRC32 0x707bd6dc         Xid = 61
+COMMIT/*!*/;
+SET @@SESSION.GTID_NEXT= 'AUTOMATIC' /* added by mysqlbinlog */ /*!*/;
+DELIMITER ;
+# End of log file  //其实和ROW的方式差不多的 因为没更新text的列 所以SET后面没有数据
+</code></pre>
+</li>
 </ul>
 <ol start="3">
 <li><p>混合日志格式binlog_format=MIXED</p>
@@ -1014,7 +1075,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

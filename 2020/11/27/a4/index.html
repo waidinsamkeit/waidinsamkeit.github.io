@@ -558,53 +558,111 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <td>于安装包过新或者是其他问题，导致依赖的包没有，或者版本过低。这个时候就要解决包的依赖问题，linux系统中有的包，一个依赖一个，可能装一个小东西，就要解决一堆包的依赖问题，花很多时间解决包的依赖问题，得不尝失。源码安装的多了，不敢升级系统，升级系统，可能会导致以前手动装的东西，不能用。</td>
 </tr>
 </tbody></table>
-<h4 id="前期准备-下载MySQL8-0的源码包"><a href="#前期准备-下载MySQL8-0的源码包" class="headerlink" title="前期准备:下载MySQL8.0的源码包"></a>前期准备:下载MySQL8.0的源码包</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.21.tar.gz</span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> 最近发现这下载速度都是不错的呀</span></span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="前期准备-下载MySQL8-0的源码包"><a href="#前期准备-下载MySQL8-0的源码包" class="headerlink" title="前期准备:下载MySQL8.0的源码包"></a>前期准备:下载MySQL8.0的源码包</h4><pre><code class="shell">wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.21.tar.gz
+&gt; 最近发现这下载速度都是不错的呀
+</code></pre>
 <p>安装有依赖环境</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install ncurses-devel bison openssl openssl-devel gcc gcc-c++</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum install ncurses-devel bison openssl openssl-devel gcc gcc-c++
+</code></pre>
 <p>Camke的源码编译安装</p>
 <ul>
 <li>[notice]请注意你的C++版本 一般要求同步阿里云的Yum源的版本即[/notice]</li>
 <li>[notice]报错大多数都是由于C++或者gcc没有安装或者版本过低导致的[/notice]</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/Kitware/CMake/releases/download/v3.18.2/cmake-3.18.2.tar.gz</span><br><span class="line">tar -zxf cmake-3.18.2.tar.gz</span><br><span class="line">cd cmake-3.18.2</span><br><span class="line">./configure --prefix=/usr/local/cmake # 安装目录为/usr/local/camke</span><br><span class="line">make -j4 # 使用4线程即可,不要网线j1024!!!	</span><br><span class="line">make install # 安装即可</span><br><span class="line">ln -s /usr/local/cmake/bin/* /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="shell">wget https://github.com/Kitware/CMake/releases/download/v3.18.2/cmake-3.18.2.tar.gz
+tar -zxf cmake-3.18.2.tar.gz
+cd cmake-3.18.2
+./configure --prefix=/usr/local/cmake # 安装目录为/usr/local/camke
+make -j4 # 使用4线程即可,不要网线j1024!!!    
+make install # 安装即可
+ln -s /usr/local/cmake/bin/* /usr/bin/
+</code></pre>
 <hr>
-<h2 id="MySQL的编译"><a href="#MySQL的编译" class="headerlink" title="MySQL的编译"></a>MySQL的编译</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">还是会怕有人不看前期准备 不下包！！！</span><br><span class="line">wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.21.tar.gz</span><br><span class="line">tar -zxf mysql-8.0.21.tar.gz</span><br><span class="line">cd mysql-8.0.21</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="MySQL的编译"><a href="#MySQL的编译" class="headerlink" title="MySQL的编译"></a>MySQL的编译</h2><pre><code class="shell">还是会怕有人不看前期准备 不下包！！！
+wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.21.tar.gz
+tar -zxf mysql-8.0.21.tar.gz
+cd mysql-8.0.21
+</code></pre>
 <p>[redbar]下面的千万别错!!![/redbar]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql8 \</span><br><span class="line">-DDEFAULT_CHARSET=utf8mb4 \ </span><br><span class="line">-DDEFAULT_COLLATION=utf8_general_ci \</span><br><span class="line">-DENABLED_LOCAL_INFILE=ON \</span><br><span class="line">-DWITH_INNODB_MEMCACHED=ON \</span><br><span class="line">-DWITH_SSL=system \</span><br><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_FEDERATED_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_ARCHIVE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_PERFSCHEMA_STORAGE_ENGINE=1 \</span><br><span class="line">-DCOMPILATION_COMMENT="zsd edition" \</span><br><span class="line">-DDOWNLOAD_BOOST=1 \</span><br><span class="line">-DWITH_BOOST=/tmp \</span><br><span class="line">-DMYSQL_UNIX_ADDR=/var/lib/mysql.sock \</span><br><span class="line">-DFORCE_INSOURCE_BUILD=1 </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql8 \
+-DDEFAULT_CHARSET=utf8mb4 \ 
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DENABLED_LOCAL_INFILE=ON \
+-DWITH_INNODB_MEMCACHED=ON \
+-DWITH_SSL=system \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_FEDERATED_STORAGE_ENGINE=1 \
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 \
+-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
+-DWITH_PERFSCHEMA_STORAGE_ENGINE=1 \
+-DCOMPILATION_COMMENT="zsd edition" \
+-DDOWNLOAD_BOOST=1 \
+-DWITH_BOOST=/tmp \
+-DMYSQL_UNIX_ADDR=/var/lib/mysql.sock \
+-DFORCE_INSOURCE_BUILD=1 
+</code></pre>
 <p>或者</p>
 <ul>
 <li>参数过多 自己调整安装格式</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql8 -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLTION=utf8_general_ci -DENABLED_LOCAL_INFILE=ON -DWITH_INNODB_MEMCACHED=ON -DWITH_SSL=system -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITHOUT_EXAMPL</span><br><span class="line">E_STORAGE_ENGINE=1 -DWITH_PERFSCHEMA_STORAGE_ENGINE=1 -DCOMPILATION_COMMENT="zsd edition" -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/tmp -DMYSQL_UNIX_ADDR=/var/lib/mysql.sock-DFORCE_INSOURCE_BUILD=1</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql8 -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLTION=utf8_general_ci -DENABLED_LOCAL_INFILE=ON -DWITH_INNODB_MEMCACHED=ON -DWITH_SSL=system -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_FEDERATED_STORAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITHOUT_EXAMPL
+E_STORAGE_ENGINE=1 -DWITH_PERFSCHEMA_STORAGE_ENGINE=1 -DCOMPILATION_COMMENT="zsd edition" -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/tmp -DMYSQL_UNIX_ADDR=/var/lib/mysql.sock-DFORCE_INSOURCE_BUILD=1
+</code></pre>
 <p><strong>参数解释</strong></p>
 <ul>
 <li>这些参数基本上就够用了</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">-DCMAKE_INSTALL_PREFIX=/usr/local/mysq8l # MySQL指定的安装路径</span><br><span class="line">-DDEFAULT_CHARSET=utf8mb4 # MySQL的字符集编码,一会儿说为什么不用utf8</span><br><span class="line">-DDEFAULT_COLLATION=utf8mb4_general_ci # 默认字符集</span><br><span class="line">-DENABLED_LOCAL_INFILE=ON #是否允许从客户端本地加载数据到Mysql服务端，专用于load data infile语句，默认不允许</span><br><span class="line">-DWITH_INNODB_MEMCACHED=ON</span><br><span class="line">-DWITH_SSL=system # 支持 SSL</span><br><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1 # 安装Innodb存储引擎</span><br><span class="line">-DWITH_FEDERATED_STORAGE_ENGINE=1 # 开启联邦存储引擎 </span><br><span class="line">-DWITH_BLACKHOLE_STORAGE_ENGINE=1  # 安装blackhole存储引擎</span><br><span class="line">-DWITH_ARCHIVE_STORAGE_ENGINE=1 # 安装 archive 存储引擎</span><br><span class="line">-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 # DWITHOUT禁用引擎</span><br><span class="line">-DWITH_PERFSCHEMA_STORAGE_ENGINE=1 # DWITH启用引擎</span><br><span class="line">-DCOMPILATION_COMMENT="zsd edition" # 指定编译信息</span><br><span class="line">-DDOWNLOAD_BOOST=1 # 安装下载Boost库 从5.7以后的版本是必须的</span><br><span class="line">-DWITH_BOOST=/tmp # Boost库安装位置</span><br><span class="line">-DMYSQL_UNIX_ADDR=/data/mysqldata/3306/mysql.sock # 	套接字文件存储路径位置</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">-DCMAKE_INSTALL_PREFIX=/usr/local/mysq8l # MySQL指定的安装路径
+-DDEFAULT_CHARSET=utf8mb4 # MySQL的字符集编码,一会儿说为什么不用utf8
+-DDEFAULT_COLLATION=utf8mb4_general_ci # 默认字符集
+-DENABLED_LOCAL_INFILE=ON #是否允许从客户端本地加载数据到Mysql服务端，专用于load data infile语句，默认不允许
+-DWITH_INNODB_MEMCACHED=ON
+-DWITH_SSL=system # 支持 SSL
+-DWITH_INNOBASE_STORAGE_ENGINE=1 # 安装Innodb存储引擎
+-DWITH_FEDERATED_STORAGE_ENGINE=1 # 开启联邦存储引擎 
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1  # 安装blackhole存储引擎
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 # 安装 archive 存储引擎
+-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 # DWITHOUT禁用引擎
+-DWITH_PERFSCHEMA_STORAGE_ENGINE=1 # DWITH启用引擎
+-DCOMPILATION_COMMENT="zsd edition" # 指定编译信息
+-DDOWNLOAD_BOOST=1 # 安装下载Boost库 从5.7以后的版本是必须的
+-DWITH_BOOST=/tmp # Boost库安装位置
+-DMYSQL_UNIX_ADDR=/data/mysqldata/3306/mysql.sock #     套接字文件存储路径位置
+</code></pre>
 <p>[redbar]报错：GCC 5.3 or newer is required (-dumpversion says 4.8.5)[/redbar]</p>
 <p>[redbar]这里可是一个大错特错[/redbar]</p>
 <p><strong>解决方法</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 添加scl源：yum -y install centos-release-scl scl-utils-build</span><br><span class="line">2, 安装gcc：yum install devtoolset-7 -y</span><br><span class="line">3. scl enable devtoolset-7 bash</span><br><span class="line">4. gcc --version</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">1. 添加scl源：yum -y install centos-release-scl scl-utils-build
+2, 安装gcc：yum install devtoolset-7 -y
+3. scl enable devtoolset-7 bash
+4. gcc --version
+</code></pre>
 <p><strong>如果依旧报错</strong></p>
 <ul>
 <li>根据报错信息来</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">-- CMAKE_GENERATOR: Unix Makefiles</span><br><span class="line">CMake Error at cmake/os/Linux.cmake:84 (MESSAGE):</span><br><span class="line">  GCC 5.3 or newer is required (-dumpversion says 4.8.5)</span><br><span class="line">Call Stack (most recent call first):</span><br><span class="line">  CMakeLists.txt:487 (INCLUDE)  # 这是我的报错信息</span><br><span class="line">vim cmake/os/Linux.cmake # 打开这个文件找到84行</span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="meta"> MESSAGE($</span><span class="bash">{WARNING_LEVEL}</span></span><br><span class="line">        "GCC 5.3 or newer is required (-dumpversion says ${GCC_VERSION})")</span><br><span class="line">        #这个里面${GCC_VERSION}需要去载入变量 由于刚刚安装完GCC的变量没有更新</span><br><span class="line">-------------------------------------------</span><br><span class="line">vim /etc/profile 写在最后一行</span><br><span class="line">export CC=/opt/rh/devtoolset-7/root/usr/bin/gcc</span><br><span class="line">export CPP=/opt/rh/devtoolset-7/root/usr/bin/cpp</span><br><span class="line">export CXX=/opt/rh/devtoolset-7/root/usr/bin/c++ </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">-- CMAKE_GENERATOR: Unix Makefiles
+CMake Error at cmake/os/Linux.cmake:84 (MESSAGE):
+  GCC 5.3 or newer is required (-dumpversion says 4.8.5)
+Call Stack (most recent call first):
+  CMakeLists.txt:487 (INCLUDE)  # 这是我的报错信息
+vim cmake/os/Linux.cmake # 打开这个文件找到84行
+-------------------------------------------
+ MESSAGE(${WARNING_LEVEL}
+        "GCC 5.3 or newer is required (-dumpversion says ${GCC_VERSION})")
+        #这个里面${GCC_VERSION}需要去载入变量 由于刚刚安装完GCC的变量没有更新
+-------------------------------------------
+vim /etc/profile 写在最后一行
+export CC=/opt/rh/devtoolset-7/root/usr/bin/gcc
+export CPP=/opt/rh/devtoolset-7/root/usr/bin/cpp
+export CXX=/opt/rh/devtoolset-7/root/usr/bin/c++ 
+</code></pre>
 <p>然后执行<code>source /etc/profile</code></p>
 <p><strong>由于你的CMakeCache.txt记录着上次的信息需要删除</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find / -name CMakeCache.txt 过滤出来的全部rm -f删除掉</span><br><span class="line">然后重新camke编译即可</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">find / -name CMakeCache.txt 过滤出来的全部rm -f删除掉
+然后重新camke编译即可
+</code></pre>
 <h4 id="为什么不用UTF8"><a href="#为什么不用UTF8" class="headerlink" title="为什么不用UTF8"></a>为什么不用UTF8</h4><blockquote>
 <p>今天我试图把UTF-8编码的字符串插入使用“utf8”编码的MariaDB数据库中，Rails抛出一个古怪的异常:</p>
 <p>Incorrect string value: ‘\xF0\x9F\x98\x83 &lt;…’ for column ‘summary’ at row 1</p>
@@ -622,7 +680,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="MySQL的安装"><a href="#MySQL的安装" class="headerlink" title="MySQL的安装"></a>MySQL的安装</h2><blockquote>
 <p>经历千重苦难终于来到这里了</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j 12</span><br><span class="line">make install</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">make -j 12
+make install
+</code></pre>
 
   
   
@@ -746,9 +806,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <a class='next' href='/2020/11/26/a33/'>
           <p class='title'>Coturn穿透服务器搭建<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
           <p class='content'>Coturn穿透服务器搭建这个具体干嘛的你们百度….
-1yum -y install libevent-devel openssl-devel
+yum -y install libevent-devel openssl-devel
 
-1.1下载编译安装coturn1234git c...</p>
+1.1下载编译安装coturngit clone ...</p>
         </a>
       
     </div>
@@ -1022,7 +1082,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

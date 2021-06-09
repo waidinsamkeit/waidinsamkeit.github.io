@@ -541,10 +541,61 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><input checked="" disabled="" type="checkbox"> 例如上线新版本报错…{wode fuck Error！！！}</li>
 <li><input checked="" disabled="" type="checkbox"> 更新新版本有Bug</li>
 </ul>
-<h2 id="Jenkins常用shell变量"><a href="#Jenkins常用shell变量" class="headerlink" title="Jenkins常用shell变量"></a>Jenkins常用shell变量</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">以下变量可用于Shell脚本</span><br><span class="line"></span><br><span class="line">BUILD_NUMBER</span><br><span class="line">当前的内部版本号，例如“ 153”</span><br><span class="line">BUILD_ID</span><br><span class="line">当前版本ID，与在1.597+中创​​建的版本的BUILD_NUMBER相同，但对于较早版本的YYYY-MM-DD_hh-mm-ss时间戳</span><br><span class="line">BUILD_DISPLAY_NAME</span><br><span class="line">当前版本的显示名称，默认情况下类似于“＃153”。</span><br><span class="line">JOB_NAME</span><br><span class="line">此版本的项目名称，例如“ foo”或“ foo / bar”。</span><br><span class="line">JOB_BASE_NAME</span><br><span class="line">此构建的项目的简称，它剥离了文件夹路径，例如“ bar / foo”的“ foo”。</span><br><span class="line">BUILD_TAG</span><br><span class="line">字符串“ jenkins- $ {JOB_NAME} - $ {BUILD_NUMBER} ”。JOB_NAME中的所有正斜杠（“ /”）均由破折号（“-”）代替。方便地放入资源文件，jar文件等中，以便于识别。</span><br><span class="line">EXECUTOR_NUMBER</span><br><span class="line">唯一标识执行此构建的当前执行程序（在同一台计算机的执行程序中）的唯一编号。这是您在“构建执行器状态”中看到的数字，除了该数字从0开始而不是从1开始。</span><br><span class="line">NODE_NAME</span><br><span class="line">如果构建在代理上，则为代理的名称；如果在主版本上运行，则为“主”</span><br><span class="line">NODE_LABELS</span><br><span class="line">节点分配的标签的空格分隔列表。</span><br><span class="line">工作空间</span><br><span class="line">分配给构建作为工作空间的目录的绝对路径。</span><br><span class="line">WORKSPACE_TMP</span><br><span class="line">工作区附近的临时目录，该目录不可浏览并且不会干扰SCM检出。最初可能不存在，所以请确保根据需要创建目录（例如，mkdir -p在Linux上）。当常规工作空间是驱动器根目录时，未定义。</span><br><span class="line">JENKINS_HOME</span><br><span class="line">主节点上分配给Jenkins用于存储数据的目录的绝对路径。</span><br><span class="line">JENKINS_URL</span><br><span class="line">Jenkins的完整URL，例如http：// server：port / jenkins /（注意：仅在系统配置中设置了Jenkins URL时可用）</span><br><span class="line">BUILD_URL</span><br><span class="line">此版本的完整URL，例如http：// server：port / jenkins / job / foo / 15 /（必须设置Jenkins URL）</span><br><span class="line">JOB_URL</span><br><span class="line">作业的完整URL，例如http：// server：port / jenkins / job / foo /（必须设置Jenkins URL）</span><br><span class="line">GIT_COMMIT</span><br><span class="line">提交哈希被检出。</span><br><span class="line">GIT_PREVIOUS_COMMIT</span><br><span class="line">提交的哈希值最后建立在此分支上（如果有）。</span><br><span class="line">GIT_PREVIOUS_SUCCESSFUL_COMMIT</span><br><span class="line">最后一次成功在该分支上构建提交的哈希（如果有）。</span><br><span class="line">GIT_BRANCH</span><br><span class="line">远程分支名称（如果有）。</span><br><span class="line">GIT_LOCAL_BRANCH</span><br><span class="line">被检出的本地分支名称（如果适用）。</span><br><span class="line">GIT_CHECKOUT_DIR</span><br><span class="line">存储库将检出到的目录。如果使用，它包含在Checkout中设置的子目录值。</span><br><span class="line">GIT_URL</span><br><span class="line">远程URL。如果有多个，会GIT_URL_1，GIT_URL_2等等。</span><br><span class="line">GIT_COMMITTER_NAME</span><br><span class="line">配置的Git提交者名称（如果有），将用于当前工作空间中的FUTURE提交。它是从“ Jenkins配置系统”页面的“全局配置user.name值”字段中读取的。</span><br><span class="line">GIT_AUTHOR_NAME</span><br><span class="line">配置的Git作者名称（如果有的话），该名称将用于当前工作空间中的FUTURE提交。它是从“ Jenkins配置系统”页面的“全局配置user.name值”字段中读取的。</span><br><span class="line">GIT_COMMITTER_EMAIL</span><br><span class="line">配置的Git提交者电子邮件（如果有），将用于当前工作空间中的FUTURE提交。从“ Jenkins配置系统”页面的“全局配置user.email值”字段读取。</span><br><span class="line">GIT_AUTHOR_EMAIL</span><br><span class="line">配置的Git作者电子邮件（如果有）将用于当前工作空间中的FUTURE提交。从“ Jenkins配置系统”页面的“全局配置user.email值”字段读取。</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Jenkins常用shell变量"><a href="#Jenkins常用shell变量" class="headerlink" title="Jenkins常用shell变量"></a>Jenkins常用shell变量</h2><pre><code class="shell">以下变量可用于Shell脚本
 
-
-
+BUILD_NUMBER
+当前的内部版本号，例如“ 153”
+BUILD_ID
+当前版本ID，与在1.597+中创​​建的版本的BUILD_NUMBER相同，但对于较早版本的YYYY-MM-DD_hh-mm-ss时间戳
+BUILD_DISPLAY_NAME
+当前版本的显示名称，默认情况下类似于“＃153”。
+JOB_NAME
+此版本的项目名称，例如“ foo”或“ foo / bar”。
+JOB_BASE_NAME
+此构建的项目的简称，它剥离了文件夹路径，例如“ bar / foo”的“ foo”。
+BUILD_TAG
+字符串“ jenkins- $ {JOB_NAME} - $ {BUILD_NUMBER} ”。JOB_NAME中的所有正斜杠（“ /”）均由破折号（“-”）代替。方便地放入资源文件，jar文件等中，以便于识别。
+EXECUTOR_NUMBER
+唯一标识执行此构建的当前执行程序（在同一台计算机的执行程序中）的唯一编号。这是您在“构建执行器状态”中看到的数字，除了该数字从0开始而不是从1开始。
+NODE_NAME
+如果构建在代理上，则为代理的名称；如果在主版本上运行，则为“主”
+NODE_LABELS
+节点分配的标签的空格分隔列表。
+工作空间
+分配给构建作为工作空间的目录的绝对路径。
+WORKSPACE_TMP
+工作区附近的临时目录，该目录不可浏览并且不会干扰SCM检出。最初可能不存在，所以请确保根据需要创建目录（例如，mkdir -p在Linux上）。当常规工作空间是驱动器根目录时，未定义。
+JENKINS_HOME
+主节点上分配给Jenkins用于存储数据的目录的绝对路径。
+JENKINS_URL
+Jenkins的完整URL，例如http：// server：port / jenkins /（注意：仅在系统配置中设置了Jenkins URL时可用）
+BUILD_URL
+此版本的完整URL，例如http：// server：port / jenkins / job / foo / 15 /（必须设置Jenkins URL）
+JOB_URL
+作业的完整URL，例如http：// server：port / jenkins / job / foo /（必须设置Jenkins URL）
+GIT_COMMIT
+提交哈希被检出。
+GIT_PREVIOUS_COMMIT
+提交的哈希值最后建立在此分支上（如果有）。
+GIT_PREVIOUS_SUCCESSFUL_COMMIT
+最后一次成功在该分支上构建提交的哈希（如果有）。
+GIT_BRANCH
+远程分支名称（如果有）。
+GIT_LOCAL_BRANCH
+被检出的本地分支名称（如果适用）。
+GIT_CHECKOUT_DIR
+存储库将检出到的目录。如果使用，它包含在Checkout中设置的子目录值。
+GIT_URL
+远程URL。如果有多个，会GIT_URL_1，GIT_URL_2等等。
+GIT_COMMITTER_NAME
+配置的Git提交者名称（如果有），将用于当前工作空间中的FUTURE提交。它是从“ Jenkins配置系统”页面的“全局配置user.name值”字段中读取的。
+GIT_AUTHOR_NAME
+配置的Git作者名称（如果有的话），该名称将用于当前工作空间中的FUTURE提交。它是从“ Jenkins配置系统”页面的“全局配置user.name值”字段中读取的。
+GIT_COMMITTER_EMAIL
+配置的Git提交者电子邮件（如果有），将用于当前工作空间中的FUTURE提交。从“ Jenkins配置系统”页面的“全局配置user.email值”字段读取。
+GIT_AUTHOR_EMAIL
+配置的Git作者电子邮件（如果有）将用于当前工作空间中的FUTURE提交。从“ Jenkins配置系统”页面的“全局配置user.email值”字段读取。
+</code></pre>
 <h2 id="配置构建参数"><a href="#配置构建参数" class="headerlink" title="配置构建参数"></a>配置构建参数</h2><p>选择你构建的项目-点击<code>Configure</code>-&gt;<code>General</code>-&gt;<code>This project is parameterized</code><br><strong>Choices</strong>为构建时候的选项</p>
 <ul>
 <li>Deploy=部署</li>
@@ -554,12 +605,48 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="配置构建后shell"><a href="#配置构建后shell" class="headerlink" title="配置构建后shell"></a>配置构建后shell</h2><blockquote>
 <p>此脚本为备份Package基本</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="variable">$Status</span> <span class="keyword">in</span></span><br><span class="line">  Deploy)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Status:<span class="variable">$Status</span>"</span></span><br><span class="line">    path=<span class="string">"<span class="variable">${WORKSPACE}</span>/tsc-Deploy-back/<span class="variable">${BUILD_NUMBER}</span>"</span>      <span class="comment">#创建每次要备份的目录</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="variable">$path</span> ];</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"The files is already  exists "</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        mkdir -p  <span class="variable">$path</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    \cp -f <span class="variable">${WORKSPACE}</span>/target/*.jar <span class="variable">$path</span>        <span class="comment">#将打包好的jar包备份到相应目录,覆盖已存在的目标</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Completing!"</span></span><br><span class="line">    ;;</span><br><span class="line">  Rollback)</span><br><span class="line">      <span class="built_in">echo</span> <span class="string">"Status:<span class="variable">$Status</span>"</span></span><br><span class="line">      <span class="built_in">echo</span> <span class="string">"Version:<span class="variable">$Version</span>"</span></span><br><span class="line">      <span class="built_in">cd</span> <span class="variable">${WORKSPACE}</span>/Deploy-back/<span class="variable">$Version</span>            <span class="comment">#进入备份目录</span></span><br><span class="line">      \cp -f *.jar <span class="variable">${WORKSPACE}</span>/target/       <span class="comment">#将备份拷贝到程序打包目录中，并覆盖之前的war包</span></span><br><span class="line">      ;;</span><br><span class="line">  *)</span><br><span class="line">  <span class="built_in">exit</span></span><br><span class="line">      ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">case $Status in
+  Deploy)
+    echo "Status:$Status"
+    path="${WORKSPACE}/tsc-Deploy-back/${BUILD_NUMBER}"      #创建每次要备份的目录
+    if [ -d $path ];
+    then
+        echo "The files is already  exists "
+    else
+        mkdir -p  $path
+    fi
+    \cp -f ${WORKSPACE}/target/*.jar $path        #将打包好的jar包备份到相应目录,覆盖已存在的目标
+    echo "Completing!"
+    ;;
+  Rollback)
+      echo "Status:$Status"
+      echo "Version:$Version"
+      cd ${WORKSPACE}/Deploy-back/$Version            #进入备份目录
+      \cp -f *.jar ${WORKSPACE}/target/       #将备份拷贝到程序打包目录中，并覆盖之前的war包
+      ;;
+  *)
+  exit
+      ;;
+esac
+</code></pre>
 <blockquote>
 <p>此脚本为构建后定时清理脚本</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ReservedNum=5  <span class="comment">#保留文件数</span></span><br><span class="line">FileDir=<span class="variable">${WORKSPACE}</span>/Deploy-back/</span><br><span class="line">date=$(date <span class="string">"+%Y%m%d-%H%M%S"</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$FileDir</span>   <span class="comment">#进入备份目录</span></span><br><span class="line">FileNum=$(ls -l | grep <span class="string">'^d'</span> | wc -l)   <span class="comment">#当前有几个文件夹，即几个备份</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(( <span class="variable">$FileNum</span> &gt; <span class="variable">$ReservedNum</span>))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    OldFile=$(ls -rt | head -1)         <span class="comment">#获取最旧的那个备份文件夹</span></span><br><span class="line">    <span class="built_in">echo</span>  <span class="variable">$date</span> <span class="string">"Delete File:"</span><span class="variable">$OldFile</span></span><br><span class="line">    rm -rf <span class="variable">$FileDir</span>/<span class="variable">$OldFile</span></span><br><span class="line">    <span class="built_in">let</span> <span class="string">"FileNum--"</span></span><br><span class="line"><span class="keyword">done</span> </span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">ReservedNum=5  #保留文件数
+FileDir=${WORKSPACE}/Deploy-back/
+date=$(date "+%Y%m%d-%H%M%S")
+
+cd $FileDir   #进入备份目录
+FileNum=$(ls -l | grep '^d' | wc -l)   #当前有几个文件夹，即几个备份
+
+while(( $FileNum &gt; $ReservedNum))
+do
+    OldFile=$(ls -rt | head -1)         #获取最旧的那个备份文件夹
+    echo  $date "Delete File:"$OldFile
+    rm -rf $FileDir/$OldFile
+    let "FileNum--"
+done 
+</code></pre>
 
   
   
@@ -965,7 +1052,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

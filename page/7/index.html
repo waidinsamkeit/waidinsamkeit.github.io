@@ -567,11 +567,14 @@ Yum
     
       
         Coturn穿透服务器搭建这个具体干嘛的你们百度….
-1yum -y install libevent-devel openssl-devel
+yum -y install libevent-devel openssl-devel
 
-1.1下载编译安装coturn1234git clone https://github.com/coturn/coturncd coturn ./configure  --prefix=/usr/local/coturnmake install
+1.1下载编译安装coturngit clone https://github.com/coturn/coturn
+cd coturn 
+./configure  --prefix=/usr/local/coturn
+make install
 
-...
+1....
       
     
   </div>
@@ -671,14 +674,14 @@ Yum
   <div class='md'>
     
       
-        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件1find . ( -name "*.txt"-o -name "*.pdf") -print
+        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件find . ( -name "*.txt"-o -name "*.pdf") -print
 
-2 正则方式查找.txt和pdf1find . -regex  ".*(.txt|.pdf)$"
+2 正则方式查找.txt和pdffind . -regex  ".*(.txt|.pdf)$"
 
 3 否定参数查找所有非txt文本
-1find . ! -name "*.txt" -print
+find . ! -name "*.txt" -print
 
-4 指定搜索深度打印...
+4 指定搜索深度打印出当前...
       
     
   </div>
@@ -724,21 +727,21 @@ Yum
   <div class='md'>
     
       
-        Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索1grep match_patten file # 默认访问匹配行
+        Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索grep match_patten file # 默认访问匹配行
 
 常用参数:
 
 -o 只输出匹配的文本行 VS -v 只输出没有匹配的文本行
 -c 统计文件中包含文本的次数
 
-1grep -c "text" filename
+grep -c "text" filename
 
 
 -n 打印匹配的行号
 -i 搜索时忽略大小写
 -l 只打印文件名
 
-1 在多...
+1 在多级目...
       
     
   </div>
@@ -793,10 +796,11 @@ list可以存放各种数据(超大量数据) 可索引、可切片
 
 
 
-1.0 创建一个list12lists = ['uuid',100,True,{'name','uuid'},(22,23)]print(lists)
+1.0 创建一个listlists = ['uuid',100,True,{'name','uuid'},(22,23)]
+print(lists)
 
 1.1 索引切片主要是说索引切片这个问题
-123...
+主要说明...
       
     
   </div>
@@ -1011,7 +1015,8 @@ Nginx有着非常丰富的配置实例
 占用内存小,并发能力强。
 
 安装docker-compose1.个人认为用PIP比其他的还快一些,所以这里用PIP进行安装
-1234561.第一种安装方法yum -y install python-pip yum-utils device-mapper-...
+1.第一种安装方法
+yum -y install python-pip yum-utils device-mapper-persi...
       
     
   </div>
@@ -1542,7 +1547,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

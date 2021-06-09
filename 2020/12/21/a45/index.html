@@ -547,20 +547,42 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>对称加密</li>
 <li>非对称加密</li>
 </ul>
-<h2 id="单向加密"><a href="#单向加密" class="headerlink" title="单向加密"></a>单向加密</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line">xhash = hashlib.md5() <span class="comment"># 生成md5对象</span></span><br><span class="line">xhash.update(<span class="string">'123.com'</span>.encode(<span class="string">'utf-8'</span>)) <span class="comment"># 转换为utf-8编码</span></span><br><span class="line"><span class="built_in">print</span>(xhash.hexdigest()) <span class="comment"># 转换为16进制数</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="单向加密"><a href="#单向加密" class="headerlink" title="单向加密"></a>单向加密</h2><pre><code class="python">import hashlib
+xhash = hashlib.md5() # 生成md5对象
+xhash.update('123.com'.encode('utf-8')) # 转换为utf-8编码
+print(xhash.hexdigest()) # 转换为16进制数
+</code></pre>
 <blockquote>
 <p>加密以后之后的的对应关系</p>
 </blockquote>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">也就是 <span class="number">123.</span>com == cbff36039c3d0212b3e34c23dcde1456</span><br><span class="line">cbff36039c3d0212b3e34c23dcde1456 理论上并不能重推回<span class="number">123.</span>com</span><br><span class="line">但是<span class="number">123.</span>com生成的结果就是cbff36039c3d0212b3e34c23dcde1456</span><br><span class="line">单向加密只是明文到密文的一个过程</span><br></pre></td></tr></tbody></table></figure>
-
-
+<pre><code class="python">也就是 123.com == cbff36039c3d0212b3e34c23dcde1456
+cbff36039c3d0212b3e34c23dcde1456 理论上并不能重推回123.com
+但是123.com生成的结果就是cbff36039c3d0212b3e34c23dcde1456
+单向加密只是明文到密文的一个过程
+</code></pre>
 <h3 id="MD5破解"><a href="#MD5破解" class="headerlink" title="MD5破解"></a>MD5破解</h3><p><strong>真的会有人用一张表格把所有的md5值记录下来</strong><br>但是MD5只能反推一些比较简单的密码,例如以下的密码.</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">123.</span>com \ 123abc abc .....</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">123.com \ 123abc abc .....
+</code></pre>
 <blockquote>
 <p>再次注意MD5无法通过计算反推,破解的方式只是用MD5的值进行查询</p>
 </blockquote>
-<h2 id="SHA系列加密"><a href="#SHA系列加密" class="headerlink" title="SHA系列加密"></a>SHA系列加密</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sha1加密算法</span></span><br><span class="line">xhash1 = hashlib.sha1(<span class="string">'123.com'</span>.encode())</span><br><span class="line"><span class="built_in">print</span>(xhash1.hexdigest())</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha224加密算法</span></span><br><span class="line">xhash1 = hashlib.sha224(<span class="string">'123.com'</span>.encode())</span><br><span class="line"><span class="built_in">print</span>(xhash1.hexdigest())</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha256加密算法</span></span><br><span class="line">xhash1 = hashlib.sha256(<span class="string">'123.com'</span>.encode())</span><br><span class="line"><span class="built_in">print</span>(xhash1.hexdigest())</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha384加密算法</span></span><br><span class="line"></span><br><span class="line">xhash1 = hashlib.sha384(<span class="string">'123.com'</span>.encode())</span><br><span class="line"><span class="built_in">print</span>(xhash1.hexdigest())</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="SHA系列加密"><a href="#SHA系列加密" class="headerlink" title="SHA系列加密"></a>SHA系列加密</h2><pre><code class="python"># sha1加密算法
+xhash1 = hashlib.sha1('123.com'.encode())
+print(xhash1.hexdigest())
 
+# sha224加密算法
+xhash1 = hashlib.sha224('123.com'.encode())
+print(xhash1.hexdigest())
+
+# sha256加密算法
+xhash1 = hashlib.sha256('123.com'.encode())
+print(xhash1.hexdigest())
+
+# sha384加密算法
+
+xhash1 = hashlib.sha384('123.com'.encode())
+print(xhash1.hexdigest())
+</code></pre>
 <h2 id="Hmac算法"><a href="#Hmac算法" class="headerlink" title="Hmac算法"></a>Hmac算法</h2><p>通过哈希算法，我们可以验证一段数据是否有效，方法就是对比该数据的哈希值，例如，判断用户口令是否正确，我们用保存在数据库中的password_md5对比计算md5(password)的结果，如果一致，用户输入的口令就是正确的。</p>
 <p>为了防止黑客通过彩虹表根据哈希值反推原始口令，在计算哈希的时候，不能仅针对原始输入计算，需要增加一个salt来使得相同的输入也能得到不同的哈希，这样，大大增加了黑客破解的难度。</p>
 <p>如果salt是我们自己随机生成的，通常我们计算MD5时采用md5(message + salt)。但实际上，把salt看做一个“口令”，加salt的哈希就是：计算一段message的哈希时，根据不同口令计算出不同的哈希。要验证哈希值，必须同时提供正确的口令。</p>
@@ -568,7 +590,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>和我们自定义的加salt算法不同，Hmac算法针对所有哈希算法都通用，无论是MD5还是SHA-1。采用Hmac替代我们自己的salt算法，可以使程序算法更标准化，也更安全。</p>
 <p>Python自带的hmac模块实现了标准的Hmac算法。我们来看看如何使用hmac实现带key的哈希。</p>
 <p>我们首先需要准备待计算的原始消息message，随机key，哈希算法，这里采用MD5，使用hmac的代码如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">message = <span class="string">b'hello world'</span></span><br><span class="line">key = <span class="string">b'secret'</span></span><br><span class="line">h = hmac.new(key,message,digestmod=<span class="string">'MD5'</span>)</span><br><span class="line">h.hexdigest()</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">message = b'hello world'
+key = b'secret'
+h = hmac.new(key,message,digestmod='MD5')
+h.hexdigest()
+</code></pre>
 
   
   
@@ -688,7 +714,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 方便的管理第三方工具包
 
 
-Mac/Linux用户安装PIP1curl https://bootstrap.pypa.io/get-pip.py | python3
+Mac/Linux用户安装PIPcurl https://bootstrap.pypa.io/get-pip.py | python3
+
 
 设...</p>
         </a>
@@ -703,7 +730,8 @@ Mac/Linux用户安装PIP1curl https://bootstrap.pypa.io/get-pip.py | python3
 1.0 禁止root登录
 修改sshd配置文件
 
-script123vim /etc/ssh/sshd_config找到 Per...</p>
+vim /etc/ssh/sshd_config
+找到 PermitRootL...</p>
         </a>
       
     </div>
@@ -977,7 +1005,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

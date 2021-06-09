@@ -537,32 +537,135 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <h2 id="Kubernetes-GUI管理"><a href="#Kubernetes-GUI管理" class="headerlink" title="Kubernetes-GUI管理"></a>Kubernetes-GUI管理</h2><p>​    Dashboard是管理Kubernetes集群一个WEB GUI插件，可以再浏览器中实现资源配置和查看。可参考：<a target="_blank" rel="noopener" href="https://github.com/kubernetes/dashboard">https://github.com/kubernetes/dashboard</a></p>
-<h2 id="1-1准备Dashbord镜像"><a href="#1-1准备Dashbord镜像" class="headerlink" title="1.1准备Dashbord镜像"></a>1.1准备Dashbord镜像</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# docker pull k8scn/kubernetes-dashboard-amd64:v1.8.3</span><br><span class="line">[root@kubernetes-master ~]# docker tag k8scn/kubernetes-dashboard-amd64:v1.8.3  192.168.1.177:8077/library/dashboard:v1.8.3 // 打标签</span><br><span class="line">[root@kubernetes-master ~]# docker push 192.168.1.177:8077/library/dashboard //传到Harbor的library仓库下</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-2部署Dashboard"><a href="#1-2部署Dashboard" class="headerlink" title="1.2部署Dashboard"></a>1.2部署Dashboard</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# mkdir /usr/local/dashboard</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-2-1构建rbac-yaml"><a href="#1-2-1构建rbac-yaml" class="headerlink" title="1.2.1构建rbac.yaml"></a>1.2.1构建rbac.yaml</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master dashboard]# vim rbac.yaml  //这个是rbac权限的问题 一会儿说</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">    <span class="attr">addonmanager.kubernetes.io/mode:</span> <span class="string">Reconcile</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">kubernetes-dashboard-admin</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">kubernetes-dashboard-admin</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">    <span class="attr">addonmanager.kubernetes.io/mode:</span> <span class="string">Reconcile</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">cluster-admin</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">kubernetes-dashboard-admin</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-2-2构建deployment-yaml"><a href="#1-2-2构建deployment-yaml" class="headerlink" title="1.2.2构建deployment.yaml"></a>1.2.2构建deployment.yaml</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master dashboard]# vim deployment.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">    <span class="attr">kubernetes.io/cluster-service:</span> <span class="string">"true"</span></span><br><span class="line">    <span class="attr">addonmanager.kubernetes.io/mode:</span> <span class="string">Reconcile</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">      <span class="attr">annotations:</span></span><br><span class="line">        <span class="attr">scheduler.alpha.kubernetes.io/critical-pod:</span> <span class="string">''</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">priorityClassName:</span> <span class="string">system-cluster-critical</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">        <span class="attr">image:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.177</span><span class="string">:8077/library/dashboard:v1.8.3</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="attr">limits:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">300Mi</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">50m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">100Mi</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8443</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">          <span class="comment"># PLATFORM-SPECIFIC ARGS HERE</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">--auto-generate-certificates</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">tmp-volume</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/tmp</span></span><br><span class="line">        <span class="attr">livenessProbe:</span></span><br><span class="line">          <span class="attr">httpGet:</span></span><br><span class="line">            <span class="attr">scheme:</span> <span class="string">HTTPS</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">            <span class="attr">port:</span> <span class="number">8443</span></span><br><span class="line">          <span class="attr">initialDelaySeconds:</span> <span class="number">30</span></span><br><span class="line">          <span class="attr">timeoutSeconds:</span> <span class="number">30</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">tmp-volume</span></span><br><span class="line">        <span class="attr">emptyDir:</span> {}</span><br><span class="line">      <span class="attr">serviceAccountName:</span> <span class="string">kubernetes-dashboard-admin</span></span><br><span class="line">      <span class="attr">tolerations:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">"CriticalAddonsOnly"</span></span><br><span class="line">        <span class="attr">operator:</span> <span class="string">"Exists"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-2-3构建services-yaml"><a href="#1-2-3构建services-yaml" class="headerlink" title="1.2.3构建services.yaml"></a>1.2.3构建services.yaml</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master dashboard]# vim services.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br><span class="line">    <span class="attr">kubernetes.io/cluster-service:</span> <span class="string">"true"</span></span><br><span class="line">    <span class="attr">addonmanager.kubernetes.io/mode:</span> <span class="string">Reconcile</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">443</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">8443</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30112</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">kubernetes-dashboard</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-3-应用yaml"><a href="#1-3-应用yaml" class="headerlink" title="1.3 应用yaml"></a>1.3 应用yaml</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master dashboard]# kubectl apply -f rbac.yaml</span><br><span class="line">[root@kubernetes-master dashboard]# kubectl apply -f deployment.yaml</span><br><span class="line">[root@kubernetes-master dashboard]# kubectl apply -f services.yaml</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="1-1准备Dashbord镜像"><a href="#1-1准备Dashbord镜像" class="headerlink" title="1.1准备Dashbord镜像"></a>1.1准备Dashbord镜像</h2><pre><code class="shell">[root@kubernetes-master ~]# docker pull k8scn/kubernetes-dashboard-amd64:v1.8.3
+[root@kubernetes-master ~]# docker tag k8scn/kubernetes-dashboard-amd64:v1.8.3  192.168.1.177:8077/library/dashboard:v1.8.3 // 打标签
+[root@kubernetes-master ~]# docker push 192.168.1.177:8077/library/dashboard //传到Harbor的library仓库下
+</code></pre>
+<h4 id="1-2部署Dashboard"><a href="#1-2部署Dashboard" class="headerlink" title="1.2部署Dashboard"></a>1.2部署Dashboard</h4><pre><code class="shell">[root@kubernetes-master ~]# mkdir /usr/local/dashboard
+</code></pre>
+<h5 id="1-2-1构建rbac-yaml"><a href="#1-2-1构建rbac-yaml" class="headerlink" title="1.2.1构建rbac.yaml"></a>1.2.1构建rbac.yaml</h5><pre><code class="shell">[root@kubernetes-master dashboard]# vim rbac.yaml  //这个是rbac权限的问题 一会儿说
+</code></pre>
+<pre><code class="yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+    addonmanager.kubernetes.io/mode: Reconcile
+  name: kubernetes-dashboard-admin
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-admin
+  namespace: kube-system
+  labels:
+    k8s-app: kubernetes-dashboard
+    addonmanager.kubernetes.io/mode: Reconcile
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard-admin
+  namespace: kube-system
+</code></pre>
+<h5 id="1-2-2构建deployment-yaml"><a href="#1-2-2构建deployment-yaml" class="headerlink" title="1.2.2构建deployment.yaml"></a>1.2.2构建deployment.yaml</h5><pre><code class="shell">[root@kubernetes-master dashboard]# vim deployment.yaml
+</code></pre>
+<pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+  labels:
+    k8s-app: kubernetes-dashboard
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        k8s-app: kubernetes-dashboard
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      priorityClassName: system-cluster-critical
+      containers:
+      - name: kubernetes-dashboard
+        image: 192.168.1.177:8077/library/dashboard:v1.8.3
+        resources:
+          limits:
+            cpu: 100m
+            memory: 300Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+        ports:
+        - containerPort: 8443
+          protocol: TCP
+        args:
+          # PLATFORM-SPECIFIC ARGS HERE
+          - --auto-generate-certificates
+        volumeMounts:
+        - name: tmp-volume
+          mountPath: /tmp
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: 8443
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
+      serviceAccountName: kubernetes-dashboard-admin
+      tolerations:
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
+</code></pre>
+<h5 id="1-2-3构建services-yaml"><a href="#1-2-3构建services-yaml" class="headerlink" title="1.2.3构建services.yaml"></a>1.2.3构建services.yaml</h5><pre><code class="shell">[root@kubernetes-master dashboard]# vim services.yaml
+</code></pre>
+<pre><code class="yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+  labels:
+    k8s-app: kubernetes-dashboard
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+spec:
+  type: NodePort
+  ports:
+  - port: 443
+    targetPort: 8443
+    nodePort: 30112
+  selector:
+    k8s-app: kubernetes-dashboard
+</code></pre>
+<h4 id="1-3-应用yaml"><a href="#1-3-应用yaml" class="headerlink" title="1.3 应用yaml"></a>1.3 应用yaml</h4><pre><code class="shell">[root@kubernetes-master dashboard]# kubectl apply -f rbac.yaml
+[root@kubernetes-master dashboard]# kubectl apply -f deployment.yaml
+[root@kubernetes-master dashboard]# kubectl apply -f services.yaml
+</code></pre>
 <p><strong>注意</strong></p>
 <ul>
 <li>yaml注释版本放到gitee上</li>
 <li>地址: <a target="_blank" rel="noopener" href="https://gitee.com/brave_heart_one/dashboard1">https://gitee.com/brave_heart_one/dashboard1</a></li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master dashboard]# kubectl get pods -n kube-system // 默认运行 kube-system命名空间中</span><br><span class="line">// 如果出现如下的报错情况</span><br><span class="line">kubernetes-dashboard-6fc67d54d9-6vhm9       0/1     ImagePullBackOff   0          6m7s // 镜像状态处于Backoff</span><br><span class="line">// 如果各位从dashboard的官网下载的yaml文件,需要修改镜像</span><br><span class="line">image: 192.168.1.177:8077/library/dashboard:v1.8.3 // 修改deployment的镜像为Harbor的镜像</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-4配置dashboard"><a href="#1-4配置dashboard" class="headerlink" title="1.4配置dashboard"></a>1.4配置dashboard</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">访问地址</span><br><span class="line">访问 http://192.168.1.178:30112</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">[root@kubernetes-master dashboard]# kubectl get pods -n kube-system // 默认运行 kube-system命名空间中
+// 如果出现如下的报错情况
+kubernetes-dashboard-6fc67d54d9-6vhm9       0/1     ImagePullBackOff   0          6m7s // 镜像状态处于Backoff
+// 如果各位从dashboard的官网下载的yaml文件,需要修改镜像
+image: 192.168.1.177:8077/library/dashboard:v1.8.3 // 修改deployment的镜像为Harbor的镜像
+</code></pre>
+<h4 id="1-4配置dashboard"><a href="#1-4配置dashboard" class="headerlink" title="1.4配置dashboard"></a>1.4配置dashboard</h4><pre><code class="shell">访问地址
+访问 http://192.168.1.178:30112
+</code></pre>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/dashboard.png#vwid=1055&amp;vhei=659" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/dashboard.png#vwid=1055&amp;vhei=659" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg"></p>
 
   
@@ -971,7 +1074,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

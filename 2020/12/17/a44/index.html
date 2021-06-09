@@ -543,11 +543,20 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="1-0-禁止root登录"><a href="#1-0-禁止root登录" class="headerlink" title="1.0 禁止root登录"></a>1.0 禁止root登录</h2><blockquote>
 <p>修改sshd配置文件</p>
 </blockquote>
-<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line">找到 PermitRootLogin</span><br><span class="line"><span class="meta">#</span><span class="bash">PermitRootLogin yes 修改为 PermitRootLogin no</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">vim /etc/ssh/sshd_config
+找到 PermitRootLogin
+#PermitRootLogin yes 修改为 PermitRootLogin no
+</code></pre>
 <blockquote>
 <p>注意: 这个时候不要重启你的ssh服务,否则你可能只能通过VNC云客户端登录</p>
 </blockquote>
-<h2 id="2-0-赋予root权限"><a href="#2-0-赋予root权限" class="headerlink" title="2.0 赋予root权限"></a>2.0 赋予root权限</h2><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim  /etc/sudoers</span><br><span class="line"><span class="meta">#</span><span class="bash"> Allows people <span class="keyword">in</span> group wheel to run all commands</span></span><br><span class="line"><span class="meta">%</span><span class="bash">wheel    ALL=(ALL)    ALL <span class="comment"># 取消注释</span></span></span><br><span class="line">useradd test # 新增一个测试用户</span><br><span class="line"></span><br><span class="line">usermod -g root  test # 把test用户放到root组</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-0-赋予root权限"><a href="#2-0-赋予root权限" class="headerlink" title="2.0 赋予root权限"></a>2.0 赋予root权限</h2><pre><code class="shell">vim  /etc/sudoers
+# Allows people in group wheel to run all commands
+%wheel    ALL=(ALL)    ALL # 取消注释
+useradd test # 新增一个测试用户
+
+usermod -g root  test # 把test用户放到root组
+</code></pre>
 
   
   
@@ -674,7 +683,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 对称加密
 非对称加密
 
-单向加密1234impo...</p>
+单向加密import h...</p>
         </a>
       
       
@@ -683,7 +692,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>搭建Leanote个人笔记
 可以作为个人私密笔记本使用
 
-1.0准备环境优先部署mongodb123wget http://labs-1253675457.cosgz.myqcloud.com/...</p>
+1.0准备环境优先部署mongodbwget http://labs-1253675457.cosgz.myqcloud.com/mon...</p>
         </a>
       
     </div>
@@ -957,7 +966,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

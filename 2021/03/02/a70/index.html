@@ -556,22 +556,55 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><strong>helm</strong>：一个命令行管理工具,用来进行配置。</li>
 </ul>
 <h2 id="部署Helm"><a href="#部署Helm" class="headerlink" title="部署Helm"></a>部署Helm</h2><p><strong>官网地址</strong>：<a target="_blank" rel="noopener" href="https://helm.sh/zh/">https://helm.sh/zh/</a></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz</span><br><span class="line">tar -zxf helm-v3.5.2-linux-amd64.tar.gz</span><br><span class="line">mv linux-amd64/helm /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="配置Helm仓库"><a href="#配置Helm仓库" class="headerlink" title="配置Helm仓库"></a>配置Helm仓库</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts</span><br><span class="line">helm repo list <span class="comment"># 查看helm仓库地址</span></span><br><span class="line">helm repo update <span class="comment"># 更新仓库地址</span></span><br><span class="line">helm repo remove aliyun <span class="comment"># 移除aliyun仓库</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="使用Helm部署一个应用"><a href="#使用Helm部署一个应用" class="headerlink" title="使用Helm部署一个应用"></a>使用Helm部署一个应用</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helm search repo weave <span class="comment"># 搜索一个weave应用</span></span><br><span class="line">helm install docker-ui aliyun/weave-scope <span class="comment"># 安装一个应用</span></span><br><span class="line">helm list <span class="comment"># 查看安装列表</span></span><br><span class="line">helm status  docker-ui <span class="comment"># 查看状态</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">wget https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz
+tar -zxf helm-v3.5.2-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/bin/
+</code></pre>
+<h2 id="配置Helm仓库"><a href="#配置Helm仓库" class="headerlink" title="配置Helm仓库"></a>配置Helm仓库</h2><pre><code class="bash"> helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+ helm repo list # 查看helm仓库地址
+ helm repo update # 更新仓库地址
+ helm repo remove aliyun # 移除aliyun仓库
+</code></pre>
+<h2 id="使用Helm部署一个应用"><a href="#使用Helm部署一个应用" class="headerlink" title="使用Helm部署一个应用"></a>使用Helm部署一个应用</h2><pre><code class="bash">helm search repo weave # 搜索一个weave应用
+helm install docker-ui aliyun/weave-scope # 安装一个应用
+helm list # 查看安装列表
+helm status  docker-ui # 查看状态
+</code></pre>
 <h2 id="修改weave的Yaml文件"><a href="#修改weave的Yaml文件" class="headerlink" title="修改weave的Yaml文件"></a>修改weave的Yaml文件</h2><p>由于服务没有对外暴露端口,所以需要修改Yaml文件</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit svc weave-scope-weave-scope</span><br><span class="line"><span class="built_in">type</span>: NodePort <span class="comment"># type改为NodePort</span></span><br><span class="line">http://172.16.87.10:31556/ <span class="comment"># 访问NodePort端口即可</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">kubectl edit svc weave-scope-weave-scope
+type: NodePort # type改为NodePort
+http://172.16.87.10:31556/ # 访问NodePort端口即可
+</code></pre>
 <h1 id="Chart"><a href="#Chart" class="headerlink" title="Chart"></a>Chart</h1><p>使用chart部署一个应用</p>
-<h2 id="创建一个Chart"><a href="#创建一个Chart" class="headerlink" title="创建一个Chart"></a>创建一个Chart</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">helm create chart <span class="comment"># 先创建一个chart模板</span></span><br><span class="line">├── chart</span><br><span class="line">├── Chart.yaml <span class="comment"># 当前chart的属性配置信息</span></span><br><span class="line">├── templates <span class="comment"># 存放模板的目录</span></span><br><span class="line">│   ├── deployment.yaml</span><br><span class="line">│   ├── _helpers.tpl</span><br><span class="line">│   ├── hpa.yaml</span><br><span class="line">│   ├── ingress.yaml</span><br><span class="line">│   ├── NOTES.txt</span><br><span class="line">│   ├── serviceaccount.yaml</span><br><span class="line">│   ├── service.yaml</span><br><span class="line">│   └── tests</span><br><span class="line">│       └── test-connection.yaml</span><br><span class="line">└── values.yaml <span class="comment"># 定义全局变量的文件</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建一个应用"><a href="#创建一个应用" class="headerlink" title="创建一个应用"></a>创建一个应用</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> templates/ <span class="comment"># 进入到模板目录</span></span><br><span class="line">kubectl create deployment web-server --image=nginx:1.7.9 --dry-run -o yaml &gt; deployment.yaml</span><br><span class="line">kubectl expose deployment web-server --port=80 --target-port=80 --<span class="built_in">type</span>=NodePort --dry-run -o yaml &gt; service.yaml</span><br><span class="line">helm install web-server chart/ <span class="comment"># 使用helm直接创建应用</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="Chart应用升级"><a href="#Chart应用升级" class="headerlink" title="Chart应用升级"></a>Chart应用升级</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">helm upgrade web-server chart/</span><br><span class="line">Release <span class="string">"web-server"</span> has been upgraded. Happy Helming!</span><br><span class="line">NAME: web-server</span><br><span class="line">LAST DEPLOYED: Sun Feb 28 17:40:39 2021</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: deployed</span><br><span class="line">REVISION: 2</span><br><span class="line">TEST SUITE: None</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="创建一个Chart"><a href="#创建一个Chart" class="headerlink" title="创建一个Chart"></a>创建一个Chart</h2><pre><code class="bash">helm create chart # 先创建一个chart模板
+├── chart
+├── Chart.yaml # 当前chart的属性配置信息
+├── templates # 存放模板的目录
+│   ├── deployment.yaml
+│   ├── _helpers.tpl
+│   ├── hpa.yaml
+│   ├── ingress.yaml
+│   ├── NOTES.txt
+│   ├── serviceaccount.yaml
+│   ├── service.yaml
+│   └── tests
+│       └── test-connection.yaml
+└── values.yaml # 定义全局变量的文件
+</code></pre>
+<h2 id="创建一个应用"><a href="#创建一个应用" class="headerlink" title="创建一个应用"></a>创建一个应用</h2><pre><code class="bash">cd templates/ # 进入到模板目录
+kubectl create deployment web-server --image=nginx:1.7.9 --dry-run -o yaml &gt; deployment.yaml
+kubectl expose deployment web-server --port=80 --target-port=80 --type=NodePort --dry-run -o yaml &gt; service.yaml
+helm install web-server chart/ # 使用helm直接创建应用
+</code></pre>
+<h2 id="Chart应用升级"><a href="#Chart应用升级" class="headerlink" title="Chart应用升级"></a>Chart应用升级</h2><pre><code class="bash">helm upgrade web-server chart/
+Release "web-server" has been upgraded. Happy Helming!
+NAME: web-server
+LAST DEPLOYED: Sun Feb 28 17:40:39 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+</code></pre>
 <h1 id="通过Helm高效复用"><a href="#通过Helm高效复用" class="headerlink" title="通过Helm高效复用"></a>通过Helm高效复用</h1><ul>
 <li>通过传递参数,动态渲染模板,动态传入参数生成。</li>
 <li>yaml中大体上有几个不同的地方<ul>
@@ -583,23 +616,71 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 </li>
 </ul>
-<h2 id="在Value-yaml中定义变量"><a href="#在Value-yaml中定义变量" class="headerlink" title="在Value.yaml中定义变量"></a>在Value.yaml中定义变量</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">value.yaml</span></span><br><span class="line"><span class="comment"># base Infomation</span></span><br><span class="line"><span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">tag:</span> <span class="number">1.7</span><span class="number">.9</span></span><br><span class="line"><span class="attr">label:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">port:</span> <span class="number">80</span></span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="在Value-yaml中定义变量"><a href="#在Value-yaml中定义变量" class="headerlink" title="在Value.yaml中定义变量"></a>在Value.yaml中定义变量</h2><pre><code class="yaml">vim value.yaml
+# base Infomation
+replicas: 1
+image: nginx
+tag: 1.7.9
+label: nginx
+port: 80
+</code></pre>
 <h2 id="引入Value-yaml变量方式"><a href="#引入Value-yaml变量方式" class="headerlink" title="引入Value.yaml变量方式"></a>引入Value.yaml变量方式</h2><ul>
 <li><strong>通过表达式的方式进行适用全局变量</strong></li>
 </ul>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># {{.Values.Name}}</span></span><br><span class="line"><span class="comment"># {{.Release.Name}} 取一个动态生成的名字.</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改Deployment-yaml"><a href="#修改Deployment-yaml" class="headerlink" title="修改Deployment.yaml"></a>修改Deployment.yaml</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">templates/deployment.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">creationTimestamp:</span> <span class="literal">null</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> {{ <span class="string">.Values.label</span> }} <span class="comment"># 改动处</span></span><br><span class="line">  <span class="attr">name:</span> {{ <span class="string">.Release.Name</span> }}<span class="string">-deployment</span> <span class="comment"># 改动处</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> {{ <span class="string">.Values.label</span> }} <span class="comment"># 改动处</span></span><br><span class="line">  <span class="attr">strategy:</span> {}</span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">creationTimestamp:</span> <span class="literal">null</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> {{ <span class="string">.Values.label</span> }} <span class="comment"># 改动处</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> {{ <span class="string">.Values.image</span> }} <span class="comment"># 改动处</span></span><br><span class="line">        <span class="attr">resources:</span> {}</span><br><span class="line"><span class="attr">status:</span> {}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="修改Service-yaml"><a href="#修改Service-yaml" class="headerlink" title="修改Service.yaml"></a>修改Service.yaml</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">templates/service.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">creationTimestamp:</span> <span class="literal">null</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> {{ <span class="string">.Values.label</span> }} <span class="comment"># 改动处</span></span><br><span class="line">  <span class="attr">name:</span> {{ <span class="string">.Release.Name</span> }}<span class="string">-svc</span> <span class="comment"># 修改处</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> {{ <span class="string">.Values.port</span> }} <span class="comment"># 修改处</span></span><br><span class="line">    <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> {{ <span class="string">.Values.label</span> }} <span class="comment"># 修改处</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line"><span class="attr">status:</span></span><br><span class="line">  <span class="attr">loadBalancer:</span> {}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="尝试运行应用"><a href="#尝试运行应用" class="headerlink" title="尝试运行应用"></a>尝试运行应用</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install --dry-run web2 charts/ <span class="comment"># 起的名字叫web2</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml"># {{.Values.Name}}
+# {{.Release.Name}} 取一个动态生成的名字.
+</code></pre>
+<h2 id="修改Deployment-yaml"><a href="#修改Deployment-yaml" class="headerlink" title="修改Deployment.yaml"></a>修改Deployment.yaml</h2><pre><code class="yaml">vim templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Values.label }} # 改动处
+  name: {{ .Release.Name }}-deployment # 改动处
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.label }} # 改动处
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.label }} # 改动处
+    spec:
+      containers:
+      - image: {{ .Values.image }} # 改动处
+        resources: {}
+status: {}
+</code></pre>
+<h2 id="修改Service-yaml"><a href="#修改Service-yaml" class="headerlink" title="修改Service.yaml"></a>修改Service.yaml</h2><pre><code class="yaml">vim templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Values.label }} # 改动处
+  name: {{ .Release.Name }}-svc # 修改处
+spec:
+  ports:
+  - port: {{ .Values.port }} # 修改处
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: {{ .Values.label }} # 修改处
+  type: NodePort
+status:
+  loadBalancer: {}
+</code></pre>
+<h2 id="尝试运行应用"><a href="#尝试运行应用" class="headerlink" title="尝试运行应用"></a>尝试运行应用</h2><pre><code class="bash">helm install --dry-run web2 charts/ # 起的名字叫web2
+</code></pre>
 <ul>
 <li><code>--dry-run</code>：表示尝试运行</li>
 </ul>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install  web2 charts/ <span class="comment"># 实际运行</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">helm install  web2 charts/ # 实际运行
+</code></pre>
 
   
   
@@ -715,7 +796,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class='prev' href='/2021/03/03/a71/'>
           <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Ansible部署k8s集群</p>
-          <p class='content'>安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=htt...</p>
+          <p class='content'>安装Ansible# 更换清华源
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mi...</p>
         </a>
       
       
@@ -725,7 +808,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 创建Secret
 
-12345678apiVersion: v1kind: Secretmetadata:...</p>
+apiVersion: v1
+kind: Secret
+metadata: 
+  na...</p>
         </a>
       
     </div>
@@ -999,7 +1085,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

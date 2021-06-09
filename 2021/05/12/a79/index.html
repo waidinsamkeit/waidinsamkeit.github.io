@@ -537,17 +537,24 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>一个让你能添加、修改和删除投票的管理站点。</li>
 </ul>
 <p>我们假定你已经阅读了 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/intro/install/">安装 Django</a>。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m django --version</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">python3 -m django --version
+</code></pre>
 <p>如果这行命令输出了一个版本号，证明你已经安装了此版本的 Django；如果你得到的是一个“No module named django”的错误提示，则表明你还未安装。</p>
 <p>这个教程是为了 Django 3.1 写的，它支持 Python 3.6 和后续版本。如果 Django 的版本不匹配，你可以通过页面右下角的版本切换器切换到对应你版本的教程，或更新至最新版本。如果你正在使用一个较老版本的 Python，在  <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/faq/install/#faq-python-version-support">我应该使用哪个版本的 Python 来配合 Django?</a> 查找一个合适的 Django 版本。</p>
 <p>你可以查看文档 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/topics/install/">如何安装 Django</a> 来获得关于移除旧版本，安装新版本的流程和建议。</p>
 <h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>如果这是你第一次使用 Django 的话，你需要一些初始化设置。也就是说，你需要用一些自动生成的代码配置一个 Django <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/glossary/#term-project">project</a> —— 即一个  Django 项目实例需要的设置项集合，包括数据库配置、Django 配置和应用程序配置。</p>
 <p>打开命令行，<code>cd</code> 到一个你想放置你代码的目录，然后运行以下命令</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject django-admin</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">django-admin/</span><br><span class="line">    manage.py</span><br><span class="line">    dijango-admin/</span><br><span class="line">        __init__.py</span><br><span class="line">        settings.py</span><br><span class="line">        urls.py</span><br><span class="line">        asgi.py</span><br><span class="line">        wsgi.py</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">django-admin startproject django-admin
+</code></pre>
+<pre><code class="shell">django-admin/
+    manage.py
+    dijango-admin/
+        __init__.py
+        settings.py
+        urls.py
+        asgi.py
+        wsgi.py
+</code></pre>
 <ul>
 <li>最外层的 <code>mysite/</code> 根目录只是你项目的容器， 根目录名称对 Django 没有影响，你可以将它重命名为任何你喜欢的名称。</li>
 <li><code>manage.py</code>: 一个让你用各种方式管理 Django 项目的命令行工具。你可以阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/django-admin/">django-admin 和 manage.py</a> 获取所有 <code>manage.py</code> 的细节。</li>
@@ -559,30 +566,64 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><code>mysite/wsgi.py</code>：作为你的项目的运行在 WSGI 兼容的Web服务器上的入口。阅读 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/howto/deployment/wsgi/">如何使用 WSGI 进行部署</a> 了解更多细节。</li>
 </ul>
 <h2 id="用于开发的简易服务器"><a href="#用于开发的简易服务器" class="headerlink" title="用于开发的简易服务器"></a>用于开发的简易服务器</h2><p>让我们来确认一下你的 Django 项目是否真的创建成功了。如果你的当前目录不是外层的 <code>mysite</code> 目录的话，请切换到此目录，然后运行下面的命令：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">python3 manage.py runserver
+</code></pre>
 <h2 id="创建投票应用"><a href="#创建投票应用" class="headerlink" title="创建投票应用"></a>创建投票应用</h2><p>你的应用可以存放在任何 <a target="_blank" rel="noopener" href="https://docs.python.org/3/tutorial/modules.html#tut-searchpath">Python 路径</a> 中定义的路径。在这个教程中，我们将在你的 <code>manage.py</code> 同级目录下创建投票应用。这样它就可以作为顶级模块导入，而不是 <code>django-admin</code> 的子模块。</p>
 <p>请确定你现在处于 <code>manage.py</code> 所在的目录下，然后运行这行命令来创建一个应用：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py startapp polls</span><br><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>python3 manage.py startapp polls
+polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    views.py
+</code></pre>
 <h2 id="编写第一个视图"><a href="#编写第一个视图" class="headerlink" title="编写第一个视图"></a>编写第一个视图</h2><p>让我们开始编写第一个视图吧。打开 <code>polls/views.py</code>，把下面这些 Python 代码输入进去</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">request</span>):</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">"Hello, world. You're at the polls index."</span>)</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">from django.http import HttpResponse
 
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+</code></pre>
 <p>这是 Django 中最简单的视图。如果想看见效果，我们需要将一个 URL 映射到它——这就是我们需要 URLconf 的原因了。</p>
 <p>为了创建 URLconf，请在 polls 目录里新建一个 <code>urls.py</code>  文件。你的应用目录现在看起来应该是这样：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">polls/</span><br><span class="line">    __init__.py</span><br><span class="line">    admin.py</span><br><span class="line">    apps.py</span><br><span class="line">    migrations/</span><br><span class="line">        __init__.py</span><br><span class="line">    models.py</span><br><span class="line">    tests.py</span><br><span class="line">    urls.py</span><br><span class="line">    views.py</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">polls/
+    __init__.py
+    admin.py
+    apps.py
+    migrations/
+        __init__.py
+    models.py
+    tests.py
+    urls.py
+    views.py
+</code></pre>
 <p>在 <code>polls/urls.py</code> 中，输入如下代码：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">''</span>, views.index, name=<span class="string">'index'</span>),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">from django.urls import path
 
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+</code></pre>
 <p>下一步是要在根 URLconf 文件中指定我们创建的 <code>polls.urls</code> 模块。在 <code>mysite/urls.py</code> 文件的 <code>urlpatterns</code> 列表里插入一个 <code>include()</code>， 如下：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> include, path</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'polls/'</span>, include(<span class="string">'polls.urls'</span>)),</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">from django.contrib import admin
+from django.urls import include, path
 
+urlpatterns = [
+    path('polls/', include('polls.urls')),
+    path('admin/', admin.site.urls),
+]
+</code></pre>
 <p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 允许引用其它 URLconfs。每当 Django 遇到 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 时，它会截断与此项匹配的 URL 的部分，并将剩余的字符串发送到 URLconf 以供进一步处理。</p>
 <p>我们设计 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.include"><code>include()</code></a> 的理念是使其可以即插即用。因为投票应用有它自己的 URLconf( <code>polls/urls.py</code> )，他们能够被放在 “/polls/“ ， “/fun_polls/“ ，”/content/polls/“，或者其他任何路径下，这个应用都能够正常工作。</p>
 <p>你现在把 <code>index</code> 视图添加进了 URLconf。通过以下命令验证是否正常工作：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>python3 manage.py runserver
+</code></pre>
 <p>用你的浏览器访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:8000/polls/%EF%BC%8C%E4%BD%A0%E5%BA%94%E8%AF%A5%E8%83%BD%E5%A4%9F%E7%9C%8B%E8%A7%81">http://127.0.0.1:8000/polls/，你应该能够看见</a> “<em>Hello, world. You’re at the polls index.</em>“ ，这是你在 <code>index</code> 视图中定义的。</p>
 <p>函数 <a target="_blank" rel="noopener" href="https://docs.djangoproject.com/zh-hans/3.1/ref/urls/#django.urls.path"><code>path()</code></a> 具有四个参数，两个必须参数：<code>route</code> 和 <code>view</code>，两个可选参数：<code>kwargs</code> 和 <code>name</code>。现在，是时候来研究这些参数的含义了。</p>
 <h2 id="path-参数：-route"><a href="#path-参数：-route" class="headerlink" title="path() 参数： route"></a>path() 参数： <code>route</code></h2><p><code>route</code> 是一个匹配 URL 的准则（类似正则表达式）。当 Django 响应一个请求时，它会从 <code>urlpatterns</code> 的第一项开始，按顺序依次匹配列表中的项，直到找到匹配的项。</p>
@@ -706,7 +747,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <a class='prev' href='/2021/05/24/a84/'>
           <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>关于Kubernetes构建Redis集群</p>
           <p class='content'>DockerFile
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546FRO...</p>
+FROM centos:8
+
+# add our user and group first to make sure their IDs get assigned cons...</p>
         </a>
       
       
@@ -991,7 +1034,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

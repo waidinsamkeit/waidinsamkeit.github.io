@@ -542,41 +542,95 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li>2台机器也能做</li>
 </ul>
-<h4 id="1-1更改mongo配置文件"><a href="#1-1更改mongo配置文件" class="headerlink" title="1.1更改mongo配置文件"></a>1.1更改mongo配置文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mongo]# vim conf/mongo.conf</span><br><span class="line">port=27017</span><br><span class="line">fork=true</span><br><span class="line">logpath=/usr/local/mongo/logs/mongodb.log</span><br><span class="line">logappend=true</span><br><span class="line">dbpath=/usr/local/mongo/data</span><br><span class="line">replSet=rs0 // 加入副本集名称,此名称要一致</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="1-1更改mongo配置文件"><a href="#1-1更改mongo配置文件" class="headerlink" title="1.1更改mongo配置文件"></a>1.1更改mongo配置文件</h4><pre><code class="shell">[root@localhost mongo]# vim conf/mongo.conf
+port=27017
+fork=true
+logpath=/usr/local/mongo/logs/mongodb.log
+logappend=true
+dbpath=/usr/local/mongo/data
+replSet=rs0 // 加入副本集名称,此名称要一致
+</code></pre>
 <p><strong>启动mongo</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mongo]# mongod -f conf/mongo.conf </span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-2-主mongo配置"><a href="#1-2-主mongo配置" class="headerlink" title="1.2 主mongo配置"></a>1.2 主mongo配置</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mongo]# mongo</span><br><span class="line">&gt; conf=</span><br><span class="line">    {</span><br><span class="line">    "_id" : "rs0",</span><br><span class="line">    "members" : [</span><br><span class="line">        { "_id" : 0, "host" : "172.17.100.193:27017" },</span><br><span class="line">        { "_id" : 1, "host" : "172.17.100.191:27017" }</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">#填写mongo的ip地址即可</span><br><span class="line">&gt; rs.initiate(conf) // 初始化副本集</span><br><span class="line">{ "ok" : 1 } //如果出现ok1则表示成功</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-3-副本集更新"><a href="#1-3-副本集更新" class="headerlink" title="1.3 副本集更新"></a>1.3 副本集更新</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 向副本集中添加成员</span><br><span class="line">rs.add("172.17.100.191:27017")</span><br><span class="line"> </span><br><span class="line">// 从副本集中删除成员</span><br><span class="line">rs.remove("172.17.100.191:27017")</span><br><span class="line"> </span><br><span class="line">// 向副本集中添加仲裁</span><br><span class="line">rs.addArb("172.17.100.191:27017")</span><br><span class="line"> </span><br><span class="line">// 向副本集中添加备份节点</span><br><span class="line">rs.add({"_id":3,"host":"172.17.100.191:27017","priority":0,"hidden":true})  // _id请依次递增</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-4-更新副本集优先级"><a href="#1-4-更新副本集优先级" class="headerlink" title="1.4 更新副本集优先级"></a>1.4 更新副本集优先级</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cfg = rs.conf()</span><br><span class="line">cfg.members[0].priority = 5  // 设置权重为5</span><br><span class="line">//members[0]里面填写你要更改的节点数字 id是1就写1 是2就设置2</span><br><span class="line">rs.reconfig(cfg) //重新加载配置</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-5-查看副本集状态"><a href="#1-5-查看副本集状态" class="headerlink" title="1.5 查看副本集状态"></a>1.5 查看副本集状态</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rs0:PRIMARY&gt; rs.status()</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-6-查看副本集的配置信息"><a href="#1-6-查看副本集的配置信息" class="headerlink" title="1.6 查看副本集的配置信息"></a>1.6 查看副本集的配置信息</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rs0:PRIMARY&gt; rs.conf()</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-7-查看节点复制信息"><a href="#1-7-查看节点复制信息" class="headerlink" title="1.7 查看节点复制信息"></a>1.7 查看节点复制信息</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rs0:PRIMARY&gt; db.printSlaveReplicationInfo()</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="插入测试数据"><a href="#插入测试数据" class="headerlink" title="插入测试数据"></a>插入测试数据</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">rs0:PRIMARY&gt; for(var i=0;i&lt;10000;i++){db.customer.insert({"name":"user"+i})}</span><br><span class="line">WriteResult({ "nInserted" : 1 })</span><br><span class="line">rs0:PRIMARY&gt; db.customer.count()</span><br><span class="line">10000</span><br><span class="line">// 在Secondary上查看客户数据是否已经同步：</span><br><span class="line">rs0:SECONDARY&gt; rs.slaveOk()</span><br><span class="line">rs0:SECONDARY&gt; db.customer.count()</span><br><span class="line">10000</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost mongo]# mongod -f conf/mongo.conf 
+</code></pre>
+<h4 id="1-2-主mongo配置"><a href="#1-2-主mongo配置" class="headerlink" title="1.2 主mongo配置"></a>1.2 主mongo配置</h4><pre><code class="mssql">[root@localhost mongo]# mongo
+&gt; conf=
+    {
+    "_id" : "rs0",
+    "members" : [
+        { "_id" : 0, "host" : "172.17.100.193:27017" },
+        { "_id" : 1, "host" : "172.17.100.191:27017" }
+        ]
+    }
+#填写mongo的ip地址即可
+&gt; rs.initiate(conf) // 初始化副本集
+{ "ok" : 1 } //如果出现ok1则表示成功
+</code></pre>
+<h4 id="1-3-副本集更新"><a href="#1-3-副本集更新" class="headerlink" title="1.3 副本集更新"></a>1.3 副本集更新</h4><pre><code class="shell">// 向副本集中添加成员
+rs.add("172.17.100.191:27017")
+ 
+// 从副本集中删除成员
+rs.remove("172.17.100.191:27017")
+ 
+// 向副本集中添加仲裁
+rs.addArb("172.17.100.191:27017")
+ 
+// 向副本集中添加备份节点
+rs.add({"_id":3,"host":"172.17.100.191:27017","priority":0,"hidden":true})  // _id请依次递增
+</code></pre>
+<h4 id="1-4-更新副本集优先级"><a href="#1-4-更新副本集优先级" class="headerlink" title="1.4 更新副本集优先级"></a>1.4 更新副本集优先级</h4><pre><code class="shell">cfg = rs.conf()
+cfg.members[0].priority = 5  // 设置权重为5
+//members[0]里面填写你要更改的节点数字 id是1就写1 是2就设置2
+rs.reconfig(cfg) //重新加载配置
+</code></pre>
+<h4 id="1-5-查看副本集状态"><a href="#1-5-查看副本集状态" class="headerlink" title="1.5 查看副本集状态"></a>1.5 查看副本集状态</h4><pre><code class="shell">rs0:PRIMARY&gt; rs.status()
+</code></pre>
+<h4 id="1-6-查看副本集的配置信息"><a href="#1-6-查看副本集的配置信息" class="headerlink" title="1.6 查看副本集的配置信息"></a>1.6 查看副本集的配置信息</h4><pre><code class="shell">rs0:PRIMARY&gt; rs.conf()
+</code></pre>
+<h4 id="1-7-查看节点复制信息"><a href="#1-7-查看节点复制信息" class="headerlink" title="1.7 查看节点复制信息"></a>1.7 查看节点复制信息</h4><pre><code class="shell">rs0:PRIMARY&gt; db.printSlaveReplicationInfo()
+</code></pre>
+<h4 id="插入测试数据"><a href="#插入测试数据" class="headerlink" title="插入测试数据"></a>插入测试数据</h4><pre><code class="shell">rs0:PRIMARY&gt; for(var i=0;i&lt;10000;i++){db.customer.insert({"name":"user"+i})}
+WriteResult({ "nInserted" : 1 })
+rs0:PRIMARY&gt; db.customer.count()
+10000
+// 在Secondary上查看客户数据是否已经同步：
+rs0:SECONDARY&gt; rs.slaveOk()
+rs0:SECONDARY&gt; db.customer.count()
+10000
+</code></pre>
 <h3 id="开启安全认证"><a href="#开启安全认证" class="headerlink" title="开启安全认证"></a>开启安全认证</h3><p>先停止从上面的mongo然后在停止主上面的mongo</p>
 <ul>
 <li>在master上进行操作</li>
 </ul>
-<h4 id="2-1-创建用户"><a href="#2-1-创建用户" class="headerlink" title="2.1 创建用户"></a>2.1 创建用户</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rs0:PRIMARY&gt; use admin</span><br><span class="line">rs0:PRIMARY&gt; db.createUser({user: 'root', pwd: '123.com', roles: ['root']}) </span><br><span class="line">// 创建root用户并且给予root权限,密码为123.com</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 例如对某个库授权</span><br><span class="line">rs0:PRIMARY&gt; use test</span><br><span class="line">rs0:PRIMARY&gt; db.createUser({user:"admin",pwd:"admin",roles:[{role:"readWrite",db:"test"}]})</span><br><span class="line">// role角色具体可以看官网的分配权限</span><br><span class="line">// db: 指定授权的库</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-2-创建秘钥文件"><a href="#2-2-创建秘钥文件" class="headerlink" title="2.2 创建秘钥文件"></a>2.2 创建秘钥文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mongo]# openssl rand -base64 666 &gt; /usr/local/mongo/keyfile</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="2-1-创建用户"><a href="#2-1-创建用户" class="headerlink" title="2.1 创建用户"></a>2.1 创建用户</h4><pre><code class="shell">rs0:PRIMARY&gt; use admin
+rs0:PRIMARY&gt; db.createUser({user: 'root', pwd: '123.com', roles: ['root']}) 
+// 创建root用户并且给予root权限,密码为123.com
+</code></pre>
+<pre><code class="shell">// 例如对某个库授权
+rs0:PRIMARY&gt; use test
+rs0:PRIMARY&gt; db.createUser({user:"admin",pwd:"admin",roles:[{role:"readWrite",db:"test"}]})
+// role角色具体可以看官网的分配权限
+// db: 指定授权的库
+</code></pre>
+<h4 id="2-2-创建秘钥文件"><a href="#2-2-创建秘钥文件" class="headerlink" title="2.2 创建秘钥文件"></a>2.2 创建秘钥文件</h4><pre><code class="shell">[root@localhost mongo]# openssl rand -base64 666 &gt; /usr/local/mongo/keyfile
+</code></pre>
 <p>将生成的keyFile文件拷贝到其他节点服务器上，并修改文件的操作权限为 600</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 更新启动配置文件,master上配置</span><br><span class="line">[root@localhost mongo]# vim conf/mongo.conf </span><br><span class="line">auth=true</span><br><span class="line">oplogSize=100</span><br><span class="line">keyFile=/usr/local/mongo/keyfile</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 更新启动配置文件,slave上配置</span><br><span class="line">[root@localhost mongo]# vim conf/mongo.conf </span><br><span class="line">oplogSize=100</span><br><span class="line">keyFile=/usr/local/mongo/keyfile</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-3启动副本集"><a href="#2-3启动副本集" class="headerlink" title="2.3启动副本集"></a>2.3启动副本集</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mongo]# mongod -f /usr/local/mongo/conf/mongo.conf</span><br><span class="line">// 先开master</span><br><span class="line">[root@localhost mongo]# mongod -f /usr/local/mongo/conf/mongo.conf </span><br><span class="line">// 然后再从上开启服务,不加auth认证</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">// 更新启动配置文件,master上配置
+[root@localhost mongo]# vim conf/mongo.conf 
+auth=true
+oplogSize=100
+keyFile=/usr/local/mongo/keyfile
+</code></pre>
+<pre><code class="shell">// 更新启动配置文件,slave上配置
+[root@localhost mongo]# vim conf/mongo.conf 
+oplogSize=100
+keyFile=/usr/local/mongo/keyfile
+</code></pre>
+<h4 id="2-3启动副本集"><a href="#2-3启动副本集" class="headerlink" title="2.3启动副本集"></a>2.3启动副本集</h4><pre><code class="shell">[root@localhost mongo]# mongod -f /usr/local/mongo/conf/mongo.conf
+// 先开master
+[root@localhost mongo]# mongod -f /usr/local/mongo/conf/mongo.conf 
+// 然后再从上开启服务,不加auth认证
+</code></pre>
 
   
   
@@ -712,12 +766,12 @@ rabbit-slave
       
         <a class='next' href='/2020/10/26/a25/'>
           <p class='title'>Spug自动化运维平台搭建<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>Spug自动化运维平台搭建12020-10-20更新日志
+          <p class='content'>Spug自动化运维平台搭建2020-10-20更新日志
 
 
 :smail:首页新增最近登录记录同时移除应用部署图表
 ? 优化分页支持显示总条数 #208
-? 优化角色发布权限设置和克隆发布支持...</p>
+? 优化角色发布权限设置和克隆发布支持搜...</p>
         </a>
       
     </div>
@@ -991,7 +1045,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

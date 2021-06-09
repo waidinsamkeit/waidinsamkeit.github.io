@@ -556,8 +556,25 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>HostPath</li>
 </ul>
 <h2 id="PV创建"><a href="#PV创建" class="headerlink" title="PV创建"></a>PV创建</h2><p>选择NFS作为PV的底层存储</p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">web-pv</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">capacity:</span></span><br><span class="line">   <span class="attr">storage:</span> <span class="string">6Gi</span></span><br><span class="line"> <span class="attr">volumeMode:</span> <span class="string">Filesystem</span></span><br><span class="line"> <span class="attr">accessModes:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">ReadWriteOnce</span> <span class="comment"># 仅读写一人</span></span><br><span class="line"> <span class="attr">persistentVolumeReclaimPolicy:</span> <span class="string">Recyle</span> <span class="comment"># 回收策略</span></span><br><span class="line"> <span class="attr">storageClassName:</span> <span class="string">slow</span> <span class="comment"># 类的名字</span></span><br><span class="line"> <span class="attr">mountOptions:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">hard</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">nfsvers=4.1</span></span><br><span class="line"> <span class="attr">nfs:</span></span><br><span class="line">   <span class="attr">path:</span> <span class="string">/tmp</span></span><br><span class="line">   <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.110</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: web-pv
+spec:
+ capacity:
+   storage: 6Gi
+ volumeMode: Filesystem
+ accessModes:
+   - ReadWriteOnce # 仅读写一人
+ persistentVolumeReclaimPolicy: Recyle # 回收策略
+ storageClassName: slow # 类的名字
+ mountOptions:
+   - hard
+   - nfsvers=4.1
+ nfs:
+   path: /tmp
+   server: 10.1.6.110
+</code></pre>
 <h2 id="PV访问模式"><a href="#PV访问模式" class="headerlink" title="PV访问模式"></a>PV访问模式</h2><p><code>PersistentVolume</code>可以以资源提供者支持的任何方式挂载到主机上。如下图所示</p>
 <p>供应商具有不同的功能,每个PV的访问模式都将被设置为该卷支持的特定模式。</p>
 <blockquote>
@@ -585,11 +602,61 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="PVC创建"><a href="#PVC创建" class="headerlink" title="PVC创建"></a>PVC创建</h2><blockquote>
 <p>安装NFS的我就不写了</p>
 </blockquote>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先部署PV</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-pvalksjdf2</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">1Gi</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">"nfs"</span></span><br><span class="line">  <span class="attr">nfs:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data</span></span><br><span class="line">    <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.110</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml"># 先部署PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pvalksjdf2
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "nfs"
+  nfs:
+    path: /data
+    server: 10.1.6.110
+</code></pre>
 <p><strong>创建服务并且使用Pvc</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-dep</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span> </span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">wwwroot</span></span><br><span class="line">        <span class="attr">persistentVolumeClaim:</span></span><br><span class="line">          <span class="attr">claimName:</span> <span class="string">my-pvc</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">"nfs"</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">requests:</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">1Gi</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels: 
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        volumeMounts:
+        - name: wwwroot
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: wwwroot
+        persistentVolumeClaim:
+          claimName: my-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "nfs"
+  resources:
+    requests:
+      storage: 1Gi
+</code></pre>
 <h2 id="什么是StorageClass"><a href="#什么是StorageClass" class="headerlink" title="什么是StorageClass"></a>什么是StorageClass</h2><p>面介绍的PV和PVC模式是需要运维人员先创建好PV，然后开发人员定义好PVC进行一对一的Bond，但是如果PVC请求成千上万，那么就需要创建成千上万的PV，对于运维人员来说维护成本很高，Kubernetes提供一种自动创建PV的机制，叫StorageClass，它的作用就是创建PV的模板。</p>
 <p>具体来说，StorageClass会定义一下两部分：</p>
 <ol>
@@ -1015,7 +1082,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

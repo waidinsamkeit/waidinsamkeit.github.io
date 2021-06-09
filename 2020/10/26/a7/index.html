@@ -557,8 +557,21 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>通过 repair table tablename 进行恢复</p>
 </blockquote>
 <p><strong>演示实例</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">use test # 进入你自己的数据库</span><br><span class="line">create table myIsam(id int,c1 varchar(10))engine=myisam; # 需要通过engine指定引擎</span><br><span class="line">cd /var/lib/mysql/test # test是你的库名字 库的位置一般都在你的安装路径下 yum的默认在/var/lib/mysql</span><br><span class="line">myIsam_352.sdi  myIsam.MYD  myIsam.MYI</span><br><span class="line">                 存储数据信息    存储索引信息</span><br><span class="line">回到mysql的test1库中执行</span><br><span class="line">check table myisam</span><br><span class="line">+--------------+-------+----------+------------------------------------+</span><br><span class="line">| Table        | Op    | Msg_type | Msg_text                           |</span><br><span class="line">+--------------+-------+----------+------------------------------------+</span><br><span class="line">| test1.myisam | check | status   | OK                                 |</span><br><span class="line">| test1.myisam | check | status   | OK                                 |</span><br><span class="line">+--------------+-------+----------+------------------------------------+</span><br><span class="line">接着执行repair table myisam # MyISAM表损坏的时候才有用</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">use test # 进入你自己的数据库
+create table myIsam(id int,c1 varchar(10))engine=myisam; # 需要通过engine指定引擎
+cd /var/lib/mysql/test # test是你的库名字 库的位置一般都在你的安装路径下 yum的默认在/var/lib/mysql
+myIsam_352.sdi  myIsam.MYD  myIsam.MYI
+                 存储数据信息    存储索引信息
+回到mysql的test1库中执行
+check table myisam
++--------------+-------+----------+------------------------------------+
+| Table        | Op    | Msg_type | Msg_text                           |
++--------------+-------+----------+------------------------------------+
+| test1.myisam | check | status   | OK                                 |
+| test1.myisam | check | status   | OK                                 |
++--------------+-------+----------+------------------------------------+
+接着执行repair table myisam # MyISAM表损坏的时候才有用
+</code></pre>
 <ul>
 <li>MyISAM表支持的索引类型</li>
 <li>MyISAM表支持数据压缩</li>
@@ -567,11 +580,21 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>压缩可以使用</p>
 </blockquote>
 <p><strong>演示实例</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# myisampack -b -f myIsam</span><br><span class="line">Compressing myIsam.MYD: (0 records)</span><br><span class="line">- Calculating statistics</span><br><span class="line">- Compressing file</span><br><span class="line">Empty file saved in compressed format</span><br><span class="line"><span class="meta">#</span><span class="bash"> (0 records) 空文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看文件大小，-f是强制压缩</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> myIsam.OLD 压缩之前文件的备份</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 实际上压缩后(MYI)的文件比压缩前(OLD)的文件还要大,因为原来的数据太小了 知识为了演示</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@localhost test]# myisampack -b -f myIsam
+Compressing myIsam.MYD: (0 records)
+- Calculating statistics
+- Compressing file
+Empty file saved in compressed format
+# (0 records) 空文件
+# 查看文件大小，-f是强制压缩
+# myIsam.OLD 压缩之前文件的备份
+# 实际上压缩后(MYI)的文件比压缩前(OLD)的文件还要大,因为原来的数据太小了 知识为了演示
+</code></pre>
 <p><strong>对于表中的读写</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 当前myIsam表已经进行压缩了，进行插入操作，结论【对于已经压缩的表是不能进行写操作的，只能读】</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> insert into myIsam values(1,<span class="string">'haha'</span>);</span></span><br><span class="line">ERROR 1036 (HY000): Table 'myIsam' is read only</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell"># 当前myIsam表已经进行压缩了，进行插入操作，结论【对于已经压缩的表是不能进行写操作的，只能读】
+mysql&gt; insert into myIsam values(1,'haha');
+ERROR 1036 (HY000): Table 'myIsam' is read only
+</code></pre>
 <p><strong>限制</strong></p>
 <p>版本&lt;5.0的默认表大小为4Gb</p>
 <p>如存储大表则需要修改<code>MAX_Rows</code>和<code>AVG_Row_LENGTH</code></p>
@@ -701,7 +724,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>centos系统参数优化
 内核相关参数(/etc/sysctl.cof)
 
-12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 #...</p>
+vim /etc/sysctl.conf
+net.core.somaxconn = 65535 # 修改端口的监听队列...</p>
         </a>
       
       
@@ -985,7 +1009,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

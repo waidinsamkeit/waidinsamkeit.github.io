@@ -509,7 +509,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 从IP：192.168.1.101
 准备配置如下，每台服务器都执行
 
-12345678sudo echo "never" &gt; /sys/kernel/mm/transparent_hugepage/enabledsudo echo "never" &gt;  /sys/kernel/mm/transpa...
+sudo echo "never" &gt; /sys/kernel/mm/transparent_hugepage/enabled
+sudo echo "never" &gt;  /sys/kernel/mm/transparent_hu...
       
     
   </div>
@@ -560,7 +561,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 PS: 必须有java的环境,怎么配置看我博客文章搜java即可。
 
 优先环境准备，禁用防火墙和selinux
-1234systemctl stop firewalldsystemctl disable firewalldsed -i '/^SELINUX=/s/enforcing/disable...
+systemctl stop firewalld
+systemctl disable firewalld
+sed -i '/^SELINUX=/s/enforcing/disabled/...
       
     
   </div>
@@ -746,7 +749,7 @@ rabbit-slave
 
 以下操作全部两台都执行
 
-1.1 准备环境搭建1[root@localhost ~]# yum -y install gcc glibc-devel make ncurses-devel open...
+1.1 准备环境搭建[root@localhost ~]# yum -y install gcc glibc-devel make ncurses-devel opens...
       
     
   </div>
@@ -798,7 +801,12 @@ rabbit-slave
 
 2台机器也能做
 
-1.1更改mongo配置文件1234567[root@localhost mongo]# vim conf/mongo.confport=27017fork=truelogpath=/usr/local/mongo/logs/mongodb.loglogappend=truedbpath=/usr/local/mongo...
+1.1更改mongo配置文件[root@localhost mongo]# vim conf/mongo.conf
+port=27017
+fork=true
+logpath=/usr/local/mongo/logs/mongodb.log
+logappend=true
+dbpath=/usr/local/mongo/d...
       
     
   </div>
@@ -844,7 +852,7 @@ rabbit-slave
   <div class='md'>
     
       
-        Spug自动化运维平台搭建12020-10-20更新日志
+        Spug自动化运维平台搭建2020-10-20更新日志
 
 
 :smail:首页新增最近登录记录同时移除应用部署图表
@@ -853,7 +861,7 @@ rabbit-slave
 ? 优化页面在不同权限下的展示效果
 ? 修复某些情况下websocket无法正常建立连接的问题
 
-​                                               ...
+​                                                ...
       
     
   </div>
@@ -902,7 +910,10 @@ rabbit-slave
         centos系统参数优化
 内核相关参数(/etc/sysctl.cof)
 
-12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目net.ipv4.tcp_max_syn_b...
+vim /etc/sysctl.conf
+net.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048
+net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目
+net.ipv4.tcp_max_syn_backlog =...
       
     
   </div>
@@ -1428,7 +1439,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

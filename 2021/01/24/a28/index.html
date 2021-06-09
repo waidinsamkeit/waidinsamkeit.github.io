@@ -561,28 +561,94 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>方便下次使用可以直接把prometheus推送到阿里云镜像</li>
 </ul>
 <p>所有Prometheus服务都可以在<a target="_blank" rel="noopener" href="https://quay.io/repository/prometheus/prometheus">Quay.io</a>或 <a target="_blank" rel="noopener" href="https://hub.docker.com/r/prom/prometheus/">Docker Hub</a>上作为Docker映像使用 。</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull prom/prometheus prom/alertmanager:latest //先把docker镜像pull下来</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.1"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">prometheus:</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">prom/prometheus</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">prometheus</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="number">9090</span><span class="string">:9090</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./path/prometheus.yml:/etc/prometheus/prometheus.yml</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">'--config.file=/etc/prometheus/prometheus.yml'</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">'--web.enable-lifecycle'</span></span><br><span class="line">  <span class="attr">alertmanager:</span>  <span class="comment"># 告警控件</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">prom/alertmanager:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">Myalertmanager</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">alertmanager</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">'9093:9093'</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./prometheus/config:/config:rw</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./prometheus/data/alertmanager:/alertmanager/data:rw</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">'--config.file=/config/alertmanager.yml'</span> <span class="comment"># 建议把这个文件映射出来</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">docker pull prom/prometheus prom/alertmanager:latest //先把docker镜像pull下来
+</code></pre>
+<pre><code class="yaml">version: "3.1"
+services:
+  prometheus:
+    restart: always
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+     - 9090:9090
+    volumes:
+     - ./path/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+  alertmanager:  # 告警控件
+    image: prom/alertmanager:latest
+    container_name: Myalertmanager
+    hostname: alertmanager
+    restart: always
+    ports:
+      - '9093:9093'
+    volumes:
+      - ./prometheus/config:/config:rw
+      - ./prometheus/data/alertmanager:/alertmanager/data:rw
+    command:
+      - '--config.file=/config/alertmanager.yml' # 建议把这个文件映射出来
+</code></pre>
 <p><strong>prometheus.yml模板</strong></p>
 <blockquote>
 <p>需要手动到Path路径创建</p>
 </blockquote>
-<figure class="highlight yml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scrape_configs:</span></span><br><span class="line">  <span class="comment"># Make Prometheus scrape itself for metrics.</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'prometheus'</span></span><br><span class="line">    <span class="attr">static_configs:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">targets:</span> [<span class="string">'localhost:9090'</span>]</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Create a job for Docker Swarm containers.</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'dockerswarm'</span></span><br><span class="line">    <span class="attr">dockerswarm_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">unix:///var/run/docker.sock</span></span><br><span class="line">        <span class="attr">role:</span> <span class="string">tasks</span></span><br><span class="line">    <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="comment"># Only keep containers that should be running.</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_dockerswarm_task_desired_state</span>]</span><br><span class="line">        <span class="attr">regex:</span> <span class="string">running</span></span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">      <span class="comment"># Only keep containers that have a `prometheus-job` label.</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_dockerswarm_service_label_prometheus_job</span>]</span><br><span class="line">        <span class="attr">regex:</span> <span class="string">.+</span></span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">      <span class="comment"># Use the prometheus-job Swarm label as Prometheus job label.</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_dockerswarm_service_label_prometheus_job</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">job</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="yml">scrape_configs:
+  # Make Prometheus scrape itself for metrics.
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
 
-<h4 id="1-1-1启动prometheus"><a href="#1-1-1启动prometheus" class="headerlink" title="1.1.1启动prometheus"></a><strong>1.1.1启动prometheus</strong></h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon prometheus]# docker-compose up -d</span><br><span class="line">访问地址 http://192.168.20.10:9090 //默认WebUI</span><br><span class="line">Myalertmanager # 这个容器可能会起不来,不用管它,下次再说。</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="1-2准备grafana"><a href="#1-2准备grafana" class="headerlink" title="1.2准备grafana"></a>1.2准备grafana</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull grafana/grafana</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.1"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">grafana:</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">grafana/grafana</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">"GF_SECURITY_ADMIN_PASSWORD=admin@123"</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">"GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app"</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./etc/localtime:/etc/localtime</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./data:/var/lib/grafana:rw</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./plugin:/var/lib/grafana/plugins:rw</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-2-1启动grafana"><a href="#1-2-1启动grafana" class="headerlink" title="1.2.1启动grafana"></a>1.2.1<strong>启动grafana</strong></h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon grafana]# chmod 777 data</span><br><span class="line">[root@bogon grafana]# chmod 777 plugin</span><br><span class="line">[root@bogon grafana]# docker-compose up -d</span><br></pre></td></tr></tbody></table></figure>
+  # Create a job for Docker Swarm containers.
+  - job_name: 'dockerswarm'
+    dockerswarm_sd_configs:
+      - host: unix:///var/run/docker.sock
+        role: tasks
+    relabel_configs:
+      # Only keep containers that should be running.
+      - source_labels: [__meta_dockerswarm_task_desired_state]
+        regex: running
+        action: keep
+      # Only keep containers that have a `prometheus-job` label.
+      - source_labels: [__meta_dockerswarm_service_label_prometheus_job]
+        regex: .+
+        action: keep
+      # Use the prometheus-job Swarm label as Prometheus job label.
+      - source_labels: [__meta_dockerswarm_service_label_prometheus_job]
+        target_label: job
+</code></pre>
+<h4 id="1-1-1启动prometheus"><a href="#1-1-1启动prometheus" class="headerlink" title="1.1.1启动prometheus"></a><strong>1.1.1启动prometheus</strong></h4><pre><code class="shell">[root@bogon prometheus]# docker-compose up -d
+访问地址 http://192.168.20.10:9090 //默认WebUI
+Myalertmanager # 这个容器可能会起不来,不用管它,下次再说。
+</code></pre>
+<h3 id="1-2准备grafana"><a href="#1-2准备grafana" class="headerlink" title="1.2准备grafana"></a>1.2准备grafana</h3><pre><code class="shell">docker pull grafana/grafana
+</code></pre>
+<pre><code class="yaml">version: "3.1"
+services:
+  grafana:
+    restart: always
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+     - 3000:3000
+    environment:
+     - "GF_SECURITY_ADMIN_PASSWORD=admin@123"
+     - "GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app"
+    volumes:
+     - ./etc/localtime:/etc/localtime
+     - ./data:/var/lib/grafana:rw
+     - ./plugin:/var/lib/grafana/plugins:rw
+</code></pre>
+<h4 id="1-2-1启动grafana"><a href="#1-2-1启动grafana" class="headerlink" title="1.2.1启动grafana"></a>1.2.1<strong>启动grafana</strong></h4><pre><code class="shell">[root@bogon grafana]# chmod 777 data
+[root@bogon grafana]# chmod 777 plugin
+[root@bogon grafana]# docker-compose up -d
+</code></pre>
 <div class="note"><p>bug red,注意查看报错信息</p></div>
 
 <p>如果访问报错可以使用<code>docker-compose logs -f </code>查看容器日志</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.20.10:3000/ # 访问grafana</span><br><span class="line">admin admin@123 账号密码</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">http://192.168.20.10:3000/ # 访问grafana
+admin admin@123 账号密码
+</code></pre>
 <h3 id="1-3部署node-exporter"><a href="#1-3部署node-exporter" class="headerlink" title="1.3部署node_exporter"></a>1.3部署node_exporter</h3><ul>
 <li>部署到被监控的主机上</li>
 <li>用于采集主机数据</li>
@@ -591,20 +657,67 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
             <a class="button" target="_blank" rel="noopener" href="https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz" title="下载node_exporter"><i class="fas fa-download"></i>下载node_exporter</a>
           </div>
 
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf node_exporter-1.0.1.linux-amd64.tar.gz</span><br><span class="line">mv node_exporter-1.0.1.linux-amd64 /usr/local/node_exporter</span><br><span class="line">ln -s /usr/local/node_exporter/node_exporter /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-3-1启动node-exporter"><a href="#1-3-1启动node-exporter" class="headerlink" title="1.3.1启动node_exporter"></a>1.3.1启动node_exporter</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup node_exporter&amp;</span><br><span class="line">netstat -anput | grep 9100 // 检测到9100端口就行</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">tar -zxf node_exporter-1.0.1.linux-amd64.tar.gz
+mv node_exporter-1.0.1.linux-amd64 /usr/local/node_exporter
+ln -s /usr/local/node_exporter/node_exporter /usr/bin/
+</code></pre>
+<h4 id="1-3-1启动node-exporter"><a href="#1-3-1启动node-exporter" class="headerlink" title="1.3.1启动node_exporter"></a>1.3.1启动node_exporter</h4><pre><code class="shell">nohup node_exporter&amp;
+netstat -anput | grep 9100 // 检测到9100端口就行
+</code></pre>
 <h3 id="1-4-配置prometheus监控node"><a href="#1-4-配置prometheus监控node" class="headerlink" title="1.4.配置prometheus监控node"></a>1.4.配置prometheus监控node</h3><blockquote>
 <p>yml文件尤其注意缩进格式</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon path]# vim prometheus.yml</span><br><span class="line">- job_name: 'node'   // 新增一个job</span><br><span class="line">  static_configs:</span><br><span class="line">  - targets: ['192.168.20.10:9100'] // 主机列表用,隔开</span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果添加多个主机也可以用这个方法</span></span><br><span class="line">- job_name: 'node'   // 新增一个job</span><br><span class="line">  static_configs:</span><br><span class="line">  - targets: ['192.168.20.10:9100']</span><br><span class="line">  - targets: ['192.168.20.11:9100']</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-4-1重启prometheus"><a href="#1-4-1重启prometheus" class="headerlink" title="1.4.1重启prometheus"></a>1.4.1重启prometheus</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker-compose restart </span><br><span class="line"><span class="meta">#</span><span class="bash"> 热重启prometheus配置文件,热重启好像对docker这个无效...</span></span><br><span class="line">curl -X POST  http://192.168.20.10:9090/-/reload </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon path]# vim prometheus.yml
+- job_name: 'node'   // 新增一个job
+  static_configs:
+  - targets: ['192.168.20.10:9100'] // 主机列表用,隔开
+# 如果添加多个主机也可以用这个方法
+- job_name: 'node'   // 新增一个job
+  static_configs:
+  - targets: ['192.168.20.10:9100']
+  - targets: ['192.168.20.11:9100']
+</code></pre>
+<h4 id="1-4-1重启prometheus"><a href="#1-4-1重启prometheus" class="headerlink" title="1.4.1重启prometheus"></a>1.4.1重启prometheus</h4><pre><code class="shell">docker-compose restart 
+# 热重启prometheus配置文件,热重启好像对docker这个无效...
+curl -X POST  http://192.168.20.10:9090/-/reload 
+</code></pre>
 <p><img src="https://i.loli.net/2020/11/02/W4lLnkBAe917YKo.png#vwid=1236&amp;vhei=519" class="lazyload placeholder" data-srcset="https://i.loli.net/2020/11/02/W4lLnkBAe917YKo.png#vwid=1236&amp;vhei=519" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg"></p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">收集系统CPU监控信息</span><br><span class="line">CPU使用率</span><br><span class="line">	公式：100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)</span><br><span class="line">CPU负载</span><br><span class="line">公式：</span><br><span class="line">	node_load1     ## 1分钟负载</span><br><span class="line">	node_load5     ##5分钟负载</span><br><span class="line">	node_load15   ##15分钟负载</span><br><span class="line"></span><br><span class="line">收集系统内存监控信息</span><br><span class="line">内存使用率</span><br><span class="line">	公式：(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes ))* 100</span><br><span class="line">可用内存（单位：M）</span><br><span class="line">	公式：node_memory_MemAvailable_bytes / 1024 / 1024 </span><br><span class="line"></span><br><span class="line">收集系统磁盘监控信息</span><br><span class="line">磁盘总大小（单位: G）</span><br><span class="line">	公式：node_filesystem_size_bytes {fstype=~"ext4|xfs"} / 1024 / 1024 / 1024</span><br><span class="line"></span><br><span class="line">磁盘剩余大小（单位: G）</span><br><span class="line">	公式：node_filesystem_avail_bytes {fstype=~"ext4|xfs"}  / 1024 / 1024 / 1024</span><br><span class="line"></span><br><span class="line">磁盘使用率</span><br><span class="line">	公式：(1-(node_filesystem_free_bytes{fstype=~"ext4|xfs"} / node_filesystem_size_bytes{fstype=~"ext4|xfs"})) * 100</span><br><span class="line"></span><br><span class="line">收集系统网络监控信息</span><br><span class="line">网卡入网流量 （指定某一个网卡）</span><br><span class="line">	公式：irate(node_network_receive_bytes_total{device='ens32'}[5m])</span><br><span class="line"></span><br><span class="line">网卡出网流量（指定某一个网卡）</span><br><span class="line">	公式：irate(node_network_transmit_bytes_total{device='ens32'}[5m])</span><br><span class="line"></span><br><span class="line">说明：以上收集系统各信息，都是通过node_exporter服务进行数据的收集，然后通过prometheus内置的PromQL语句进行组合查询，对于每一个公式，都可以在prometheus WEB界面测试查询。</span><br><span class="line">注意：新版本node_exporter中一些PromQL查询指标值与旧版本不一致，使用时注意区分。</span><br><span class="line">关于具体的PromQL语句以及公式中函数的使用参考：https://prometheus.io/docs/prometheus/latest/querying/functions/</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="json">收集系统CPU监控信息
+CPU使用率
+    公式：100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+CPU负载
+公式：
+    node_load1     ## 1分钟负载
+    node_load5     ##5分钟负载
+    node_load15   ##15分钟负载
 
+收集系统内存监控信息
+内存使用率
+    公式：(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes ))* 100
+可用内存（单位：M）
+    公式：node_memory_MemAvailable_bytes / 1024 / 1024 
+
+收集系统磁盘监控信息
+磁盘总大小（单位: G）
+    公式：node_filesystem_size_bytes {fstype=~"ext4|xfs"} / 1024 / 1024 / 1024
+
+磁盘剩余大小（单位: G）
+    公式：node_filesystem_avail_bytes {fstype=~"ext4|xfs"}  / 1024 / 1024 / 1024
+
+磁盘使用率
+    公式：(1-(node_filesystem_free_bytes{fstype=~"ext4|xfs"} / node_filesystem_size_bytes{fstype=~"ext4|xfs"})) * 100
+
+收集系统网络监控信息
+网卡入网流量 （指定某一个网卡）
+    公式：irate(node_network_receive_bytes_total{device='ens32'}[5m])
+
+网卡出网流量（指定某一个网卡）
+    公式：irate(node_network_transmit_bytes_total{device='ens32'}[5m])
+
+说明：以上收集系统各信息，都是通过node_exporter服务进行数据的收集，然后通过prometheus内置的PromQL语句进行组合查询，对于每一个公式，都可以在prometheus WEB界面测试查询。
+注意：新版本node_exporter中一些PromQL查询指标值与旧版本不一致，使用时注意区分。
+关于具体的PromQL语句以及公式中函数的使用参考：https://prometheus.io/docs/prometheus/latest/querying/functions/
+</code></pre>
 <h3 id="1-5-grafana监控prometheus节点设置"><a href="#1-5-grafana监控prometheus节点设置" class="headerlink" title="1.5 grafana监控prometheus节点设置"></a>1.5 grafana监控prometheus节点设置</h3><ul>
 <li>请你自己添加Prometheus数据源</li>
 <li>按下面图片操作导入仪表板</li>
@@ -619,17 +732,32 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="1-6-监控MYSQL设置"><a href="#1-6-监控MYSQL设置" class="headerlink" title="1.6 监控MYSQL设置"></a>1.6 监控MYSQL设置</h3><div class="btns rounded grid5">
             <a class="button" target="_blank" rel="noopener" href="https://github.com/prometheus/mysqld_exporter/releases/" title="下载mysql_nexporter"><i class="fas fa-download"></i>下载mysql_nexporter</a>
           </div>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf mysqld_exporter-0.12.1.linux-amd64.tar.gz </span><br><span class="line">mv mysqld_exporter-0.12.1.linux-amd64 /usr/local/mysqld_exporter</span><br><span class="line">ln -s /usr/local/mysqld_exporter/mysqld_exporter /usr/local/bin/</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-6-1-配置MySQL监控用户与授权"><a href="#1-6-1-配置MySQL监控用户与授权" class="headerlink" title="1.6.1 配置MySQL监控用户与授权"></a>1.6.1 配置MySQL监控用户与授权</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> CREATE USER <span class="string">'mysql_monitor'</span>@<span class="string">'localhost'</span> identified by <span class="string">'mysql_monitor'</span>;</span> </span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> GRANT REPLICATION CLIENT, PROCESS ON *.* TO <span class="string">'mysql_monitor'</span>@<span class="string">'localhost'</span>;</span> </span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> GRANT SELECT ON performance_schema.* TO <span class="string">'mysql_monitor'</span>@<span class="string">'localhost'</span>;</span> </span><br><span class="line">cd /usr/local/mysqld_exporter/</span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意 MySQL8.0以后需要符合密码规范 字母+符号+数字</span></span><br><span class="line">vim .my.cnf</span><br><span class="line">[client]</span><br><span class="line">port=3306  </span><br><span class="line">user=xxx  # 写上面你授权的用户</span><br><span class="line">password=xxx  # 写你授权的密码</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-6-2-启动MySQL-exporter"><a href="#1-6-2-启动MySQL-exporter" class="headerlink" title="1.6.2 启动MySQL_exporter"></a>1.6.2 启动MySQL_exporter</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup mysqld_exporter --config.my-cnf=/usr/local/mysqld_exporter/.my.cnf &gt; /usr/local/mysqld_exporter/nohup.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">tar -zxf mysqld_exporter-0.12.1.linux-amd64.tar.gz 
+mv mysqld_exporter-0.12.1.linux-amd64 /usr/local/mysqld_exporter
+ln -s /usr/local/mysqld_exporter/mysqld_exporter /usr/local/bin/
+</code></pre>
+<h4 id="1-6-1-配置MySQL监控用户与授权"><a href="#1-6-1-配置MySQL监控用户与授权" class="headerlink" title="1.6.1 配置MySQL监控用户与授权"></a>1.6.1 配置MySQL监控用户与授权</h4><pre><code class="shell">mysql&gt; CREATE USER 'mysql_monitor'@'localhost' identified by 'mysql_monitor'; 
+mysql&gt; GRANT REPLICATION CLIENT, PROCESS ON *.* TO 'mysql_monitor'@'localhost'; 
+mysql&gt; GRANT SELECT ON performance_schema.* TO 'mysql_monitor'@'localhost'; 
+cd /usr/local/mysqld_exporter/
+# 注意 MySQL8.0以后需要符合密码规范 字母+符号+数字
+vim .my.cnf
+[client]
+port=3306  
+user=xxx  # 写上面你授权的用户
+password=xxx  # 写你授权的密码
+</code></pre>
+<h4 id="1-6-2-启动MySQL-exporter"><a href="#1-6-2-启动MySQL-exporter" class="headerlink" title="1.6.2 启动MySQL_exporter"></a>1.6.2 启动MySQL_exporter</h4><pre><code class="shell">nohup mysqld_exporter --config.my-cnf=/usr/local/mysqld_exporter/.my.cnf &gt; /usr/local/mysqld_exporter/nohup.log 2&gt;&amp;1 &amp;
+</code></pre>
 <p><strong>检查MySQL是否启动</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -anput | grep 9104</span><br><span class="line">tcp6 0  0 :::9104   :::*      LISTEN      2840965/mysqld_expo </span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-6-3-编辑prometheus-yml"><a href="#1-6-3-编辑prometheus-yml" class="headerlink" title="1.6.3 编辑prometheus.yml"></a>1.6.3 编辑prometheus.yml</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  - job_name: 'mysql-ceshifu'</span><br><span class="line">    static_configs:</span><br><span class="line">       - targets: ['IP:9104'] # 例如[192.168.1.1:9104]</span><br><span class="line">docker-compose restart # 重启prometheus</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">netstat -anput | grep 9104
+tcp6 0  0 :::9104   :::*      LISTEN      2840965/mysqld_expo 
+</code></pre>
+<h4 id="1-6-3-编辑prometheus-yml"><a href="#1-6-3-编辑prometheus-yml" class="headerlink" title="1.6.3 编辑prometheus.yml"></a>1.6.3 编辑prometheus.yml</h4><pre><code class="shell">  - job_name: 'mysql-ceshifu'
+    static_configs:
+       - targets: ['IP:9104'] # 例如[192.168.1.1:9104]
+docker-compose restart # 重启prometheus
+</code></pre>
 <blockquote>
 <p><strong><a target="_blank" rel="noopener" href="https://grafana.com/dashboards/7362">https://grafana.com/dashboards/7362</a></strong> 用这个仪表板,导入方法跟上面一样</p>
 </blockquote>
@@ -642,22 +770,28 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="1-7监控Redis主从设置"><a href="#1-7监控Redis主从设置" class="headerlink" title="1.7监控Redis主从设置"></a>1.7监控Redis主从设置</h3><blockquote>
 <p>下载redis指针  <a target="_blank" rel="noopener" href="https://github.com/oliver006/redis_exporter/releases">https://github.com/oliver006/redis_exporter/releases</a></p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf redis_exporter-v1.13.1.linux-amd64.tar.gz</span><br><span class="line">mv redis_exporter-v1.13.1.linux-amd64 /usr/local/redis_exporter</span><br><span class="line">ln -s /usr/local/redis_exporter/redis_exporter /usr/local/bin/</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">tar -zxf redis_exporter-v1.13.1.linux-amd64.tar.gz
+mv redis_exporter-v1.13.1.linux-amd64 /usr/local/redis_exporter
+ln -s /usr/local/redis_exporter/redis_exporter /usr/local/bin/
+</code></pre>
 <h4 id="1-7-1-启动Redis-export"><a href="#1-7-1-启动Redis-export" class="headerlink" title="1.7.1 启动Redis_export"></a>1.7.1 启动Redis_export</h4><p><strong>无密码登录设置</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup redis_exporter -redis.addr 172.17.100.194:6379 &gt; /usr/local/redis_exporter/nohup.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">nohup redis_exporter -redis.addr 172.17.100.194:6379 &gt; /usr/local/redis_exporter/nohup.log 2&gt;&amp;1 &amp;
+</code></pre>
 <p><strong>有密码登录</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup redis_exporter -redis.addr 172.17.100.194:6379 -redis.password 123123  &gt; /usr/local/redis_exporter/nohup.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">nohup redis_exporter -redis.addr 172.17.100.194:6379 -redis.password 123123  &gt; /usr/local/redis_exporter/nohup.log 2&gt;&amp;1 &amp;
+</code></pre>
 <blockquote>
 <p>本地IP+6479端口,根据自己设置来</p>
 </blockquote>
 <p><strong>检查Redis_export是否开启</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -lntp | grep 9121</span><br><span class="line">tcp6  0   0 :::9121   :::*    LISTEN    11558/redis_exporte</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-7-2编辑prometheus-yml"><a href="#1-7-2编辑prometheus-yml" class="headerlink" title="1.7.2编辑prometheus.yml"></a>1.7.2编辑prometheus.yml</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  - job_name: 'redis-cluster'</span><br><span class="line">    static_configs:</span><br><span class="line">       - targets: ['192.168.1.1:9121','192.168.1.2:9121'] # 写上主redis和从redis的exporer端口</span><br><span class="line">docker-compose restart </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">netstat -lntp | grep 9121
+tcp6  0   0 :::9121   :::*    LISTEN    11558/redis_exporte
+</code></pre>
+<h4 id="1-7-2编辑prometheus-yml"><a href="#1-7-2编辑prometheus-yml" class="headerlink" title="1.7.2编辑prometheus.yml"></a>1.7.2编辑prometheus.yml</h4><pre><code class="shell">  - job_name: 'redis-cluster'
+    static_configs:
+       - targets: ['192.168.1.1:9121','192.168.1.2:9121'] # 写上主redis和从redis的exporer端口
+docker-compose restart 
+</code></pre>
 <p><strong>导入模板</strong></p>
 <blockquote>
 <p><strong><a target="_blank" rel="noopener" href="https://grafana.com/dashboards/763/">https://grafana.com/dashboards/763/</a></strong></p>
@@ -1068,7 +1202,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

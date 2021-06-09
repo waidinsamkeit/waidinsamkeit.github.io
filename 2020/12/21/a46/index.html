@@ -540,21 +540,29 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>方便的管理第三方工具包</li>
 <li></li>
 </ul>
-<h2 id="Mac-Linux用户安装PIP"><a href="#Mac-Linux用户安装PIP" class="headerlink" title="Mac/Linux用户安装PIP"></a>Mac/Linux用户安装PIP</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://bootstrap.pypa.io/get-pip.py | python3</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Mac-Linux用户安装PIP"><a href="#Mac-Linux用户安装PIP" class="headerlink" title="Mac/Linux用户安装PIP"></a>Mac/Linux用户安装PIP</h2><pre><code class="shell">curl https://bootstrap.pypa.io/get-pip.py | python3
+</code></pre>
 <ul>
 <li>设置清华源</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install pip -U</span><br><span class="line">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install package name </span><br><span class="line">pip install numpy</span><br><span class="line">pip install flask</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="卸载包"><a href="#卸载包" class="headerlink" title="卸载包"></a>卸载包</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall flask</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="列出已经安装的包"><a href="#列出已经安装的包" class="headerlink" title="列出已经安装的包"></a>列出已经安装的包</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip list # 列出当前环境已安装的模块</span><br><span class="line">pip freeze # 列出当前环境的安装模块以及对应的Version</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="一般的开发规范使用"><a href="#一般的开发规范使用" class="headerlink" title="一般的开发规范使用"></a>一般的开发规范使用</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br><span class="line">pip install -r requirements.txt # 这样的话可以让pip读取到.txt里面</span><br><span class="line">所需要的包的信息以及对应版本,然后进行安装.</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="指定包的下载地址"><a href="#指定包的下载地址" class="headerlink" title="指定包的下载地址"></a>指定包的下载地址</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install &lt;package_name&gt; -i &lt;url&gt; # 临时修改,只修改这一个</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">pip install pip -U
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+<h2 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h2><pre><code class="pip">pip install package name 
+pip install numpy
+pip install flask
+</code></pre>
+<h2 id="卸载包"><a href="#卸载包" class="headerlink" title="卸载包"></a>卸载包</h2><pre><code class="pip">pip uninstall flask
+</code></pre>
+<h2 id="列出已经安装的包"><a href="#列出已经安装的包" class="headerlink" title="列出已经安装的包"></a>列出已经安装的包</h2><pre><code class="pip">pip list # 列出当前环境已安装的模块
+pip freeze # 列出当前环境的安装模块以及对应的Version
+</code></pre>
+<h2 id="一般的开发规范使用"><a href="#一般的开发规范使用" class="headerlink" title="一般的开发规范使用"></a>一般的开发规范使用</h2><pre><code class="pip">pip freeze &gt; requirements.txt
+pip install -r requirements.txt # 这样的话可以让pip读取到.txt里面
+所需要的包的信息以及对应版本,然后进行安装.
+</code></pre>
+<h2 id="指定包的下载地址"><a href="#指定包的下载地址" class="headerlink" title="指定包的下载地址"></a>指定包的下载地址</h2><pre><code class="pip">pip install &lt;package_name&gt; -i &lt;url&gt; # 临时修改,只修改这一个
+</code></pre>
 
   
   
@@ -687,7 +695,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 对称加密
 非对称加密
 
-单向加密1234impo...</p>
+单向加密import h...</p>
         </a>
       
     </div>
@@ -961,7 +969,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

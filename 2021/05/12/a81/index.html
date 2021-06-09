@@ -554,13 +554,53 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>group：用户组</li>
 <li>ServiceAccount：服务账户(一般用于Pod访问)</li>
 </ul>
-<h1 id="Rbac"><a href="#Rbac" class="headerlink" title="Rbac"></a>Rbac</h1><h2 id="创建命名空间"><a href="#创建命名空间" class="headerlink" title="创建命名空间"></a>创建命名空间</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create ns roletest</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="在新的空间中创建Pod"><a href="#在新的空间中创建Pod" class="headerlink" title="在新的空间中创建Pod"></a>在新的空间中创建Pod</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-dep</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="创建一个角色"><a href="#创建一个角色" class="headerlink" title="创建一个角色"></a>创建一个角色</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Pod-role</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">""</span>] </span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">"pods"</span>] <span class="comment"># 只对pods有权限</span></span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">"get"</span>,<span class="string">"watch"</span>,<span class="string">"list"</span>] <span class="comment"># 只拥有get watch list权限</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="绑定一个用户"><a href="#绑定一个用户" class="headerlink" title="绑定一个用户"></a>绑定一个用户</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">read-pods</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">roletest</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">alex</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Pod-role</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="Rbac"><a href="#Rbac" class="headerlink" title="Rbac"></a>Rbac</h1><h2 id="创建命名空间"><a href="#创建命名空间" class="headerlink" title="创建命名空间"></a>创建命名空间</h2><pre><code class="shell">kubectl create ns roletest
+</code></pre>
+<h2 id="在新的空间中创建Pod"><a href="#在新的空间中创建Pod" class="headerlink" title="在新的空间中创建Pod"></a>在新的空间中创建Pod</h2><pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep
+  namespace: roletest
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+</code></pre>
+<h2 id="创建一个角色"><a href="#创建一个角色" class="headerlink" title="创建一个角色"></a>创建一个角色</h2><pre><code class="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: roletest
+  name: Pod-role
+rules:
+- apiGroups: [""] 
+  resources: ["pods"] # 只对pods有权限
+  verbs: ["get","watch","list"] # 只拥有get watch list权限
+</code></pre>
+<h2 id="绑定一个用户"><a href="#绑定一个用户" class="headerlink" title="绑定一个用户"></a>绑定一个用户</h2><pre><code class="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: roletest
+subjects:
+- kind: User
+  name: alex
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: Pod-role
+  apiGroup: rbac.authorization.k8s.io
+</code></pre>
 
   
   
@@ -687,12 +727,12 @@ PV是Volume之类的卷插件,但具有...</p>
           <p class='content'>简单安装使用
  最新版本应该是1.4.1
 
-1git clone https://github.com/nacos-group/nacos-k8s.git
+git clone https://github.com/nacos-group/nacos-k8s.git
 
 
 简单使用
 
-123cd nacos...</p>
+cd nacos-k8s...</p>
         </a>
       
     </div>
@@ -966,7 +1006,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

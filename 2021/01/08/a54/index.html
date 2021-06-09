@@ -565,16 +565,38 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 <p>清华开源镜像站 国内从这儿下</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm</span><br><span class="line">rpm -ivh gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">wget https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm
+rpm -ivh gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm
+</code></pre>
 <p>若提示依赖有错误,看下面的</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y localinstall gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm</span><br><span class="line">gitlab-ctl reconfigure</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum -y localinstall gitlab-ce-13.7.1-ce.0.el7.x86_64.rpm
+gitlab-ctl reconfigure
+</code></pre>
 <p>Docker-compose</p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.7"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">gitlab-ce:</span></span><br><span class="line">   <span class="attr">restart:</span> <span class="string">"always"</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">gitlab/gitlab-ce</span></span><br><span class="line">   <span class="attr">container_name:</span> <span class="string">gitlab-ce</span></span><br><span class="line">   <span class="attr">volumes:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./config:/etc/gitlab</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./logs:/var/log/gitlab</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">./data:/var/opt/data/gitlab</span></span><br><span class="line">   <span class="attr">ports:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="number">8077</span><span class="string">:80</span></span><br><span class="line">     <span class="bullet">-</span> <span class="number">4433</span><span class="string">:443</span></span><br><span class="line">     <span class="bullet">-</span> <span class="number">222</span><span class="string">:22</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">version: "3.7"
+services:
+  gitlab-ce:
+   restart: "always"
+   image: gitlab/gitlab-ce
+   container_name: gitlab-ce
+   volumes:
+     - ./config:/etc/gitlab
+     - ./logs:/var/log/gitlab
+     - ./data:/var/opt/data/gitlab
+   ports:
+     - 8077:80
+     - 4433:443
+     - 222:22
+</code></pre>
 <p>注意docker需要更改gitlab配置文件</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim config/gitlab.rb</span><br><span class="line"><span class="meta">#</span><span class="bash"> gitlab访问地址，可以写域名。如果端口不写的话默认为80端口</span></span><br><span class="line">eaxternal_url 'http://172.16.87.10:8077'</span><br><span class="line"><span class="meta">#</span><span class="bash"> ssh主机ip</span></span><br><span class="line">gitlab_rails['gitlab_ssh_host'] = '172.16.87.10'</span><br><span class="line"><span class="meta">#</span><span class="bash"> ssh连接端口</span></span><br><span class="line">gitlab_rails['gitlab_shell_ssh_port'] = 222</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">vim config/gitlab.rb
+# gitlab访问地址，可以写域名。如果端口不写的话默认为80端口
+eaxternal_url 'http://172.16.87.10:8077'
+# ssh主机ip
+gitlab_rails['gitlab_ssh_host'] = '172.16.87.10'
+# ssh连接端口
+gitlab_rails['gitlab_shell_ssh_port'] = 222
+</code></pre>
 <blockquote>
 <p>最后访问<a target="_blank" rel="noopener" href="http://172.16.87.10:8077/">http://172.16.87.10:8077/</a></p>
 <p>初始化Gitlab会要求设置新密码,按照提示设置就行了,图我就不放了</p>
@@ -582,8 +604,25 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>密码：xxx</p>
 </blockquote>
 <h2 id="Jenkins安装"><a href="#Jenkins安装" class="headerlink" title="Jenkins安装"></a>Jenkins安装</h2><p>Docker-compose</p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3.7'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"> <span class="attr">jenkins:</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">jenkins/jenkins:lts</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">/data/jenkins/:/var/jenkins_home</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">/usr/bin/docker:/usr/bin/docker</span></span><br><span class="line">   <span class="bullet">-</span> <span class="string">/usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="number">8080</span><span class="string">:8080</span></span><br><span class="line">   <span class="bullet">-</span> <span class="number">50000</span><span class="string">:50000</span></span><br><span class="line">  <span class="attr">privileged:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">user:</span> <span class="string">root</span></span><br><span class="line">  <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">  <span class="attr">container_name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">environment:</span></span><br><span class="line">   <span class="attr">JAVA_OPTS:</span> <span class="string">'-Djava.util.logging.config.file=/var/jenkins_home/log.properties'</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">version: '3.7'
+services:
+ jenkins:
+  image: jenkins/jenkins:lts
+  volumes:
+   - /data/jenkins/:/var/jenkins_home
+   - /var/run/docker.sock:/var/run/docker.sock
+   - /usr/bin/docker:/usr/bin/docker
+   - /usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7
+  ports:
+   - 8080:8080
+   - 50000:50000
+  privileged: true
+  user: root
+  restart: always
+  container_name: jenkins
+  environment:
+   JAVA_OPTS: '-Djava.util.logging.config.file=/var/jenkins_home/log.properties'
+</code></pre>
 <blockquote>
 <p>怎么启动怎么访问我就不交了哦….</p>
 </blockquote>
@@ -707,7 +746,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 这就是搞心态就是,直接重启docker服务就能解决….上面方法别直接用…
 
-12docker: Error respons...</p>
+docker: Error response ...</p>
         </a>
       
       
@@ -987,7 +1026,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

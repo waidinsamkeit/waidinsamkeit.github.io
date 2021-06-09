@@ -576,7 +576,7 @@ M(模型层)：负责与数据库进...
 静态文件配置
 配置静态文件的存储路径为STATICFILES_DIRS是保存在服务器端的存储位置
 
-123456# django请求...
+# django请求静态文件的地...
       
     
   </div>
@@ -620,7 +620,13 @@ M(模型层)：负责与数据库进...
     
       
         有关绝对地址和相对地址先说一下有关绝对路径和相对路径吧
-1234567891. 绝对地址http://127.0.0.1:8000/api/userlist2.相对地址/api/userlist = 浏览器会把当前地址栏的协议+地址+端口 + 地址 相对地址的标识结果最终为: http://127.0.0.1:8000 + /api/userlist3. 没有`/`的相对地址api/user...
+1. 绝对地址
+http://127.0.0.1:8000/api/userlist
+2.相对地址
+/api/userlist = 浏览器会把当前地址栏的协议+地址+端口 + 地址 
+相对地址的标识结果最终为: http://127.0.0.1:8000 + /api/userlist
+3. 没有`/`的相对地址
+api/userlis...
       
     
   </div>
@@ -668,7 +674,10 @@ M(模型层)：负责与数据库进...
 响应指的是服务端收到响应后做相应处理后再返回给浏览器
 
 请求样例
-12345678910111213141516GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行Host: 127.0.0.1:8000   ---&gt; 请求头Connection: keep-alivesec-ch-ua: " ...
+GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行
+Host: 127.0.0.1:8000   ---&gt; 请求头
+Connection: keep-alive
+sec-ch-ua: " Not;A Brand";v="99",...
       
     
   </div>
@@ -718,7 +727,8 @@ http://127.0.0.1/apps/django/1
 Django从配置文件中根据ROOT_URLCONF找到主路由文件,也就是我们的主目录下的urls.py
 Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由的数组.
 
-123456789from django.contrib import adminfrom django.urls imp...
+from django.contrib import admin
+from django.urls import path...
       
     
   </div>
@@ -1225,7 +1235,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

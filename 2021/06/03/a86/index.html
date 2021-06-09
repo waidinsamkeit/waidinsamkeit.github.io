@@ -536,8 +536,16 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>Django从配置文件中根据<code>ROOT_URLCONF</code>找到主路由文件,也就是我们的主目录下的<code>urls.py</code></li>
 <li>Django找到<code>urls.py</code>中的<code>urlpatterns</code>变量,该内容是一个包含多个路由的数组.</li>
 </ol>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"><span class="comment"># 项目的主路由配置-HTTP进入请求Django后,优先调用urls</span></span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">    path(<span class="string">'apps/django/'</span>,views.apps_dijango),</span><br><span class="line">]</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">from django.contrib import admin
+from django.urls import path
+from . import views
+# 项目的主路由配置-HTTP进入请求Django后,优先调用urls
 
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('apps/django/',views.apps_dijango),
+]
+</code></pre>
 <ol start="3">
 <li>依次匹配<code>urlpatternes</code>中的<code>path</code></li>
 <li>匹配成功-调用对应函数视图</li>
@@ -545,39 +553,65 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ol>
 <h2 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h2><p>视图函数是一个用来接收浏览器请求(HttpRequest)对象并通过<code>HttpRequest</code>对象返回响应函数。此函数可以接收浏览器请求并根据业务逻辑返回相应的内容.</p>
 <p>语法</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一个参数必须为Request,其他参数可以依次向后写</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">api_tools</span>(<span class="params">request</span>):</span> </span><br><span class="line">    <span class="keyword">return</span> HttpResponse</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h2><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line">ali = {</span><br><span class="line">    path(route,views,name=<span class="literal">None</span>),</span><br><span class="line">    path(route2,views.page2)</span><br><span class="line">}</span><br><span class="line">参数;</span><br><span class="line"><span class="number">1.</span> route: 字符串类型,匹配请求路径</span><br><span class="line"><span class="number">2.</span> views: 指定路径对应视图处理函数的名称,需要与views匹配</span><br><span class="line"><span class="number">3.</span> name: 为地址起别名,在模板中地址反向解析时使用</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="python"># 第一个参数必须为Request,其他参数可以依次向后写
+def api_tools(request): 
+    return HttpResponse
+</code></pre>
+<h2 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h2><pre><code class="python">from django.urls import path
+ali = {
+    path(route,views,name=None),
+    path(route2,views.page2)
+}
+参数;
+1. route: 字符串类型,匹配请求路径
+2. views: 指定路径对应视图处理函数的名称,需要与views匹配
+3. name: 为地址起别名,在模板中地址反向解析时使用
+</code></pre>
 <h3 id="Path转换器"><a href="#Path转换器" class="headerlink" title="Path转换器"></a>Path转换器</h3><p>语法</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;转换器类型:自定义名&gt;</span><br><span class="line">path(<span class="string">'page/&lt;int:page&gt;'</span>,views.page)</span><br><span class="line"><span class="comment"># 以下是视图函数内容</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">request,page_num</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(page_num)</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">&lt;转换器类型:自定义名&gt;
+path('page/&lt;int:page&gt;',views.page)
+# 以下是视图函数内容
+def test(request,page_num):
 
+    return HttpResponse(page_num)
+</code></pre>
 <p>作用：若转换器类型匹配到对应类型的数据,则将数据按照关键字传参的方式传递给视图函数。</p>
 <p><strong>转换器类型</strong></p>
 <ul>
 <li><code>str</code>：匹配除了<code>/</code>之外的非空字符串 </li>
 </ul>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;<span class="built_in">str</span>:toolsname&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/coretools</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="python">/v1/api/&lt;str:toolsname&gt;
+        匹配
+/v1/api/coretools
+</code></pre>
 <ul>
 <li><code>int</code>:  匹配或任何整数,可以返回一个Int</li>
 </ul>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;<span class="built_in">int</span>:page&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/<span class="number">100</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="python">/v1/api/&lt;int:page&gt;
+        匹配
+/v1/api/100
+</code></pre>
 <ul>
 <li><code>slug</code>： 匹配任意由ASCII字母或数字以及连字符和下划线组成的短标签</li>
 </ul>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;slug:sl&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/this-<span class="keyword">is</span>-user_list</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="python">/v1/api/&lt;slug:sl&gt;
+        匹配
+/v1/api/this-is-user_list
+</code></pre>
 <ul>
 <li><code>path</code>：匹配非空字段,包括路径分隔符<code>/</code></li>
 </ul>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/api/&lt;path:ph&gt;</span><br><span class="line">    	匹配</span><br><span class="line">/v1/api/a/b/c</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="python">/v1/api/&lt;path:ph&gt;
+        匹配
+/v1/api/a/b/c
+</code></pre>
 <h3 id="re-path"><a href="#re-path" class="headerlink" title="re_path"></a>re_path</h3><p>在url的匹配过程中可以使用正则表达式进行精确匹配</p>
 <p>语法</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> re_path</span><br><span class="line"></span><br><span class="line">re_path(reg,view,name=xxx)</span><br><span class="line"><span class="comment"># 正则表达式为命名分组模式(?P&lt;name&gt;pattern)匹配提取参数后用关键字传参方式传递给视图函数</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">from django.urls import re_path
 
+re_path(reg,view,name=xxx)
+# 正则表达式为命名分组模式(?P&lt;name&gt;pattern)匹配提取参数后用关键字传参方式传递给视图函数
+</code></pre>
 
   
   
@@ -698,7 +732,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 响应指的是服务端收到响应后做相应处理后再返回给浏览器
 
 请求样例
-12345678910111213141516GET /user/...</p>
+GET /user/api/qoqa HTTP/1.1   ---...</p>
         </a>
       
       
@@ -984,7 +1018,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

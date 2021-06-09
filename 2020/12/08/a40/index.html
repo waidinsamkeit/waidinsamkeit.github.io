@@ -555,9 +555,28 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ul>
 <li><input disabled="" type="checkbox"> 使用以下代码可以对名称空间的查找顺序进行演示</li>
 </ul>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">level = <span class="string">'l0'</span></span><br><span class="line">n = <span class="number">22</span></span><br><span class="line"><span class="comment"># dir = 333333 定义一个内置方法 当全局变量失效的时候</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span></span><br><span class="line">    level = <span class="string">'l1'</span></span><br><span class="line">    n = <span class="number">33</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">locals</span>())</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">outer</span>():</span></span><br><span class="line">        n = <span class="number">44</span></span><br><span class="line">        level = <span class="string">'l2'</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'outer:'</span>,<span class="built_in">locals</span>(),n)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">inner</span>():</span></span><br><span class="line">            level = <span class="string">'l3'</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'inner:'</span>,<span class="built_in">locals</span>(),n)</span><br><span class="line">        inner()</span><br><span class="line">    outer()</span><br><span class="line"></span><br><span class="line">func()</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="python">level = 'l0'
+n = 22
+# dir = 333333 定义一个内置方法 当全局变量失效的时候
 
+def func():
+    level = 'l1'
+    n = 33
+    print(locals())
 
+    def outer():
+        n = 44
+        level = 'l2'
+        print('outer:',locals(),n)
+
+        def inner():
+            level = 'l3'
+            print('inner:',locals(),n)
+        inner()
+    outer()
+
+func()
+</code></pre>
 
   
   
@@ -954,7 +973,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

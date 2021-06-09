@@ -540,17 +540,58 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <ol>
 <li>创建Secret</li>
 </ol>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">mysecret</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">Opaque</span></span><br><span class="line"><span class="attr">date:</span> </span><br><span class="line">  <span class="attr">username:</span> <span class="string">YWRtaW4=</span></span><br><span class="line">  <span class="attr">password:</span> <span class="string">MTc2MTE0NjY1MTdBYmM=</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: v1
+kind: Secret
+metadata: 
+  name: mysecret
+type: Opaque
+date: 
+  username: YWRtaW4=
+  password: MTc2MTE0NjY1MTdBYmM=
+</code></pre>
 <ol start="2">
 <li>挂载方式(变量方式)</li>
 </ol>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">mypod</span></span><br><span class="line"><span class="attr">spec:</span> </span><br><span class="line">  <span class="attr">containers:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">env:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SECRET_USERNAME</span></span><br><span class="line">        <span class="attr">valueFrom:</span></span><br><span class="line">          <span class="attr">secretKeyRef:</span> </span><br><span class="line">            <span class="attr">name:</span> <span class="string">mysecret</span></span><br><span class="line">            <span class="attr">key:</span> <span class="string">username</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SECRET_PASSWORD</span></span><br><span class="line">        <span class="attr">valueFrom:</span></span><br><span class="line">           <span class="attr">secretKeyRef:</span> </span><br><span class="line">             <span class="attr">name:</span> <span class="string">mysecret</span></span><br><span class="line">             <span class="attr">key:</span> <span class="string">password</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata: 
+  name: mypod
+spec: 
+  containers: 
+  - name: nginx
+    image: nginx
+    env: 
+      - name: SECRET_USERNAME
+        valueFrom:
+          secretKeyRef: 
+            name: mysecret
+            key: username
+      - name: SECRET_PASSWORD
+        valueFrom:
+           secretKeyRef: 
+             name: mysecret
+             key: password
+</code></pre>
 <ol start="3">
 <li>以Volume方式挂载到Pod中</li>
 </ol>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">mypod</span></span><br><span class="line"><span class="attr">spec:</span> </span><br><span class="line">  <span class="attr">containers:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">volumeMounts:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">foo</span></span><br><span class="line">      <span class="attr">mountPath:</span> <span class="string">"/etc/foo"</span></span><br><span class="line">      <span class="attr">readOnly:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">volumes:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">foo</span></span><br><span class="line">    <span class="attr">secret:</span></span><br><span class="line">      <span class="attr">secretName:</span> <span class="string">mysecret</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="yaml">apiVersion: v1
+kind: Pod
+metadata: 
+  name: mypod
+spec: 
+  containers: 
+  - name: nginx
+    image: nginx
+    volumeMounts: 
+    - name: foo
+      mountPath: "/etc/foo"
+      readOnly: true
+  volumes: 
+  - name: foo
+    secret:
+      secretName: mysecret
+</code></pre>
 
   
   
@@ -957,7 +998,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

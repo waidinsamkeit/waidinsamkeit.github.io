@@ -553,11 +553,13 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>多应用支持: 数据库，Windows远程应用，Kubernetes。</li>
 </ul>
 <h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><p>自 v2.0.0 发布后， JumpServer 版本号命名将变更为：v大版本.功能版本.Bug修复版本。比如：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v2.0.1 是 v2.0.0 之后的Bug修复版本；</span><br><span class="line">v2.1.0 是 v2.0.0 之后的功能版本。</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>v2.0.1 是 v2.0.0 之后的Bug修复版本；
+v2.1.0 是 v2.0.0 之后的功能版本。
+</code></pre>
 <p>像其它优秀开源项目一样，JumpServer 每个月会发布一个功能版本，并同时维护 3 个功能版本。比如：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在 v2.4 发布前，我们会同时维护 v2.1、v2.2、v2.3；</span><br><span class="line">在 v2.4 发布后，我们会同时维护 v2.2、v2.3、v2.4；v2.1 会停止维护。</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>在 v2.4 发布前，我们会同时维护 v2.1、v2.2、v2.3；
+在 v2.4 发布后，我们会同时维护 v2.2、v2.3、v2.4；v2.1 会停止维护。
+</code></pre>
 <h2 id="功能列表"><a href="#功能列表" class="headerlink" title="功能列表"></a>功能列表</h2><table>
 <thead>
 <tr>
@@ -853,67 +855,133 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h1 id="极速部署"><a href="#极速部署" class="headerlink" title="极速部署"></a>极速部署</h1><blockquote>
 <p>注意: 该命令仅对Centos7.x适用 Centos8.x需要手动进行编译安装</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://github.com/jumpserver/jumpserver/releases/download/v2.5.2/quick_start.sh | sh</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="shell">curl -sSL https://github.com/jumpserver/jumpserver/releases/download/v2.5.2/quick_start.sh | sh
+</code></pre>
 <h2 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h2><h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><h3 id="1-安装-Python3-6-MySQL-Redis"><a href="#1-安装-Python3-6-MySQL-Redis" class="headerlink" title="1. 安装 Python3.6 MySQL Redis"></a>1. 安装 Python3.6 MySQL Redis</h3><blockquote>
 <p> 推荐直接从仓库获取</p>
 </blockquote>
 <ul>
 <li>数据库字符集要求:</li>
 </ul>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database jumpserver default charset 'utf8' collate 'utf8_bin';</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="2-创建-Python-虚拟环境"><a href="#2-创建-Python-虚拟环境" class="headerlink" title="2. 创建 Python 虚拟环境"></a>2. 创建 Python 虚拟环境</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/jumpserver &amp;&amp; cd /usr/local/jumpserver</span><br><span class="line">python3.6 -m venv ./</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="3-载入-Python-虚拟环境"><a href="#3-载入-Python-虚拟环境" class="headerlink" title="3. 载入 Python 虚拟环境"></a>3. 载入 Python 虚拟环境</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source bin/activate</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="mysql">create database jumpserver default charset 'utf8' collate 'utf8_bin';
+</code></pre>
+<h3 id="2-创建-Python-虚拟环境"><a href="#2-创建-Python-虚拟环境" class="headerlink" title="2. 创建 Python 虚拟环境"></a>2. 创建 Python 虚拟环境</h3><pre><code class="shell">mkdir /usr/local/jumpserver &amp;&amp; cd /usr/local/jumpserver
+python3.6 -m venv ./
+</code></pre>
+<h3 id="3-载入-Python-虚拟环境"><a href="#3-载入-Python-虚拟环境" class="headerlink" title="3. 载入 Python 虚拟环境"></a>3. 载入 Python 虚拟环境</h3><pre><code class="shell">source bin/activate
+</code></pre>
 <blockquote>
 <p><strong>注意: 每次操作 JumpServer 都需要先载入 py3 虚拟环境</strong></p>
 <blockquote>
 <p><strong>部分系统可能会提示 source: not found, 可以使用 . 代替 source</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. bin/activate  </span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">. bin/activate  
+</code></pre>
 </blockquote>
 </blockquote>
 <h3 id="4-获取-JumpServer-代码"><a href="#4-获取-JumpServer-代码" class="headerlink" title="4. 获取 JumpServer 代码"></a>4. 获取 JumpServer 代码</h3><ul>
 <li>速度可能会有些慢,或者你可以从网页点击下载的方式可能会快一些。</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/jumpserver/jumpserver/releases/download/v2.5.2/jumpserver-v2.5.2.tar.gz</span><br><span class="line">tar -zxf jumpserver-v2.5.2.tar.gz</span><br><span class="line">mv jumpserver-v2.5.2/* ./</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="5-安装编译环境依赖"><a href="#5-安装编译环境依赖" class="headerlink" title="5. 安装编译环境依赖"></a>5. 安装编译环境依赖</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd requirements/</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">wget https://github.com/jumpserver/jumpserver/releases/download/v2.5.2/jumpserver-v2.5.2.tar.gz
+tar -zxf jumpserver-v2.5.2.tar.gz
+mv jumpserver-v2.5.2/* ./
+</code></pre>
+<h3 id="5-安装编译环境依赖"><a href="#5-安装编译环境依赖" class="headerlink" title="5. 安装编译环境依赖"></a>5. 安装编译环境依赖</h3><pre><code class="shell">cd requirements/
+</code></pre>
 <blockquote>
 <p>根据系统直接选择虚拟环境即可</p>
 </blockquote>
 <p>Centos:</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y $(cat rpm_requirements.txt)</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum install -y $(cat rpm_requirements.txt)
+</code></pre>
 <p>Ubuntu:</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install -y $(cat deb_requirements.txt)</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="No-match-for-argument-lcms2-devel报错解决"><a href="#No-match-for-argument-lcms2-devel报错解决" class="headerlink" title="No match for argument: lcms2-devel报错解决"></a>No match for argument: lcms2-devel报错解决</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/lcms2-devel-2.9-2.el8.x86_64.rpm</span><br><span class="line">rpm -ivh lcms2-devel-2.9-2.el8.x86_64.rpm</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install wheel &amp;&amp; \</span><br><span class="line">pip install --upgrade pip setuptools &amp;&amp; \</span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">apt-get install -y $(cat deb_requirements.txt)
+</code></pre>
+<h4 id="No-match-for-argument-lcms2-devel报错解决"><a href="#No-match-for-argument-lcms2-devel报错解决" class="headerlink" title="No match for argument: lcms2-devel报错解决"></a>No match for argument: lcms2-devel报错解决</h4><pre><code class="shell">wget http://rpmfind.net/linux/centos/8-stream/PowerTools/x86_64/os/Packages/lcms2-devel-2.9-2.el8.x86_64.rpm
+rpm -ivh lcms2-devel-2.9-2.el8.x86_64.rpm
+</code></pre>
+<pre><code class="shell">pip install wheel &amp;&amp; \
+pip install --upgrade pip setuptools &amp;&amp; \
+pip install -r requirements.txt
+</code></pre>
 <blockquote>
 <p>注意,安装过程中可能会出现非常非常多的报错</p>
 <p>具体移步解决过程:<a target="_blank" rel="noopener" href="https://book.micomint.top/d/30-jumpserver">点我</a></p>
 </blockquote>
 <p>或者尝试使用以下办法进行解决</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 总结了下情况,有的包清华有有的包豆瓣有灵活切换!</span></span><br><span class="line">pip config set global.index-url http://pypi.douban.com/simple/ # 设置完之后重新安装</span><br><span class="line">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="6-修改配置文件"><a href="#6-修改配置文件" class="headerlink" title="6. 修改配置文件"></a>6. 修改配置文件</h3><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd .. &amp;&amp;  cp config_example.yml config.yml</span><br><span class="line">vim config.yml</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell"># 总结了下情况,有的包清华有有的包豆瓣有灵活切换!
+pip config set global.index-url http://pypi.douban.com/simple/ # 设置完之后重新安装
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+<h3 id="6-修改配置文件"><a href="#6-修改配置文件" class="headerlink" title="6. 修改配置文件"></a>6. 修改配置文件</h3><pre><code>cd .. &amp;&amp;  cp config_example.yml config.yml
+vim config.yml
+</code></pre>
 <blockquote>
 <p>你们可以按照如下的修改,这是官方的</p>
 </blockquote>
-<figure class="highlight yml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SECURITY WARNING: keep the secret key used in production secret!</span></span><br><span class="line"><span class="comment"># 加密秘钥 生产环境中请修改为随机字符串，请勿外泄, 可使用命令生成</span></span><br><span class="line"><span class="comment"># cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 49;echo</span></span><br><span class="line"><span class="attr">SECRET_KEY:</span> <span class="string">W5Ic3fMXNZ0p5RIy5DhJYJllppTfcfkW8Yuf94VBMfpcssbfu</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SECURITY WARNING: keep the bootstrap token used in production secret!</span></span><br><span class="line"><span class="comment"># 预共享Token coco和guacamole用来注册服务账号，不在使用原来的注册接受机制</span></span><br><span class="line"><span class="attr">BOOTSTRAP_TOKEN:</span> <span class="string">zxffNymGjP79j6BN</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Development env open this, when error occur display the full process track, Production disable it</span></span><br><span class="line"><span class="comment"># DEBUG 模式 开启DEBUG后遇到错误时可以看到更多日志</span></span><br><span class="line"><span class="attr">DEBUG:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DEBUG, INFO, WARNING, ERROR, CRITICAL can set. See https://docs.djangoproject.com/en/1.10/topics/logging/</span></span><br><span class="line"><span class="comment"># 日志级别</span></span><br><span class="line"><span class="attr">LOG_LEVEL:</span> <span class="string">ERROR</span></span><br><span class="line"><span class="comment"># LOG_DIR:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Session expiration setting, Default 24 hour, Also set expired on on browser close</span></span><br><span class="line"><span class="comment"># 浏览器Session过期时间，默认24小时, 也可以设置浏览器关闭则过期</span></span><br><span class="line"><span class="comment"># SESSION_COOKIE_AGE: 86400</span></span><br><span class="line"><span class="attr">SESSION_EXPIRE_AT_BROWSER_CLOSE:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Database setting, Support sqlite3, mysql, postgres ....</span></span><br><span class="line"><span class="comment"># 数据库设置</span></span><br><span class="line"><span class="comment"># See https://docs.djangoproject.com/en/1.10/ref/settings/#databases</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SQLite setting:</span></span><br><span class="line"><span class="comment"># 使用单文件sqlite数据库</span></span><br><span class="line"><span class="comment"># DB_ENGINE: sqlite3</span></span><br><span class="line"><span class="comment"># DB_NAME:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MySQL or postgres setting like:</span></span><br><span class="line"><span class="comment"># 使用Mysql作为数据库</span></span><br><span class="line"><span class="attr">DB_ENGINE:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">DB_HOST:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">DB_PORT:</span> <span class="number">3306</span></span><br><span class="line"><span class="attr">DB_USER:</span> <span class="string">jumpserver</span></span><br><span class="line"><span class="attr">DB_PASSWORD:</span> <span class="string">rBi41SrDqlX4zsx9e1L0cqTP</span></span><br><span class="line"><span class="attr">DB_NAME:</span> <span class="string">jumpserver</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># When Django start it will bind this host and port</span></span><br><span class="line"><span class="comment"># ./manage.py runserver 127.0.0.1:8080</span></span><br><span class="line"><span class="comment"># 运行时绑定端口</span></span><br><span class="line"><span class="attr">HTTP_BIND_HOST:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="yml"># SECURITY WARNING: keep the secret key used in production secret!
+# 加密秘钥 生产环境中请修改为随机字符串，请勿外泄, 可使用命令生成
+# cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 49;echo
+SECRET_KEY: W5Ic3fMXNZ0p5RIy5DhJYJllppTfcfkW8Yuf94VBMfpcssbfu
 
-<h3 id="7-启动jumpserver"><a href="#7-启动jumpserver" class="headerlink" title="7.启动jumpserver"></a>7.启动jumpserver</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./jms start -d # 启动</span><br><span class="line">./jms stop # 停止</span><br></pre></td></tr></tbody></table></figure>
+# SECURITY WARNING: keep the bootstrap token used in production secret!
+# 预共享Token coco和guacamole用来注册服务账号，不在使用原来的注册接受机制
+BOOTSTRAP_TOKEN: zxffNymGjP79j6BN
 
-<h3 id="8-正常部署-KoKo-组件"><a href="#8-正常部署-KoKo-组件" class="headerlink" title="8. 正常部署 KoKo 组件"></a>8. 正常部署 KoKo 组件</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /opt &amp;&amp; \</span><br><span class="line">wget https://github.com/jumpserver/koko/releases/download/v2.5.2/koko-v2.5.2-linux-amd64.tar.gz</span><br><span class="line">tar -xf koko-v2.5.2-linux-amd64.tar.gz &amp;&amp; \</span><br><span class="line">mv koko-v2.5.2-linux-amd64 koko &amp;&amp; \</span><br><span class="line">chown -R root:root koko &amp;&amp; \</span><br><span class="line">cd koko \</span><br><span class="line">mv kubectl /usr/local/bin/ &amp;&amp; \</span><br><span class="line">wget https://download.jumpserver.org/public/kubectl.tar.gz &amp;&amp; \</span><br><span class="line">tar -xf kubectl.tar.gz &amp;&amp; \</span><br><span class="line">chmod 755 kubectl &amp;&amp; \</span><br><span class="line">mv kubectl /usr/local/bin/rawkubectl &amp;&amp; \</span><br><span class="line">rm -rf kubectl.tar.gz</span><br><span class="line">cp config_example.yml config.yml &amp;&amp; \</span><br><span class="line">vi config.yml</span><br></pre></td></tr></tbody></table></figure>
+# Development env open this, when error occur display the full process track, Production disable it
+# DEBUG 模式 开启DEBUG后遇到错误时可以看到更多日志
+DEBUG: false
 
+# DEBUG, INFO, WARNING, ERROR, CRITICAL can set. See https://docs.djangoproject.com/en/1.10/topics/logging/
+# 日志级别
+LOG_LEVEL: ERROR
+# LOG_DIR:
+
+# Session expiration setting, Default 24 hour, Also set expired on on browser close
+# 浏览器Session过期时间，默认24小时, 也可以设置浏览器关闭则过期
+# SESSION_COOKIE_AGE: 86400
+SESSION_EXPIRE_AT_BROWSER_CLOSE: true
+
+# Database setting, Support sqlite3, mysql, postgres ....
+# 数据库设置
+# See https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+
+# SQLite setting:
+# 使用单文件sqlite数据库
+# DB_ENGINE: sqlite3
+# DB_NAME:
+
+# MySQL or postgres setting like:
+# 使用Mysql作为数据库
+DB_ENGINE: mysql
+DB_HOST: 127.0.0.1
+DB_PORT: 3306
+DB_USER: jumpserver
+DB_PASSWORD: rBi41SrDqlX4zsx9e1L0cqTP
+DB_NAME: jumpserver
+
+# When Django start it will bind this host and port
+# ./manage.py runserver 127.0.0.1:8080
+# 运行时绑定端口
+HTTP_BIND_HOST: 0.0.0.0
+</code></pre>
+<h3 id="7-启动jumpserver"><a href="#7-启动jumpserver" class="headerlink" title="7.启动jumpserver"></a>7.启动jumpserver</h3><pre><code class="shell">./jms start -d # 启动
+./jms stop # 停止
+</code></pre>
+<h3 id="8-正常部署-KoKo-组件"><a href="#8-正常部署-KoKo-组件" class="headerlink" title="8. 正常部署 KoKo 组件"></a>8. 正常部署 KoKo 组件</h3><pre><code class="shell">cd /opt &amp;&amp; \
+wget https://github.com/jumpserver/koko/releases/download/v2.5.2/koko-v2.5.2-linux-amd64.tar.gz
+tar -xf koko-v2.5.2-linux-amd64.tar.gz &amp;&amp; \
+mv koko-v2.5.2-linux-amd64 koko &amp;&amp; \
+chown -R root:root koko &amp;&amp; \
+cd koko \
+mv kubectl /usr/local/bin/ &amp;&amp; \
+wget https://download.jumpserver.org/public/kubectl.tar.gz &amp;&amp; \
+tar -xf kubectl.tar.gz &amp;&amp; \
+chmod 755 kubectl &amp;&amp; \
+mv kubectl /usr/local/bin/rawkubectl &amp;&amp; \
+rm -rf kubectl.tar.gz
+cp config_example.yml config.yml &amp;&amp; \
+vi config.yml
+</code></pre>
 <details class="info" open="" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(0, 184, 212); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(0, 184, 212, 0.1); border-left: 0.2rem solid rgb(0, 184, 212); display: block; min-height: 1rem; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; cursor: pointer; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); outline: none; -webkit-tap-highlight-color: transparent;">BOOTSTRAP_TOKEN 需要从 jumpserver/config.yml 里面获取, 保证一致</summary><p style="box-sizing: inherit; margin: 1em 0px;">以下配置仅供参考</p><div class="highlight" style="box-sizing: inherit;"><pre id="__code_19" style="box-sizing: inherit; color: var(--md-code-fg-color); font-feature-settings: &quot;kern&quot;; font-family: &quot;Roboto Mono&quot;, SFMono-Regular, Consolas, Menlo, monospace; direction: ltr; position: relative; margin: 1em 0px; line-height: 1.4;"><span style="box-sizing: inherit;"></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_19 > code" style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; font-size: inherit; background: transparent; border: 0px; position: absolute; top: 0.5em; right: 0.5em; z-index: 1; width: 1.5em; height: 1.5em; color: var(--md-default-fg-color--lightest); border-radius: 0.1rem; cursor: pointer; transition: color 125ms ease 0s;"></button><code style="box-sizing: inherit; color: var(--md-code-fg-color); font-feature-settings: &quot;kern&quot;; font-family: &quot;Roboto Mono&quot;, SFMono-Regular, Consolas, Menlo, monospace; direction: ltr; padding: 0.772059em 1.17647em; font-size: 0.85em; word-break: normal; background-color: var(--md-code-bg-color); border-radius: 0.1rem; -webkit-box-decoration-break: slice; display: block; margin: 0px; overflow: auto; box-shadow: none; touch-action: auto; outline: none; -webkit-tap-highlight-color: transparent;"><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># 项目名称, 会用来向Jumpserver注册, 识别而已, 不能重复</span>
 <span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># NAME: {{ Hostname }}</span>
 
@@ -937,49 +1005,194 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># 向资产发送心跳包的重试次数，默认为3</span><br><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># RETRY_ALIVE_COUNT_MAX: 3</span></p>
 <p><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># 会话共享使用的类型 [local, redis], 默认local</span><br><span class="nt" style="box-sizing: inherit; color: var(--md-code-hl-keyword-color);">SHARE_ROOM_TYPE</span><span class="p" style="box-sizing: inherit; color: var(--md-code-hl-punctuation-color);">:</span> <span class="l l-Scalar l-Scalar-Plain" style="box-sizing: inherit; color: var(--md-code-hl-string-color);">redis</span></p>
 </code><p><code style="box-sizing: inherit; color: var(--md-code-fg-color); font-feature-settings: &quot;kern&quot;; font-family: &quot;Roboto Mono&quot;, SFMono-Regular, Consolas, Menlo, monospace; direction: ltr; padding: 0.772059em 1.17647em; font-size: 0.85em; word-break: normal; background-color: var(--md-code-bg-color); border-radius: 0.1rem; -webkit-box-decoration-break: slice; display: block; margin: 0px; overflow: auto; box-shadow: none; touch-action: auto; outline: none; -webkit-tap-highlight-color: transparent;"><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># Redis配置</span><br><span class="nt" style="box-sizing: inherit; color: var(--md-code-hl-keyword-color);">REDIS_HOST</span><span class="p" style="box-sizing: inherit; color: var(--md-code-hl-punctuation-color);">:</span> <span class="l l-Scalar l-Scalar-Plain" style="box-sizing: inherit; color: var(--md-code-hl-string-color);">127.0.0.1</span><br><span class="nt" style="box-sizing: inherit; color: var(--md-code-hl-keyword-color);">REDIS_PORT</span><span class="p" style="box-sizing: inherit; color: var(--md-code-hl-punctuation-color);">:</span> <span class="l l-Scalar l-Scalar-Plain" style="box-sizing: inherit; color: var(--md-code-hl-string-color);">6379</span><br><span class="nt" style="box-sizing: inherit; color: var(--md-code-hl-keyword-color);">REDIS_PASSWORD</span><span class="p" style="box-sizing: inherit; color: var(--md-code-hl-punctuation-color);">:</span> <span class="l l-Scalar l-Scalar-Plain" style="box-sizing: inherit; color: var(--md-code-hl-string-color);">ZhYnLrodpmPncovxJTnRyiBs</span><br><span class="c1" style="box-sizing: inherit; color: var(--md-code-hl-comment-color);"># REDIS_CLUSTERS:</span><br><span class="nt" style="box-sizing: inherit; color: var(--md-code-hl-keyword-color);">REDIS_DB_ROOM</span><span class="p" style="box-sizing: inherit; color: var(--md-code-hl-punctuation-color);">:</span> <span class="l l-Scalar l-Scalar-Plain" style="box-sizing: inherit; color: var(--md-code-hl-string-color);">6</span><br></code></p></pre></div><p style="box-sizing: inherit; margin: 1em 0px 0.6rem;"></p></details><p></p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./koko  </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>./koko  
+</code></pre>
 <details class="tip" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(0, 191, 165); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(0, 191, 165); border-right-color: rgb(0, 191, 165); border-bottom-color: rgb(0, 191, 165); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(0, 191, 165, 0.1); border-left: 0.2rem solid rgb(0, 191, 165); display: block; min-height: 1rem; border-radius: 0.1rem; cursor: pointer; border-top-color: rgb(0, 191, 165); border-right-color: rgb(0, 191, 165); border-bottom-color: rgb(0, 191, 165); outline: none; -webkit-tap-highlight-color: transparent;">可以 -d 参数在后台运行</summary></details>
 
 <h3 id="8-1-Docker-部署-KoKo-组件"><a href="#8-1-Docker-部署-KoKo-组件" class="headerlink" title="8.1. Docker 部署 KoKo 组件"></a>8.1. Docker 部署 KoKo 组件</h3><details class="info" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(0, 184, 212); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(0, 184, 212, 0.1); border-left: 0.2rem solid rgb(0, 184, 212); display: block; min-height: 1rem; border-radius: 0.1rem; cursor: pointer; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); outline: none; -webkit-tap-highlight-color: transparent;">如果前面已经正常部署了 KoKo, 可以跳过此步骤</summary></details>
 
 <p>例:</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run --name jms_koko -d \</span><br><span class="line">  -p 2222:2222 \</span><br><span class="line">  -p 127.0.0.1:5000:5000 \</span><br><span class="line">  -e CORE_HOST=http://192.168.244.144:8080 \</span><br><span class="line">  -e BOOTSTRAP_TOKEN=zxffNymGjP79j6BN \</span><br><span class="line">  -e LOG_LEVEL=ERROR \</span><br><span class="line">  --privileged=true \</span><br><span class="line">  --restart=always \</span><br><span class="line">  jumpserver/jms_koko:v2.5.2</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">docker run --name jms_koko -d \
+  -p 2222:2222 \
+  -p 127.0.0.1:5000:5000 \
+  -e CORE_HOST=http://192.168.244.144:8080 \
+  -e BOOTSTRAP_TOKEN=zxffNymGjP79j6BN \
+  -e LOG_LEVEL=ERROR \
+  --privileged=true \
+  --restart=always \
+  jumpserver/jms_koko:v2.5.2
+</code></pre>
 <h3 id="9-正常部署-Guacamole-组件"><a href="#9-正常部署-Guacamole-组件" class="headerlink" title="9. 正常部署 Guacamole 组件"></a>9. 正常部署 Guacamole 组件</h3><p>建议使用 Docker 部署 Guacamole 组件 , 部分环境可能无法正常编译安装</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cd /opt &amp;&amp; \</span><br><span class="line">wget -O docker-guacamole-v2.5.2.tar.gz https://github.com/jumpserver/docker-guacamole/archive/master.tar.gz</span><br><span class="line">mkdir /opt/docker-guacamole &amp;&amp; \</span><br><span class="line">tar -xf docker-guacamole-v2.5.2.tar.gz -C /opt/docker-guacamole --strip-components 1 &amp;&amp; \</span><br><span class="line">rm -rf /opt/docker-guacamole-v2.5.2.tar.gz &amp;&amp; \</span><br><span class="line">cd /opt/docker-guacamole &amp;&amp; \</span><br><span class="line">wget http://download.jumpserver.org/public/guacamole-server-1.2.0.tar.gz &amp;&amp; \</span><br><span class="line">tar -xf guacamole-server-1.2.0.tar.gz &amp;&amp; \</span><br><span class="line">wget http://download.jumpserver.org/public/ssh-forward.tar.gz &amp;&amp; \</span><br><span class="line">tar -xf ssh-forward.tar.gz -C /bin/ &amp;&amp; \</span><br><span class="line">chmod +x /bin/ssh-forward</span><br><span class="line">cd /opt/docker-guacamole/guacamole-server-1.2.0</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">cd /opt &amp;&amp; \
+wget -O docker-guacamole-v2.5.2.tar.gz https://github.com/jumpserver/docker-guacamole/archive/master.tar.gz
+mkdir /opt/docker-guacamole &amp;&amp; \
+tar -xf docker-guacamole-v2.5.2.tar.gz -C /opt/docker-guacamole --strip-components 1 &amp;&amp; \
+rm -rf /opt/docker-guacamole-v2.5.2.tar.gz &amp;&amp; \
+cd /opt/docker-guacamole &amp;&amp; \
+wget http://download.jumpserver.org/public/guacamole-server-1.2.0.tar.gz &amp;&amp; \
+tar -xf guacamole-server-1.2.0.tar.gz &amp;&amp; \
+wget http://download.jumpserver.org/public/ssh-forward.tar.gz &amp;&amp; \
+tar -xf ssh-forward.tar.gz -C /bin/ &amp;&amp; \
+chmod +x /bin/ssh-forward
+cd /opt/docker-guacamole/guacamole-server-1.2.0
+</code></pre>
 <p>根据 <a target="_blank" rel="noopener" href="http://guacamole.apache.org/doc/gug/installing-guacamole.html">Guacamole官方文档</a> 文档安装对应的依赖包</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-init-dir=/etc/init.d &amp;&amp; \</span><br><span class="line">make &amp;&amp; \</span><br><span class="line">make install</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">./configure --with-init-dir=/etc/init.d &amp;&amp; \
+make &amp;&amp; \
+make install
+</code></pre>
 <details class="warning" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(255, 145, 0); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(255, 145, 0); border-right-color: rgb(255, 145, 0); border-bottom-color: rgb(255, 145, 0); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(255, 145, 0, 0.1); border-left: 0.2rem solid rgb(255, 145, 0); display: block; min-height: 1rem; border-radius: 0.1rem; cursor: pointer; border-top-color: rgb(255, 145, 0); border-right-color: rgb(255, 145, 0); border-bottom-color: rgb(255, 145, 0); outline: none; -webkit-tap-highlight-color: transparent;">需要先在当前环境配置好 Java</summary></details>
 
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /config/guacamole /config/guacamole/extensions /config/guacamole/record /config/guacamole/drive &amp;&amp; \</span><br><span class="line">chown daemon:daemon /config/guacamole/record /config/guacamole/drive &amp;&amp; \</span><br><span class="line">cd /config</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">mkdir -p /config/guacamole /config/guacamole/extensions /config/guacamole/record /config/guacamole/drive &amp;&amp; \
+chown daemon:daemon /config/guacamole/record /config/guacamole/drive &amp;&amp; \
+cd /config
+</code></pre>
 <details class="warning" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(255, 145, 0); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(255, 145, 0); border-right-color: rgb(255, 145, 0); border-bottom-color: rgb(255, 145, 0); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(255, 145, 0, 0.1); border-left: 0.2rem solid rgb(255, 145, 0); display: block; min-height: 1rem; border-radius: 0.1rem; cursor: pointer; border-top-color: rgb(255, 145, 0); border-right-color: rgb(255, 145, 0); border-bottom-color: rgb(255, 145, 0); outline: none; -webkit-tap-highlight-color: transparent;">访问<span>&nbsp;</span><a target="_blank" rel="noopener" href="https://tomcat.apache.org/download-90.cgi" style="box-sizing: inherit; -webkit-tap-highlight-color: transparent; color: rgb(43, 147, 124); text-decoration: none; word-break: break-word; transition: color 125ms ease 0s;">此处</a><span>&nbsp;</span>下载最新的 Tomcat9</summary></details>
 
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tar -xf apache-tomcat-9.0.36.tar.gz &amp;&amp; \</span><br><span class="line">mv apache-tomcat-9.0.36 tomcat9 &amp;&amp; \</span><br><span class="line">rm -rf /config/tomcat9/webapps/* &amp;&amp; \</span><br><span class="line">sed -i 's/Connector port="8080"/Connector port="8081"/g' /config/tomcat9/conf/server.xml &amp;&amp; \</span><br><span class="line">echo "java.util.logging.ConsoleHandler.encoding = UTF-8" &gt;&gt; /config/tomcat9/conf/logging.properties &amp;&amp; \</span><br><span class="line">wget http://download.jumpserver.org/release/v2.5.2/guacamole-client-v2.5.2.tar.gz &amp;&amp; \</span><br><span class="line">tar -xf guacamole-client-v2.5.2.tar.gz &amp;&amp; \</span><br><span class="line">rm -rf guacamole-client-v2.5.2.tar.gz &amp;&amp; \</span><br><span class="line">cp guacamole-client-v2.5.2/guacamole-*.war /config/tomcat9/webapps/ROOT.war &amp;&amp; \</span><br><span class="line">cp guacamole-client-v2.5.2/guacamole-*.jar /config/guacamole/extensions/ &amp;&amp; \</span><br><span class="line">mv /opt/docker-guacamole/guacamole.properties /config/guacamole/ &amp;&amp; \</span><br><span class="line">rm -rf /opt/docker-guacamole</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">tar -xf apache-tomcat-9.0.36.tar.gz &amp;&amp; \
+mv apache-tomcat-9.0.36 tomcat9 &amp;&amp; \
+rm -rf /config/tomcat9/webapps/* &amp;&amp; \
+sed -i 's/Connector port="8080"/Connector port="8081"/g' /config/tomcat9/conf/server.xml &amp;&amp; \
+echo "java.util.logging.ConsoleHandler.encoding = UTF-8" &gt;&gt; /config/tomcat9/conf/logging.properties &amp;&amp; \
+wget http://download.jumpserver.org/release/v2.5.2/guacamole-client-v2.5.2.tar.gz &amp;&amp; \
+tar -xf guacamole-client-v2.5.2.tar.gz &amp;&amp; \
+rm -rf guacamole-client-v2.5.2.tar.gz &amp;&amp; \
+cp guacamole-client-v2.5.2/guacamole-*.war /config/tomcat9/webapps/ROOT.war &amp;&amp; \
+cp guacamole-client-v2.5.2/guacamole-*.jar /config/guacamole/extensions/ &amp;&amp; \
+mv /opt/docker-guacamole/guacamole.properties /config/guacamole/ &amp;&amp; \
+rm -rf /opt/docker-guacamole
+</code></pre>
 <p>设置 Guacamole 环境</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">export JUMPSERVER_SERVER=http://127.0.0.1:8080</span><br><span class="line">echo "export JUMPSERVER_SERVER=http://127.0.0.1:8080" &gt;&gt; ~/.bashrc</span><br><span class="line">export BOOTSTRAP_TOKEN=zxffNymGjP79j6BN</span><br><span class="line">echo "export BOOTSTRAP_TOKEN=zxffNymGjP79j6BN" &gt;&gt; ~/.bashrc</span><br><span class="line">export JUMPSERVER_KEY_DIR=/config/guacamole/data/keys</span><br><span class="line">echo "export JUMPSERVER_KEY_DIR=/config/guacamole/data/keys" &gt;&gt; ~/.bashrc</span><br><span class="line">export GUACAMOLE_HOME=/config/guacamole</span><br><span class="line">echo "export GUACAMOLE_HOME=/config/guacamole" &gt;&gt; ~/.bashrc</span><br><span class="line">export GUACAMOLE_LOG_LEVEL=ERROR</span><br><span class="line">echo "export GUACAMOLE_LOG_LEVEL=ERROR" &gt;&gt; ~/.bashrc</span><br><span class="line">export JUMPSERVER_ENABLE_DRIVE=true</span><br><span class="line">echo "export JUMPSERVER_ENABLE_DRIVE=true" &gt;&gt; ~/.bashrc</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">export JUMPSERVER_SERVER=http://127.0.0.1:8080
+echo "export JUMPSERVER_SERVER=http://127.0.0.1:8080" &gt;&gt; ~/.bashrc
+export BOOTSTRAP_TOKEN=zxffNymGjP79j6BN
+echo "export BOOTSTRAP_TOKEN=zxffNymGjP79j6BN" &gt;&gt; ~/.bashrc
+export JUMPSERVER_KEY_DIR=/config/guacamole/data/keys
+echo "export JUMPSERVER_KEY_DIR=/config/guacamole/data/keys" &gt;&gt; ~/.bashrc
+export GUACAMOLE_HOME=/config/guacamole
+echo "export GUACAMOLE_HOME=/config/guacamole" &gt;&gt; ~/.bashrc
+export GUACAMOLE_LOG_LEVEL=ERROR
+echo "export GUACAMOLE_LOG_LEVEL=ERROR" &gt;&gt; ~/.bashrc
+export JUMPSERVER_ENABLE_DRIVE=true
+echo "export JUMPSERVER_ENABLE_DRIVE=true" &gt;&gt; ~/.bashrc
+</code></pre>
 <details class="info" style="box-sizing: inherit; margin: 1.5625em 0px; padding: 0px 0.6rem; overflow: visible; color: rgba(0, 0, 0, 0.87); font-size: 0.64rem; break-inside: avoid; background-color: var(--md-admonition-bg-color); border-left: 0.2rem solid rgb(0, 184, 212); border-radius: 0.1rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0.2rem 0.5rem, rgba(0, 0, 0, 0.1) 0px 0px 0.05rem; display: block; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); font-family: Roboto, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><summary style="box-sizing: inherit; position: relative; margin: 0px -0.6rem 0px -0.8rem; padding: 0.4rem 1.8rem 0.4rem 2rem; font-weight: 700; background-color: rgba(0, 184, 212, 0.1); border-left: 0.2rem solid rgb(0, 184, 212); display: block; min-height: 1rem; border-radius: 0.1rem; cursor: pointer; border-top-color: rgb(0, 184, 212); border-right-color: rgb(0, 184, 212); border-bottom-color: rgb(0, 184, 212); outline: none; -webkit-tap-highlight-color: transparent;">环境变量说明</summary></details>
 
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/guacd start</span><br><span class="line">sh /config/tomcat9/bin/startup.sh</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>/etc/init.d/guacd start
+sh /config/tomcat9/bin/startup.sh
+</code></pre>
 <h3 id="9-1-Docker-部署-Guacamole-组件"><a href="#9-1-Docker-部署-Guacamole-组件" class="headerlink" title="9.1 Docker 部署 Guacamole 组件"></a>9.1 Docker 部署 Guacamole 组件</h3><p>如果前面已经正常部署了 Guacamole, 可以跳过此步骤</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run --name jms_guacamole -d \</span><br><span class="line">  -p 127.0.0.1:8081:8080 \</span><br><span class="line">  -e JUMPSERVER_SERVER=http://&lt;Jumpserver_url&gt; \</span><br><span class="line">  -e BOOTSTRAP_TOKEN=&lt;Jumpserver_BOOTSTRAP_TOKEN&gt; \</span><br><span class="line">  -e GUACAMOLE_LOG_LEVEL=ERROR \</span><br><span class="line">  jumpserver/jms_guacamole:&lt;Tag&gt;</span><br><span class="line">&lt;Jumpserver_url&gt; 为 JumpServer 的 url 地址, &lt;Jumpserver_BOOTSTRAP_TOKEN&gt; 需要从 jumpserver/config.yml 里面获取, 保证一致, &lt;Tag&gt; 是版本</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">docker run --name jms_guacamole -d \
+  -p 127.0.0.1:8081:8080 \
+  -e JUMPSERVER_SERVER=http://&lt;Jumpserver_url&gt; \
+  -e BOOTSTRAP_TOKEN=&lt;Jumpserver_BOOTSTRAP_TOKEN&gt; \
+  -e GUACAMOLE_LOG_LEVEL=ERROR \
+  jumpserver/jms_guacamole:&lt;Tag&gt;
+&lt;Jumpserver_url&gt; 为 JumpServer 的 url 地址, &lt;Jumpserver_BOOTSTRAP_TOKEN&gt; 需要从 jumpserver/config.yml 里面获取, 保证一致, &lt;Tag&gt; 是版本
+</code></pre>
 <p>例:</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run --name jms_guacamole -d \</span><br><span class="line">  -p 127.0.0.1:8081:8080 \</span><br><span class="line">  -e JUMPSERVER_SERVER=http://192.168.244.144:8080 \</span><br><span class="line">  -e BOOTSTRAP_TOKEN=abcdefg1234 \</span><br><span class="line">  -e GUACAMOLE_LOG_LEVEL=ERROR \</span><br><span class="line">  jumpserver/jms_guacamole:v2.5.2</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="10-下载-Lina-组件"><a href="#10-下载-Lina-组件" class="headerlink" title="10. 下载 Lina 组件"></a>10. 下载 Lina 组件</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">wget https://github.com/jumpserver/lina/releases/download/v2.5.2/lina-v2.5.2.tar.gz</span><br><span class="line">tar -xf lina-v2.5.2.tar.gz</span><br><span class="line">mv lina-v2.5.2 lina</span><br><span class="line">chown -R nginx:nginx lina</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="11-下载-Luna-组件"><a href="#11-下载-Luna-组件" class="headerlink" title="11. 下载 Luna 组件"></a>11. 下载 Luna 组件</h3><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">wget https://github.com/jumpserver/luna/releases/download/v2.5.2/luna-v2.5.2.tar.gz</span><br><span class="line">tar -xf luna-v2.5.2.tar.gz</span><br><span class="line">mv luna-v2.5.2 luna</span><br><span class="line">chown -R nginx:nginx luna</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">docker run --name jms_guacamole -d \
+  -p 127.0.0.1:8081:8080 \
+  -e JUMPSERVER_SERVER=http://192.168.244.144:8080 \
+  -e BOOTSTRAP_TOKEN=abcdefg1234 \
+  -e GUACAMOLE_LOG_LEVEL=ERROR \
+  jumpserver/jms_guacamole:v2.5.2
+</code></pre>
+<h3 id="10-下载-Lina-组件"><a href="#10-下载-Lina-组件" class="headerlink" title="10. 下载 Lina 组件"></a>10. 下载 Lina 组件</h3><pre><code class="shell">cd /opt
+wget https://github.com/jumpserver/lina/releases/download/v2.5.2/lina-v2.5.2.tar.gz
+tar -xf lina-v2.5.2.tar.gz
+mv lina-v2.5.2 lina
+chown -R nginx:nginx lina
+</code></pre>
+<h3 id="11-下载-Luna-组件"><a href="#11-下载-Luna-组件" class="headerlink" title="11. 下载 Luna 组件"></a>11. 下载 Luna 组件</h3><pre><code>cd /opt
+wget https://github.com/jumpserver/luna/releases/download/v2.5.2/luna-v2.5.2.tar.gz
+tar -xf luna-v2.5.2.tar.gz
+mv luna-v2.5.2 luna
+chown -R nginx:nginx luna
+</code></pre>
 <h3 id="12-配置-Nginx-整合各组件"><a href="#12-配置-Nginx-整合各组件" class="headerlink" title="12. 配置 Nginx 整合各组件"></a>12. 配置 Nginx 整合各组件</h3><p>参考 <a target="_blank" rel="noopener" href="http://nginx.org/en/linux_packages.html">官方文档</a> 安装最新的稳定版 nginx</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">echo &gt; /etc/nginx/conf.d/default.conf</span><br><span class="line">vi /etc/nginx/conf.d/jumpserver.conf</span><br><span class="line">server {</span><br><span class="line">    listen 80;</span><br><span class="line"></span><br><span class="line">    client_max_body_size 100m;  # 录像及文件上传大小限制</span><br><span class="line"></span><br><span class="line">    location /ui/ {</span><br><span class="line">        try_files $uri / /index.html;</span><br><span class="line">        alias /opt/lina/;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /luna/ {</span><br><span class="line">        try_files $uri / /index.html;</span><br><span class="line">        alias /opt/luna/;  # luna 路径, 如果修改安装目录, 此处需要修改</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /media/ {</span><br><span class="line">        add_header Content-Encoding gzip;</span><br><span class="line">        root /opt/jumpserver/data/;  # 录像位置, 如果修改安装目录, 此处需要修改</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /static/ {</span><br><span class="line">        root /opt/jumpserver/data/;  # 静态资源, 如果修改安装目录, 此处需要修改</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /koko/ {</span><br><span class="line">        proxy_pass       http://localhost:5000;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection "upgrade";</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /guacamole/ {</span><br><span class="line">        proxy_pass       http://localhost:8081/;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection $http_connection;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        access_log off;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /ws/ {</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_pass http://localhost:8070;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_buffering off;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection "upgrade";</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /api/ {</span><br><span class="line">        proxy_pass http://localhost:8080;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location /core/ {</span><br><span class="line">        proxy_pass http://localhost:8080;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    location / {</span><br><span class="line">        rewrite ^/(.*)$ /ui/$1 last;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line">nginx -t</span><br><span class="line">nginx -s reload</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">echo &gt; /etc/nginx/conf.d/default.conf
+vi /etc/nginx/conf.d/jumpserver.conf
+server {
+    listen 80;
 
+    client_max_body_size 100m;  # 录像及文件上传大小限制
+
+    location /ui/ {
+        try_files $uri / /index.html;
+        alias /opt/lina/;
+    }
+
+    location /luna/ {
+        try_files $uri / /index.html;
+        alias /opt/luna/;  # luna 路径, 如果修改安装目录, 此处需要修改
+    }
+
+    location /media/ {
+        add_header Content-Encoding gzip;
+        root /opt/jumpserver/data/;  # 录像位置, 如果修改安装目录, 此处需要修改
+    }
+
+    location /static/ {
+        root /opt/jumpserver/data/;  # 静态资源, 如果修改安装目录, 此处需要修改
+    }
+
+    location /koko/ {
+        proxy_pass       http://localhost:5000;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+    }
+
+    location /guacamole/ {
+        proxy_pass       http://localhost:8081/;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        access_log off;
+    }
+
+    location /ws/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://localhost:8070;
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:8080;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /core/ {
+        proxy_pass http://localhost:8080;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location / {
+        rewrite ^/(.*)$ /ui/$1 last;
+    }
+}
+nginx -t
+nginx -s reload
+</code></pre>
 <h3 id="13-开始使用-JumpServer"><a href="#13-开始使用-JumpServer" class="headerlink" title="13. 开始使用 JumpServer"></a>13. 开始使用 JumpServer</h3><p>检查应用是否已经正常运行</p>
 <p>服务全部启动后, 访问 JumpServer 服务器 nginx 代理的 80 端口, 不要通过8080端口访问 默认账号: admin 密码: admin</p>
 
@@ -1383,7 +1596,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

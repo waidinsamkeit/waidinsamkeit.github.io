@@ -536,8 +536,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h3 id="Spug自动化运维平台搭建"><a href="#Spug自动化运维平台搭建" class="headerlink" title="Spug自动化运维平台搭建"></a>Spug自动化运维平台搭建</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2020-10-20更新日志</span><br></pre></td></tr></tbody></table></figure>
-
+  <h3 id="Spug自动化运维平台搭建"><a href="#Spug自动化运维平台搭建" class="headerlink" title="Spug自动化运维平台搭建"></a>Spug自动化运维平台搭建</h3><pre><code class="shell">2020-10-20更新日志
+</code></pre>
 <ul>
 <li>:smail:首页新增最近登录记录同时移除应用部署图表</li>
 <li>? 优化分页支持显示总条数 #208</li>
@@ -555,8 +555,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>常见问题：<a target="_blank" rel="noopener" href="https://www.spug.dev/docs/faq/">https://www.spug.dev/docs/faq/</a></li>
 </ul>
 <h3 id="演示环境"><a href="#演示环境" class="headerlink" title="演示环境"></a>演示环境</h3><p>演示地址：<a target="_blank" rel="noopener" href="https://demo.spug.dev/">https://demo.spug.dev</a></p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">演示账号: admin </span><br><span class="line">演示密码：spug</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>演示账号: admin 
+演示密码：spug
+</code></pre>
 <h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
 <li><strong>批量执行</strong>: 主机命令在线批量执行</li>
 <li><strong>在线终端</strong>: 主机支持浏览器在线终端登录</li>
@@ -579,23 +580,42 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="1-1安装docker"><a href="#1-1安装docker" class="headerlink" title="1.1安装docker"></a>1.1安装docker</h3><blockquote>
 <p>基于官方文档采用docker搭建，个人喜欢docker-compose</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# yum -y install yum-utils</span><br><span class="line">[root@bogon ~]# yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">[root@bogon ~]# yum -y install docker-ce</span><br><span class="line">[root@bogon ~]# curl -L https://get.daocloud.io/docker/compose/releases/download/1.25.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose //安装docker-compose</span><br><span class="line">[root@bogon ~]# chmod +x /usr/local/bin/docker-compose</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon ~]# yum -y install yum-utils
+[root@bogon ~]# yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+[root@bogon ~]# yum -y install docker-ce
+[root@bogon ~]# curl -L https://get.daocloud.io/docker/compose/releases/download/1.25.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose //安装docker-compose
+[root@bogon ~]# chmod +x /usr/local/bin/docker-compose
+</code></pre>
 <h3 id="1-2编写docker-compose"><a href="#1-2编写docker-compose" class="headerlink" title="1.2编写docker-compose"></a>1.2编写docker-compose</h3><blockquote>
 <p>阿里云的镜像与 <a target="_blank" rel="noopener" href="https://hub.docker.com/r/openspug/spug">Docker hub</a> 同步更新，国内用户建议使用阿里云的镜像。</p>
 <p>我在这儿直接用docker-compose了,因为个人觉得比较好管理</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon spug]# mkdir /usr/local/spug</span><br><span class="line">[root@bogon spug]# cd /usr/local/spug/</span><br><span class="line">[root@bogon spug]# vim docker-compose.yml</span><br><span class="line">[root@bogon spug]# docker-compose up -d // 编写完docker-compose.yml文件,然后启动</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3.1'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">spug:</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">"always"</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry.aliyuncs.com/openspug/spug</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">spug</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8077</span><span class="string">:80</span>  <span class="string">//内部80映射到外部8077端口</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./mydata:/data</span> <span class="string">//数据持久化</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon spug]# mkdir /usr/local/spug
+[root@bogon spug]# cd /usr/local/spug/
+[root@bogon spug]# vim docker-compose.yml
+[root@bogon spug]# docker-compose up -d // 编写完docker-compose.yml文件,然后启动
+</code></pre>
+<pre><code class="yml">version: '3.1'
+services:
+  spug:
+    restart: "always"
+    image: registry.aliyuncs.com/openspug/spug
+    container_name: spug
+    ports:
+      - 8077:80  //内部80映射到外部8077端口
+    volumes:
+      - ./mydata:/data //数据持久化
+</code></pre>
 <blockquote>
 <p>提个醒: 以后只要是使用docker的,都建议把数据持久化到本机目录当中。</p>
 </blockquote>
-<h3 id="1-3-初始化spug"><a href="#1-3-初始化spug" class="headerlink" title="1.3 初始化spug"></a>1.3 初始化spug</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon spug]# docker-compose exec spug init_spug admin sql123.com</span><br><span class="line">// 账号admin 密码sql123.com 自行设定</span><br><span class="line">[root@bogon spug]# docker-compose restart spug //初始化完成需要重启容器</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.20.10:8077/</span><br><span class="line">// 然后登陆就行了,具体使用看官方文档</span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="1-3-初始化spug"><a href="#1-3-初始化spug" class="headerlink" title="1.3 初始化spug"></a>1.3 初始化spug</h3><pre><code class="shell">[root@bogon spug]# docker-compose exec spug init_spug admin sql123.com
+// 账号admin 密码sql123.com 自行设定
+[root@bogon spug]# docker-compose restart spug //初始化完成需要重启容器
+</code></pre>
+<pre><code class="html">http://192.168.20.10:8077/
+// 然后登陆就行了,具体使用看官方文档
+</code></pre>
 <p><img src="https://i.loli.net/2020/10/22/gcJysSdbTf49QvZ.png#vwid=1039&amp;vhei=796" class="lazyload placeholder" data-srcset="https://i.loli.net/2020/10/22/gcJysSdbTf49QvZ.png#vwid=1039&amp;vhei=796" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="spug"></p>
 
   
@@ -718,7 +738,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 2台机器也能做
 
-1.1更改mongo配置文件1234567[root@localhost mongo]# vim conf/mongo.c...</p>
+1.1更改mongo配置文件[root@localhost mongo]# vim conf/mongo.conf
+por...</p>
         </a>
       
       
@@ -1000,7 +1021,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

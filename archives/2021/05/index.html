@@ -593,7 +593,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 请各位记住把所有离线包全拿到本地!!!
 
 在线部署chartmuseum直接使用最简单的 docker run 方式，使用local 本地存储方式，通过 -v 映射到宿主机 /opt/charts更多支持安装方式见官网
-12345678mkdir /opt/chartsdocker run -d \  -p 8080:8080 \  -e DEBUG...
+mkdir /opt/charts
+docker run -d \
+  -p 8080:8080 \
+  -e DEBUG=1 \
+...
       
     
   </div>
@@ -637,7 +641,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
       
         DockerFile
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546FROM centos:8# add our user and group first to make sure their IDs get assigned consistently, regardles...
+FROM centos:8
+
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r -g 1000 redis &amp;&amp; use...
       
     
   </div>
@@ -688,7 +695,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 一个让你能添加、修改和删除投票的管理站点。
 
 我们假定你已经阅读了 安装 Django。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令
-1python3 -m django --version...
+python3 -m django --version
+...
       
     
   </div>
@@ -848,18 +856,20 @@ Clus...
         简单安装使用
  最新版本应该是1.4.1
 
-1git clone https://github.com/nacos-group/nacos-k8s.git
+git clone https://github.com/nacos-group/nacos-k8s.git
 
 
 简单使用
 
-123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
+cd nacos-k8s
+chmod +x quick-startup.sh
+./quick-startup.sh
 
 如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
 
 
 演示使用
-...
+服务...
       
     
   </div>
@@ -908,7 +918,14 @@ Clus...
 
 
 
-12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
+# -*- coding: utf-8 -*- 
+# @Time : 2021/4/21 10:11
+
+
+import requests
+# 定义请求头
+headers = {
+    "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,imag...
       
     
   </div>
@@ -1417,7 +1434,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

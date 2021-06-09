@@ -711,7 +711,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>centos系统参数优化
 内核相关参数(/etc/sysctl.cof)
 
-12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 #...</p>
+vim /etc/sysctl.conf
+net.core.somaxconn = 65535 # 修改端口的监听队列...</p>
         </a>
       
     </div>
@@ -985,7 +986,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

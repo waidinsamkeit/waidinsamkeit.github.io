@@ -543,20 +543,40 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>占用内存小,并发能力强。</li>
 </ul>
 <h2 id="安装docker-compose"><a href="#安装docker-compose" class="headerlink" title="安装docker-compose"></a>安装docker-compose</h2><p>1.个人认为用PIP比其他的还快一些,所以这里用PIP进行安装</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.第一种安装方法</span><br><span class="line">yum -y install python-pip yum-utils device-mapper-persistent-data lvm2  // 安装pip以及后期用到的一些包</span><br><span class="line">pip install docker-compose</span><br><span class="line">2.第二种安装方法</span><br><span class="line">yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo  //添加docker-ce的仓库</span><br><span class="line">yum -y install docker-compose docker-ce</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="部署nginx"><a href="#部署nginx" class="headerlink" title="部署nginx"></a>部署nginx</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkdir /usr/local/nginx</span><br><span class="line">[root@localhost ~]# cd /usr/local/nginx/</span><br><span class="line">[root@localhost ~]# vim docker-compose.yaml</span><br><span class="line">[root@localhost nginx]# docker-compose up -d //写完yaml文件在运行</span><br><span class="line">//接着访问 192.168.1.178:8443</span><br><span class="line">//出现Welecome to nginx即可</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">1.第一种安装方法
+yum -y install python-pip yum-utils device-mapper-persistent-data lvm2  // 安装pip以及后期用到的一些包
+pip install docker-compose
+2.第二种安装方法
+yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo  //添加docker-ce的仓库
+yum -y install docker-compose docker-ce
+</code></pre>
+<h2 id="部署nginx"><a href="#部署nginx" class="headerlink" title="部署nginx"></a>部署nginx</h2><pre><code class="shell">[root@localhost ~]# mkdir /usr/local/nginx
+[root@localhost ~]# cd /usr/local/nginx/
+[root@localhost ~]# vim docker-compose.yaml
+[root@localhost nginx]# docker-compose up -d //写完yaml文件在运行
+//接着访问 192.168.1.178:8443
+//出现Welecome to nginx即可
+</code></pre>
 <p><strong>docker-compose.yaml</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3.1"</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">"always"</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">daocloud.io/library/nginx</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8443</span><span class="string">:80</span> <span class="string">//映射主机端口的8443到容器内部的80端口</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">version: "3.1"
+services:
+  nginx:
+    restart: "always"
+    image: daocloud.io/library/nginx
+    container_name: nginx
+    ports:
+      - 8443:80 //映射主机端口的8443到容器内部的80端口
+</code></pre>
 <h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>通过GUI界面来进行管理容器</p>
 <blockquote>
 <p>采用Portainer进行容器的GUIa</p>
 </blockquote>
 <p>官方地址：<a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://portainer.io/install.html">https://portainer.io/install.html</a></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.简单一点安装吧</span><br><span class="line">[root@localhost portainer]# docker volume create portainer_data</span><br><span class="line">[root@localhost portainer]# docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer</span><br><span class="line">// 访问192.168.1.178:9000</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">1.简单一点安装吧
+[root@localhost portainer]# docker volume create portainer_data
+[root@localhost portainer]# docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+// 访问192.168.1.178:9000
+</code></pre>
 <p><img src="https://blog.micomint.top/usr/uploads/2020/09/3797356710.png#vwid=1914&amp;vhei=988" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/3797356710.png#vwid=1914&amp;vhei=988" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="Portainer.png"></p>
 
   
@@ -954,7 +974,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

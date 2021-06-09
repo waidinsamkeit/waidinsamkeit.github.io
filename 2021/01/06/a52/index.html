@@ -537,11 +537,18 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <h1 id="Ansible远程执行寻找不到环境变量问题"><a href="#Ansible远程执行寻找不到环境变量问题" class="headerlink" title="Ansible远程执行寻找不到环境变量问题"></a>Ansible远程执行寻找不到环境变量问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>Ansible调用shell远程启动java包，找不到<code>JAVA_HOME</code>或者直接输出为空。 </p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon ~]# ansible testserver -m shell -a "nohup java -jar /server/share-0.0.1-SNAPSHOT.jar --spring.profiles.active=test3 &gt; /server/nohup.out  &amp;"</span><br><span class="line">172.16.87.11 | CHANGED | rc=0 &gt;&gt;</span><br><span class="line">nohup: failed to run command ‘java’: No such file or directory</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@bogon ~]# ansible testserver -m shell -a "nohup java -jar /server/share-0.0.1-SNAPSHOT.jar --spring.profiles.active=test3 &gt; /server/nohup.out  &amp;"
+172.16.87.11 | CHANGED | rc=0 &gt;&gt;
+nohup: failed to run command ‘java’: No such file or directory
+</code></pre>
 <h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><ol>
 <li><p>首先，在/etc/profile中声明java的变量,发现执行<code>ansible-playbook</code>返回为空</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/java</span><br><span class="line">export JRE_HOME=/usr/local/java/jre</span><br><span class="line">export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin</span><br></pre></td></tr></tbody></table></figure></li>
+<pre><code class="shell">export JAVA_HOME=/usr/local/java
+export JRE_HOME=/usr/local/java/jre
+export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+</code></pre>
+</li>
 <li><p>其次，在~/.bash_profile中添加环境变量，用ansible远程执行脚本，发现依然输出为空和找不到java….</p>
 </li>
 <li><p>最后…考虑ansible执行的环境变量与登录时使用的环境变量是否有所不同,所以将JAVA_HOME写在<code>/etc/bashrc</code>里面,发现执行结果正常…</p>
@@ -946,7 +953,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

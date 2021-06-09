@@ -500,7 +500,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <div class='md'>
     
       
-        安装Ansible12345678# 更换清华源sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \         -i.bak \         /et...
+        安装Ansible# 更换清华源
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \
+         -i.bak \
+         /etc/yu...
       
     
   </div>
@@ -605,10 +609,18 @@ Helm可以解决那些问题
 
 创建Secret
 
-12345678apiVersion: v1kind: Secretmetadata:   name: mysecrettype: Opaquedate:   username: YWRtaW4=  password: MTc2MTE0NjY1MTdBYmM=
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: mysecret
+type: Opaque
+date: 
+  username: YWRtaW4=
+  password: MTc2MTE0NjY1MTdBYmM=
 
 
-挂载方式(变量方式)...
+挂载方式(变量方式)
+...
       
     
   </div>
@@ -738,7 +750,7 @@ Ingress需要维护更多地域名
 
 ClusterIP：None
 
-部署StatefulSet1234567...
+部署StatefulSet# 首先构建一...
       
     
   </div>
@@ -789,9 +801,15 @@ ClusterIP：None
 管理Pod和ReplicaSet
 部署、滚动升级
 
-Pod资源限制1234567resource: # 调度时候资源配置大小  requests:  memory: "64Mi"  cpu: "250m"limits: # Pod的最大值  memory: "64Mi"  cpu: "250m"
+Pod资源限制resource: # 调度时候资源配置大小
+  requests:
+  memory: "64Mi"
+  cpu: "250m"
+limits: # Pod的最大值
+  memory: "64Mi"
+  cpu: "250m"
 
-健康检查1234567liven...
+健康检查livenessProbe...
       
     
   </div>
@@ -891,7 +909,17 @@ Swap disabled. You MUST disable swap in order for the kubelet to work properly
     
       
         Producer
-123456789101112131415161718192021222324252627282930# -*- coding: utf-8 -*- # @Time : 2021/2/20 9:19 上午 # @Author : Forest# @File : Producer.pyimport jsonimport pikaimport datetime#生成消息入口处d...
+# -*- coding: utf-8 -*- 
+# @Time : 2021/2/20 9:19 上午 
+# @Author : Forest
+# @File : Producer.py
+import json
+import pika
+import datetime
+
+#生成消息入口处
+def get_message():
+    for i in range(10): ...
       
     
   </div>
@@ -995,7 +1023,10 @@ redis集群采用P2P模式，是完全去中心化的，不存在中...
         
 别丢银哈哈哈
 
-1234567891011121314[root@bogon ~]# kill -l 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIG...
+[root@bogon ~]# kill -l
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+ 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
+11) SIGSEGV ...
       
     
   </div>
@@ -1526,7 +1557,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

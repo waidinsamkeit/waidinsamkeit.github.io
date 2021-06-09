@@ -536,23 +536,75 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h1 id="Elasticsearch常用API操作合集"><a href="#Elasticsearch常用API操作合集" class="headerlink" title="Elasticsearch常用API操作合集"></a>Elasticsearch常用API操作合集</h1><h2 id="GET方式"><a href="#GET方式" class="headerlink" title="GET方式"></a>GET方式</h2><h3 id="查询Elastic节点状态"><a href="#查询Elastic节点状态" class="headerlink" title="查询Elastic节点状态"></a>查询Elastic节点状态</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v 192.168.10.1:9200/_cat/health?v</span><br></pre></td></tr></tbody></table></figure>
+  <h1 id="Elasticsearch常用API操作合集"><a href="#Elasticsearch常用API操作合集" class="headerlink" title="Elasticsearch常用API操作合集"></a>Elasticsearch常用API操作合集</h1><h2 id="GET方式"><a href="#GET方式" class="headerlink" title="GET方式"></a>GET方式</h2><h3 id="查询Elastic节点状态"><a href="#查询Elastic节点状态" class="headerlink" title="查询Elastic节点状态"></a>查询Elastic节点状态</h3><pre><code class="shell">curl -v 192.168.10.1:9200/_cat/health?v
+</code></pre>
+<h3 id="初始化索引"><a href="#初始化索引" class="headerlink" title="初始化索引"></a>初始化索引</h3><pre><code class="shell">在创建索引之前 对索引进行初始化操作
+指定shards数量和replicas数量
+curl -XPUT 'http://192.168.10.1:9200/library' -d {
+    "settings":{
+        "index":{
+            "number_of_shards":5,
+            "number_of_replicas":1,   
+        }
+    }
+}
+</code></pre>
+<h3 id="查看索引信息"><a href="#查看索引信息" class="headerlink" title="查看索引信息"></a>查看索引信息</h3><pre><code class="shell">GET 地址/索引名称/_settings
+curl -X GET http://192.168.10.1:9200/test/_settings 
+</code></pre>
+<h3 id="查看多个索引信息"><a href="#查看多个索引信息" class="headerlink" title="查看多个索引信息"></a>查看多个索引信息</h3><pre><code class="shell">GET 地址/索引名称，索引名称/_settings 
+curl -X GET http://192.168.10.1:9200/test,test2/_settings
+</code></pre>
+<h3 id="查询所有索引的信息"><a href="#查询所有索引的信息" class="headerlink" title="查询所有索引的信息"></a>查询所有索引的信息</h3><pre><code class="shell">curl -X GET http://192.168.10.1:9200/_all/_settings
+</code></pre>
+<h3 id="查看所有索引列表"><a href="#查看所有索引列表" class="headerlink" title="查看所有索引列表"></a>查看所有索引列表</h3><pre><code class="shell">curl -X GET 'http://192.168.10.1:9200/_cat/indices?v='
+</code></pre>
+<h3 id="查看索引相关信息"><a href="#查看索引相关信息" class="headerlink" title="查看索引相关信息"></a>查看索引相关信息</h3><pre><code class="shell">1.根据id查看文档信息
+get 地址/索引名称/type名称/文档id
+curl -X GET http://192.168.10.1:9200/test10/people/1
 
-<h3 id="初始化索引"><a href="#初始化索引" class="headerlink" title="初始化索引"></a>初始化索引</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">在创建索引之前 对索引进行初始化操作</span><br><span class="line">指定shards数量和replicas数量</span><br><span class="line">curl -XPUT 'http://192.168.10.1:9200/library' -d {</span><br><span class="line">    "settings":{</span><br><span class="line">        "index":{</span><br><span class="line">            "number_of_shards":5,</span><br><span class="line">            "number_of_replicas":1,   </span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="查看索引信息"><a href="#查看索引信息" class="headerlink" title="查看索引信息"></a>查看索引信息</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET 地址/索引名称/_settings</span><br><span class="line">curl -X GET http://192.168.10.1:9200/test/_settings </span><br></pre></td></tr></tbody></table></figure>
-<h3 id="查看多个索引信息"><a href="#查看多个索引信息" class="headerlink" title="查看多个索引信息"></a>查看多个索引信息</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET 地址/索引名称，索引名称/_settings </span><br><span class="line">curl -X GET http://192.168.10.1:9200/test,test2/_settings</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="查询所有索引的信息"><a href="#查询所有索引的信息" class="headerlink" title="查询所有索引的信息"></a>查询所有索引的信息</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET http://192.168.10.1:9200/_all/_settings</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="查看所有索引列表"><a href="#查看所有索引列表" class="headerlink" title="查看所有索引列表"></a>查看所有索引列表</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://192.168.10.1:9200/_cat/indices?v='</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="查看索引相关信息"><a href="#查看索引相关信息" class="headerlink" title="查看索引相关信息"></a>查看索引相关信息</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.根据id查看文档信息</span><br><span class="line">get 地址/索引名称/type名称/文档id</span><br><span class="line">curl -X GET http://192.168.10.1:9200/test10/people/1</span><br><span class="line"></span><br><span class="line">2.通过source获取指定字段</span><br><span class="line">get /索引名称/type名称/文档id?_source=字段</span><br><span class="line">curl -X GET http://192.168.10.1:9200/test10/people/1?_source=title</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="PUT方式"><a href="#PUT方式" class="headerlink" title="PUT方式"></a>PUT方式</h2><h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">创建一个索引名称为test9的索引</span><br><span class="line">curl -X PUT http://192.168.10.1:9200/test9/ </span><br><span class="line">返回</span><br><span class="line">{</span><br><span class="line">"acknowledged": true,</span><br><span class="line">"shards_acknowledged": true</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="创建索引及类型和文档"><a href="#创建索引及类型和文档" class="headerlink" title="创建索引及类型和文档"></a>创建索引及类型和文档</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT 地址/索引名称/type名称/文档id</span><br><span class="line">curl -X PUT http://192.168.10.1:9200/test10/people/1 -d '{</span><br><span class="line">	"title": "test10"</span><br><span class="line">}' </span><br></pre></td></tr></tbody></table></figure>
-<h3 id="创建索引及类型-不设置文档ID（因为会自动设置文档ID）"><a href="#创建索引及类型-不设置文档ID（因为会自动设置文档ID）" class="headerlink" title="创建索引及类型,不设置文档ID（因为会自动设置文档ID）"></a>创建索引及类型,不设置文档ID（因为会自动设置文档ID）</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST 地址/索引名称/type名称/ </span><br><span class="line">curl -X POST http://192.168.10.1:9200/test11/people/ -d </span><br><span class="line">'{</span><br><span class="line">	"title": "test11"</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="更新同一id下的信息"><a href="#更新同一id下的信息" class="headerlink" title="更新同一id下的信息"></a>更新同一id下的信息</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUT 地址/索引名称/type名称/文档id</span><br><span class="line">curl -X PUT http://192.168.10.1:9200/test10/people/1 -d </span><br><span class="line">'{</span><br><span class="line">	"title": "test10"</span><br><span class="line">}'</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="更新指定字段"><a href="#更新指定字段" class="headerlink" title="更新指定字段"></a>更新指定字段</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST 地址/索引名称/type名称/文档id/_update</span><br><span class="line">curl -X POST  http://192.168.10.1:9200/test10/people/1 -d </span><br><span class="line">'{</span><br><span class="line">	"doc":{</span><br><span class="line">		"title": "testt12"</span><br><span class="line">	}</span><br><span class="line">}'</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><h3 id="delete-地址-索引名称"><a href="#delete-地址-索引名称" class="headerlink" title="delete 地址/索引名称"></a>delete 地址/索引名称</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X DELETE  http://192.168.10.1:9200/test10</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete 地址/索引名称/type名称/文档id</span><br><span class="line">curl -X DELETE  http://192.168.10.1:9200/test10/people/1</span><br></pre></td></tr></tbody></table></figure>
+2.通过source获取指定字段
+get /索引名称/type名称/文档id?_source=字段
+curl -X GET http://192.168.10.1:9200/test10/people/1?_source=title
+</code></pre>
+<h2 id="PUT方式"><a href="#PUT方式" class="headerlink" title="PUT方式"></a>PUT方式</h2><h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><pre><code class="shell">创建一个索引名称为test9的索引
+curl -X PUT http://192.168.10.1:9200/test9/ 
+返回
+{
+"acknowledged": true,
+"shards_acknowledged": true
+}
+</code></pre>
+<h3 id="创建索引及类型和文档"><a href="#创建索引及类型和文档" class="headerlink" title="创建索引及类型和文档"></a>创建索引及类型和文档</h3><pre><code class="shell">PUT 地址/索引名称/type名称/文档id
+curl -X PUT http://192.168.10.1:9200/test10/people/1 -d '{
+    "title": "test10"
+}' 
+</code></pre>
+<h3 id="创建索引及类型-不设置文档ID（因为会自动设置文档ID）"><a href="#创建索引及类型-不设置文档ID（因为会自动设置文档ID）" class="headerlink" title="创建索引及类型,不设置文档ID（因为会自动设置文档ID）"></a>创建索引及类型,不设置文档ID（因为会自动设置文档ID）</h3><pre><code class="shell">POST 地址/索引名称/type名称/ 
+curl -X POST http://192.168.10.1:9200/test11/people/ -d 
+'{
+    "title": "test11"
+}
+</code></pre>
+<h3 id="更新同一id下的信息"><a href="#更新同一id下的信息" class="headerlink" title="更新同一id下的信息"></a>更新同一id下的信息</h3><pre><code class="shell">PUT 地址/索引名称/type名称/文档id
+curl -X PUT http://192.168.10.1:9200/test10/people/1 -d 
+'{
+    "title": "test10"
+}'
+</code></pre>
+<h3 id="更新指定字段"><a href="#更新指定字段" class="headerlink" title="更新指定字段"></a>更新指定字段</h3><pre><code class="shell">POST 地址/索引名称/type名称/文档id/_update
+curl -X POST  http://192.168.10.1:9200/test10/people/1 -d 
+'{
+    "doc":{
+        "title": "testt12"
+    }
+}'
+</code></pre>
+<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><h3 id="delete-地址-索引名称"><a href="#delete-地址-索引名称" class="headerlink" title="delete 地址/索引名称"></a>delete 地址/索引名称</h3><pre><code class="shell">curl -X DELETE  http://192.168.10.1:9200/test10
+</code></pre>
+<h3 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3><pre><code class="shell">delete 地址/索引名称/type名称/文档id
+curl -X DELETE  http://192.168.10.1:9200/test10/people/1
+</code></pre>
 
   
   
@@ -951,7 +1003,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

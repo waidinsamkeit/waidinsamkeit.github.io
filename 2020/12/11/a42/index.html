@@ -559,39 +559,55 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>恢复仍有一定的机率失败，平时应对重要数据作备份，小心使用rm</li>
 </ul>
 <h4 id="1-0安装依赖"><a href="#1-0安装依赖" class="headerlink" title="1.0安装依赖"></a>1.0安装依赖</h4><p><code>Centos7</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install e2fsprogs-devel   e2fsprogs* gcc*</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">yum -y install e2fsprogs-devel   e2fsprogs* gcc*
+</code></pre>
 <p><code>Ubuntu</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential  e2fslibs-dev  e2fslibs-dev</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-0安装编译"><a href="#2-0安装编译" class="headerlink" title="2.0安装编译"></a>2.0安装编译</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://downloads.sourceforge.net/project/extundelete/extundelete/0.2.4/extundelete-0.2.4.tar.bz2</span><br><span class="line">tar -xf  extundelete-0.2.4.tar.bz2</span><br><span class="line">cd  extundelete-0.2.4</span><br><span class="line">./configure --prefix=/usr/local/extundelete</span><br><span class="line">make install</span><br><span class="line">ln -s /usr/local/extundelete/bin/extundelete /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">apt-get install build-essential  e2fslibs-dev  e2fslibs-dev
+</code></pre>
+<h4 id="2-0安装编译"><a href="#2-0安装编译" class="headerlink" title="2.0安装编译"></a>2.0安装编译</h4><pre><code class="shell">wget http://downloads.sourceforge.net/project/extundelete/extundelete/0.2.4/extundelete-0.2.4.tar.bz2
+tar -xf  extundelete-0.2.4.tar.bz2
+cd  extundelete-0.2.4
+./configure --prefix=/usr/local/extundelete
+make install
+ln -s /usr/local/extundelete/bin/extundelete /usr/bin/
+</code></pre>
 <p>使用<code>extundelete -v</code>可以查看版本</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos extundelete-0.2.4]# extundelete -v</span><br><span class="line">extundelete version 0.2.4</span><br><span class="line">libext2fs version 1.42.9</span><br><span class="line">Processor is little endian.</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@VM-0-13-centos extundelete-0.2.4]# extundelete -v
+extundelete version 0.2.4
+libext2fs version 1.42.9
+Processor is little endian.
+</code></pre>
 <h4 id="3-0-进行文件恢复"><a href="#3-0-进行文件恢复" class="headerlink" title="3.0 进行文件恢复"></a>3.0 进行文件恢复</h4><hr>
 <p><strong>1、查看要恢复文件的分区的文件系统</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">df  -Th</span><br><span class="line">Filesystem     Type      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs       devtmpfs  909M     0  909M   0% /dev</span><br><span class="line">tmpfs          tmpfs     920M   24K  920M   1% /dev/shm</span><br><span class="line">tmpfs          tmpfs     920M  468K  919M   1% /run</span><br><span class="line">tmpfs          tmpfs     920M     0  920M   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda1      ext4       50G   11G   37G  23% /</span><br><span class="line">tmpfs          tmpfs     184M     0  184M   0% /run/user/0</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">df  -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+devtmpfs       devtmpfs  909M     0  909M   0% /dev
+tmpfs          tmpfs     920M   24K  920M   1% /dev/shm
+tmpfs          tmpfs     920M  468K  919M   1% /run
+tmpfs          tmpfs     920M     0  920M   0% /sys/fs/cgroup
+/dev/vda1      ext4       50G   11G   37G  23% /
+tmpfs          tmpfs     184M     0  184M   0% /run/user/0
+</code></pre>
 <p><strong>2、对要恢复文件的分区解除挂载</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount /xxx</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">umount /xxx
+</code></pre>
 <p><strong>3、查看可以恢复的数据</strong></p>
 <p>指定误删文件的分区进行查找<br>最后一列标记为Deleted的文件，即为删除了的文件</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extundelete /dev/vdb1 --inode 2 （根分区的inode值是2）</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">extundelete /dev/vdb1 --inode 2 （根分区的inode值是2）
+</code></pre>
 <p><strong>4、恢复单个目录</strong></p>
 <p>指定要恢复的目录名<br>如果是空目录，则不会恢复</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extundelete /dev/vdb1 --restore-directory  ferris</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">extundelete /dev/vdb1 --restore-directory  ferris
+</code></pre>
 <p>当执行恢复文件的命令后，会在执行命令的当前的目录下生成RECOVERED_FILES目录，恢复的文件都会放入此目录中。如未生成目录，即为失败。</p>
 <p><strong>5、恢复单个文件</strong></p>
 <p>指定要恢复的文件名<br>如果几k大小的小文件，有很大几率恢复失败</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extundelete /dev/vdb1 --restore-file openssh-7.7p1.tar.g</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">extundelete /dev/vdb1 --restore-file openssh-7.7p1.tar.g
+</code></pre>
 <p><strong>6、恢复全部删除的文件</strong></p>
 <p>无需指定文件名或目录名，恢复全部删除的数据</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extundelete /dev/vdb1 --restore-all</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">extundelete /dev/vdb1 --restore-all
+</code></pre>
 
   
   
@@ -710,7 +726,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>搭建Leanote个人笔记
 可以作为个人私密笔记本使用
 
-1.0准备环境优先部署mongodb123wget http://labs-1253675457.cosgz.myqcloud.com/...</p>
+1.0准备环境优先部署mongodbwget http://labs-1253675457.cosgz.myqcloud.com/mon...</p>
         </a>
       
       
@@ -991,7 +1007,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

@@ -540,8 +540,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="必要的前提条件"><a href="#必要的前提条件" class="headerlink" title="必要的前提条件"></a>必要的前提条件</h2><ol>
 <li>你需要使用<code>kubelet get node -o wide</code> 查看你的集群状态信息</li>
 </ol>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# kubectl get node -o wide</span><br><span class="line">NAME                STATUS   ROLES    AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION          CONTAINER-RUNTIME</span><br><span class="line">kubernetes-master   Ready    master   37m     v1.16.2   192.168.1.177   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br><span class="line">kubernetes-node1    Ready    &lt;none&gt;   5m11s   v1.16.2   192.168.1.178   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br><span class="line">kubernetes-node2    Ready    &lt;none&gt;   5m1s    v1.16.2   192.168.1.179   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@kubernetes-master ~]# kubectl get node -o wide
+NAME                STATUS   ROLES    AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION          CONTAINER-RUNTIME
+kubernetes-master   Ready    master   37m     v1.16.2   192.168.1.177   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13
+kubernetes-node1    Ready    &lt;none&gt;   5m11s   v1.16.2   192.168.1.178   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13
+kubernetes-node2    Ready    &lt;none&gt;   5m1s    v1.16.2   192.168.1.179   &lt;none&gt;        CentOS Linux 7 (Core)   3.10.0-862.el7.x86_64   docker://19.3.13
+</code></pre>
 <p><strong>如上状态STATUS=Ready即可进行下面的操作</strong></p>
 <ol start="2">
 <li>已经安装好Harbor并且和仓库已经集成Auth认证</li>
@@ -602,10 +606,29 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p><strong>一般都是公司自己使用持续集成,所以需要搭建私有仓库</strong></p>
 <p><strong>此处没有根据大佬吧jenkins交付到k8s上,做一个简单的持续集成jenkins</strong></p>
 <p><strong>再说一次,这个地方超级超级的难,因为要用docker来跑到k8s中</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# docker pull jenkins/jenkins:2.190.3 //我这直接用hub.docker.com的</span><br><span class="line">[root@kubernetes-master jenkins]# docker tag jenkins/jenkins:2.190.3 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 //打标签 这个192.168.1.177是你harbor仓库</span><br><span class="line">[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 // 推送到harbor仓库</span><br><span class="line">[root@kubernetes-master jenkins]# mkdir /usr/local/jenkins/</span><br><span class="line">[root@kubernetes-master jenkins]# cd /usr/local/jenkins</span><br><span class="line">[root@kubernetes-master jenkins]# cp /root/.ssh/id_rsa ./</span><br><span class="line">[root@kubernetes-master jenkins]# cp /root/.docker/config.json</span><br><span class="line">[root@kubernetes-master jenkins]# curl -fsSL get.docker.com -o get-docker.sh</span><br><span class="line">[root@kubernetes-master jenkins]# chmod +x get-docker.sh</span><br><span class="line">[root@kubernetes-master jenkins]# vim dockerfile</span><br><span class="line">[root@kubernetes-master jenkins]# docker build . -t 192.168.1.177:8077/infra/jenkins:v2.190.3 //编辑完dockerfile在构建</span><br><span class="line">[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/infra/jenkins:v2.190.3 </span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="１-４制作Dockerfile文件"><a href="#１-４制作Dockerfile文件" class="headerlink" title="１.４制作Dockerfile文件"></a>１.４<strong>制作Dockerfile文件</strong></h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM 192.168.1.177:8077/ci_cd/jenkins:v2.190.3</span><br><span class="line">USER root</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp;\</span><br><span class="line">    echo 'Asia/Shanghai' &gt; /etc/timezone</span><br><span class="line">ADD id_rsa /root/.ssh/id_rsa</span><br><span class="line">ADD config.json /root/.docker/config.json</span><br><span class="line">ADD get-docker.sh /get-docker.sh</span><br><span class="line">RUN echo "	StrictHostKeyChecking no" &gt;&gt; /etc/ssh/ssh_config &amp;&amp;\</span><br><span class="line">    /get-docker.sh</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@kubernetes-master ~]# docker pull jenkins/jenkins:2.190.3 //我这直接用hub.docker.com的
+[root@kubernetes-master jenkins]# docker tag jenkins/jenkins:2.190.3 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 //打标签 这个192.168.1.177是你harbor仓库
+[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/ci_cd/jenkins:v2.190.3 // 推送到harbor仓库
+[root@kubernetes-master jenkins]# mkdir /usr/local/jenkins/
+[root@kubernetes-master jenkins]# cd /usr/local/jenkins
+[root@kubernetes-master jenkins]# cp /root/.ssh/id_rsa ./
+[root@kubernetes-master jenkins]# cp /root/.docker/config.json
+[root@kubernetes-master jenkins]# curl -fsSL get.docker.com -o get-docker.sh
+[root@kubernetes-master jenkins]# chmod +x get-docker.sh
+[root@kubernetes-master jenkins]# vim dockerfile
+[root@kubernetes-master jenkins]# docker build . -t 192.168.1.177:8077/infra/jenkins:v2.190.3 //编辑完dockerfile在构建
+[root@kubernetes-master jenkins]# docker push 192.168.1.177:8077/infra/jenkins:v2.190.3 
+</code></pre>
+<h4 id="１-４制作Dockerfile文件"><a href="#１-４制作Dockerfile文件" class="headerlink" title="１.４制作Dockerfile文件"></a>１.４<strong>制作Dockerfile文件</strong></h4><pre><code class="shell">FROM 192.168.1.177:8077/ci_cd/jenkins:v2.190.3
+USER root
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp;\
+    echo 'Asia/Shanghai' &gt; /etc/timezone
+ADD id_rsa /root/.ssh/id_rsa
+ADD config.json /root/.docker/config.json
+ADD get-docker.sh /get-docker.sh
+RUN echo "    StrictHostKeyChecking no" &gt;&gt; /etc/ssh/ssh_config &amp;&amp;\
+    /get-docker.sh
+</code></pre>
 <p>这个dockerfile主要有以下几个用途</p>
 <ul>
 <li>设置容器用户为root</li>
@@ -619,67 +642,254 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>注意 由于jenkins属于私有镜像 为了安全你们要去你们的harbor上新建一个私有仓库</p>
 </blockquote>
 <p><img src="https://blog.micomint.top/usr/uploads/2020/09/697847120.png#vwid=1332&amp;vhei=672" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/697847120.png#vwid=1332&amp;vhei=672" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="image-20200923160430545"></p>
-<h4 id="1-5-检测SSh免密是否成功"><a href="#1-5-检测SSh免密是否成功" class="headerlink" title="1.5 检测SSh免密是否成功"></a>1.5 检测SSh免密是否成功</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">You've successfully authenticated 成功 [root@kubernetes-master jenkins]# docker run --rm 192.168.1.177:8077/infra/jenkins:v2.190.3 ssh -i /root/.ssh/id_rsa -T git@gitee.com //如果出现以下提示则成功 </span><br><span class="line">Warning: Permanently added 'gitee.com,212.64.62.183' (ECDSA) to the list of known hosts.</span><br><span class="line">Hi Brave (DeployKey)! You've successfully authenticated, but GITEE.COM does not provide shell access.</span><br><span class="line">Note: Perhaps the current use is DeployKey.</span><br><span class="line">Note: DeployKey only supports pull/fetch operations</span><br><span class="line">// 出现 You've successfully authenticated 成功  如图所示</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="1-5-检测SSh免密是否成功"><a href="#1-5-检测SSh免密是否成功" class="headerlink" title="1.5 检测SSh免密是否成功"></a>1.5 检测SSh免密是否成功</h4><pre><code class="shell">You've successfully authenticated 成功 [root@kubernetes-master jenkins]# docker run --rm 192.168.1.177:8077/infra/jenkins:v2.190.3 ssh -i /root/.ssh/id_rsa -T git@gitee.com //如果出现以下提示则成功 
+Warning: Permanently added 'gitee.com,212.64.62.183' (ECDSA) to the list of known hosts.
+Hi Brave (DeployKey)! You've successfully authenticated, but GITEE.COM does not provide shell access.
+Note: Perhaps the current use is DeployKey.
+Note: DeployKey only supports pull/fetch operations
+// 出现 You've successfully authenticated 成功  如图所示
+</code></pre>
 <p><img src="https://blog.micomint.top/usr/uploads/2020/09/1186952419.png#vwid=1127&amp;vhei=146" class="lazyload placeholder" data-srcset="https://blog.micomint.top/usr/uploads/2020/09/1186952419.png#vwid=1127&amp;vhei=146" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="image-20200923200017524"></p>
-<h2 id="2-1Kubernetes创建jenkins命名空间"><a href="#2-1Kubernetes创建jenkins命名空间" class="headerlink" title="2.1Kubernetes创建jenkins命名空间"></a>2.1Kubernetes创建jenkins命名空间</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl create ns infra</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="2-1Kubernetes创建jenkins命名空间"><a href="#2-1Kubernetes创建jenkins命名空间" class="headerlink" title="2.1Kubernetes创建jenkins命名空间"></a>2.1Kubernetes创建jenkins命名空间</h2><pre><code class="shell">[root@kubernetes-master jenkins]# kubectl create ns infra
+</code></pre>
 <blockquote>
 <p>注意 此时我们需要把jenkins放入到infra这个单独的名称空间 由于jenkins放入到名称空间以后 从harbor上拉取镜像已经不仅仅需要的是docker login了。</p>
 <p>你还需要做以下操作</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl create secret docker-registry harbor --docker-server=192.178.1.177:8077 --docker-username=admin --docker-password=Harbor12345 -n infra //需要为jenkins创建一个secret资源,类型为docker-registry 名字为harbor</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@kubernetes-master jenkins]# kubectl create secret docker-registry harbor --docker-server=192.178.1.177:8077 --docker-username=admin --docker-password=Harbor12345 -n infra //需要为jenkins创建一个secret资源,类型为docker-registry 名字为harbor
+</code></pre>
 <h4 id="2-2-Kubernetes中Pod共享数据"><a href="#2-2-Kubernetes中Pod共享数据" class="headerlink" title="2.2 Kubernetes中Pod共享数据"></a>2.2 Kubernetes中Pod共享数据</h4><p><strong>这里准备一个共享存储,采用NFS</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# yum -y install nfs-utils</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@kubernetes-master jenkins]# yum -y install nfs-utils
+</code></pre>
 <ul>
 <li>192.168.1.178作为共享存储的客户端,这里是重点一定是在node1节点上进行</li>
 <li>所有的Pod数据都需要挂载到共享存储</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-node1 ~]# vim /etc/exports</span><br><span class="line">/data/nfs-volume 192.168.1.0/24(rw,ro_root_squash) //共享给主机的IP段</span><br><span class="line">[root@kubernetes-node1 ~]# mkdir /data/nfs-volume</span><br><span class="line">[root@kubernetes-node1 ~]# mkdir /data/nfs-volume/jenkins_home</span><br><span class="line">[root@kubernetes-node1 ~]# systemctl start nfs</span><br><span class="line">[root@kubernetes-node1 ~]# systemctl enable nfs</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@kubernetes-node1 ~]# vim /etc/exports
+/data/nfs-volume 192.168.1.0/24(rw,ro_root_squash) //共享给主机的IP段
+[root@kubernetes-node1 ~]# mkdir /data/nfs-volume
+[root@kubernetes-node1 ~]# mkdir /data/nfs-volume/jenkins_home
+[root@kubernetes-node1 ~]# systemctl start nfs
+[root@kubernetes-node1 ~]# systemctl enable nfs
+</code></pre>
 <p><strong>准备jenkins资源配置清单</strong></p>
 <ul>
 <li>deployment </li>
 <li>services</li>
 <li>ingress</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# vim jenkins_dep.yaml</span><br><span class="line">[root@kubernetes-master jenkins]# vim service.yaml</span><br><span class="line">[root@kubernetes-master jenkins]# vim ingress.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="shell">[root@kubernetes-master jenkins]# vim jenkins_dep.yaml
+[root@kubernetes-master jenkins]# vim service.yaml
+[root@kubernetes-master jenkins]# vim ingress.yaml
+</code></pre>
 <p><strong>deployment原版</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="string">//注意</span> <span class="string">有些kubernetes版本会报错误</span> <span class="string">使用extensions/v1beta1即可</span> </span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line">  <span class="attr">labels:</span> </span><br><span class="line">    <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span> </span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span> </span><br><span class="line">        <span class="attr">app:</span> <span class="string">jenkins</span> </span><br><span class="line">        <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">nfs:</span> </span><br><span class="line">          <span class="attr">server:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.178</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/data/nfs-volume/jenkins_home</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">        <span class="attr">hostPath:</span> </span><br><span class="line">          <span class="attr">path:</span> <span class="string">/run/docker.sock</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">''</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">image:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.177</span><span class="string">:8077/infra/jenkins:v2.190.3</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8080</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">JAVA_OPTS</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">-Xmx512m</span> <span class="string">-Xms512m</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/var/jenkins_home</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/run/docker.sock</span></span><br><span class="line">      <span class="attr">imagePullSecrets:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">harbor</span></span><br><span class="line">      <span class="attr">securityContext:</span> </span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span> </span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">7</span></span><br><span class="line">  <span class="attr">progressDeadlineSeconds:</span> <span class="number">600</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kind: Deployment
+apiVersion: apps/v1 //注意 有些kubernetes版本会报错误 使用extensions/v1beta1即可 
+metadata:
+  name: jenkins
+  namespace: infra
+  labels: 
+    name: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: jenkins
+  template:
+    metadata:
+      labels: 
+        app: jenkins 
+        name: jenkins
+    spec:
+      volumes:
+      - name: data
+        nfs: 
+          server: 192.168.1.178
+          path: /data/nfs-volume/jenkins_home
+      - name: docker
+        hostPath: 
+          path: /run/docker.sock
+          type: ''
+      containers:
+      - name: jenkins
+        image: 192.168.1.177:8077/infra/jenkins:v2.190.3
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx512m -Xms512m
+        volumeMounts:
+        - name: data
+          mountPath: /var/jenkins_home
+        - name: docker
+          mountPath: /run/docker.sock
+      imagePullSecrets:
+      - name: harbor
+      securityContext: 
+        runAsUser: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxUnavailable: 1
+      maxSurge: 0
+  revisionHistoryLimit: 7
+  progressDeadlineSeconds: 600
+</code></pre>
 <p><strong>deployment注释版</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Kind:</span> <span class="string">Deployment</span> <span class="string">//Pod控制器类型</span> <span class="string">还有一种是daemonset,daemonset每个节点上都会运行一个</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="string">//注意</span> <span class="string">有些kubernetes版本会报错误</span> <span class="string">使用extensions/v1beta1即可</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespaces:</span> <span class="string">infra</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span> <span class="string">//根据replicas启动</span> <span class="string">启动1个</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">template:</span>   <span class="string">//Pod的模板</span></span><br><span class="line">    <span class="attr">metadate:</span></span><br><span class="line">      <span class="attr">lables:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">nfs:</span></span><br><span class="line">          <span class="attr">server:</span> <span class="string">kubernetes-node1</span>  <span class="string">//这个地方写NFS服务的主机名或者IP</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/data/nfs-volume/jenkins_home</span> <span class="string">//挂载目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span> </span><br><span class="line">        <span class="attr">hostpath:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">/run/docker.sock</span> <span class="string">//挂载到/run/docker.sock</span> <span class="string">可以与docker服务段进行通信</span></span><br><span class="line">        <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">        <span class="attr">image:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.177</span><span class="string">:8077/infra/jenkins:v2.190.3</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="string">//分为</span> <span class="string">always</span> <span class="string">never</span> <span class="string">ifnotpresent</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8080</span> <span class="string">//往外映射端口为8080</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">JAVA_OPTS</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">-Xmx512m</span> <span class="string">-Xms512m</span> <span class="string">//赋予jenkins内存</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/var/jenkins_home</span> <span class="string">//挂载内部jenkins的/var/jenkins_home到nfs的/data</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/run/docker.sock</span> <span class="string">//</span> <span class="string">挂载内部/run/docker.sock</span> <span class="string">到docker存储</span></span><br><span class="line">      <span class="attr">imagePullSecrets:</span> <span class="string">//镜像Secrets的资源类型</span> <span class="string">只要是私有仓库都需要create</span> <span class="string">secrets</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">harbor</span>    <span class="string">//名字为harbor</span> </span><br><span class="line">      <span class="attr">securityContext:</span> </span><br><span class="line">        <span class="attr">runAsUser:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span>  <span class="string">//默认采用滚动升级</span></span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">0</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">7</span> <span class="string">//留几分老数据</span></span><br><span class="line">  <span class="attr">progressDeadlineSeconds:</span> <span class="number">600</span> <span class="string">//到底容器运行多少时间依旧不正常</span> <span class="string">60s为1分钟</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">Kind: Deployment //Pod控制器类型 还有一种是daemonset,daemonset每个节点上都会运行一个
+apiVersion: apps/v1 //注意 有些kubernetes版本会报错误 使用extensions/v1beta1即可
+metadata:
+  name: jenkins
+  namespaces: infra
+  labels:
+    name: jenkins
+spec:
+  replicas: 1 //根据replicas启动 启动1个
+  selector:
+    matchLabels:
+      name: jenkins
+  template:   //Pod的模板
+    metadate:
+      lables:
+        app: jenkins
+        name: jenkins
+    spec:
+      volumes:
+      - name: data
+        nfs:
+          server: kubernetes-node1  //这个地方写NFS服务的主机名或者IP
+          path: /data/nfs-volume/jenkins_home //挂载目录
+      - name: docker 
+        hostpath:
+          path: /run/docker.sock //挂载到/run/docker.sock 可以与docker服务段进行通信
+        containers:
+      - name: jenkins
+        image: 192.168.1.177:8077/infra/jenkins:v2.190.3
+        imagePullPolicy: IfNotPresent //分为 always never ifnotpresent
+        ports:
+        - containerPort: 8080 //往外映射端口为8080
+          protocol: TCP
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx512m -Xms512m //赋予jenkins内存
+        volumeMounts:
+        - name: data
+          mountPath: /var/jenkins_home //挂载内部jenkins的/var/jenkins_home到nfs的/data
+        - name: docker
+          mountPath: /run/docker.sock // 挂载内部/run/docker.sock 到docker存储
+      imagePullSecrets: //镜像Secrets的资源类型 只要是私有仓库都需要create secrets
+      - name: harbor    //名字为harbor 
+      securityContext: 
+        runAsUser: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:  //默认采用滚动升级
+      maxUnavailable: 1
+      maxSurge: 0
+  revisionHistoryLimit: 7 //留几分老数据
+  progressDeadlineSeconds: 600 //到底容器运行多少时间依旧不正常 60s为1分钟
+</code></pre>
 <p><strong>service</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span> </span><br><span class="line">  <span class="attr">ports:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">8080</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30111</span> </span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">jenkins</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kind: Service
+apiVersion: v1
+metadata: 
+  name: jenkins
+  namespace: infra
+spec:
+  type: NodePort 
+  ports: 
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+    nodePort: 30111 
+  selector:
+    app: jenkins
+</code></pre>
 <p><strong>service注释版</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span> <span class="string">//设置端口暴露节点的方式</span> <span class="string">NodePort和ingress</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span>    <span class="string">//集群网络的80端口</span> </span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">8080</span> <span class="string">//容器内部运行端口</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30111</span> <span class="string">//供给外部映射访问的端口为Cluster</span> <span class="string">IP+30111</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">jenkins</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kind: Service
+apiVersion: v1
+metadata: 
+  name: jenkins
+  namespace: infra
+spec:
+  type: NodePort //设置端口暴露节点的方式 NodePort和ingress
+  ports:
+  - protocol: TCP
+    port: 80    //集群网络的80端口 
+    targetPort: 8080 //容器内部运行端口
+    nodePort: 30111 //供给外部映射访问的端口为Cluster IP+30111
+  selector:
+    app: jenkins
+</code></pre>
 <p><strong>ingress</strong> 其实你也可以不用ingress 如果你没有dns解析的话</p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">jenkins.k.com</span></span><br><span class="line">    <span class="attr">http:</span></span><br><span class="line">      <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">backend:</span> </span><br><span class="line">          <span class="attr">serviceName:</span> <span class="string">jenkins</span></span><br><span class="line">          <span class="attr">servicePort:</span> <span class="number">80</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kind: Ingress
+apiVersion: apps/v1
+metadata: 
+  name: jenkins
+  namespace: infra
+spec:
+  rules:
+  - host: jenkins.k.com
+    http:
+      paths:
+      - path: /
+        backend: 
+          serviceName: jenkins
+          servicePort: 80
+</code></pre>
 <p><strong>ingress注释版</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">infra</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">jenkins.k.com</span> <span class="string">//注意这个地方不能用IP</span> <span class="string">需要做DNS解析</span></span><br><span class="line">    <span class="attr">http:</span></span><br><span class="line">      <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">backend:</span> </span><br><span class="line">          <span class="attr">serviceName:</span> <span class="string">jenkins</span></span><br><span class="line">          <span class="attr">servicePort:</span> <span class="number">80</span> <span class="string">//service的port必须要与ingress的端口匹配</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-3部署yaml文件"><a href="#2-3部署yaml文件" class="headerlink" title="2.3部署yaml文件"></a>2.3部署yaml文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f jenkins_dep.yaml	</span><br><span class="line">deployment.apps/jenkins created</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f service.yaml</span><br><span class="line">service/jenkins created</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl apply -f ingress.yaml</span><br><span class="line">ingress.extensions/jenkins created</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kind: Ingress
+apiVersion: apps/v1
+metadata: 
+  name: jenkins
+  namespace: infra
+spec:
+  rules:
+  - host: jenkins.k.com //注意这个地方不能用IP 需要做DNS解析
+    http:
+      paths:
+      - path: /
+        backend: 
+          serviceName: jenkins
+          servicePort: 80 //service的port必须要与ingress的端口匹配
+</code></pre>
+<h4 id="2-3部署yaml文件"><a href="#2-3部署yaml文件" class="headerlink" title="2.3部署yaml文件"></a>2.3部署yaml文件</h4><pre><code class="shell">[root@kubernetes-master jenkins]# kubectl apply -f jenkins_dep.yaml    
+deployment.apps/jenkins created
+[root@kubernetes-master jenkins]# kubectl apply -f service.yaml
+service/jenkins created
+[root@kubernetes-master jenkins]# kubectl apply -f ingress.yaml
+ingress.extensions/jenkins created
+</code></pre>
 <p><strong>查看部署的容器</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master ~]# kubectl get pods -n infra</span><br><span class="line">NAME                       READY   STATUS              RESTARTS   AGE</span><br><span class="line">jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m8s</span><br><span class="line">// 容器正在创建中</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">[root@kubernetes-master ~]# kubectl get all -n infra</span><br><span class="line">NAME                           READY   STATUS              RESTARTS   AGE</span><br><span class="line">pod/jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m50s</span><br><span class="line"></span><br><span class="line">NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE</span><br><span class="line">service/jenkins   ClusterIP   10.1.35.175   &lt;none&gt;        80/TCP    3m5s</span><br><span class="line"></span><br><span class="line">NAME                      READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">deployment.apps/jenkins   0/1     1            0           4m50s</span><br><span class="line"></span><br><span class="line">NAME                                 DESIRED   CURRENT   READY   AGE</span><br><span class="line">replicaset.apps/jenkins-546fbb867c   1         1         0       4m50s</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">[root@kubernetes-master ~]# kubectl get pods -n infra
+NAME                       READY   STATUS              RESTARTS   AGE
+jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m8s
+// 容器正在创建中
+----------------------------------------------------------------------
+[root@kubernetes-master ~]# kubectl get all -n infra
+NAME                           READY   STATUS              RESTARTS   AGE
+pod/jenkins-546fbb867c-jpfv8   0/1     ContainerCreating   0          4m50s
 
+NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+service/jenkins   ClusterIP   10.1.35.175   &lt;none&gt;        80/TCP    3m5s
 
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/jenkins   0/1     1            0           4m50s
 
-<h4 id="2-4错误排查"><a href="#2-4错误排查" class="headerlink" title="2.4错误排查"></a>2.4错误排查</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master jenkins]# kubectl describe  pods -n infra //可以查看Pod详细信息</span><br><span class="line">[root@kubernetes-master jenkins]# kubectl get pods -n infra</span><br><span class="line">NAME                       READY   STATUS    RESTARTS   AGE</span><br><span class="line">jenkins-7bbd44dc8b-ngv8f   1/1     Running   0          4m17s</span><br><span class="line">// 如果是Running就是运行正常</span><br></pre></td></tr></tbody></table></figure>
-
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/jenkins-546fbb867c   1         1         0       4m50s
+</code></pre>
+<h4 id="2-4错误排查"><a href="#2-4错误排查" class="headerlink" title="2.4错误排查"></a>2.4错误排查</h4><pre><code class="shell">[root@kubernetes-master jenkins]# kubectl describe  pods -n infra //可以查看Pod详细信息
+[root@kubernetes-master jenkins]# kubectl get pods -n infra
+NAME                       READY   STATUS    RESTARTS   AGE
+jenkins-7bbd44dc8b-ngv8f   1/1     Running   0          4m17s
+// 如果是Running就是运行正常
+</code></pre>
 <ol>
 <li><p>如果遇到拉取镜像错误</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed       7m36s                   kubelet, kubernetes-node1  Failed to pull image "192.168.1.177:8077/infra/jenkins:v2.190.3": rpc error: code = Unknown desc = Error response from daemon: Get https://192.168.1.177:8077/v2/: http: server gave HTTP response to HTTPS client</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">Failed       7m36s                   kubelet, kubernetes-node1  Failed to pull image "192.168.1.177:8077/infra/jenkins:v2.190.3": rpc error: code = Unknown desc = Error response from daemon: Get https://192.168.1.177:8077/v2/: http: server gave HTTP response to HTTPS client
+</code></pre>
 <blockquote>
 <p>解决方法1：cp /root/.docker/config.json到node节点上 因为harbor是通过认证密钥来获取镜像 这个错误大多数都是拉取不了镜像</p>
 <p>解决方法2：vim /etc/docker/daemon.json</p>
@@ -1102,7 +1312,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

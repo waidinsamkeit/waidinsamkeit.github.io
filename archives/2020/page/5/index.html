@@ -608,7 +608,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         centos系统参数优化
 内核相关参数(/etc/sysctl.cof)
 
-12345678910vim /etc/sysctl.confnet.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目net.ipv4.tcp_max_syn_b...
+vim /etc/sysctl.conf
+net.core.somaxconn = 65535 # 修改端口的监听队列长度 一般为2048
+net.core.netdev_max_backlog = 65535 # 决定每个网络接受包比网络快的情况下的数目
+net.ipv4.tcp_max_syn_backlog =...
       
     
   </div>
@@ -731,7 +734,7 @@ innodb_file_per_table (如果此参数为ON)
 
 
 演示参数ON
-1234567891011mysql&gt; sh...
+mysql&gt; show variables ...
       
     
   </div>
@@ -778,11 +781,15 @@ innodb_file_per_table (如果此参数为ON)
     
       
         MySQL服务器参数其他常用配置参数
-12345sync_binlog 控制mysql如何向磁盘刷新binlog- 防止主DB崩溃以后Cache同步不到binlog日志tmp_table_size和max_heap_table_size - 控制内存临时表大小max_connections 控制运行的最大连接数
+sync_binlog 控制mysql如何向磁盘刷新binlog
+- 防止主DB崩溃以后Cache同步不到binlog日志
+tmp_table_size和max_heap_table_size 
+- 控制内存临时表大小
+max_connections 控制运行的最大连接数
 
 数据库设计对性能的印象
 MySQL最多只能关联61个表
-过分的反范式化为表建立...
+过分的反范式化为表建立太...
       
     
   </div>
@@ -1307,7 +1314,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

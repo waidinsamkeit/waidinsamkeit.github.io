@@ -502,7 +502,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
       
         Kubernetes-GUI管理​    Dashboard是管理Kubernetes集群一个WEB GUI插件，可以再浏览器中实现资源配置和查看。可参考：https://github.com/kubernetes/dashboard
-1.1准备Dashbord镜像1234[root@kubernetes-master ~]# docker pull k8scn/kubernetes-das...
+1.1准备Dashbord镜像[root@kubernetes-master ~]# docker pull k8scn/kubernetes-dashboa...
       
     
   </div>
@@ -601,7 +601,10 @@ logstash-6.3.2
     
       
         项目中使用Nginx服务实现文件的访问，由于和tomcat的接口不是一个域，前端VUE做了图片处理，导致出现跨域问题.
-12345location /file {            alias  /kjc;            add_header Access-Control-Allow-Origin *;            add_header Access-Control-A...
+location /file {
+            alias  /kjc;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-All...
       
     
   </div>
@@ -647,12 +650,16 @@ logstash-6.3.2
   <div class='md'>
     
       
-        NGinx优化-常规优化1.1nginx连接数优化1234events {    worker_connections  65530;  //设置nginx最大连接,最多为65535    use epoll; //采用epoll模型，作用于event的I/O异步}
+        NGinx优化-常规优化1.1nginx连接数优化events {
+    worker_connections  65530;  //设置nginx最大连接,最多为65535
+    use epoll; //采用epoll模型，作用于event的I/O异步
+}
 
 
 进程优化
 
-1234worker_processes 8;//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8...
+worker_processes 8;
+//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8如果超出...
       
     
   </div>
@@ -701,7 +708,11 @@ logstash-6.3.2
         Redis主从复制搭建1.1运行超级无敌垃圾的脚本
 脚本每个人的环境不同.可能有的会有问题，按照自己的环境来改和执行
 
-1234567891011121314151617181920212223[root@localhost redis]# vim start.sh  //就是不想手动敲那么累，全是命令拼凑#!/bin/bashRedis_home=/usr/local/redis# sta...
+[root@localhost redis]# vim start.sh  //就是不想手动敲那么累，全是命令拼凑
+#!/bin/bash
+Redis_home=/usr/local/redis
+# start dow redis
+echo -e "\033[41;36m ...
       
     
   </div>
@@ -754,7 +765,8 @@ logstash-6.3.2
 从IP：192.168.1.101
 准备配置如下，每台服务器都执行
 
-12345678sudo echo "never" &gt; /sys/kernel/mm/transparent_hugepage/enabledsudo echo "never" &gt;  /sys/kernel/mm/transpa...
+sudo echo "never" &gt; /sys/kernel/mm/transparent_hugepage/enabled
+sudo echo "never" &gt;  /sys/kernel/mm/transparent_hu...
       
     
   </div>
@@ -805,7 +817,9 @@ logstash-6.3.2
 PS: 必须有java的环境,怎么配置看我博客文章搜java即可。
 
 优先环境准备，禁用防火墙和selinux
-1234systemctl stop firewalldsystemctl disable firewalldsed -i '/^SELINUX=/s/enforcing/disable...
+systemctl stop firewalld
+systemctl disable firewalld
+sed -i '/^SELINUX=/s/enforcing/disabled/...
       
     
   </div>
@@ -855,7 +869,8 @@ PS: 必须有java的环境,怎么配置看我博客文章搜java即可。
 必要的前提条件
 你需要使用kubelet get node -o wide 查看你的集群状态信息
 
-12345[root@kubernetes-master ~]# kubectl get node -o wideN...
+[root@kubernetes-master ~]# kubectl get node -o wide
+NAME ...
       
     
   </div>
@@ -1508,7 +1523,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

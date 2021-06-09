@@ -574,8 +574,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>内存1Gb以上</li>
 <li>以下命令两台主机全部执行</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo "192.168.1.100 Zabbix-server" &gt;&gt; /etc/hosts</span><br><span class="line">echo "192.168.1.101 Zabbix-agent" &gt;&gt; /etc/hosts</span><br><span class="line">wget -o /etc/yum.repos.d/Centos-SCLo-rh.repo https://gitee.com/brave_heart_one/rh-scl/blob/master/Centos-SCLo-rh.repo</span><br><span class="line">关闭selinux和firewalld</span><br><span class="line">reboot</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">echo "192.168.1.100 Zabbix-server" &gt;&gt; /etc/hosts
+echo "192.168.1.101 Zabbix-agent" &gt;&gt; /etc/hosts
+wget -o /etc/yum.repos.d/Centos-SCLo-rh.repo https://gitee.com/brave_heart_one/rh-scl/blob/master/Centos-SCLo-rh.repo
+关闭selinux和firewalld
+reboot
+</code></pre>
 <h4 id="注意PHP的版本"><a href="#注意PHP的版本" class="headerlink" title="注意PHP的版本"></a>注意PHP的版本</h4><p>The minimum required PHP version has been upped to <strong>7.2.0</strong> from 5.4.0.</p>
 <blockquote>
 <p>Zabbix5.x支持的PHP版本已经不支持5.4.0 需要支持7.2</p>
@@ -590,26 +594,48 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <blockquote>
 <p>以下安装方法仅仅适用于Centos与Redhat发行版本</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm</span><br><span class="line">[root@Zabbix-server ~]# yum clean all</span><br><span class="line">[root@Zabbix-server ~]# yum install zabbix-server-mysql</span><br><span class="line">[root@Zabbix-server ~]# yum install -y centos-release-scl</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-1-1配置zabbix仓库"><a href="#1-1-1配置zabbix仓库" class="headerlink" title="1.1.1配置zabbix仓库"></a>1.1.1配置zabbix仓库</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-agent ~]# vim /etc/yum.repos.d/zabbix.repo</span><br><span class="line">enabled=1  //将里面的所有enable改为1</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-1-2开始安装zabbix-web"><a href="#1-1-2开始安装zabbix-web" class="headerlink" title="1.1.2开始安装zabbix-web"></a>1.1.2开始安装zabbix-web</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# yum install zabbix-web-mysql-scl zabbix-nginx-conf-scl -y</span><br><span class="line">[root@Zabbix-server ~]# scl enable rh-php72 bash //运行php,此步骤仅限scl安装的php启动</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-1-3-安装mysql8-0"><a href="#1-1-3-安装mysql8-0" class="headerlink" title="1.1.3 安装mysql8.0"></a>1.1.3 安装mysql8.0</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm</span><br><span class="line">[root@x-server ~]# rpm -ivh mysql80-community-release-el7-3.noarch.rpm</span><br><span class="line">[root@Zabbix-server ~]# systemctl enable mysqld</span><br><span class="line">[root@Zabbix-server ~]# systemctl restart mysqld</span><br><span class="line">[root@Zabbix-server ~]# mysql -u root  //切记修改密码</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">[root@Zabbix-server ~]# rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+[root@Zabbix-server ~]# yum clean all
+[root@Zabbix-server ~]# yum install zabbix-server-mysql
+[root@Zabbix-server ~]# yum install -y centos-release-scl
+</code></pre>
+<h5 id="1-1-1配置zabbix仓库"><a href="#1-1-1配置zabbix仓库" class="headerlink" title="1.1.1配置zabbix仓库"></a>1.1.1配置zabbix仓库</h5><pre><code class="shell">[root@Zabbix-agent ~]# vim /etc/yum.repos.d/zabbix.repo
+enabled=1  //将里面的所有enable改为1
+</code></pre>
+<h5 id="1-1-2开始安装zabbix-web"><a href="#1-1-2开始安装zabbix-web" class="headerlink" title="1.1.2开始安装zabbix-web"></a>1.1.2开始安装zabbix-web</h5><pre><code class="shell">[root@Zabbix-server ~]# yum install zabbix-web-mysql-scl zabbix-nginx-conf-scl -y
+[root@Zabbix-server ~]# scl enable rh-php72 bash //运行php,此步骤仅限scl安装的php启动
+</code></pre>
+<h5 id="1-1-3-安装mysql8-0"><a href="#1-1-3-安装mysql8-0" class="headerlink" title="1.1.3 安装mysql8.0"></a>1.1.3 安装mysql8.0</h5><pre><code class="shell">[root@Zabbix-server ~]# wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+[root@x-server ~]# rpm -ivh mysql80-community-release-el7-3.noarch.rpm
+[root@Zabbix-server ~]# systemctl enable mysqld
+[root@Zabbix-server ~]# systemctl restart mysqld
+[root@Zabbix-server ~]# mysql -u root  //切记修改密码
+</code></pre>
 <blockquote>
 <p>怎么修改mysql密码我就不多说了</p>
 </blockquote>
 <p><a href="https://blog.micomint.top/index.php/archives/19/">传送门</a></p>
-<h5 id="1-4导入zabbix数据库"><a href="#1-4导入zabbix数据库" class="headerlink" title="1.4导入zabbix数据库"></a>1.4导入zabbix数据库</h5><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# mysql -u root -p</span><br><span class="line">mysql&gt; create database zabbix character set utf8 collate utf8_bin;</span><br><span class="line">mysql&gt; create user 'zabbix'@'localhost' identified with mysql_native_password by '123.comA'; //zabbix库允许用户zabbix的登陆密码123.comA</span><br><span class="line">mysql&gt; grant all privileges on zabbix.* to zabbix@localhost;</span><br><span class="line">mysql&gt; quit;</span><br><span class="line">[root@Zabbix-server ~]# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix</span><br><span class="line">[root@Zabbix-server ~]# vim /etc/zabbix/zabbix_server.conf</span><br><span class="line">DBPassword=123.comA // zabbix用户的密码</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-5为zabbix配置php"><a href="#1-5为zabbix配置php" class="headerlink" title="1.5为zabbix配置php"></a>1.5为zabbix配置php</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# vim /etc/opt/rh/rh-nginx116/nginx/conf.d/zabbix.conf</span><br><span class="line">        listen          8088; //监听端口为8088</span><br><span class="line"><span class="meta">#</span><span class="bash">        server_name     example.com; //此项可以不修改</span></span><br><span class="line">[root@Zabbix-server ~]# vim /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf</span><br><span class="line">listen.acl_users = apache,nginx // 在apache用户后面加入nginx</span><br><span class="line">php_value[date.timezone] = Asia/shanghai //去掉;并且加入自己的时区</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-6-启动zabbix-server"><a href="#1-6-启动zabbix-server" class="headerlink" title="1.6 启动zabbix-server"></a>1.6 启动zabbix-server</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Zabbix-server ~]# systemctl enable zabbix-server  rh-nginx116-nginx rh-php72-php-fpm</span><br><span class="line">[root@Zabbix-server ~]# systemctl restart zabbix-server  rh-nginx116-nginx rh-php72-php-fpm	</span><br></pre></td></tr></tbody></table></figure>
-
-<h5 id="1-7-访问zabbix"><a href="#1-7-访问zabbix" class="headerlink" title="1.7 访问zabbix"></a>1.7 访问zabbix</h5><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">访问 http://192.168.20.22:8088</span><br></pre></td></tr></tbody></table></figure>
-
+<h5 id="1-4导入zabbix数据库"><a href="#1-4导入zabbix数据库" class="headerlink" title="1.4导入zabbix数据库"></a>1.4导入zabbix数据库</h5><pre><code class="mysql">[root@Zabbix-server ~]# mysql -u root -p
+mysql&gt; create database zabbix character set utf8 collate utf8_bin;
+mysql&gt; create user 'zabbix'@'localhost' identified with mysql_native_password by '123.comA'; //zabbix库允许用户zabbix的登陆密码123.comA
+mysql&gt; grant all privileges on zabbix.* to zabbix@localhost;
+mysql&gt; quit;
+[root@Zabbix-server ~]# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
+[root@Zabbix-server ~]# vim /etc/zabbix/zabbix_server.conf
+DBPassword=123.comA // zabbix用户的密码
+</code></pre>
+<h5 id="1-5为zabbix配置php"><a href="#1-5为zabbix配置php" class="headerlink" title="1.5为zabbix配置php"></a>1.5为zabbix配置php</h5><pre><code class="shell">[root@Zabbix-server ~]# vim /etc/opt/rh/rh-nginx116/nginx/conf.d/zabbix.conf
+        listen          8088; //监听端口为8088
+#        server_name     example.com; //此项可以不修改
+[root@Zabbix-server ~]# vim /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf
+listen.acl_users = apache,nginx // 在apache用户后面加入nginx
+php_value[date.timezone] = Asia/shanghai //去掉;并且加入自己的时区
+</code></pre>
+<h5 id="1-6-启动zabbix-server"><a href="#1-6-启动zabbix-server" class="headerlink" title="1.6 启动zabbix-server"></a>1.6 启动zabbix-server</h5><pre><code class="shell">[root@Zabbix-server ~]# systemctl enable zabbix-server  rh-nginx116-nginx rh-php72-php-fpm
+[root@Zabbix-server ~]# systemctl restart zabbix-server  rh-nginx116-nginx rh-php72-php-fpm    
+</code></pre>
+<h5 id="1-7-访问zabbix"><a href="#1-7-访问zabbix" class="headerlink" title="1.7 访问zabbix"></a>1.7 访问zabbix</h5><pre><code class="shell">访问 http://192.168.20.22:8088
+</code></pre>
 <p><img src="https://i.loli.net/2020/10/20/6zCEyDj8NO5mIJx.png#vwid=1018&amp;vhei=763" class="lazyload placeholder" data-srcset="https://i.loli.net/2020/10/20/6zCEyDj8NO5mIJx.png#vwid=1018&amp;vhei=763" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="zabbix1"></p>
 <p>自己按照提示配置就行</p>
 <p><img src="https://i.loli.net/2020/10/20/685NhnFRcEvMIZl.png#vwid=1278&amp;vhei=775" class="lazyload placeholder" data-srcset="https://i.loli.net/2020/10/20/685NhnFRcEvMIZl.png#vwid=1278&amp;vhei=775" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="zabbix2"></p>
@@ -1015,7 +1041,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

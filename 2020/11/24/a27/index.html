@@ -551,13 +551,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="1-1部署入门"><a href="#1-1部署入门" class="headerlink" title="1.1部署入门"></a>1.1部署入门</h3><ul>
 <li>Docker&gt;=19.03</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L git.io/scope -o /usr/local/bin/scope</span><br><span class="line">sudo chmod a+x /usr/local/bin/scope</span><br><span class="line">scope launch </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">sudo curl -L git.io/scope -o /usr/local/bin/scope
+sudo chmod a+x /usr/local/bin/scope
+scope launch 
+</code></pre>
 <blockquote>
 <p>// 由于国外地址问题,有时候会出现以下报错,多试几次。<br>curl: (56) Recv failure: Connection reset by peer  </p>
 </blockquote>
 <h3 id="1-2-访问Weave-Scope"><a href="#1-2-访问Weave-Scope" class="headerlink" title="1.2 访问Weave Scope"></a>1.2 访问Weave Scope</h3><p>This script downloads and runs a recent Scope image from Docker Hub. Now, open your web browser to <strong><a target="_blank" rel="noopener" href="http://localhost:4040/">http://localhost:4040</a></strong>.</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:4040 // localhost访问不到可以尝试以下方法</span><br><span class="line">http://192.168.20.21:4040 // 本机IP:4040端口</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">http://localhost:4040 // localhost访问不到可以尝试以下方法
+http://192.168.20.21:4040 // 本机IP:4040端口
+</code></pre>
 
   
   
@@ -674,17 +678,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <a class='prev' href='/2020/11/26/a33/'>
           <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Coturn穿透服务器搭建</p>
           <p class='content'>Coturn穿透服务器搭建这个具体干嘛的你们百度….
-1yum -y install libevent-devel openssl-devel
+yum -y install libevent-devel openssl-devel
 
-1.1下载编译安装coturn1234git c...</p>
+1.1下载编译安装coturngit clone ...</p>
         </a>
       
       
         <a class='next' href='/2020/11/24/a29/'>
           <p class='title'>Linux Shell 文本处理工具集锦-find篇<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件1find . ( -name "*.txt"-o -name "*.pdf") -print
+          <p class='content'>Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件find . ( -name "*.txt"-o -name "*.pdf") -print
 
-2 正则方式查找....</p>
+2 正则方式查找.t...</p>
         </a>
       
     </div>
@@ -958,7 +962,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

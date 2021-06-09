@@ -603,25 +603,70 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="部署Redis-三台全搞"><a href="#部署Redis-三台全搞" class="headerlink" title="部署Redis(三台全搞)"></a>部署Redis(三台全搞)</h2><blockquote>
 <p>Redis6.x版本以上需要GCC4.9X</p>
 </blockquote>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget http://download.redis.io/releases/redis-6.0.8.tar.gz</span><br><span class="line">yum -y install centos-release-scl  scl-utils-build</span><br><span class="line">yum -y install devtoolset-7-gcc* gcc</span><br><span class="line">scl <span class="built_in">enable</span> devtoolset-7 bash</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"511"</span> &gt; /proc/sys/net/core/somaxconn</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"vm.overcommit_memory = 1"</span> &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p</span><br><span class="line">mv redis-6.0.8 /usr/<span class="built_in">local</span>/ &amp;&amp; <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/redis-6.0.8/ &amp;&amp; make install</span><br><span class="line">mkdir /usr/<span class="built_in">local</span>/redis-6.0.8/logs</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">wget http://download.redis.io/releases/redis-6.0.8.tar.gz
+yum -y install centos-release-scl  scl-utils-build
+yum -y install devtoolset-7-gcc* gcc
+scl enable devtoolset-7 bash
+echo "511" &gt; /proc/sys/net/core/somaxconn
+echo "vm.overcommit_memory = 1" &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p
+mv redis-6.0.8 /usr/local/ &amp;&amp; cd /usr/local/redis-6.0.8/ &amp;&amp; make install
+mkdir /usr/local/redis-6.0.8/logs
+</code></pre>
 <p>更改Redis 主配置文件-172.16.87.10</p>
 <ul>
 <li>修复master认证密码</li>
 </ul>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost redis]<span class="comment"># vim /usr/local/redis/redis.conf</span></span><br><span class="line"><span class="built_in">bind</span> 172.16.87.10  <span class="comment"># 改为本机IP</span></span><br><span class="line">port 6379   <span class="comment"># 默认6379</span></span><br><span class="line">daemonize yes  <span class="comment"># 改为yes允许后台运行</span></span><br><span class="line">pidfile /var/run/redis_6379.pid <span class="comment"># pid文件位置</span></span><br><span class="line">maxmemory 750mb <span class="comment"># 设置最大内存 一般为3/4,生产建议</span></span><br><span class="line">dbfilename redis-master.rdb <span class="comment"># 改一下rdb文件名称</span></span><br><span class="line">logfile <span class="string">"/usr/local/redis/logs/redis-master.log"</span></span><br><span class="line">requirepass 123.com</span><br><span class="line">masterauth 123.com</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">[root@localhost redis]# vim /usr/local/redis/redis.conf
+bind 172.16.87.10  # 改为本机IP
+port 6379   # 默认6379
+daemonize yes  # 改为yes允许后台运行
+pidfile /var/run/redis_6379.pid # pid文件位置
+maxmemory 750mb # 设置最大内存 一般为3/4,生产建议
+dbfilename redis-master.rdb # 改一下rdb文件名称
+logfile "/usr/local/redis/logs/redis-master.log"
+requirepass 123.com
+masterauth 123.com
+</code></pre>
 <p>更改Redis从配置文件-<code>172.16.87.11</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost redis]<span class="comment"># vim /usr/local/redis/redis.conf</span></span><br><span class="line"><span class="built_in">bind</span> 172.16.87.11  <span class="comment"># 改为本机IP</span></span><br><span class="line">port 6379   <span class="comment"># 默认6379</span></span><br><span class="line">daemonize yes  <span class="comment"># 改为yes允许后台运行</span></span><br><span class="line">pidfile /var/run/redis_6379.pid <span class="comment"># pid文件位置</span></span><br><span class="line">maxmemory 750mb <span class="comment"># 设置最大内存 一般为3/4,生产建议</span></span><br><span class="line">dbfilename redis-slove.rdb <span class="comment"># 改一下rdb文件名称</span></span><br><span class="line">logfile <span class="string">"/usr/local/redis/logs/redis-slove1.log"</span></span><br><span class="line">requirepass 123.com</span><br><span class="line"><span class="comment"># 指定主服务器，注意：有关slaveof的配置只是配置从服务器，主服务器不需要配置</span></span><br><span class="line">slaveof 172.16.87.10 6379</span><br><span class="line"><span class="comment"># 主服务器密码</span></span><br><span class="line">masterauth 123.com</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">[root@localhost redis]# vim /usr/local/redis/redis.conf
+bind 172.16.87.11  # 改为本机IP
+port 6379   # 默认6379
+daemonize yes  # 改为yes允许后台运行
+pidfile /var/run/redis_6379.pid # pid文件位置
+maxmemory 750mb # 设置最大内存 一般为3/4,生产建议
+dbfilename redis-slove.rdb # 改一下rdb文件名称
+logfile "/usr/local/redis/logs/redis-slove1.log"
+requirepass 123.com
+# 指定主服务器，注意：有关slaveof的配置只是配置从服务器，主服务器不需要配置
+slaveof 172.16.87.10 6379
+# 主服务器密码
+masterauth 123.com
+</code></pre>
 <p>更改Redis从配置文件-<code>172.16.87.12</code></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost redis]<span class="comment"># vim /usr/local/redis/redis.conf</span></span><br><span class="line"><span class="built_in">bind</span> 172.16.87.12  <span class="comment"># 改为本机IP</span></span><br><span class="line">port 6379   <span class="comment"># 默认6379</span></span><br><span class="line">daemonize yes  <span class="comment"># 改为yes允许后台运行</span></span><br><span class="line">pidfile /var/run/redis_6379.pid <span class="comment"># pid文件位置</span></span><br><span class="line">maxmemory 750mb <span class="comment"># 设置最大内存 一般为3/4,生产建议</span></span><br><span class="line">dbfilename redis-slove.rdb <span class="comment"># 改一下rdb文件名称</span></span><br><span class="line">logfile <span class="string">"/usr/local/redis/logs/redis-slove2.log"</span></span><br><span class="line">requirepass 123.com</span><br><span class="line">slaveof 172.16.87.10 6379</span><br><span class="line"><span class="comment"># 主服务器密码</span></span><br><span class="line">masterauth 123.com</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">[root@localhost redis]# vim /usr/local/redis/redis.conf
+bind 172.16.87.12  # 改为本机IP
+port 6379   # 默认6379
+daemonize yes  # 改为yes允许后台运行
+pidfile /var/run/redis_6379.pid # pid文件位置
+maxmemory 750mb # 设置最大内存 一般为3/4,生产建议
+dbfilename redis-slove.rdb # 改一下rdb文件名称
+logfile "/usr/local/redis/logs/redis-slove2.log"
+requirepass 123.com
+slaveof 172.16.87.10 6379
+# 主服务器密码
+masterauth 123.com
+</code></pre>
 <p>上述内容主要是配置Redis服务器，从服务器比主服务器多一个slaveof的配置和密码。</p>
 <h2 id="配置哨兵文件"><a href="#配置哨兵文件" class="headerlink" title="配置哨兵文件"></a>配置哨兵文件</h2><p>在Redis安装目录下有一个<code>sentinel.conf</code>文件</p>
 <p>三台Redis都需要更改此配置文件<br>注意logfile的命名</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cp sentinel.conf sentinel.conf.back <span class="comment"># 先备份一个</span></span><br><span class="line">vim sentinel.conf</span><br><span class="line">protected-mode no</span><br><span class="line">daemonize yes</span><br><span class="line">logfile <span class="string">"/usr/local/redis-6.0.8/logs/redis-sentinel10.log"</span> </span><br><span class="line">sentinel monitor mymaster 172.16.87.10 6379 2</span><br><span class="line">sentinel auth-pass mymaster 123.com</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">cp sentinel.conf sentinel.conf.back # 先备份一个
+vim sentinel.conf
+protected-mode no
+daemonize yes
+logfile "/usr/local/redis-6.0.8/logs/redis-sentinel10.log" 
+sentinel monitor mymaster 172.16.87.10 6379 2
+sentinel auth-pass mymaster 123.com
+</code></pre>
 <ul>
 <li><code>protected-mode no</code> 禁止保护模式</li>
 <li><code>daemonize yes</code> 后台运行</li>
@@ -642,20 +687,46 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>上述都修改完成可以启动redis了</p>
 </blockquote>
 <h2 id="启动Redis和哨兵"><a href="#启动Redis和哨兵" class="headerlink" title="启动Redis和哨兵"></a>启动Redis和哨兵</h2><p>注意启动的顺序：首先是主的Redis服务进程，然后启动从机的Redis服务进程，最后启动3个哨兵的服务进程。</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-server  /usr/<span class="built_in">local</span>/redis-6.0.8/redis.conf <span class="comment"># 三台Redis服务都用这个命令启动</span></span><br><span class="line">redis-sentinel /usr/<span class="built_in">local</span>/redis-6.0.8/sentinel.conf <span class="comment"># 三台Redis哨兵服务</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">redis-server  /usr/local/redis-6.0.8/redis.conf # 三台Redis服务都用这个命令启动
+redis-sentinel /usr/local/redis-6.0.8/sentinel.conf # 三台Redis哨兵服务
+</code></pre>
 <h2 id="检查Redis主从是否同步成功"><a href="#检查Redis主从是否同步成功" class="headerlink" title="检查Redis主从是否同步成功"></a>检查Redis主从是否同步成功</h2><p>查看Redis日志</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tail -f /usr/<span class="built_in">local</span>/redis-6.0.8/logs/redis-master.log</span><br><span class="line">9040:M 03 Jan 2021 11:46:53.570 * Synchronization with replica 172.16.87.11:6379 succeeded</span><br><span class="line">9040:M 03 Jan 2021 11:48:19.065 * Synchronization with replica 172.16.87.12:6379 succeeded</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">tail -f /usr/local/redis-6.0.8/logs/redis-master.log
+9040:M 03 Jan 2021 11:46:53.570 * Synchronization with replica 172.16.87.11:6379 succeeded
+9040:M 03 Jan 2021 11:48:19.065 * Synchronization with replica 172.16.87.12:6379 succeeded
+</code></pre>
 <p>出现两个<code>successed</code>并且成功同步复制即成功.</p>
 <h2 id="检测哨兵的主从切换是否成功"><a href="#检测哨兵的主从切换是否成功" class="headerlink" title="检测哨兵的主从切换是否成功"></a>检测哨兵的主从切换是否成功</h2><p><strong>你可以直接kill掉Redis的master</strong></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">killall -9 redis-server</span><br><span class="line">然后查看从上的哨兵日志.</span><br><span class="line">+sdown master mymaster 172.16.87.10 6379 可以看出master已经宕机,然后更换新的master为11</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">13706:X 03 Jan 2021 21:54:34.755 <span class="comment"># +sdown master mymaster 172.16.87.10 6379</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:34.816 <span class="comment"># +new-epoch 1</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:34.818 <span class="comment"># +vote-for-leader d8c5bbbb14158ccb0ff962c4b0ed2e7e6bb9067c 1</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:34.818 <span class="comment"># +odown master mymaster 172.16.87.10 6379 #quorum 3/2</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:34.819 <span class="comment"># Next failover delay: I will not start a failover before Sun Jan  3 22:00:35 2021</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:35.344 <span class="comment"># +config-update-from sentinel d8c5bbbb14158ccb0ff962c4b0ed2e7e6bb9067c 172.16.87.12 26379 @ mymaster 172.16.87.10 6379</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:35.344 <span class="comment"># +switch-master mymaster 172.16.87.10 6379 172.16.87.11 6379</span></span><br><span class="line">13706:X 03 Jan 2021 21:54:35.344 * +slave slave 172.16.87.12:6379 172.16.87.12 6379 @ mymaster 172.16.87.11 6379</span><br><span class="line">13706:X 03 Jan 2021 21:54:35.345 * +slave slave 172.16.87.10:6379 172.16.87.10 6379 @ mymaster 172.16.87.11 6379</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">killall -9 redis-server
+然后查看从上的哨兵日志.
++sdown master mymaster 172.16.87.10 6379 可以看出master已经宕机,然后更换新的master为11
+</code></pre>
+<pre><code class="bash">13706:X 03 Jan 2021 21:54:34.755 # +sdown master mymaster 172.16.87.10 6379
+13706:X 03 Jan 2021 21:54:34.816 # +new-epoch 1
+13706:X 03 Jan 2021 21:54:34.818 # +vote-for-leader d8c5bbbb14158ccb0ff962c4b0ed2e7e6bb9067c 1
+13706:X 03 Jan 2021 21:54:34.818 # +odown master mymaster 172.16.87.10 6379 #quorum 3/2
+13706:X 03 Jan 2021 21:54:34.819 # Next failover delay: I will not start a failover before Sun Jan  3 22:00:35 2021
+13706:X 03 Jan 2021 21:54:35.344 # +config-update-from sentinel d8c5bbbb14158ccb0ff962c4b0ed2e7e6bb9067c 172.16.87.12 26379 @ mymaster 172.16.87.10 6379
+13706:X 03 Jan 2021 21:54:35.344 # +switch-master mymaster 172.16.87.10 6379 172.16.87.11 6379
+13706:X 03 Jan 2021 21:54:35.344 * +slave slave 172.16.87.12:6379 172.16.87.12 6379 @ mymaster 172.16.87.11 6379
+13706:X 03 Jan 2021 21:54:35.345 * +slave slave 172.16.87.10:6379 172.16.87.10 6379 @ mymaster 172.16.87.11 6379
+</code></pre>
 <p>连接到Redis172.16.87.11</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost redis-6.0.8]<span class="comment"># redis-cli -h 172.16.87.11 -a 123.com</span></span><br><span class="line">172.16.87.11:6379&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master <span class="comment"># 角色已经变成了master</span></span><br><span class="line">connected_slaves:1</span><br><span class="line">slave0:ip=172.16.87.12,port=6379,state=online,offset=133347,lag=0</span><br><span class="line">master_replid:dbee8e7470ab8f5fddadc8958659a39d75033521</span><br><span class="line">master_replid2:bd20b8c1ab987db5bc6bfa6eaca6df5d6ffdfa53</span><br><span class="line">master_repl_offset:133486</span><br><span class="line">second_repl_offset:93027</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:197</span><br><span class="line">repl_backlog_histlen:133290</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">[root@localhost redis-6.0.8]# redis-cli -h 172.16.87.11 -a 123.com
+172.16.87.11:6379&gt; info replication
+# Replication
+role:master # 角色已经变成了master
+connected_slaves:1
+slave0:ip=172.16.87.12,port=6379,state=online,offset=133347,lag=0
+master_replid:dbee8e7470ab8f5fddadc8958659a39d75033521
+master_replid2:bd20b8c1ab987db5bc6bfa6eaca6df5d6ffdfa53
+master_repl_offset:133486
+second_repl_offset:93027
+repl_backlog_active:1
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:197
+repl_backlog_histlen:133290
+</code></pre>
 <p>可以配合Cachecloud使用<br><a href="https://blog.micomint.top/2021/01/04/a50/">详细点我</a></p>
 
   
@@ -1057,7 +1128,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

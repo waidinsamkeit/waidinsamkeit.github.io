@@ -553,27 +553,422 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h2 id="监控平台搭建方案"><a href="#监控平台搭建方案" class="headerlink" title="监控平台搭建方案"></a>监控平台搭建方案</h2><ul>
 <li>Prometheus+Grafana</li>
 </ul>
-<h2 id="部署Prometheus"><a href="#部署Prometheus" class="headerlink" title="部署Prometheus"></a>部署Prometheus</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">configMap.yaml</span> <span class="comment"># 类似于配置文件的存储</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">prometheus.yml:</span> <span class="string">|</span></span><br><span class="line">    <span class="attr">global:</span></span><br><span class="line">      <span class="attr">scrape_interval:</span>     <span class="string">15s</span></span><br><span class="line">      <span class="attr">evaluation_interval:</span> <span class="string">15s</span></span><br><span class="line">    <span class="attr">scrape_configs:</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-apiservers'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">endpoints</span></span><br><span class="line">      <span class="attr">scheme:</span> <span class="string">https</span></span><br><span class="line">      <span class="attr">tls_config:</span></span><br><span class="line">        <span class="attr">ca_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/ca.crt</span></span><br><span class="line">      <span class="attr">bearer_token_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/token</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_namespace</span>, <span class="string">__meta_kubernetes_service_name</span>, <span class="string">__meta_kubernetes_endpoint_port_name</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">default;kubernetes;https</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-nodes'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">node</span></span><br><span class="line">      <span class="attr">scheme:</span> <span class="string">https</span></span><br><span class="line">      <span class="attr">tls_config:</span></span><br><span class="line">        <span class="attr">ca_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/ca.crt</span></span><br><span class="line">      <span class="attr">bearer_token_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/token</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_node_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">kubernetes.default.svc:443</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_node_name</span>]</span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(.+)</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__metrics_path__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">/api/v1/nodes/${1}/proxy/metrics</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-cadvisor'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">node</span></span><br><span class="line">      <span class="attr">scheme:</span> <span class="string">https</span></span><br><span class="line">      <span class="attr">tls_config:</span></span><br><span class="line">        <span class="attr">ca_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/ca.crt</span></span><br><span class="line">      <span class="attr">bearer_token_file:</span> <span class="string">/var/run/secrets/kubernetes.io/serviceaccount/token</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_node_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">kubernetes.default.svc:443</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_node_name</span>]</span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(.+)</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__metrics_path__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">/api/v1/nodes/${1}/proxy/metrics/cadvisor</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-service-endpoints'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">endpoints</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_annotation_prometheus_io_scrape</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="literal">true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_annotation_prometheus_io_scheme</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__scheme__</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(https?)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_annotation_prometheus_io_path</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__metrics_path__</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__address__</span>, <span class="string">__meta_kubernetes_service_annotation_prometheus_io_port</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">([^:]+)(?::\d+)?;(\d+)</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">$1:$2</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_service_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_namespace</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_namespace</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_name</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_name</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-services'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">service</span></span><br><span class="line">      <span class="attr">metrics_path:</span> <span class="string">/probe</span></span><br><span class="line">      <span class="attr">params:</span></span><br><span class="line">        <span class="attr">module:</span> [<span class="string">http_2xx</span>]</span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_annotation_prometheus_io_probe</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="literal">true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__address__</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__param_target</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">blackbox-exporter.example.com:9115</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__param_target</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">instance</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_service_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_namespace</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_namespace</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_service_name</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_name</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-ingresses'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">ingress</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_ingress_annotation_prometheus_io_probe</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="literal">true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_ingress_scheme</span>,<span class="string">__address__</span>,<span class="string">__meta_kubernetes_ingress_path</span>]</span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(.+);(.+);(.+)</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">${1}://${2}${3}</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__param_target</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">blackbox-exporter.example.com:9115</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__param_target</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">instance</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_ingress_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_namespace</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_namespace</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_ingress_name</span>]</span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_name</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">'kubernetes-pods'</span></span><br><span class="line">      <span class="attr">kubernetes_sd_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">role:</span> <span class="string">pod</span></span><br><span class="line">      <span class="attr">relabel_configs:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_pod_annotation_prometheus_io_scrape</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">keep</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="literal">true</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_pod_annotation_prometheus_io_path</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__metrics_path__</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__address__</span>, <span class="string">__meta_kubernetes_pod_annotation_prometheus_io_port</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">([^:]+)(?::\d+)?;(\d+)</span></span><br><span class="line">        <span class="attr">replacement:</span> <span class="string">$1:$2</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">__address__</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">action:</span> <span class="string">labelmap</span></span><br><span class="line">        <span class="attr">regex:</span> <span class="string">__meta_kubernetes_pod_label_(.+)</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_namespace</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_namespace</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">source_labels:</span> [<span class="string">__meta_kubernetes_pod_name</span>]</span><br><span class="line">        <span class="attr">action:</span> <span class="string">replace</span></span><br><span class="line">        <span class="attr">target_label:</span> <span class="string">kubernetes_pod_name</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="部署Prometheus"><a href="#部署Prometheus" class="headerlink" title="部署Prometheus"></a>部署Prometheus</h2><pre><code class="yaml">vim configMap.yaml # 类似于配置文件的存储
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: kube-system
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval:     15s
+      evaluation_interval: 15s
+    scrape_configs:
 
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">rbac-setup.yaml</span> <span class="comment"># rbac权限</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">""</span>]</span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodes</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">nodes/proxy</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">services</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">endpoints</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">pods</span></span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">extensions</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">ingresses</span></span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">nonResourceURLs:</span> [<span class="string">"/metrics"</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">"get"</span>]</span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
 
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">prome_dep.yaml</span> <span class="comment"># 部署Prometheus</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1beta2</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">prometheus-deployment</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">prom/prometheus:v2.0.0</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">        <span class="attr">command:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"/bin/prometheus"</span></span><br><span class="line">        <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"--config.file=/etc/prometheus/prometheus.yml"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"--storage.tsdb.path=/prometheus"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"--storage.tsdb.retention=24h"</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">9090</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">"/prometheus"</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">"/etc/prometheus"</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">100Mi</span></span><br><span class="line">          <span class="attr">limits:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">500m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">2500Mi</span></span><br><span class="line">      <span class="attr">serviceAccountName:</span> <span class="string">prometheus</span>    </span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">emptyDir:</span> {}</span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config-volume</span></span><br><span class="line">        <span class="attr">configMap:</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">prometheus-config</span>   </span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-nodes'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics
 
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">prome_svc.yaml</span>  <span class="comment"># service访问控制</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">prometheus</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">9090</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">9090</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30003</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">prometheus</span></span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-cadvisor'
+      kubernetes_sd_configs:
+      - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
 
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">node-exporter.yaml</span> <span class="comment"># 守护进程文件</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">DaemonSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">node-exporter</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">node-exporter</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">k8s-app:</span> <span class="string">node-exporter</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">k8s-app:</span> <span class="string">node-exporter</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">prom/node-exporter</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">node-exporter</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">9100</span></span><br><span class="line">          <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">node-exporter</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">node-exporter</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">9100</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">31672</span></span><br><span class="line">    <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">k8s-app:</span> <span class="string">node-exporter</span></span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-service-endpoints'
+      kubernetes_sd_configs:
+      - role: endpoints
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+        action: replace
+        target_label: __scheme__
+        regex: (https?)
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+        action: replace
+        target_label: __address__
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        action: replace
+        target_label: kubernetes_name
 
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f node-exporter.yaml</span><br><span class="line">kubectl apply -f rbac-setup.yaml</span><br><span class="line">kubectl apply -f prome_dep.yaml</span><br><span class="line">kubectl apply -f prome_svc.yaml</span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-services'
+      kubernetes_sd_configs:
+      - role: service
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter.example.com:9115
+      - source_labels: [__param_target]
+        target_label: instance
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_service_name]
+        target_label: kubernetes_name
 
-<h2 id="部署Grafana"><a href="#部署Grafana" class="headerlink" title="部署Grafana"></a>部署Grafana</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">grafana-dep.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">grafana-core</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">component:</span> <span class="string">core</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">        <span class="attr">component:</span> <span class="string">core</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">grafana/grafana:4.2.0</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">grafana-core</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">        <span class="comment"># env:</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="comment"># keep request = limit to keep this container in guaranteed class</span></span><br><span class="line">          <span class="attr">limits:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">100Mi</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">100m</span></span><br><span class="line">            <span class="attr">memory:</span> <span class="string">100Mi</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="comment"># The following env variables set up basic auth twith the default admin user and admin password.</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GF_AUTH_BASIC_ENABLED</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">"true"</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GF_AUTH_ANONYMOUS_ENABLED</span></span><br><span class="line">            <span class="attr">value:</span> <span class="string">"false"</span></span><br><span class="line">          <span class="comment"># - name: GF_AUTH_ANONYMOUS_ORG_ROLE</span></span><br><span class="line">          <span class="comment">#   value: Admin</span></span><br><span class="line">          <span class="comment"># does not really work, because of template variables in exported dashboards:</span></span><br><span class="line">          <span class="comment"># - name: GF_DASHBOARDS_JSON_ENABLED</span></span><br><span class="line">          <span class="comment">#   value: "true"</span></span><br><span class="line">        <span class="attr">readinessProbe:</span></span><br><span class="line">          <span class="attr">httpGet:</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/login</span></span><br><span class="line">            <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line">          <span class="comment"># initialDelaySeconds: 30</span></span><br><span class="line">          <span class="comment"># timeoutSeconds: 1</span></span><br><span class="line">        <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana-persistent-storage</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/var</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana-persistent-storage</span></span><br><span class="line">        <span class="attr">emptyDir:</span> {}</span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-ingresses'
+      kubernetes_sd_configs:
+      - role: ingress
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_ingress_scheme,__address__,__meta_kubernetes_ingress_path]
+        regex: (.+);(.+);(.+)
+        replacement: ${1}://${2}${3}
+        target_label: __param_target
+      - target_label: __address__
+        replacement: blackbox-exporter.example.com:9115
+      - source_labels: [__param_target]
+        target_label: instance
+      - action: labelmap
+        regex: __meta_kubernetes_ingress_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_ingress_name]
+        target_label: kubernetes_name
 
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">grafana-ing.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">   <span class="attr">name:</span> <span class="string">grafana</span></span><br><span class="line">   <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">   <span class="attr">rules:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">k8s.grafana</span></span><br><span class="line">     <span class="attr">http:</span></span><br><span class="line">       <span class="attr">paths:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">         <span class="attr">backend:</span></span><br><span class="line">          <span class="attr">serviceName:</span> <span class="string">grafana</span></span><br><span class="line">          <span class="attr">servicePort:</span> <span class="number">3000</span></span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">grafana-svc.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">grafana</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">component:</span> <span class="string">core</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">grafana</span></span><br><span class="line">    <span class="attr">component:</span> <span class="string">core</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="访问页面"><a href="#访问页面" class="headerlink" title="访问页面"></a>访问页面</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-master pro]<span class="comment"># kubectl get svc -n kube-system</span></span><br><span class="line">NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE</span><br><span class="line">grafana         NodePort    10.1.154.215   &lt;none&gt;        3000:31407/TCP           16m</span><br><span class="line">kube-dns        ClusterIP   10.1.0.10      &lt;none&gt;        53/UDP,53/TCP,9153/TCP   18h</span><br><span class="line">node-exporter   NodePort    10.1.93.125    &lt;none&gt;        9100:31672/TCP           44m</span><br><span class="line">prometheus      NodePort    10.1.220.59    &lt;none&gt;        9090:30003/TCP           42m</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Grafana默认账户：admin</span><br><span class="line">Grafana默认密码：admin</span><br></pre></td></tr></tbody></table></figure>
+    - job_name: 'kubernetes-pods'
+      kubernetes_sd_configs:
+      - role: pod
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+</code></pre>
+<pre><code class="yaml">vim rbac-setup.yaml # rbac权限
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - nodes/proxy
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs: ["get", "list", "watch"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: kube-system
+</code></pre>
+<pre><code class="yaml">vim prome_dep.yaml # 部署Prometheus
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    name: prometheus-deployment
+  name: prometheus
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - image: prom/prometheus:v2.0.0
+        name: prometheus
+        command:
+        - "/bin/prometheus"
+        args:
+        - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.path=/prometheus"
+        - "--storage.tsdb.retention=24h"
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/prometheus"
+          name: data
+        - mountPath: "/etc/prometheus"
+          name: config-volume
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 2500Mi
+      serviceAccountName: prometheus    
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: prometheus-config   
+</code></pre>
+<pre><code class="yaml">vim prome_svc.yaml  # service访问控制
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: kube-system
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30003
+  selector:
+    app: prometheus
+</code></pre>
+<pre><code class="yaml">vim node-exporter.yaml # 守护进程文件
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: kube-system
+  labels:
+    k8s-app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      k8s-app: node-exporter
+  template:
+    metadata:
+      labels:
+        k8s-app: node-exporter
+    spec:
+      containers:
+      - image: prom/node-exporter
+        name: node-exporter
+        ports:
+        - containerPort: 9100
+          protocol: TCP
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+  namespace: kube-system
+spec:
+  ports:
+  - name: http
+    port: 9100
+    nodePort: 31672
+    protocol: TCP
+  type: NodePort
+  selector:
+    k8s-app: node-exporter
+</code></pre>
+<pre><code class="bash">kubectl apply -f node-exporter.yaml
+kubectl apply -f rbac-setup.yaml
+kubectl apply -f prome_dep.yaml
+kubectl apply -f prome_svc.yaml
+</code></pre>
+<h2 id="部署Grafana"><a href="#部署Grafana" class="headerlink" title="部署Grafana"></a>部署Grafana</h2><pre><code class="yaml">vim grafana-dep.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-core
+  namespace: kube-system
+  labels:
+    app: grafana
+    component: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+        component: core
+    spec:
+      containers:
+      - image: grafana/grafana:4.2.0
+        name: grafana-core
+        imagePullPolicy: IfNotPresent
+        # env:
+        resources:
+          # keep request = limit to keep this container in guaranteed class
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          # The following env variables set up basic auth twith the default admin user and admin password.
+          - name: GF_AUTH_BASIC_ENABLED
+            value: "true"
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "false"
+          # - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+          #   value: Admin
+          # does not really work, because of template variables in exported dashboards:
+          # - name: GF_DASHBOARDS_JSON_ENABLED
+          #   value: "true"
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: 3000
+          # initialDelaySeconds: 30
+          # timeoutSeconds: 1
+        volumeMounts:
+        - name: grafana-persistent-storage
+          mountPath: /var
+      volumes:
+      - name: grafana-persistent-storage
+        emptyDir: {}
+</code></pre>
+<pre><code class="yaml">vim grafana-ing.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+   name: grafana
+   namespace: kube-system
+spec:
+   rules:
+   - host: k8s.grafana
+     http:
+       paths:
+       - path: /
+         backend:
+          serviceName: grafana
+          servicePort: 3000
+</code></pre>
+<pre><code class="yaml">vim grafana-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: kube-system
+  labels:
+    app: grafana
+    component: core
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+  selector:
+    app: grafana
+    component: core
+</code></pre>
+<h2 id="访问页面"><a href="#访问页面" class="headerlink" title="访问页面"></a>访问页面</h2><pre><code class="bash">[root@kubernetes-master pro]# kubectl get svc -n kube-system
+NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE
+grafana         NodePort    10.1.154.215   &lt;none&gt;        3000:31407/TCP           16m
+kube-dns        ClusterIP   10.1.0.10      &lt;none&gt;        53/UDP,53/TCP,9153/TCP   18h
+node-exporter   NodePort    10.1.93.125    &lt;none&gt;        9100:31672/TCP           44m
+prometheus      NodePort    10.1.220.59    &lt;none&gt;        9090:30003/TCP           42m
+</code></pre>
+<pre><code class="bash">Grafana默认账户：admin
+Grafana默认密码：admin
+</code></pre>
 
   
   
@@ -708,7 +1103,7 @@ Nfs：网络存储,Pod重启后,数据还是存在的
 部署NFS服务器
 可以单独设置一台服务器为NFS服务器
 
-12y...</p>
+yum...</p>
         </a>
       
     </div>
@@ -982,7 +1377,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

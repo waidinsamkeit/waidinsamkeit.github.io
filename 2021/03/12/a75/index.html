@@ -545,21 +545,44 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 </li>
 </ul>
-<h2 id="安装依赖环境"><a href="#安装依赖环境" class="headerlink" title="安装依赖环境"></a>安装依赖环境</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install rpm-build gcc gcc-c++ glibc glibc-devel openssl-devel openssl prce pcre-devel zlib zlib-devel make wget krb5-devel pam-devel libX11-devel xmkmf libXt-devel initscripts libXt-devel imake gtk2-devel</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="下载Openssh和Openssl"><a href="#下载Openssh和Openssl" class="headerlink" title="下载Openssh和Openssl"></a>下载Openssh和Openssl</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget ftp://mirrors.sonic.net/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz</span><br><span class="line">wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="安装Openssl"><a href="#安装Openssl" class="headerlink" title="安装Openssl"></a>安装Openssl</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf openssl-1.1.1h.tar.gz</span><br><span class="line">cd openssl-1.1.1h</span><br><span class="line">./config --prefix=/usr/local/openssl-1.1.1 -d shared</span><br><span class="line">make install</span><br><span class="line">echo "/usr/local/openssl-1.1.1/lib" &gt;&gt; /etc/ld.so.conf </span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="安装Openssh"><a href="#安装Openssh" class="headerlink" title="安装Openssh"></a>安装Openssh</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf openssh-8.4p1.tar.gz</span><br><span class="line">cd openssh-8.4p1</span><br><span class="line">mv /etc/ssh/ /home/ssh-back</span><br><span class="line">./configure --prefix=/usr/local/openssh-8.4 --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl-1.1.1/ --with-zlib</span><br><span class="line">make install</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="备份SSH"><a href="#备份SSH" class="headerlink" title="备份SSH"></a>备份SSH</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mv /usr/sbin/sshd /home/sshd_back</span><br><span class="line">cp -rf /usr/local/openssh-8.4/sbin/sshd /usr/sbin/sshd</span><br><span class="line">mv /usr/bin/ssh /home/ssh_back</span><br><span class="line">cp -rf /usr/local/openssh-8.4/bin/ssh /usr/bin/</span><br><span class="line">mv /usr/bin/ssh-keygen /home/ssh-keygen_back</span><br><span class="line">cp -rf /usr/local/openssh-8.4/bin/ssh-keygen /usr/bin/</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="安装依赖环境"><a href="#安装依赖环境" class="headerlink" title="安装依赖环境"></a>安装依赖环境</h2><pre><code class="bash">yum -y install rpm-build gcc gcc-c++ glibc glibc-devel openssl-devel openssl prce pcre-devel zlib zlib-devel make wget krb5-devel pam-devel libX11-devel xmkmf libXt-devel initscripts libXt-devel imake gtk2-devel
+</code></pre>
+<h2 id="下载Openssh和Openssl"><a href="#下载Openssh和Openssl" class="headerlink" title="下载Openssh和Openssl"></a>下载Openssh和Openssl</h2><pre><code class="shell">wget ftp://mirrors.sonic.net/pub/OpenBSD/OpenSSH/portable/openssh-8.4p1.tar.gz
+wget https://www.openssl.org/source/openssl-1.1.1h.tar.gz
+</code></pre>
+<h2 id="安装Openssl"><a href="#安装Openssl" class="headerlink" title="安装Openssl"></a>安装Openssl</h2><pre><code class="shell">tar -zxf openssl-1.1.1h.tar.gz
+cd openssl-1.1.1h
+./config --prefix=/usr/local/openssl-1.1.1 -d shared
+make install
+echo "/usr/local/openssl-1.1.1/lib" &gt;&gt; /etc/ld.so.conf 
+</code></pre>
+<h2 id="安装Openssh"><a href="#安装Openssh" class="headerlink" title="安装Openssh"></a>安装Openssh</h2><pre><code class="shell">tar -zxf openssh-8.4p1.tar.gz
+cd openssh-8.4p1
+mv /etc/ssh/ /home/ssh-back
+./configure --prefix=/usr/local/openssh-8.4 --sysconfdir=/etc/ssh --with-ssl-dir=/usr/local/openssl-1.1.1/ --with-zlib
+make install
+</code></pre>
+<h2 id="备份SSH"><a href="#备份SSH" class="headerlink" title="备份SSH"></a>备份SSH</h2><pre><code class="shell">mv /usr/sbin/sshd /home/sshd_back
+cp -rf /usr/local/openssh-8.4/sbin/sshd /usr/sbin/sshd
+mv /usr/bin/ssh /home/ssh_back
+cp -rf /usr/local/openssh-8.4/bin/ssh /usr/bin/
+mv /usr/bin/ssh-keygen /home/ssh-keygen_back
+cp -rf /usr/local/openssh-8.4/bin/ssh-keygen /usr/bin/
+</code></pre>
 <h2 id="启动sshd服务"><a href="#启动sshd服务" class="headerlink" title="启动sshd服务"></a>启动sshd服务</h2><div class="note warning"><p>note warning 你可能会遇到sshd无法启动</p></div>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sshd.service start operation timed out. Terminating</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">sshd.service start operation timed out. Terminating
+</code></pre>
 <blockquote>
 <p>解决方法</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop sshd</span><br><span class="line">rm -rf /lib/systemd/system/sshd.service</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"><span class="meta">#</span><span class="bash"> openssh-8.4p1是你最开始tar解压的目录,而不是安装后的目录</span></span><br><span class="line">cp openssh-8.4p1/contrib/redhat/sshd.init /etc/init.d/sshd</span><br><span class="line">/etc/init.d/sshd restart 或者 systemctl start sshd</span><br><span class="line">systemctl enable sshd</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">systemctl stop sshd
+rm -rf /lib/systemd/system/sshd.service
+systemctl daemon-reload
+# openssh-8.4p1是你最开始tar解压的目录,而不是安装后的目录
+cp openssh-8.4p1/contrib/redhat/sshd.init /etc/init.d/sshd
+/etc/init.d/sshd restart 或者 systemctl start sshd
+systemctl enable sshd
+</code></pre>
 
   
   
@@ -968,7 +991,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

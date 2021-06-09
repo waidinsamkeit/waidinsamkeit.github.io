@@ -536,25 +536,87 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h3 id="NGinx优化-常规优化"><a href="#NGinx优化-常规优化" class="headerlink" title="NGinx优化-常规优化"></a>NGinx优化-常规优化</h3><h4 id="1-1nginx连接数优化"><a href="#1-1nginx连接数优化" class="headerlink" title="1.1nginx连接数优化"></a>1.1nginx连接数优化</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">events {</span><br><span class="line">    worker_connections  65530;  //设置nginx最大连接,最多为65535</span><br><span class="line">    use epoll; //采用epoll模型，作用于event的I/O异步</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
+  <h3 id="NGinx优化-常规优化"><a href="#NGinx优化-常规优化" class="headerlink" title="NGinx优化-常规优化"></a>NGinx优化-常规优化</h3><h4 id="1-1nginx连接数优化"><a href="#1-1nginx连接数优化" class="headerlink" title="1.1nginx连接数优化"></a>1.1nginx连接数优化</h4><pre><code class="shell">events {
+    worker_connections  65530;  //设置nginx最大连接,最多为65535
+    use epoll; //采用epoll模型，作用于event的I/O异步
+}
+</code></pre>
 <ul>
 <li>进程优化</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">worker_processes 8;</span><br><span class="line">//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8如果超出性能则不会进行提升了</span><br><span class="line">worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000; //设置NGinx的cpu亲和力，8核心就这样设置</span><br><span class="line">worker_rlimit_nofile 102400; //nginx 子进程允许打开的文件次数</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">worker_processes 8;
+//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8如果超出性能则不会进行提升了
+worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000; //设置NGinx的cpu亲和力，8核心就这样设置
+worker_rlimit_nofile 102400; //nginx 子进程允许打开的文件次数
+</code></pre>
+<h4 id="1-2选项参数优化"><a href="#1-2选项参数优化" class="headerlink" title="1.2选项参数优化"></a>1.2选项参数优化</h4><pre><code class="shell">http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    limit_req_zone $binary_remote_addr zone=allip:10m rate=1000r/m;
+    client_header_timeout 15; // 建立链接后发送request header的链接时间，如果超过此时间没有发送数据，则报错408
+    client_body_timeout 15;  // 建立链接后发送request body的链接时间，如果超过此时间没有发送数据，则报错408
+    send_timeout 60s;  //服务端向客户端传输数据的超时实际那
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+    #access_log  logs/access.log  main;
 
-<h4 id="1-2选项参数优化"><a href="#1-2选项参数优化" class="headerlink" title="1.2选项参数优化"></a>1.2选项参数优化</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">http {</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span><br><span class="line">    limit_req_zone $binary_remote_addr zone=allip:10m rate=1000r/m;</span><br><span class="line">    client_header_timeout 15; // 建立链接后发送request header的链接时间，如果超过此时间没有发送数据，则报错408</span><br><span class="line">    client_body_timeout 15;  // 建立链接后发送request body的链接时间，如果超过此时间没有发送数据，则报错408</span><br><span class="line">    send_timeout 60s;  //服务端向客户端传输数据的超时实际那</span><br><span class="line">    #                  '$status $body_bytes_sent "$http_referer" '</span><br><span class="line">    #                  '"$http_user_agent" "$http_x_forwarded_for"';</span><br><span class="line">    #access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  45;    //TCP链接最多保持时间</span><br><span class="line">    gzip_http_version 1.1;  gzip_http_version 1.1; //识别gzip使用的http的版本，默认1.1</span><br><span class="line">    gzip  on; // 开启gzip on 减少数据传输量</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+    sendfile        on;
+    #tcp_nopush     on;
 
-<h4 id="1-3系统内核层面优化"><a href="#1-3系统内核层面优化" class="headerlink" title="1.3系统内核层面优化"></a>1.3系统内核层面优化</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo "net.core.somaxconn = 50000" &gt; /etc/sysctl.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="comment"># 最大连接数</span></span></span><br><span class="line">echo "net.ipv4.tcp_syncookies = 1" &gt; /etc/sysctl.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；</span></span><br><span class="line">echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_recycle</span><br><span class="line"><span class="meta">#</span><span class="bash"> 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。</span></span><br><span class="line">echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_reuse</span><br><span class="line"><span class="meta">#</span><span class="bash"> 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-4-允许打开最大文件数"><a href="#1-4-允许打开最大文件数" class="headerlink" title="1.4 允许打开最大文件数"></a>1.4 允许打开最大文件数</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">cat&gt;</span><span class="bash">&gt;/etc/security/limits.conf&lt;&lt;<span class="string">EOF</span></span></span><br><span class="line">* soft nofile 655350</span><br><span class="line">* hard nofile 655350</span><br><span class="line">EOF</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-5-nginx-添加统计模块及配置"><a href="#1-5-nginx-添加统计模块及配置" class="headerlink" title="1.5 nginx 添加统计模块及配置"></a>1.5 nginx 添加统计模块及配置</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在 nginx.conf 中配置统计模块</span></span><br><span class="line">location /status{</span><br><span class="line">    # 开启状态</span><br><span class="line">    stub_status on;</span><br><span class="line">    # 不需要日志</span><br><span class="line">    access_log off;</span><br><span class="line">    # 只允许此 ip 访问</span><br><span class="line">    allow 192.168.20.21;</span><br><span class="line">    # 其他 ip 禁止访问</span><br><span class="line">    deny all;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
+    #keepalive_timeout  0;
+    keepalive_timeout  45;    //TCP链接最多保持时间
+    gzip_http_version 1.1;  gzip_http_version 1.1; //识别gzip使用的http的版本，默认1.1
+    gzip  on; // 开启gzip on 减少数据传输量
+}
+</code></pre>
+<h4 id="1-3系统内核层面优化"><a href="#1-3系统内核层面优化" class="headerlink" title="1.3系统内核层面优化"></a>1.3系统内核层面优化</h4><pre><code class="shell">echo "net.core.somaxconn = 50000" &gt; /etc/sysctl.conf
+# # 最大连接数
+echo "net.ipv4.tcp_syncookies = 1" &gt; /etc/sysctl.conf
+# 表示开启SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击，默认为0，表示关闭；
+echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_recycle
+# 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。
+echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_reuse
+# 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；
+</code></pre>
+<h4 id="1-4-允许打开最大文件数"><a href="#1-4-允许打开最大文件数" class="headerlink" title="1.4 允许打开最大文件数"></a>1.4 允许打开最大文件数</h4><pre><code class="shell">cat&gt;&gt;/etc/security/limits.conf&lt;&lt;EOF
+* soft nofile 655350
+* hard nofile 655350
+EOF
+</code></pre>
+<h4 id="1-5-nginx-添加统计模块及配置"><a href="#1-5-nginx-添加统计模块及配置" class="headerlink" title="1.5 nginx 添加统计模块及配置"></a>1.5 nginx 添加统计模块及配置</h4><pre><code class="shell"># 在 nginx.conf 中配置统计模块
+location /status{
+    # 开启状态
+    stub_status on;
+    # 不需要日志
+    access_log off;
+    # 只允许此 ip 访问
+    allow 192.168.20.21;
+    # 其他 ip 禁止访问
+    deny all;
+}
+</code></pre>
 <p>访问即可<a target="_blank" rel="noopener" href="http://192.168.20.21/status">http://192.168.20.21/status</a></p>
-<h3 id="NGinx限制同一个ip的访问频率"><a href="#NGinx限制同一个ip的访问频率" class="headerlink" title="NGinx限制同一个ip的访问频率"></a>NGinx限制同一个ip的访问频率</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">在nginx.conf里的http{}里加上如下代码：</span><br><span class="line">http {</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span><br><span class="line">    limit_req_zone $binary_remote_addr zone=allip:10m rate=1000r/m;</span><br><span class="line">    limit_conn_zone $server_name zone=allserver:10m;</span><br><span class="line">    #定义一个名为one的limit_req_zone用来存储session，大小是10M内存，　　</span><br><span class="line"></span><br><span class="line"><span class="meta">　　#</span><span class="bash">以<span class="variable">$binary_remote_addr</span> 为key,限制平均每分钟的请求为1000个，</span></span><br><span class="line"></span><br><span class="line"><span class="meta">　　#</span><span class="bash">1M能存储16000个状态，rete的值必须为整数</span></span><br><span class="line"><span class="meta">　　#</span><span class="bash"> <span class="variable">$server_name</span> 为限制同一server最大并发数</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="NGinx限制同一个ip的访问频率"><a href="#NGinx限制同一个ip的访问频率" class="headerlink" title="NGinx限制同一个ip的访问频率"></a>NGinx限制同一个ip的访问频率</h3><pre><code class="shell">在nginx.conf里的http{}里加上如下代码：
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    limit_req_zone $binary_remote_addr zone=allip:10m rate=1000r/m;
+    limit_conn_zone $server_name zone=allserver:10m;
+    #定义一个名为one的limit_req_zone用来存储session，大小是10M内存，　　
 
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">在需要限制并发数和下载带宽的网站配置server{}里加上如下代码：</span><br><span class="line">limit_conn allip 2;    // allip是根据http中的zone选择的，是一个自定名称</span><br><span class="line">limit_conn allserver 20; // allserver也是和http的zone保持一致</span><br><span class="line">limit_rate 100k; //限制下载速度,根据带宽进行确定</span><br></pre></td></tr></tbody></table></figure>
+　　#以$binary_remote_addr 为key,限制平均每分钟的请求为1000个，
+
+　　#1M能存储16000个状态，rete的值必须为整数
+　　# $server_name 为限制同一server最大并发数
+}
+</code></pre>
+<pre><code class="shell">在需要限制并发数和下载带宽的网站配置server{}里加上如下代码：
+limit_conn allip 2;    // allip是根据http中的zone选择的，是一个自定名称
+limit_conn allserver 20; // allserver也是和http的zone保持一致
+limit_rate 100k; //限制下载速度,根据带宽进行确定
+</code></pre>
 
   
   
@@ -671,7 +733,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <a class='prev' href='/2020/10/26/a15/'>
           <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>解决nginx跨域问题</p>
           <p class='content'>项目中使用Nginx服务实现文件的访问，由于和tomcat的接口不是一个域，前端VUE做了图片处理，导致出现跨域问题.
-12345location /file {            alia...</p>
+location /file {
+            alias  /...</p>
         </a>
       
       
@@ -680,7 +743,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           <p class='content'>Redis主从复制搭建1.1运行超级无敌垃圾的脚本
 脚本每个人的环境不同.可能有的会有问题，按照自己的环境来改和执行
 
-1234567891011121314151617181920212223...</p>
+[root@localhost redis]# vim start.sh ...</p>
         </a>
       
     </div>
@@ -954,7 +1017,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

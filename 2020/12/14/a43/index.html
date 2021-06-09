@@ -539,27 +539,30 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <h1 id="搭建Leanote个人笔记"><a href="#搭建Leanote个人笔记" class="headerlink" title="搭建Leanote个人笔记"></a>搭建Leanote个人笔记</h1><ul>
 <li>可以作为个人私密笔记本使用</li>
 </ul>
-<h2 id="1-0准备环境"><a href="#1-0准备环境" class="headerlink" title="1.0准备环境"></a>1.0准备环境</h2><h3 id="优先部署mongodb"><a href="#优先部署mongodb" class="headerlink" title="优先部署mongodb"></a><strong>优先部署mongodb</strong></h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://labs-1253675457.cosgz.myqcloud.com/mongodb-linux-x86_64-3.0.1.tgz</span><br><span class="line">tar -xzvf mongodb-linux-x86_64-3.0.1.tgz</span><br><span class="line">mv mongodb-linux-x86_64-3.0.1/ /usr/<span class="built_in">local</span>/mongodb</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="创建数据存储目录"><a href="#创建数据存储目录" class="headerlink" title="创建数据存储目录"></a>创建数据存储目录</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/<span class="built_in">local</span>/mongodb/data</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a><strong>配置环境变量</strong></h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"export PATH=<span class="variable">$PATH</span>:/usr/local/mongodb/bin"</span> &gt;&gt; /etc/profile</span><br><span class="line"><span class="built_in">source</span> /etc/profile <span class="comment"># 使环境变量生效</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="启动mongodb"><a href="#启动mongodb" class="headerlink" title="启动mongodb"></a>启动mongodb</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --bind_ip localhost --port 27017 --dbpath /usr/<span class="built_in">local</span>/mongodb/data --logpath=/var/<span class="built_in">log</span>/mongod.log --fork</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="2-0-部署Leanote"><a href="#2-0-部署Leanote" class="headerlink" title="2.0 部署Leanote"></a>2.0 部署Leanote</h2><h3 id="下载官方源码包"><a href="#下载官方源码包" class="headerlink" title="下载官方源码包"></a>下载官方源码包</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://labs-1253675457.cosgz.myqcloud.com/leanote-linux-amd64-v2.4.bin.tar.gz</span><br><span class="line">tar -zxf leanote-linux-amd64-v2.4.bin.tar.gz -C /</span><br><span class="line"><span class="built_in">cd</span> /leanote</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="编辑-Leanote-配置文件"><a href="#编辑-Leanote-配置文件" class="headerlink" title="编辑 Leanote 配置文件"></a><strong>编辑 Leanote 配置文件</strong></h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim conf/app.conf</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="1-0准备环境"><a href="#1-0准备环境" class="headerlink" title="1.0准备环境"></a>1.0准备环境</h2><h3 id="优先部署mongodb"><a href="#优先部署mongodb" class="headerlink" title="优先部署mongodb"></a><strong>优先部署mongodb</strong></h3><pre><code class="bash">wget http://labs-1253675457.cosgz.myqcloud.com/mongodb-linux-x86_64-3.0.1.tgz
+tar -xzvf mongodb-linux-x86_64-3.0.1.tgz
+mv mongodb-linux-x86_64-3.0.1/ /usr/local/mongodb
+</code></pre>
+<h3 id="创建数据存储目录"><a href="#创建数据存储目录" class="headerlink" title="创建数据存储目录"></a>创建数据存储目录</h3><pre><code class="bash">mkdir /usr/local/mongodb/data
+</code></pre>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a><strong>配置环境变量</strong></h3><pre><code class="bash">echo "export PATH=$PATH:/usr/local/mongodb/bin" &gt;&gt; /etc/profile
+source /etc/profile # 使环境变量生效
+</code></pre>
+<h3 id="启动mongodb"><a href="#启动mongodb" class="headerlink" title="启动mongodb"></a>启动mongodb</h3><pre><code class="bash">mongod --bind_ip localhost --port 27017 --dbpath /usr/local/mongodb/data --logpath=/var/log/mongod.log --fork
+</code></pre>
+<h2 id="2-0-部署Leanote"><a href="#2-0-部署Leanote" class="headerlink" title="2.0 部署Leanote"></a>2.0 部署Leanote</h2><h3 id="下载官方源码包"><a href="#下载官方源码包" class="headerlink" title="下载官方源码包"></a>下载官方源码包</h3><pre><code class="bash">wget http://labs-1253675457.cosgz.myqcloud.com/leanote-linux-amd64-v2.4.bin.tar.gz
+tar -zxf leanote-linux-amd64-v2.4.bin.tar.gz -C /
+cd /leanote
+</code></pre>
+<h3 id="编辑-Leanote-配置文件"><a href="#编辑-Leanote-配置文件" class="headerlink" title="编辑 Leanote 配置文件"></a><strong>编辑 Leanote 配置文件</strong></h3><pre><code class="bash">vim conf/app.conf
+</code></pre>
 <p>在文件中找到<code>app.secret</code>并且修改为以下内容</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.secret=qcloud666</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="初始化mongo数据库"><a href="#初始化mongo数据库" class="headerlink" title="初始化mongo数据库"></a>初始化mongo数据库</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongorestore -h localhost -d leanote --dir /leanote/mongodb_backup/leanote_install_data/</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="启动Leanote"><a href="#启动Leanote" class="headerlink" title="启动Leanote"></a>启动Leanote</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /bin/bash /leanote/bin/run.sh &gt;&gt; /var/<span class="built_in">log</span>/leanote.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="bash">app.secret=qcloud666
+</code></pre>
+<h3 id="初始化mongo数据库"><a href="#初始化mongo数据库" class="headerlink" title="初始化mongo数据库"></a>初始化mongo数据库</h3><pre><code class="bash">mongorestore -h localhost -d leanote --dir /leanote/mongodb_backup/leanote_install_data/
+</code></pre>
+<h3 id="启动Leanote"><a href="#启动Leanote" class="headerlink" title="启动Leanote"></a>启动Leanote</h3><pre><code class="bash">nohup /bin/bash /leanote/bin/run.sh &gt;&gt; /var/log/leanote.log 2&gt;&amp;1 &amp;
+</code></pre>
 <ul>
 <li><p>默认监听端口为9000,如果需要更改,修改<code>app.conf</code>中的<code>http.port=9000</code></p>
 </li>
@@ -705,7 +708,8 @@ location / {
 1.0 禁止root登录
 修改sshd配置文件
 
-script123vim /etc/ssh/sshd_config找到 Per...</p>
+vim /etc/ssh/sshd_config
+找到 PermitRootL...</p>
         </a>
       
       
@@ -992,7 +996,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

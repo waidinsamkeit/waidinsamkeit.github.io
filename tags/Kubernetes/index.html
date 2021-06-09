@@ -533,7 +533,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 请各位记住把所有离线包全拿到本地!!!
 
 在线部署chartmuseum直接使用最简单的 docker run 方式，使用local 本地存储方式，通过 -v 映射到宿主机 /opt/charts更多支持安装方式见官网
-12345678mkdir /opt/chartsdocker run -d \  -p 8080:8080 \  -e DEBUG...
+mkdir /opt/charts
+docker run -d \
+  -p 8080:8080 \
+  -e DEBUG=1 \
+...
       
     
   </div>
@@ -577,7 +581,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
       
         DockerFile
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546FROM centos:8# add our user and group first to make sure their IDs get assigned consistently, regardles...
+FROM centos:8
+
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r -g 1000 redis &amp;&amp; use...
       
     
   </div>
@@ -779,7 +786,9 @@ PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者
 
 根据容量和读写模式进行匹配
 
-部署PV与PVC12345678910111213vim pv.yamlapiVersion:...
+部署PV与PVCvim pv.yaml
+apiVersion: v1
+kind: Persis...
       
     
   </div>
@@ -842,7 +851,12 @@ Pod监控
 监控平台搭建方案
 Prometheus+Grafana
 
-部署Prometheus1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545...
+部署Prometheusvim configMap.yaml # 类似于配置文件的存储
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+ ...
       
     
   </div>
@@ -897,9 +911,12 @@ Nfs：网络存储,Pod重启后,数据还是存在的
 部署NFS服务器
 可以单独设置一台服务器为NFS服务器
 
-12yum -y install nfs-utilssystemctl start nfs
+yum -y install nfs-utils
+systemctl start nfs
 
-设置挂载目录123mkdir /data/k8s_nfs -pvim /etc/exports/data/k8s...
+设置挂载目录mkdir /data/k8s_nfs -p
+vim /etc/exports
+/data/k8s_n...
       
     
   </div>
@@ -1004,10 +1021,18 @@ Helm可以解决那些问题
 
 创建Secret
 
-12345678apiVersion: v1kind: Secretmetadata:   name: mysecrettype: Opaquedate:   username: YWRtaW4=  password: MTc2MTE0NjY1MTdBYmM=
+apiVersion: v1
+kind: Secret
+metadata: 
+  name: mysecret
+type: Opaque
+date: 
+  username: YWRtaW4=
+  password: MTc2MTE0NjY1MTdBYmM=
 
 
-挂载方式(变量方式)...
+挂载方式(变量方式)
+...
       
     
   </div>
@@ -1533,7 +1558,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

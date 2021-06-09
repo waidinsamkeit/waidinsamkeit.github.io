@@ -596,23 +596,62 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <blockquote>
 <p>建议mysql5.7  不要用mysql8 不然需要编译!!!</p>
 </blockquote>
-<h3 id="1-1-三台数据库配置"><a href="#1-1-三台数据库配置" class="headerlink" title="1.1 三台数据库配置"></a>1.1 三台数据库配置</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# vim /etc/my.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">log-bin=mysql-bin # 非必需</span><br><span class="line">server-id=1　　　　# 必需</span><br><span class="line">master的server-id为1 那么slave1的server-id就是2 然后以此类推</span><br><span class="line">[root@localhost ~]# systemctl restart mysqld</span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="1-1-三台数据库配置"><a href="#1-1-三台数据库配置" class="headerlink" title="1.1 三台数据库配置"></a>1.1 三台数据库配置</h3><pre><code class="shell">[root@localhost ~]# vim /etc/my.cnf
+[mysqld]
+log-bin=mysql-bin # 非必需
+server-id=1　　　　# 必需
+master的server-id为1 那么slave1的server-id就是2 然后以此类推
+[root@localhost ~]# systemctl restart mysqld
+</code></pre>
 <h4 id="1-1-1-创建数据库同步用户"><a href="#1-1-1-创建数据库同步用户" class="headerlink" title="1.1.1 创建数据库同步用户"></a>1.1.1 创建数据库同步用户</h4><blockquote>
 <p>注意 // 此操作在master进行</p>
 </blockquote>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 此操作在master进行</span><br><span class="line">[root@localhost ~]# mysql -u root -p</span><br><span class="line">mysql&gt; CREATE USER 'repl'@'192.168.20.%' IDENTIFIED BY '123.comA'; /IP段写自己的 </span><br><span class="line">mysql&gt; GRANT REPLICATION SLAVE ON *.* TO 'repl'@'192.168.20.%';</span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br><span class="line">mysql&gt; show master status\G    //查看master状态</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">             File: mysql-bin.000001</span><br><span class="line">         Position: 875</span><br><span class="line">     Binlog_Do_DB: </span><br><span class="line"> Binlog_Ignore_DB: </span><br><span class="line">Executed_Gtid_Set: </span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="1-1-2从库配置"><a href="#1-1-2从库配置" class="headerlink" title="1.1.2从库配置"></a>1.1.2从库配置</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 此操作在从服务器上执行</span><br><span class="line">[root@bogon ~]# mysql -u root -p</span><br><span class="line">change master to master_host='192.168.20.10', master_user='repl', master_password='123.comA', master_log_file='mysql-bin.000001', master_log_pos=875;</span><br><span class="line">mysql&gt; start slave; //开启从数据同步</span><br><span class="line">mysql&gt; show slave status\G //查看从服务器状态</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">如果都是yes的话就表示成功,如果一个yes一个no就查看报错信息,主从排错我就不多说了</span><br><span class="line">Slave_IO_Running: Yes   </span><br><span class="line">Slave_SQL_Running: Yes </span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="mysql">// 此操作在master进行
+[root@localhost ~]# mysql -u root -p
+mysql&gt; CREATE USER 'repl'@'192.168.20.%' IDENTIFIED BY '123.comA'; /IP段写自己的 
+mysql&gt; GRANT REPLICATION SLAVE ON *.* TO 'repl'@'192.168.20.%';
+mysql&gt; FLUSH PRIVILEGES;
+mysql&gt; show master status\G    //查看master状态
+*************************** 1. row ***************************
+             File: mysql-bin.000001
+         Position: 875
+     Binlog_Do_DB: 
+ Binlog_Ignore_DB: 
+Executed_Gtid_Set: 
+1 row in set (0.00 sec)
+</code></pre>
+<h4 id="1-1-2从库配置"><a href="#1-1-2从库配置" class="headerlink" title="1.1.2从库配置"></a>1.1.2从库配置</h4><pre><code class="mysql">// 此操作在从服务器上执行
+[root@bogon ~]# mysql -u root -p
+change master to master_host='192.168.20.10', master_user='repl', master_password='123.comA', master_log_file='mysql-bin.000001', master_log_pos=875;
+mysql&gt; start slave; //开启从数据同步
+mysql&gt; show slave status\G //查看从服务器状态
+*************************** 1. row ***************************
+如果都是yes的话就表示成功,如果一个yes一个no就查看报错信息,主从排错我就不多说了
+Slave_IO_Running: Yes   
+Slave_SQL_Running: Yes 
+</code></pre>
 <blockquote>
 <p>master_log_pos //根据master上的Position: 875写</p>
 <p>master_host=’192.168.20.10’ // 指定masterip地址</p>
 <p>master_user=’repl’ //允许同步的用户</p>
 <p>master_password=’123.comA’ // master的密码</p>
 </blockquote>
-<h4 id="1-1-3-检测主从同步"><a href="#1-1-3-检测主从同步" class="headerlink" title="1.1.3 检测主从同步"></a>1.1.3 检测主从同步</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 主服务器上创建一个数据库</span><br><span class="line">mysql&gt; create database nacos;</span><br><span class="line">// 从服务器上进行查询</span><br><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database            |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema  |</span><br><span class="line">| mysql               |</span><br><span class="line">| performance_schema  |</span><br><span class="line">| sys                 |</span><br><span class="line">| nacos               |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.04 sec)  //查询到有nacos库即同步成功</span><br><span class="line">grant all privileges on nacos to 'root'@'%' identified by '123.comA';</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="1-1-3-检测主从同步"><a href="#1-1-3-检测主从同步" class="headerlink" title="1.1.3 检测主从同步"></a>1.1.3 检测主从同步</h4><pre><code class="mysql">// 主服务器上创建一个数据库
+mysql&gt; create database nacos;
+// 从服务器上进行查询
+mysql&gt; show databases;
++--------------------+
+| Database            |
++--------------------+
+| information_schema  |
+| mysql               |
+| performance_schema  |
+| sys                 |
+| nacos               |
++--------------------+
+5 rows in set (0.04 sec)  //查询到有nacos库即同步成功
+grant all privileges on nacos to 'root'@'%' identified by '123.comA';
+</code></pre>
 <hr>
 <h3 id="2-1-单实例版nacos集群"><a href="#2-1-单实例版nacos集群" class="headerlink" title="2.1 单实例版nacos集群"></a>2.1 单实例版nacos集群</h3><p>nacos的github地址：<a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos">https://github.com/alibaba/nacos</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/alibaba/nacos/releases/download/1.3.2/nacos-server-1.3.2.tar.gz">下载地址</a></p>
@@ -628,42 +667,93 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li><p>maven3.2+</p>
 </li>
 </ul>
-<h4 id="2-1-1-安装nacos"><a href="#2-1-1-安装nacos" class="headerlink" title="2.1.1 安装nacos"></a>2.1.1 安装nacos</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# tar -zxf nacos-server-1.3.2.tar.gz</span><br><span class="line">[root@localhost ~]# mv nacos /usr/local/nacos</span><br><span class="line">[root@localhost ~]# mv nacos /usr/local/nacos1</span><br><span class="line">[root@localhost ~]# mv nacos /usr/local/nacos2</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-2-修改nacos端口号"><a href="#2-1-2-修改nacos端口号" class="headerlink" title="2.1.2 修改nacos端口号"></a>2.1.2 修改nacos端口号</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 默认不用修改nacos 直接修改nacos1和nacos2</span><br><span class="line">[root@localhost bin]# vim /usr/local/nacos1/conf/application.properties</span><br><span class="line">server.port=8849 //更改为8849</span><br><span class="line">[root@localhost bin]# vim /usr/local/nacos2/conf/application.properties</span><br><span class="line">server.port=8850 //更改为8850</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-3-配置集群文件"><a href="#2-1-3-配置集群文件" class="headerlink" title="2.1.3 配置集群文件"></a>2.1.3 配置集群文件</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 你们自己进相应的目录进行复制吧</span><br><span class="line">[root@localhost nacos]# cd /usr/local/nacos/conf/</span><br><span class="line">[root@localhost conf]# cp cluster.conf.example cluster.conf // 三台机器都这么执行</span><br><span class="line">[root@localhost conf]# vim cluster.conf</span><br><span class="line">192.168.20.10:8848</span><br><span class="line">192.168.20.10:8849</span><br><span class="line">192.168.20.10:8850 </span><br><span class="line">// 采用这种不断端口号来充当nacos实例</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-4修改启动脚本"><a href="#2-1-4修改启动脚本" class="headerlink" title="2.1.4修改启动脚本"></a>2.1.4修改启动脚本</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bogon bin]# vim /usr/local/nacos/bin/startup.sh</span><br><span class="line">JAVA_OPT="${JAVA_OPT} -server -Xms1g -Xmx1g // 找到这一行修改启动内存为1g要不然机器扛不住,三个全改</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="2-1-5-启动nacos集群"><a href="#2-1-5-启动nacos集群" class="headerlink" title="2.1.5 启动nacos集群"></a>2.1.5 启动nacos集群</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost conf]# cd /usr/local/nacos/bin/</span><br><span class="line">sh startup.sh -p embedded  //三个配置全部启动</span><br><span class="line"><span class="meta">#</span><span class="bash"> -p embedded  //表示采用内置数据源</span></span><br><span class="line">[root@localhost bin]# tail -f ../logs/nacos.log </span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2020-10-18 22:13:26,644 INFO Nacos started successfully in cluster mode. use embedded storage</span><br><span class="line">打印出来的日志出现successfully表示成功</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">访问：http://192.168.20.10:8848/nacos/index.html</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="2-1-1-安装nacos"><a href="#2-1-1-安装nacos" class="headerlink" title="2.1.1 安装nacos"></a>2.1.1 安装nacos</h4><pre><code class="shell">[root@localhost ~]# tar -zxf nacos-server-1.3.2.tar.gz
+[root@localhost ~]# mv nacos /usr/local/nacos
+[root@localhost ~]# mv nacos /usr/local/nacos1
+[root@localhost ~]# mv nacos /usr/local/nacos2
+</code></pre>
+<h4 id="2-1-2-修改nacos端口号"><a href="#2-1-2-修改nacos端口号" class="headerlink" title="2.1.2 修改nacos端口号"></a>2.1.2 修改nacos端口号</h4><pre><code class="shell">// 默认不用修改nacos 直接修改nacos1和nacos2
+[root@localhost bin]# vim /usr/local/nacos1/conf/application.properties
+server.port=8849 //更改为8849
+[root@localhost bin]# vim /usr/local/nacos2/conf/application.properties
+server.port=8850 //更改为8850
+</code></pre>
+<h4 id="2-1-3-配置集群文件"><a href="#2-1-3-配置集群文件" class="headerlink" title="2.1.3 配置集群文件"></a>2.1.3 配置集群文件</h4><pre><code class="shell">// 你们自己进相应的目录进行复制吧
+[root@localhost nacos]# cd /usr/local/nacos/conf/
+[root@localhost conf]# cp cluster.conf.example cluster.conf // 三台机器都这么执行
+[root@localhost conf]# vim cluster.conf
+192.168.20.10:8848
+192.168.20.10:8849
+192.168.20.10:8850 
+// 采用这种不断端口号来充当nacos实例
+</code></pre>
+<h4 id="2-1-4修改启动脚本"><a href="#2-1-4修改启动脚本" class="headerlink" title="2.1.4修改启动脚本"></a>2.1.4修改启动脚本</h4><pre><code class="shell">[root@bogon bin]# vim /usr/local/nacos/bin/startup.sh
+JAVA_OPT="${JAVA_OPT} -server -Xms1g -Xmx1g // 找到这一行修改启动内存为1g要不然机器扛不住,三个全改
+</code></pre>
+<h4 id="2-1-5-启动nacos集群"><a href="#2-1-5-启动nacos集群" class="headerlink" title="2.1.5 启动nacos集群"></a>2.1.5 启动nacos集群</h4><pre><code class="shell">[root@localhost conf]# cd /usr/local/nacos/bin/
+sh startup.sh -p embedded  //三个配置全部启动
+# -p embedded  //表示采用内置数据源
+[root@localhost bin]# tail -f ../logs/nacos.log 
+</code></pre>
+<pre><code class="shell">2020-10-18 22:13:26,644 INFO Nacos started successfully in cluster mode. use embedded storage
+打印出来的日志出现successfully表示成功
+</code></pre>
+<pre><code class="shell">访问：http://192.168.20.10:8848/nacos/index.html
+</code></pre>
 <p>点击集群管理，出现节点即可</p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/nacos.png#vwid=1084&amp;vhei=671" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/nacos.png#vwid=1084&amp;vhei=671" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="nacos"></p>
-<h3 id="3-1-多实例版nacos集群"><a href="#3-1-多实例版nacos集群" class="headerlink" title="3.1 多实例版nacos集群"></a>3.1 多实例版nacos集群</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 三台全部修改cluster.conf配置文件</span><br><span class="line">192.168.20.10:8848</span><br><span class="line">192.168.20.21:8848</span><br><span class="line">192.168.20.22:8848</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh startup.sh -p embedded 启动即可</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">随机访问一台 http://192.168.20.21:8848/nacos/index.html</span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="3-1-多实例版nacos集群"><a href="#3-1-多实例版nacos集群" class="headerlink" title="3.1 多实例版nacos集群"></a>3.1 多实例版nacos集群</h3><pre><code class="shell">// 三台全部修改cluster.conf配置文件
+192.168.20.10:8848
+192.168.20.21:8848
+192.168.20.22:8848
+</code></pre>
+<pre><code class="shell">sh startup.sh -p embedded 启动即可
+</code></pre>
+<pre><code class="shell">随机访问一台 http://192.168.20.21:8848/nacos/index.html
+</code></pre>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/nacos1.png#vwid=897&amp;vhei=758" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/nacos1.png#vwid=897&amp;vhei=758" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="多实例nacos"></p>
-<h4 id="3-1-1-nacos连接mysql存储源"><a href="#3-1-1-nacos连接mysql存储源" class="headerlink" title="3.1.1 nacos连接mysql存储源"></a>3.1.1 nacos连接mysql存储源</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 三台配置文件都修改</span><br><span class="line">[root@bogon nacos]# vim conf/application.properties</span><br><span class="line">spring.datasource.platform=mysql</span><br><span class="line">db.num=1  //数据库个数</span><br><span class="line">db.url.0=jdbc:mysql://192.168.20.22:3306/nacos_config?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC //此处填写mysql的ip</span><br><span class="line">db.user=root  //用户</span><br><span class="line">db.password=xxx  //此为mysql的密码</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="3-1-2导入mysql数据"><a href="#3-1-2导入mysql数据" class="headerlink" title="3.1.2导入mysql数据"></a>3.1.2导入mysql数据</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE DATABASE nacos_config;  //先进入mysql创建一个库</span><br><span class="line">[root@bogon conf]# mysql -u root -p nacos_config &lt; nacos-mysql.sql  //把nacos的表结构导入进去</span><br><span class="line">[root@bogon bin]# ./startup.sh 启动nacos</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="3-1-1-nacos连接mysql存储源"><a href="#3-1-1-nacos连接mysql存储源" class="headerlink" title="3.1.1 nacos连接mysql存储源"></a>3.1.1 nacos连接mysql存储源</h4><pre><code class="shell">// 三台配置文件都修改
+[root@bogon nacos]# vim conf/application.properties
+spring.datasource.platform=mysql
+db.num=1  //数据库个数
+db.url.0=jdbc:mysql://192.168.20.22:3306/nacos_config?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC //此处填写mysql的ip
+db.user=root  //用户
+db.password=xxx  //此为mysql的密码
+</code></pre>
+<h4 id="3-1-2导入mysql数据"><a href="#3-1-2导入mysql数据" class="headerlink" title="3.1.2导入mysql数据"></a>3.1.2导入mysql数据</h4><pre><code class="mysql">mysql&gt; CREATE DATABASE nacos_config;  //先进入mysql创建一个库
+[root@bogon conf]# mysql -u root -p nacos_config &lt; nacos-mysql.sql  //把nacos的表结构导入进去
+[root@bogon bin]# ./startup.sh 启动nacos
+</code></pre>
 <h4 id="3-1-3测试nacos持久化"><a href="#3-1-3测试nacos持久化" class="headerlink" title="3.1.3测试nacos持久化"></a>3.1.3测试nacos持久化</h4><p>然后访问nacos新建一个测试的数据</p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/nacos2.png#vwid=1433&amp;vhei=634" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/nacos2.png#vwid=1433&amp;vhei=634" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="插入数据"></p>
 <p><img src="https://mv4.oss-cn-beijing.aliyuncs.com/nacos3.png#vwid=964&amp;vhei=827" class="lazyload placeholder" data-srcset="https://mv4.oss-cn-beijing.aliyuncs.com/nacos3.png#vwid=964&amp;vhei=827" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg" alt="插入数据1"></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">然后停止掉nacos</span><br><span class="line">[root@bogon bin]# ./shutdown.sh</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">然后停止掉nacos
+[root@bogon bin]# ./shutdown.sh
+</code></pre>
 <blockquote>
 <p>进入mysql查询数据</p>
 </blockquote>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use nacos_config</span><br><span class="line">mysql&gt; select * from config_info\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">          id: 1</span><br><span class="line">     data_id: 1</span><br><span class="line">    group_id: DEFAULT_GROUP</span><br><span class="line">     content: test</span><br><span class="line">         md5: 098f6bcd4621d373cade4e832627b4f6</span><br><span class="line">  gmt_create: 2020-10-19 07:54:39</span><br><span class="line">gmt_modified: 2020-10-19 07:54:39</span><br><span class="line">    src_user: NULL</span><br><span class="line">      src_ip: 192.168.20.1</span><br><span class="line">    app_name: </span><br><span class="line">   tenant_id: </span><br><span class="line">      c_desc: NULL</span><br><span class="line">       c_use: NULL</span><br><span class="line">      effect: NULL</span><br><span class="line">        type: text</span><br><span class="line">    c_schema: NULL</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="mysql">mysql&gt; use nacos_config
+mysql&gt; select * from config_info\G
+*************************** 1. row ***************************
+          id: 1
+     data_id: 1
+    group_id: DEFAULT_GROUP
+     content: test
+         md5: 098f6bcd4621d373cade4e832627b4f6
+  gmt_create: 2020-10-19 07:54:39
+gmt_modified: 2020-10-19 07:54:39
+    src_user: NULL
+      src_ip: 192.168.20.1
+    app_name: 
+   tenant_id: 
+      c_desc: NULL
+       c_use: NULL
+      effect: NULL
+        type: text
+    c_schema: NULL
+1 row in set (0.00 sec)
+</code></pre>
 
   
   
@@ -1083,7 +1173,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

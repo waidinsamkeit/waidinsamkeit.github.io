@@ -503,18 +503,20 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         简单安装使用
  最新版本应该是1.4.1
 
-1git clone https://github.com/nacos-group/nacos-k8s.git
+git clone https://github.com/nacos-group/nacos-k8s.git
 
 
 简单使用
 
-123cd nacos-k8schmod +x quick-startup.sh./quick-startup.sh
+cd nacos-k8s
+chmod +x quick-startup.sh
+./quick-startup.sh
 
 如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!
 
 
 演示使用
-...
+服务...
       
     
   </div>
@@ -563,7 +565,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
 
-12345678910111213141516171819202122232425262728293031323334# -*- coding: utf-8 -*- # @Time : 2021/4/21 10:11import requests# 定义请求头headers = {    "Accept":"text/html,applica...
+# -*- coding: utf-8 -*- 
+# @Time : 2021/4/21 10:11
+
+
+import requests
+# 定义请求头
+headers = {
+    "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,imag...
       
     
   </div>
@@ -768,7 +777,7 @@ OpenSSH 安全漏洞(CVE-2017-15906)
 
 
 
-安装依赖环境1yum -y install rpm-build gcc gcc-c++ glibc glibc-devel...
+安装依赖环境yum -y install rpm-build gcc gcc-c++ glibc glibc-devel ...
       
     
   </div>
@@ -822,7 +831,9 @@ PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者
 
 根据容量和读写模式进行匹配
 
-部署PV与PVC12345678910111213vim pv.yamlapiVersion:...
+部署PV与PVCvim pv.yaml
+apiVersion: v1
+kind: Persis...
       
     
   </div>
@@ -885,7 +896,12 @@ Pod监控
 监控平台搭建方案
 Prometheus+Grafana
 
-部署Prometheus1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545...
+部署Prometheusvim configMap.yaml # 类似于配置文件的存储
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+ ...
       
     
   </div>
@@ -940,9 +956,12 @@ Nfs：网络存储,Pod重启后,数据还是存在的
 部署NFS服务器
 可以单独设置一台服务器为NFS服务器
 
-12yum -y install nfs-utilssystemctl start nfs
+yum -y install nfs-utils
+systemctl start nfs
 
-设置挂载目录123mkdir /data/k8s_nfs -pvim /etc/exports/data/k8s...
+设置挂载目录mkdir /data/k8s_nfs -p
+vim /etc/exports
+/data/k8s_n...
       
     
   </div>
@@ -1473,7 +1492,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

@@ -537,11 +537,16 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <p>项目中使用Nginx服务实现文件的访问，由于和tomcat的接口不是一个域，前端VUE做了图片处理，导致出现跨域问题.</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location /file {</span><br><span class="line">            <span class="built_in">alias</span>  /kjc;</span><br><span class="line">            add_header Access-Control-Allow-Origin *;</span><br><span class="line">            add_header Access-Control-Allow-Credentials <span class="literal">true</span>;</span><br><span class="line">        }</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="bash">location /file {
+            alias  /kjc;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Credentials true;
+        }
+</code></pre>
 <p>添加跨域配置：           </p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add_header Access-Control-Allow-Origin *;</span><br><span class="line">add_header Access-Control-Allow-Credentials <span class="literal">true</span>;</span><br></pre></td></tr></tbody></table></figure>
-
-
+<pre><code class="bash">    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Credentials true;
+</code></pre>
 
   
   
@@ -669,7 +674,9 @@ logstash-6.3.2
       
         <a class='next' href='/2020/10/26/a16/'>
           <p class='title'>NGinx优化-常规优化<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>NGinx优化-常规优化1.1nginx连接数优化1234events {    worker_connections  65530;  //设置nginx最大连接,最多为65535    us...</p>
+          <p class='content'>NGinx优化-常规优化1.1nginx连接数优化events {
+    worker_connections  65530;  //设置nginx最大连接,最多为65535
+    use ...</p>
         </a>
       
     </div>
@@ -929,7 +936,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

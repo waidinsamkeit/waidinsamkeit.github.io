@@ -537,8 +537,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <h2 id="MySQL服务器参数"><a href="#MySQL服务器参数" class="headerlink" title="MySQL服务器参数"></a>MySQL服务器参数</h2><p><strong>其他常用配置参数</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sync_binlog 控制mysql如何向磁盘刷新binlog</span><br><span class="line">- 防止主DB崩溃以后Cache同步不到binlog日志</span><br><span class="line">tmp_table_size和max_heap_table_size </span><br><span class="line">- 控制内存临时表大小</span><br><span class="line">max_connections 控制运行的最大连接数</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">sync_binlog 控制mysql如何向磁盘刷新binlog
+- 防止主DB崩溃以后Cache同步不到binlog日志
+tmp_table_size和max_heap_table_size 
+- 控制内存临时表大小
+max_connections 控制运行的最大连接数
+</code></pre>
 <h2 id="数据库设计对性能的印象"><a href="#数据库设计对性能的印象" class="headerlink" title="数据库设计对性能的印象"></a>数据库设计对性能的印象</h2><ul>
 <li>MySQL最多只能关联61个表</li>
 <li>过分的反范式化为表建立太多的列</li>
@@ -551,22 +555,20 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>针对测试系统的压力 直接简单 评估服务处理能力</li>
 </ul>
 <p><strong>MySQL基础测试工作之mysqlslap</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqlslap -u root -p123.comA --concurrency=1,50,100,200 --iterations=3 --number-int-cols=5 --number-char-cols=5 --auto-generate-sql --auto-generate-sql-add-autoincrement --engine=myisam,innodb --number-of-queries=10 --create-schema=sbtest</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">mysqlslap -u root -p123.comA --concurrency=1,50,100,200 --iterations=3 --number-int-cols=5 --number-char-cols=5 --auto-generate-sql --auto-generate-sql-add-autoincrement --engine=myisam,innodb --number-of-queries=10 --create-schema=sbtest
+</code></pre>
 <p>如果你想打印出insert的数据</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqlslap -u root -p123.comA --concurrency=1,50,100,200 --iterations=3 --number-int-cols=5 --number-char-cols=5 --auto-generate-sql --auto-generate-sql-add-autoincrement --engine=myisam,innodb --number-of-queries=10 --create-schema=sbtest --only-print</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-
-
+<pre><code class="shell">mysqlslap -u root -p123.comA --concurrency=1,50,100,200 --iterations=3 --number-int-cols=5 --number-char-cols=5 --auto-generate-sql --auto-generate-sql-add-autoincrement --engine=myisam,innodb --number-of-queries=10 --create-schema=sbtest --only-print
+</code></pre>
 <h2 id="论数据库优化的目的"><a href="#论数据库优化的目的" class="headerlink" title="论数据库优化的目的"></a>论数据库优化的目的</h2><ul>
 <li><p>减少数据冗余(尽量减少而不是没有)</p>
 </li>
 <li><p>尽量避免数据维护中出现更新,插入和删除</p>
 <ul>
 <li><p>插入异常: 如果表中的某个实体随着另一个实体存在</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当某些表存在着有主键约束的时候并且有没有默认值的时候 就会导致插入异异常</span><br></pre></td></tr></tbody></table></figure></li>
+<pre><code class="shell">当某些表存在着有主键约束的时候并且有没有默认值的时候 就会导致插入异异常
+</code></pre>
+</li>
 <li><p>更新异常: 如果更改表中的某个实体的单独属性 需要对多行进行更新</p>
 </li>
 <li><p>删除异常：如果删除表中的某一实体则会导致其他实体一起消失</p>
@@ -989,7 +991,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

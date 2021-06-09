@@ -549,11 +549,31 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </li>
 </ul>
 <p><strong>演示参数ON</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">'innodb_file_per_table'</span>;</span></span><br><span class="line">+-----------------------+-------+</span><br><span class="line">| Variable_name         | Value |</span><br><span class="line">+-----------------------+-------+</span><br><span class="line">| innodb_file_per_table | ON    |</span><br><span class="line">+-----------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">由此可见 file_per_table是开启的,可以为每一个表创造一个表空间</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> create table myinnodb(id int,c1 varchar(40)); <span class="comment"># 新建一个表</span></span></span><br><span class="line">找的你的数据库下面可以看到</span><br><span class="line">myinnodb.ibd myinnodb.frm</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">mysql&gt; show variables like 'innodb_file_per_table';
++-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| innodb_file_per_table | ON    |
++-----------------------+-------+
+1 row in set (0.00 sec)
+由此可见 file_per_table是开启的,可以为每一个表创造一个表空间
+mysql&gt; create table myinnodb(id int,c1 varchar(40)); # 新建一个表
+找的你的数据库下面可以看到
+myinnodb.ibd myinnodb.frm
+</code></pre>
 <p><strong>演示参数OFF</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> <span class="built_in">set</span> global innodb_file_per_table=OFF;</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">"innodb_file_per_table"</span>;</span></span><br><span class="line">+-----------------------+-------+</span><br><span class="line">| Variable_name         | Value |</span><br><span class="line">+-----------------------+-------+</span><br><span class="line">| innodb_file_per_table | OFF   |</span><br><span class="line">+-----------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> create table myinnodb1(id int,cid varchar(20))engine=innodb;</span></span><br><span class="line">查看数据库目录下只有</span><br><span class="line"> myinnodb1.frm  # 存储的系统表空间</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">mysql&gt; set global innodb_file_per_table=OFF;
+mysql&gt; show variables like "innodb_file_per_table";
++-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| innodb_file_per_table | OFF   |
++-----------------------+-------+
+1 row in set (0.00 sec)
+mysql&gt; create table myinnodb1(id int,cid varchar(20))engine=innodb;
+查看数据库目录下只有
+ myinnodb1.frm  # 存储的系统表空间
+</code></pre>
 <h2 id="系统表空间和独立表空间怎么选"><a href="#系统表空间和独立表空间怎么选" class="headerlink" title="系统表空间和独立表空间怎么选"></a>系统表空间和独立表空间怎么选</h2><p><strong>比较</strong></p>
 <ul>
 <li>系统表空间无法简单的收缩文件大小</li>
@@ -581,10 +601,25 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>查看Redo log大小 以字节为单位</p>
 <p><strong>1.redo log通常是物理日志，记录的是数据页的物理修改，而不是某一行或某几行修改成怎样怎样，它用来恢复提交后的物理数据页(恢复数据页，且只能恢复到最后一次提交的位置)。</strong></p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">"innodb_log_buffer_size"</span>;</span></span><br><span class="line">+------------------------+----------+</span><br><span class="line">| Variable_name          | Value    |</span><br><span class="line">+------------------------+----------+</span><br><span class="line">| innodb_log_buffer_size | 16777216 |</span><br><span class="line">+------------------------+----------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">cd /var/lib/mysql/</span><br><span class="line">查看到这个目录下会有两个文件</span><br><span class="line">ib_logfile0 和 ib_logfile1</span><br><span class="line">这是因为默认的redo log的files是2</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">'innodb_log_files_in_group'</span>;</span></span><br><span class="line">+---------------------------+-------+</span><br><span class="line">| Variable_name             |Value |</span><br><span class="line">+---------------------------+-------+</span><br><span class="line">| innodb_log_files_in_group | 2     |</span><br><span class="line">+---------------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="shell">mysql&gt; show variables like "innodb_log_buffer_size";
++------------------------+----------+
+| Variable_name          | Value    |
++------------------------+----------+
+| innodb_log_buffer_size | 16777216 |
++------------------------+----------+
+1 row in set (0.00 sec)
+cd /var/lib/mysql/
+查看到这个目录下会有两个文件
+ib_logfile0 和 ib_logfile1
+这是因为默认的redo log的files是2
+mysql&gt; show variables like 'innodb_log_files_in_group';
++---------------------------+-------+
+| Variable_name             |Value |
++---------------------------+-------+
+| innodb_log_files_in_group | 2     |
++---------------------------+-------+
+1 row in set (0.00 sec)
+</code></pre>
 <blockquote>
 <p><strong>2.Undo log用来回滚行记录到某个版本。undo log一般是逻辑日志，根据每行记录进行记录。</strong></p>
 <p>包括MVCC</p>
@@ -606,8 +641,15 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 </blockquote>
 <p><strong>独占锁以及共享锁演示</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">begin  # 开启一个事务</span><br><span class="line">insert into myinnodb values(3,'bb');</span><br><span class="line">update myinnodb set name='bbbb' where id =2; # 更新name字段的值为bbbb</span><br><span class="line">其实innodb在锁的方面还是比较复杂的 了解即可</span><br><span class="line">加入表级别的独占锁</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> lock table myinnodb write;</span></span><br><span class="line">当存在锁的情况下 select的语句会被阻塞需要进行解锁</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> unlock table;</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">begin  # 开启一个事务
+insert into myinnodb values(3,'bb');
+update myinnodb set name='bbbb' where id =2; # 更新name字段的值为bbbb
+其实innodb在锁的方面还是比较复杂的 了解即可
+加入表级别的独占锁
+mysql&gt; lock table myinnodb write;
+当存在锁的情况下 select的语句会被阻塞需要进行解锁
+mysql&gt; unlock table;
+</code></pre>
 <p><strong>锁的粒度</strong></p>
 <ul>
 <li>表级锁 通过mysql的服务器层实现</li>
@@ -624,10 +666,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 </li>
 </ul>
-<h2 id="Innodb状态检查"><a href="#Innodb状态检查" class="headerlink" title="Innodb状态检查"></a>Innodb状态检查</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">show engine innodb status # 间隔30s进行采样 </span><br><span class="line">主要是包括一些 I/O读写进程 一些配置页 缓存信息 索引等等</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">  Type: InnoDB</span><br><span class="line">  Name:</span><br><span class="line">Status:</span><br><span class="line">=====================================</span><br><span class="line">2020-09-17 23:22:26 0x7f371091e700 INNODB MONITOR OUTPUT</span><br><span class="line">=====================================</span><br><span class="line">Per second averages calculated from the last 21 seconds # 21秒的统计值</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<h2 id="Innodb状态检查"><a href="#Innodb状态检查" class="headerlink" title="Innodb状态检查"></a>Innodb状态检查</h2><pre><code class="shell">show engine innodb status # 间隔30s进行采样 
+主要是包括一些 I/O读写进程 一些配置页 缓存信息 索引等等
+*************************** 1. row ***************************
+  Type: InnoDB
+  Name:
+Status:
+=====================================
+2020-09-17 23:22:26 0x7f371091e700 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 21 seconds # 21秒的统计值
+</code></pre>
 <h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><ul>
 <li>适合于大多数的OLTP应用</li>
 </ul>
@@ -760,7 +809,9 @@ MyISA...</p>
         <a class='next' href='/2020/10/26/a9/'>
           <p class='title'>MySQL服务器参数<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
           <p class='content'>MySQL服务器参数其他常用配置参数
-12345sync_binlog 控制mysql如何向磁盘刷新binlog- 防止主DB崩溃以后Cache同步不到binlog日志tmp_table_siz...</p>
+sync_binlog 控制mysql如何向磁盘刷新binlog
+- 防止主DB崩溃以后Cache同步不到binlog日志
+tmp_table_size和m...</p>
         </a>
       
     </div>
@@ -1034,7 +1085,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

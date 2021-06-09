@@ -508,9 +508,13 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <div class='md'>
     
       
-        Elasticsearch常用API操作合集GET方式查询Elastic节点状态1curl -v 192.168.10.1:9200/_cat/health?v
+        Elasticsearch常用API操作合集GET方式查询Elastic节点状态curl -v 192.168.10.1:9200/_cat/health?v
 
-初始化索引12345678910在创建索引之前 对索引进行初始化操作指定shards数量和replicas数量curl -XPUT 'http://192.168.10.1:9200/library' -d {    "setti...
+初始化索引在创建索引之前 对索引进行初始化操作
+指定shards数量和replicas数量
+curl -XPUT 'http://192.168.10.1:9200/library' -d {
+    "settings":{
+  ...
       
     
   </div>
@@ -1021,7 +1025,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

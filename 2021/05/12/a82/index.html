@@ -530,67 +530,122 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <h2 id="简单安装使用"><a href="#简单安装使用" class="headerlink" title="简单安装使用"></a>简单安装使用</h2><blockquote>
 <p> 最新版本应该是1.4.1</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/nacos-group/nacos-k8s.git</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">git clone https://github.com/nacos-group/nacos-k8s.git
+</code></pre>
 <ul>
 <li>简单使用</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd nacos-k8s</span><br><span class="line">chmod +x quick-startup.sh</span><br><span class="line">./quick-startup.sh</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">cd nacos-k8s
+chmod +x quick-startup.sh
+./quick-startup.sh
+</code></pre>
 <div class="note danger"><p>如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!!</p></div>
 
 <ul>
 <li>演示使用</li>
-<li><strong>服务注册</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT 'http://cluster-ip:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080'</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>服务发现</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET 'http://cluster-ip:8848/nacos/v1/ns/instance/list?serviceName=nacos.naming.serviceName'</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>发布配置</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"</span><br></pre></td></tr></tbody></table></figure></li>
-<li><strong>获取配置</strong><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"</span><br></pre></td></tr></tbody></table></figure></li>
+<li><strong>服务注册</strong><pre><code class="shell">curl -X PUT 'http://cluster-ip:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080'
+</code></pre>
+</li>
+<li><strong>服务发现</strong><pre><code class="shell">curl -X GET 'http://cluster-ip:8848/nacos/v1/ns/instance/list?serviceName=nacos.naming.serviceName'
+</code></pre>
+</li>
+<li><strong>发布配置</strong><pre><code class="shell">curl -X POST "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test&amp;content=helloWorld"
+</code></pre>
+</li>
+<li><strong>获取配置</strong><pre><code class="shell">curl -X GET "http://cluster-ip:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&amp;group=test"
+</code></pre>
+</li>
 </ul>
 <h2 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h2><blockquote>
 <p>在高级使用中,Nacos在K8S拥有自动扩容缩容和数据持久特性,请注意如果需要使用这部分功能请使用PVC持久卷,Nacos的自动扩容缩容需要依赖持久卷,以及数据持久化也是一样,本例中使用的是NFS来使用PVC.</p>
 </blockquote>
 <h3 id="部署NFS"><a href="#部署NFS" class="headerlink" title="部署NFS"></a>部署NFS</h3><p>nfs-client-provisioner 可动态为kubernetes提供pv卷，是Kubernetes的简易NFS的外部provisioner，本身不提供NFS，需要现有的NFS服务器提供存储。持久卷目录的命名规则为: <code>${namespace}-${pvcName}-${pvName}</code></p>
 <p><strong>创建角色</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/nfs/rbac.yaml</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">kubectl create -f deploy/nfs/rbac.yaml
+</code></pre>
 <p><strong>修改NFS的yaml</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="string">nacos-k8s/deploy/nfs/deployment.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">Recreate</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">serviceAccount:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">quay.io/external_storage/nfs-client-provisioner:latest</span></span><br><span class="line">          <span class="attr">volumeMounts:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span></span><br><span class="line">              <span class="attr">mountPath:</span> <span class="string">/persistentvolumes</span></span><br><span class="line">          <span class="attr">env:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">PROVISIONER_NAME</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">fuseim.pri/ifs</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_SERVER</span></span><br><span class="line">              <span class="attr">value:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.93</span> <span class="comment"># 修改NFS的IP为你本地的NFSIP地址</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_PATH</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">/server/nacos</span></span><br><span class="line">      <span class="attr">volumes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span></span><br><span class="line">          <span class="attr">nfs:</span></span><br><span class="line">            <span class="attr">server:</span> <span class="number">10.1</span><span class="number">.6</span><span class="number">.93</span> <span class="comment"># 同上</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/server/nacos</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">vim nacos-k8s/deploy/nfs/deployment.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-client-provisioner
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccount: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: quay.io/external_storage/nfs-client-provisioner:latest
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: fuseim.pri/ifs
+            - name: NFS_SERVER
+              value: 10.1.6.93 # 修改NFS的IP为你本地的NFSIP地址
+            - name: NFS_PATH
+              value: /server/nacos
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 10.1.6.93 # 同上
+            path: /server/nacos
+</code></pre>
 <p><strong>部署NFS-client</strong></p>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">kubectl</span> <span class="string">create</span> <span class="string">-f</span> <span class="string">deploy/nfs/deployment.yaml</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">kubectl create -f deploy/nfs/deployment.yaml
+</code></pre>
 <p><strong>部署NFS StorageClass</strong></p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/nfs/class.yaml</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>kubectl create -f deploy/nfs/class.yaml
+</code></pre>
 <p><strong>验证nfs-client-provisioner是否成功</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod -l app=nfs-client-provisioner</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f deploy/mysql/mysql-nfs.yaml</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">kubectl get pod -l app=nfs-client-provisioner
+</code></pre>
+<h3 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h3><pre><code class="shell">kubectl create -f deploy/mysql/mysql-nfs.yaml
+</code></pre>
 <h3 id="部署Nacos"><a href="#部署Nacos" class="headerlink" title="部署Nacos"></a>部署Nacos</h3><ul>
 <li>修改 <strong>deploy/nacos/nacos-pvc-nfs.yaml</strong> </li>
 </ul>
 <blockquote>
 <p>可以自行选择更改</p>
 </blockquote>
-<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">mysql.master.db.name:</span> <span class="string">"主库名称"</span></span><br><span class="line">  <span class="attr">mysql.master.port:</span> <span class="string">"主库端口"</span></span><br><span class="line">  <span class="attr">mysql.slave.port:</span> <span class="string">"从库端口"</span></span><br><span class="line">  <span class="attr">mysql.master.user:</span> <span class="string">"主库用户名"</span></span><br><span class="line">  <span class="attr">mysql.master.password:</span> <span class="string">"主库密码"</span></span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="yaml">data:
+  mysql.master.db.name: "主库名称"
+  mysql.master.port: "主库端口"
+  mysql.slave.port: "从库端口"
+  mysql.master.user: "主库用户名"
+  mysql.master.password: "主库密码"
+</code></pre>
 <ul>
 <li><strong>创建Nacos</strong></li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f nacos-k8s/deploy/nacos/nacos-pvc-nfs.yaml</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">kubectl create -f nacos-k8s/deploy/nacos/nacos-pvc-nfs.yaml
+</code></pre>
 <h3 id="扩容测试"><a href="#扩容测试" class="headerlink" title="扩容测试"></a>扩容测试</h3><ul>
 <li>在扩容前，使用 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands/#exec"><code>kubectl exec</code></a>获取在pod中的Nacos集群配置文件信息</li>
 </ul>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in 0 1; do echo nacos-$i; kubectl exec nacos-$i cat conf/cluster.conf; done</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">for i in 0 1; do echo nacos-$i; kubectl exec nacos-$i cat conf/cluster.conf; done
+</code></pre>
 <p>StatefulSet控制器根据其序数索引为每个Pod提供唯一的主机名。 主机名采用 - 的形式。 因为nacos StatefulSet的副本字段设置为3，所以当前集群文件中只有三个Nacos节点地址</p>
 <ul>
 <li>使用kubectl scale 对Nacos动态扩容</li>
 </ul>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale sts nacos --replicas=5</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code>kubectl scale sts nacos --replicas=5
+</code></pre>
 <div class="checkbox yellow"><input type="radio">
             <p>注意：一台主机上调度的时候只能分配一个Nacos</p>
             </div>
@@ -731,7 +786,12 @@ ServiceAccount
 
 
 
-12345678910111213141516171819202122232425262728293031323334# -*- coding:...</p>
+# -*- coding: utf-8 -*- 
+# @Time : 2021/4/21 10:11
+
+
+import requests
+# 定...</p>
         </a>
       
     </div>
@@ -1005,7 +1065,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

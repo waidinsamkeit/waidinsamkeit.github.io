@@ -550,26 +550,80 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>PS: 以下包版本只适合Redhat和Centos以及Oracle</p>
 <p>我觉得这样安装速度还是不错的,可以根据自己的正常网速下载</p>
 </blockquote>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm # 下载官方的mysql8.0</span><br><span class="line"></span><br><span class="line">rpm -ivh mysql80-community-release-el7-3.noarch.rpm #安装rpm</span><br><span class="line">yum install mysql-community-server # 安装mysql8.0</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm # 下载官方的mysql8.0
 
+rpm -ivh mysql80-community-release-el7-3.noarch.rpm #安装rpm
+yum install mysql-community-server # 安装mysql8.0
+</code></pre>
 <h3 id="服务启动"><a href="#服务启动" class="headerlink" title="服务启动"></a>服务启动</h3><hr>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld # 启动mysql</span><br><span class="line">systemctl stop mysqld  # 停止mysql</span><br><span class="line">systemctl restart mysqld # 重启mysql</span><br><span class="line">systemctl status mysqld  # 查看mysql的状态</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">systemctl start mysqld # 启动mysql
+systemctl stop mysqld  # 停止mysql
+systemctl restart mysqld # 重启mysql
+systemctl status mysqld  # 查看mysql的状态
+</code></pre>
 <p>[redbar]来启动失败报错的同学看过来[/redbar]</p>
 <hr>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">如果mysql启动失败报错</span><br><span class="line">cat /var/log/mysqld.log # 查看日志</span><br><span class="line">2020-09-14T09:26:14.925068Z 1 [ERROR] [MY-011011] [Server] Failed to find valid data directory.</span><br><span class="line">2020-09-14T09:26:14.925300Z 0 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.</span><br><span class="line">如果是以上的报错内容 解决方法如下：</span><br><span class="line">rm -rf /var/lib/mysql </span><br><span class="line">systemctl start mysqld # 在启动就行了.</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">如果mysql启动失败报错
+cat /var/log/mysqld.log # 查看日志
+2020-09-14T09:26:14.925068Z 1 [ERROR] [MY-011011] [Server] Failed to find valid data directory.
+2020-09-14T09:26:14.925300Z 0 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.
+如果是以上的报错内容 解决方法如下：
+rm -rf /var/lib/mysql 
+systemctl start mysqld # 在启动就行了.
+</code></pre>
 <h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><hr>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">1. 由于mysql版本变更以后,mysql默认生成了密码</span><br><span class="line">cat /var/log/mysqld.log | grep password # mysql默认密码,你的先启动mysql才能看到米吗</span><br><span class="line">2020-09-14T09:30:23.884566Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: E&amp;Vkxormg1,L # localhost: 后面都是密码</span><br><span class="line"><span class="meta">#</span><span class="bash"> 不过mysql8好像默认临时密码也不允许登录了 直接就改密码吧.</span></span><br><span class="line"></span><br><span class="line">2.vim /etc/my.cnf  </span><br><span class="line">在[mysqld]里面加入,然后重启mysql</span><br><span class="line">skip-grant-tables </span><br><span class="line">重启systemctl restart mysqld</span><br><span class="line">mysql -u root -p -A # 一路回车就进去了</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> use mysql</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> update user <span class="built_in">set</span> authentication_string=<span class="string">''</span> <span class="built_in">where</span> user=<span class="string">'root'</span>; <span class="comment"># 因为mysql5.7以后已经废弃password字段了,用了authentication_string字段,所以我们先将密码设置为空.</span></span></span><br><span class="line"></span><br><span class="line">3.回到my.cnf将`skip-grant-tables`删掉,然后重新启动mysql</span><br><span class="line">mysql -u root -p -A 回车进入就行</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> use mysql</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> ALTER user <span class="string">'root'</span>@<span class="string">'localhost'</span> IDENTIFIED BY <span class="string">'(^&amp;*^*&amp;^(*))'</span>; <span class="comment"># 将密码修改为(^&amp;*^*&amp;^(*)),这个密码你们自己自定义.</span></span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> flush privileges; <span class="comment"># 刷新权限</span></span></span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">1. 由于mysql版本变更以后,mysql默认生成了密码
+cat /var/log/mysqld.log | grep password # mysql默认密码,你的先启动mysql才能看到米吗
+2020-09-14T09:30:23.884566Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: E&amp;Vkxormg1,L # localhost: 后面都是密码
+# 不过mysql8好像默认临时密码也不允许登录了 直接就改密码吧.
 
+2.vim /etc/my.cnf  
+在[mysqld]里面加入,然后重启mysql
+skip-grant-tables 
+重启systemctl restart mysqld
+mysql -u root -p -A # 一路回车就进去了
+mysql&gt; use mysql
+mysql&gt; update user set authentication_string='' where user='root'; # 因为mysql5.7以后已经废弃password字段了,用了authentication_string字段,所以我们先将密码设置为空.
+
+3.回到my.cnf将`skip-grant-tables`删掉,然后重新启动mysql
+mysql -u root -p -A 回车进入就行
+mysql&gt; use mysql
+mysql&gt; ALTER user 'root'@'localhost' IDENTIFIED BY '(^&amp;*^*&amp;^(*))'; # 将密码修改为(^&amp;*^*&amp;^(*)),这个密码你们自己自定义.
+mysql&gt; flush privileges; # 刷新权限
+</code></pre>
 <p>[redbar]来修改密码失败报错的同学看过来[/redbar]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR 1819 (HY000): Your password does not satisfy the current policy requirements</span><br><span class="line">修改的密码不符合mysql的要求规范</span><br><span class="line">数字+字母+符号+大小写 -解决不了来打我-</span><br></pre></td></tr></tbody></table></figure>
-
+<pre><code class="shell">ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+修改的密码不符合mysql的要求规范
+数字+字母+符号+大小写 -解决不了来打我-
+</code></pre>
 <h3 id="卸载MySQL"><a href="#卸载MySQL" class="headerlink" title="卸载MySQL"></a>卸载MySQL</h3><p>[redbar]警告：不要再生产环节中删库！！！[/redbar]</p>
 <p>[redbar]警告：不要再生产环节中删库！！！[/redbar]</p>
 <p>[redbar]警告：不要再生产环节中删库！！！[/redbar]</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 不是让你生产中删除跑路的！！！！</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 不是让你生产中删除跑路的！！！！</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">## 不是让你生产中删除跑路的！！！！</span></span></span><br><span class="line">首先,停止MySQL </span><br><span class="line">systemctl stop mysqld </span><br><span class="line">1.简单粗暴直接删除</span><br><span class="line">yum remove mysql-community-server* # 单纯的为了方便,没啥事别用*</span><br><span class="line">2.如果你嫌弃删除的不干净,那就服务目录一起删掉.</span><br><span class="line">find / -name mysql # 所有过滤出来的目录都删掉</span><br></pre></td></tr></tbody></table></figure>
-<h3 id="授权用户远程登录"><a href="#授权用户远程登录" class="headerlink" title="授权用户远程登录"></a>授权用户远程登录</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 修改数据库密码认证方式（不修改密码则不执行）</span><br><span class="line">ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'chatsure！@#456';</span><br><span class="line">-- root用户设置为可远程连接（注意：需要在mysql数据库下执行）</span><br><span class="line">update user set host='%' where user='root';</span><br><span class="line">-- 给用户授权</span><br><span class="line">grant all privileges on *.* to 'root'@'%' with grant option</span><br><span class="line">-- 创建角色</span><br><span class="line">create role 'role_all'</span><br><span class="line">-- 给角色授权</span><br><span class="line">grant all privileges on *.* to role_all;</span><br><span class="line">-- 给用户添加角色</span><br><span class="line">grant role_all to 'root'@'%';</span><br><span class="line">-- 刷新权限</span><br><span class="line">flush privileges;</span><br></pre></td></tr></tbody></table></figure>
+<pre><code class="shell">### 不是让你生产中删除跑路的！！！！
+### 不是让你生产中删除跑路的！！！！
+### 不是让你生产中删除跑路的！！！！
+首先,停止MySQL 
+systemctl stop mysqld 
+1.简单粗暴直接删除
+yum remove mysql-community-server* # 单纯的为了方便,没啥事别用*
+2.如果你嫌弃删除的不干净,那就服务目录一起删掉.
+find / -name mysql # 所有过滤出来的目录都删掉
+</code></pre>
+<h3 id="授权用户远程登录"><a href="#授权用户远程登录" class="headerlink" title="授权用户远程登录"></a>授权用户远程登录</h3><pre><code class="shell">-- 修改数据库密码认证方式（不修改密码则不执行）
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'chatsure！@#456';
+-- root用户设置为可远程连接（注意：需要在mysql数据库下执行）
+update user set host='%' where user='root';
+-- 给用户授权
+grant all privileges on *.* to 'root'@'%' with grant option
+-- 创建角色
+create role 'role_all'
+-- 给角色授权
+grant all privileges on *.* to role_all;
+-- 给用户添加角色
+grant role_all to 'root'@'%';
+-- 刷新权限
+flush privileges;
+</code></pre>
 
   
   
@@ -970,7 +1024,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

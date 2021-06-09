@@ -537,16 +537,15 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
   
   <h1 id="Nacos报错问题汇总"><a href="#Nacos报错问题汇总" class="headerlink" title="Nacos报错问题汇总"></a>Nacos报错问题汇总</h1><p>各种方法不一….请按具体问题解决</p>
-<h2 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">errorMsg: errCode: 100, errMsg: Nacos serialize for class [com.alibaba.nacos.common.http....</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2021-01-18 15:21:12,490 ERROR Event listener exception : {}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NACOS页面报错如下</span><br><span class="line">Unable to process the request at this time: System triggered degradation</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h2><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">caused: errCode: 500, errMsg: java.util.concurrent.ExecutionException: com.alibaba.nacos.consistency.exception.ConsistencyException: The conformance protocol is temporarily unavailable for reading, Invalid state for readIndex: STATE_ERROR. ;</span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<h2 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h2><pre><code class="shell">errorMsg: errCode: 100, errMsg: Nacos serialize for class [com.alibaba.nacos.common.http....
+</code></pre>
+<h2 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h2><pre><code class="shell">2021-01-18 15:21:12,490 ERROR Event listener exception : {}
+</code></pre>
+<h2 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h2><pre><code class="shell">NACOS页面报错如下
+Unable to process the request at this time: System triggered degradation
+</code></pre>
+<h2 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h2><pre><code class="shell">caused: errCode: 500, errMsg: java.util.concurrent.ExecutionException: com.alibaba.nacos.consistency.exception.ConsistencyException: The conformance protocol is temporarily unavailable for reading, Invalid state for readIndex: STATE_ERROR. ;
+</code></pre>
 <h2 id="问题1、2、3、4解决方案"><a href="#问题1、2、3、4解决方案" class="headerlink" title="问题1、2、3、4解决方案"></a>问题1、2、3、4解决方案</h2><p>解决方案看下面</p>
 <p><strong>Nacos自身的Bug,有上面四个问题的可以尝试更新到最新版本的Nacos.</strong></p>
 
@@ -950,7 +949,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

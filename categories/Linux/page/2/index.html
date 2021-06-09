@@ -648,11 +648,14 @@ JumpServer 采纳分布式架构，支...
     
       
         Coturn穿透服务器搭建这个具体干嘛的你们百度….
-1yum -y install libevent-devel openssl-devel
+yum -y install libevent-devel openssl-devel
 
-1.1下载编译安装coturn1234git clone https://github.com/coturn/coturncd coturn ./configure  --prefix=/usr/local/coturnmake install
+1.1下载编译安装coturngit clone https://github.com/coturn/coturn
+cd coturn 
+./configure  --prefix=/usr/local/coturn
+make install
 
-...
+1....
       
     
   </div>
@@ -698,14 +701,14 @@ JumpServer 采纳分布式架构，支...
   <div class='md'>
     
       
-        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件1find . ( -name "*.txt"-o -name "*.pdf") -print
+        Linux Shell 文本处理工具集锦-find篇1 查找txt和pdf文件find . ( -name "*.txt"-o -name "*.pdf") -print
 
-2 正则方式查找.txt和pdf1find . -regex  ".*(.txt|.pdf)$"
+2 正则方式查找.txt和pdffind . -regex  ".*(.txt|.pdf)$"
 
 3 否定参数查找所有非txt文本
-1find . ! -name "*.txt" -print
+find . ! -name "*.txt" -print
 
-4 指定搜索深度打印...
+4 指定搜索深度打印出当前...
       
     
   </div>
@@ -751,21 +754,21 @@ JumpServer 采纳分布式架构，支...
   <div class='md'>
     
       
-        Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索1grep match_patten file # 默认访问匹配行
+        Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索grep match_patten file # 默认访问匹配行
 
 常用参数:
 
 -o 只输出匹配的文本行 VS -v 只输出没有匹配的文本行
 -c 统计文件中包含文本的次数
 
-1grep -c "text" filename
+grep -c "text" filename
 
 
 -n 打印匹配的行号
 -i 搜索时忽略大小写
 -l 只打印文件名
 
-1 在多...
+1 在多级目...
       
     
   </div>
@@ -864,7 +867,10 @@ logstash-6.3.2
     
       
         项目中使用Nginx服务实现文件的访问，由于和tomcat的接口不是一个域，前端VUE做了图片处理，导致出现跨域问题.
-12345location /file {            alias  /kjc;            add_header Access-Control-Allow-Origin *;            add_header Access-Control-A...
+location /file {
+            alias  /kjc;
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-All...
       
     
   </div>
@@ -910,12 +916,16 @@ logstash-6.3.2
   <div class='md'>
     
       
-        NGinx优化-常规优化1.1nginx连接数优化1234events {    worker_connections  65530;  //设置nginx最大连接,最多为65535    use epoll; //采用epoll模型，作用于event的I/O异步}
+        NGinx优化-常规优化1.1nginx连接数优化events {
+    worker_connections  65530;  //设置nginx最大连接,最多为65535
+    use epoll; //采用epoll模型，作用于event的I/O异步
+}
 
 
 进程优化
 
-1234worker_processes 8;//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8...
+worker_processes 8;
+//NGinx的工作线程一般为核心数或者核心数X2 最多设置为8如果超出...
       
     
   </div>
@@ -964,7 +974,11 @@ logstash-6.3.2
         Redis主从复制搭建1.1运行超级无敌垃圾的脚本
 脚本每个人的环境不同.可能有的会有问题，按照自己的环境来改和执行
 
-1234567891011121314151617181920212223[root@localhost redis]# vim start.sh  //就是不想手动敲那么累，全是命令拼凑#!/bin/bashRedis_home=/usr/local/redis# sta...
+[root@localhost redis]# vim start.sh  //就是不想手动敲那么累，全是命令拼凑
+#!/bin/bash
+Redis_home=/usr/local/redis
+# start dow redis
+echo -e "\033[41;36m ...
       
     
   </div>
@@ -1496,7 +1510,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

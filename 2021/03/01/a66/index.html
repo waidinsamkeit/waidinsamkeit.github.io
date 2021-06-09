@@ -541,10 +541,22 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>管理Pod和ReplicaSet</li>
 <li>部署、滚动升级</li>
 </ul>
-<h2 id="Pod资源限制"><a href="#Pod资源限制" class="headerlink" title="Pod资源限制"></a>Pod资源限制</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">resource:</span> <span class="comment"># 调度时候资源配置大小</span></span><br><span class="line">  <span class="attr">requests:</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">"64Mi"</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">"250m"</span></span><br><span class="line"><span class="attr">limits:</span> <span class="comment"># Pod的最大值</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">"64Mi"</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">"250m"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h2><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">livenessProbe:</span></span><br><span class="line">  <span class="attr">exec:</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">cat</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/tmp/healthy</span></span><br><span class="line">  <span class="attr">initalDelaySeconds:</span> <span class="number">5</span></span><br><span class="line">  <span class="attr">periodSeconds:</span> <span class="number">5</span></span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="Pod资源限制"><a href="#Pod资源限制" class="headerlink" title="Pod资源限制"></a>Pod资源限制</h2><pre><code class="yaml">resource: # 调度时候资源配置大小
+  requests:
+  memory: "64Mi"
+  cpu: "250m"
+limits: # Pod的最大值
+  memory: "64Mi"
+  cpu: "250m"
+</code></pre>
+<h2 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h2><pre><code class="yaml">livenessProbe:
+  exec:
+    command:
+    - cat
+    - /tmp/healthy
+  initalDelaySeconds: 5
+  periodSeconds: 5
+</code></pre>
 <ul>
 <li><code>livenessProbe</code>: 存活检查</li>
 <li><code>readinessProbe</code>:就绪检查</li>
@@ -557,13 +569,18 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>EXEC：通过进入容器执行命令进行检测</li>
 <li>TCPSocker：通过建立Socker连接来进行检测</li>
 </ol>
-<h2 id="生成Yaml文件"><a href="#生成Yaml文件" class="headerlink" title="生成Yaml文件"></a>生成Yaml文件</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create deployment web --image=nginx:1.7.9 -o yaml &gt; web.yaml</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="对外暴露端口"><a href="#对外暴露端口" class="headerlink" title="对外暴露端口"></a>对外暴露端口</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl expose deployment nginx --port=80 --<span class="built_in">type</span>=NodePort --target-port=80</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="应用升级-更新镜像"><a href="#应用升级-更新镜像" class="headerlink" title="应用升级(更新镜像)"></a>应用升级(更新镜像)</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">set</span> image deployment nginx nginx=nginx:1.8.1</span><br><span class="line">kubectl rollout status deployment nginx <span class="comment"># 查看升级状态</span></span><br><span class="line">kubectl rollout <span class="built_in">history</span> deployment nginx <span class="comment"># 查看升级版本历史</span></span><br><span class="line">kubectl rollout undo deployment nginx <span class="comment"># 回滚到上一个版本</span></span><br><span class="line">kubectl rollout undo deployment nginx --to-revision=3 <span class="comment"># 指定版本回滚</span></span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="动态扩容-属于弹性伸缩一部分"><a href="#动态扩容-属于弹性伸缩一部分" class="headerlink" title="动态扩容(属于弹性伸缩一部分)"></a>动态扩容(属于弹性伸缩一部分)</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale deployment nginx --replicas=4 <span class="comment"># 扩容副本数量为4</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="生成Yaml文件"><a href="#生成Yaml文件" class="headerlink" title="生成Yaml文件"></a>生成Yaml文件</h2><pre><code class="bash">kubectl create deployment web --image=nginx:1.7.9 -o yaml &gt; web.yaml
+</code></pre>
+<h2 id="对外暴露端口"><a href="#对外暴露端口" class="headerlink" title="对外暴露端口"></a>对外暴露端口</h2><pre><code class="bash">kubectl expose deployment nginx --port=80 --type=NodePort --target-port=80
+</code></pre>
+<h2 id="应用升级-更新镜像"><a href="#应用升级-更新镜像" class="headerlink" title="应用升级(更新镜像)"></a>应用升级(更新镜像)</h2><pre><code class="bash">kubectl set image deployment nginx nginx=nginx:1.8.1
+kubectl rollout status deployment nginx # 查看升级状态
+kubectl rollout history deployment nginx # 查看升级版本历史
+kubectl rollout undo deployment nginx # 回滚到上一个版本
+kubectl rollout undo deployment nginx --to-revision=3 # 指定版本回滚
+</code></pre>
+<h2 id="动态扩容-属于弹性伸缩一部分"><a href="#动态扩容-属于弹性伸缩一部分" class="headerlink" title="动态扩容(属于弹性伸缩一部分)"></a>动态扩容(属于弹性伸缩一部分)</h2><pre><code class="bash">kubectl scale deployment nginx --replicas=4 # 扩容副本数量为4
+</code></pre>
 <h2 id="Pod的重启策略"><a href="#Pod的重启策略" class="headerlink" title="Pod的重启策略"></a>Pod的重启策略</h2><p>Pod的重启策略（RestartPolicy）应用与Pod内所有容器，并且仅在Pod所处的Node上由kubelet进行判断和重启操作。当某个容器异常退出或者健康检查失败时，kubelet将根据RestartPolicy的设置来进行相应的操作。</p>
 <p>Pod的重启策略包括：Always、OnFailure和Never，默认值为Always。<br><code>Always</code>：当容器失效时，由kubelet自动重启该容器。<br><code>OnFailure</code>：当容器终止运行且退出码不为0时，由kubelet自动重启该容器。<br><code>Never</code>：不论容器运行状态如何，kubelet都不会重启该容器。</p>
 
@@ -973,7 +990,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->

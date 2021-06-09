@@ -545,33 +545,61 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 </li>
 </ul>
-<h4 id="1-0-创建一个list"><a href="#1-0-创建一个list" class="headerlink" title="1.0 创建一个list"></a>1.0 创建一个list</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lists = [<span class="string">'uuid'</span>,<span class="number">100</span>,<span class="literal">True</span>,{<span class="string">'name'</span>,<span class="string">'uuid'</span>},(<span class="number">22</span>,<span class="number">23</span>)]</span><br><span class="line"><span class="built_in">print</span>(lists)</span><br></pre></td></tr></tbody></table></figure>
-
+<h4 id="1-0-创建一个list"><a href="#1-0-创建一个list" class="headerlink" title="1.0 创建一个list"></a>1.0 创建一个list</h4><pre><code class="python">lists = ['uuid',100,True,{'name','uuid'},(22,23)]
+print(lists)
+</code></pre>
 <h4 id="1-1-索引切片"><a href="#1-1-索引切片" class="headerlink" title="1.1 索引切片"></a>1.1 索引切片</h4><p>主要是说索引切片这个问题</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">主要说明索引的切片</span><br><span class="line"><span class="built_in">print</span>(lists[<span class="number">0</span>],<span class="built_in">type</span>(lists[<span class="number">0</span>])) <span class="comment"># index0的存储数据类型</span></span><br><span class="line"><span class="built_in">print</span>(lists[<span class="number">1</span>],<span class="built_in">type</span>(lists[<span class="number">1</span>])) <span class="comment"># index1的存储数据类型</span></span><br><span class="line"><span class="built_in">print</span>([lists[:<span class="number">4</span>]]) <span class="comment"># 取值0-4索引内容</span></span><br><span class="line"><span class="built_in">print</span>(lists[::<span class="number">2</span>])  <span class="comment"># 步长为2 隔1取一</span></span><br><span class="line"><span class="built_in">print</span>(lists[-<span class="number">1</span>:<span class="number">2</span>:-<span class="number">2</span>]) </span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="1-2-列表的增加操作"><a href="#1-2-列表的增加操作" class="headerlink" title="1.2 列表的增加操作"></a>1.2 列表的增加操作</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    add = <span class="built_in">input</span>(<span class="string">"请输入追加信息:"</span>).strip()</span><br><span class="line">    <span class="keyword">if</span> add.upper() == <span class="string">"Q"</span> : <span class="keyword">break</span> <span class="comment"># upper小写转大写</span></span><br><span class="line">    lists.append(add) <span class="comment"># 默认追加最后</span></span><br><span class="line"><span class="built_in">print</span>(lists)</span><br><span class="line">lists.insert(<span class="number">1</span>,<span class="string">'population'</span>) <span class="comment"># 在索引下标1前插入</span></span><br><span class="line">lists.extend(<span class="string">'auther'</span>) <span class="comment"># 可迭代追加，只拆分最小元素</span></span><br><span class="line">lists.extend(<span class="string">'auther'</span>,<span class="string">'forest'</span>) <span class="comment"># </span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="1-3-列表的删除操作"><a href="#1-3-列表的删除操作" class="headerlink" title="1.3 列表的删除操作"></a>1.3 列表的删除操作</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># // 删除</span></span><br><span class="line">lists.pop(<span class="number">0</span>) <span class="comment"># 删除索引为0的数据,可以返回删除值</span></span><br><span class="line">lists.clear()  <span class="comment"># 清空列表内容 </span></span><br><span class="line"><span class="keyword">del</span> lists  <span class="comment"># 可以切片 可以索引删除,包括内存级别删除索引</span></span><br><span class="line"><span class="keyword">del</span> lists[<span class="number">0</span>] <span class="comment"># 删除索引0的数据</span></span><br><span class="line"><span class="keyword">del</span> lists[:<span class="number">2</span>] <span class="comment"># 删除0-1的数据</span></span><br><span class="line"><span class="keyword">del</span> lists[<span class="number">1</span>::<span class="number">2</span>]</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="1-4-列表的修改操作"><a href="#1-4-列表的修改操作" class="headerlink" title="1.4 列表的修改操作"></a>1.4 列表的修改操作</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># //改</span></span><br><span class="line">lists[<span class="number">0</span>]=<span class="string">'uuids'</span> <span class="comment"># 按照索引更改列表内容</span></span><br><span class="line">lists[:<span class="number">2</span>]=[<span class="string">'uuidss'</span>,<span class="number">10267</span>] <span class="comment"># 按照切片去改</span></span><br><span class="line">lists[:<span class="number">3</span>:<span class="number">1</span>]=[<span class="string">'sss'</span>,<span class="literal">False</span>] <span class="comment"># 按照切片+步长更改</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
+<pre><code class="python">主要说明索引的切片
+print(lists[0],type(lists[0])) # index0的存储数据类型
+print(lists[1],type(lists[1])) # index1的存储数据类型
+print([lists[:4]]) # 取值0-4索引内容
+print(lists[::2])  # 步长为2 隔1取一
+print(lists[-1:2:-2]) 
+</code></pre>
+<h4 id="1-2-列表的增加操作"><a href="#1-2-列表的增加操作" class="headerlink" title="1.2 列表的增加操作"></a>1.2 列表的增加操作</h4><pre><code class="python">while 1:
+    add = input("请输入追加信息:").strip()
+    if add.upper() == "Q" : break # upper小写转大写
+    lists.append(add) # 默认追加最后
+print(lists)
+lists.insert(1,'population') # 在索引下标1前插入
+lists.extend('auther') # 可迭代追加，只拆分最小元素
+lists.extend('auther','forest') # 
+</code></pre>
+<h4 id="1-3-列表的删除操作"><a href="#1-3-列表的删除操作" class="headerlink" title="1.3 列表的删除操作"></a>1.3 列表的删除操作</h4><pre><code class="python"># // 删除
+lists.pop(0) # 删除索引为0的数据,可以返回删除值
+lists.clear()  # 清空列表内容 
+del lists  # 可以切片 可以索引删除,包括内存级别删除索引
+del lists[0] # 删除索引0的数据
+del lists[:2] # 删除0-1的数据
+del lists[1::2]
+</code></pre>
+<h4 id="1-4-列表的修改操作"><a href="#1-4-列表的修改操作" class="headerlink" title="1.4 列表的修改操作"></a>1.4 列表的修改操作</h4><pre><code class="python"># //改
+lists[0]='uuids' # 按照索引更改列表内容
+lists[:2]=['uuidss',10267] # 按照切片去改
+lists[:3:1]=['sss',False] # 按照切片+步长更改
+</code></pre>
 <h4 id="1-5-列表的修改操作"><a href="#1-5-列表的修改操作" class="headerlink" title="1.5 列表的修改操作"></a>1.5 列表的修改操作</h4><p>查的话<code>print()</code>或者<code>for</code>循环即可。</p>
-<h4 id="1-6-其他操作"><a href="#1-6-其他操作" class="headerlink" title="1.6 其他操作"></a>1.6 其他操作</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//其他方法</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(lists)) <span class="comment"># 查询个数</span></span><br><span class="line"><span class="built_in">print</span>(lists.count(<span class="string">'uuid'</span>)) <span class="comment"># 查询某个元素出现的次数</span></span><br><span class="line"><span class="built_in">print</span>(lists.index(uuid)) <span class="comment"># 通过元素索找索引</span></span><br><span class="line">number=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]</span><br><span class="line">number.sort() <span class="comment"># 从小到大进行排序</span></span><br><span class="line">number.sort(reverse=Ture) <span class="comment"># 从大到小排</span></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="1-6-其他操作"><a href="#1-6-其他操作" class="headerlink" title="1.6 其他操作"></a>1.6 其他操作</h4><pre><code class="python">//其他方法
+print(len(lists)) # 查询个数
+print(lists.count('uuid')) # 查询某个元素出现的次数
+print(lists.index(uuid)) # 通过元素索找索引
+number=[1, 2, 3, 5, 4, 7, 8, 9]
+number.sort() # 从小到大进行排序
+number.sort(reverse=Ture) # 从大到小排
+</code></pre>
+<h4 id="1-7-列表的嵌套"><a href="#1-7-列表的嵌套" class="headerlink" title="1.7 列表的嵌套"></a>1.7 列表的嵌套</h4><pre><code class="python">//列表的嵌套
+lists1 = ['This','is','a','list']
+lists2 = ['This','is','second','list']
+lists3 = lists1+lists2
+print(lists3) # 列表拼接
+l4 = [5,8]*3
+print(l4)
+result = 3 in [1,2,3,4,5,6]
+print(result) # 判断3 是否存在列表中,返回True或False
 
-
-
-<h4 id="1-7-列表的嵌套"><a href="#1-7-列表的嵌套" class="headerlink" title="1.7 列表的嵌套"></a>1.7 列表的嵌套</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//列表的嵌套</span><br><span class="line">lists1 = [<span class="string">'This'</span>,<span class="string">'is'</span>,<span class="string">'a'</span>,<span class="string">'list'</span>]</span><br><span class="line">lists2 = [<span class="string">'This'</span>,<span class="string">'is'</span>,<span class="string">'second'</span>,<span class="string">'list'</span>]</span><br><span class="line">lists3 = lists1+lists2</span><br><span class="line"><span class="built_in">print</span>(lists3) <span class="comment"># 列表拼接</span></span><br><span class="line">l4 = [<span class="number">5</span>,<span class="number">8</span>]*<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(l4)</span><br><span class="line">result = <span class="number">3</span> <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line"><span class="built_in">print</span>(result) <span class="comment"># 判断3 是否存在列表中,返回True或False</span></span><br><span class="line"></span><br><span class="line">listin = [<span class="string">"aa"</span>,<span class="string">"bb"</span>] <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,[<span class="string">"aa"</span>,<span class="string">"bb"</span>],<span class="literal">True</span>]</span><br><span class="line"><span class="built_in">print</span>(listin)  <span class="comment"># 匹配嵌套内容只匹配整体</span></span><br></pre></td></tr></tbody></table></figure>
-
-
+listin = ["aa","bb"] in [1,2,["aa","bb"],True]
+print(listin)  # 匹配嵌套内容只匹配整体
+</code></pre>
 
   
   
@@ -687,11 +715,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       
         <a class='prev' href='/2020/11/24/a30/'>
           <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Linux Shell 文本处理工具集锦-grep+xargs</p>
-          <p class='content'>Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索1grep match_patten file # 默认访问匹配行
+          <p class='content'>Linux Shell 文本处理工具集锦-grep+xargs1 grep 文本搜索grep match_patten file # 默认访问匹配行
 
 常用参数:
 
--o 只输出匹配的文本行 ...</p>
+-o 只输出匹配的文本行 V...</p>
         </a>
       
       
@@ -974,7 +1002,7 @@ var loadCSS = function( href, before, media, attributes ){
   loadCSS("https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css", window.volantis.loadcss);
   
   
-  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/default.css", window.volantis.loadcss);
+  loadCSS("https://cdn.jsdelivr.net/npm/highlight.js@11.0.1/styles/srcery.css", window.volantis.loadcss);
   
 </script>
 <!-- required -->
