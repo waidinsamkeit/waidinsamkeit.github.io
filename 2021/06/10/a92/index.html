@@ -499,54 +499,76 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>模型类中的每一个类的属性都代表数据库中的一个字段</li>
 <li>模型是数据交互的接口,是表示和操作数据库的方法和方式</li>
 </ul>
-<h2 id="Django配置MySQL"><a href="#Django配置MySQL" class="headerlink" title="Django配置MySQL"></a>Django配置MySQL</h2><h4 id="MacOS用户"><a href="#MacOS用户" class="headerlink" title="MacOS用户"></a>MacOS用户</h4><pre><code class="bash"># Assume you are activating Python 3 venv
-$ brew install mysql # 安装MySQL
-$ pip install mysqlclient
-</code></pre>
-<h4 id="Linux用户"><a href="#Linux用户" class="headerlink" title="Linux用户"></a>Linux用户</h4><blockquote>
-<p><strong>请注意，这是一个基本步骤。我不能支持所有环境的完整构建步骤。如果你看到一些错误，你应该自己修复它，或者在一些用户论坛上寻求支持。不要在问题跟踪器上提交问题。</strong></p>
+<h2 id="ORM框架"><a href="#ORM框架" class="headerlink" title="ORM框架"></a>ORM框架</h2><ul>
+<li>定义：ORM(Object Relation Mapping)即对象关系映射,它是一种程序技术,它允许你使用类和对象数据库进行操作,从而</li>
+</ul>
+<p>进行避免通过SQL进行操作数据库</p>
+<ul>
+<li>作用<ul>
+<li>1.建立模型类和表之间的对应关系,允许我们通过对象的方式来操作数据库</li>
+<li>2.根据设计的模型类生成数据库的表格</li>
+<li>3.通过简单地配置就可以进行数据库的切换</li>
+</ul>
+</li>
+<li>优点<ul>
+<li>只需要面向对象编程,不需要面向数据编写代码</li>
+<li>对数据库操作都转化为对类属性和方法的操作</li>
+<li>不用编写各种数据库的SQL语句</li>
+<li>实现了数据模型与数据的解耦,屏蔽了不同数据库操作上的差异,也不用关注MySQL、ORACLE…的内部细节</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>对于复杂业务,使用成本较高…</li>
+<li>根据对象的操作转换成SQL语句,根据查询的结果转化成对象,在映射的过程中有性能损失</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>世间万物 即无完美</p>
 </blockquote>
-<p>您可能需要像这样安装 Python 3 和 MySQL 开发头文件和库：</p>
-<ul>
-<li><p><code>$ sudo apt-get install python3-dev default-libmysqlclient-dev build-essential</code> # Debian / Ubuntu</p>
-</li>
-<li><p><code>% sudo yum install python3-devel mysql-devel</code> # 红帽 / CentOS</p>
-</li>
-<li><pre><code># 执行完上面的步骤你就可以使用pip来安装mysqlclient了
-pip install mysqlclient
+<table>
+<thead>
+<tr>
+<th>ORM</th>
+<th>DataBase</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Class(类)</td>
+<td>Table(数据表)</td>
+</tr>
+<tr>
+<td>Object(对象)</td>
+<td>DataRow(数据行)</td>
+</tr>
+<tr>
+<td>Attribute(属性)</td>
+<td>Field(字段)</td>
+</tr>
+</tbody></table>
+<h3 id="模型代码示例"><a href="#模型代码示例" class="headerlink" title="模型代码示例"></a>模型代码示例</h3><p>该文件位于APP的<code>models.py</code></p>
+<pre><code class="python">from django.db import models
+
+# Create your models here.
+# 模型层入口
+from django.db import models
+
+class Detection(models.Model):
+    # CharField
+    host_name = models.CharField("HOSTNAME",max_length=50,default='')
+    addr = models.CharField("Addr",max_length=255)
+    cpu_info = models.DecimalField("CPU",max_digits=7,decimal_places=2,default=0.0)
 </code></pre>
-</li>
+<h3 id="数据库迁移"><a href="#数据库迁移" class="headerlink" title="数据库迁移"></a>数据库迁移</h3><ul>
+<li>迁移是Django同步你对模型所做的更改(添加字段、删除模型…)到你的数据的方式.</li>
+<li>生成迁移文件<code>python manage.py makemigrations</code>,生成的文件保存在应用的<code>migrations</code>下</li>
+<li>执行脚本迁移程序<code>python manage.py migrate</code>,会将每个应用下的migrations的文件同步回数据库</li>
 </ul>
-<h4 id="Win用户"><a href="#Win用户" class="headerlink" title="Win用户"></a>Win用户</h4><blockquote>
-<p>在 Windows 上构建 mysqlclient 非常困难,我们使用pymysql进行代替</p>
-</blockquote>
-<ul>
-<li><p>告诉Django用MySQL替换他的MySQLDB</p>
-<ul>
-<li>在你项目文件夹下面的<code>__init__.py</code></li>
-<li>在你APP应用下面的<code>__init__.py</code></li>
-</ul>
-</li>
-</ul>
-<pre><code class="python">  import pymysql
-  pymysql.install_as_MySQLdb() # 告诉django用pymysql代替mysqldb连接数据库
+<h3 id="模型类-创建"><a href="#模型类-创建" class="headerlink" title="模型类-创建"></a>模型类-创建</h3><pre><code class="python">from django.db import models
+class 模型类名(models.Model):
+    字段名 = models.字段类型(字段选项)
 </code></pre>
-<pre><code class="python">  # 将配置原封不动的写入settings.py
-  DATABASES = {
-      'default':{
-       'ENGINE':'django.db.backends.mysql', # 数据库引擎
-       'HOST':'127.0.0.1',  # 地址
-       'PORT':'33266', # 端口
-       'NAME':'django',  # 数据库名
-       'USER':'djangoapi', # 用户名
-       'PASSWORD':'123123123', # 密码
-       'OPTIONS':{
-           'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
-       },
-      }
-  }
-</code></pre>
-<h2 id="11"><a href="#11" class="headerlink" title="11"></a>11</h2>
+
   
   
     
@@ -580,7 +602,7 @@ pip install mysqlclient
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-10T17:25:42+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-10T17:28:50+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年6月10日</p>
@@ -708,7 +730,7 @@ python manage.py st...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E6%A8%A1%E5%9E%8B%E5%B1%82%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">有关模型层的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E5%9E%8B%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">什么是模型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Django%E9%85%8D%E7%BD%AEMySQL"><span class="toc-number">3.</span> <span class="toc-text">Django配置MySQL</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MacOS%E7%94%A8%E6%88%B7"><span class="toc-number">3.0.1.</span> <span class="toc-text">MacOS用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux%E7%94%A8%E6%88%B7"><span class="toc-number">3.0.2.</span> <span class="toc-text">Linux用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Win%E7%94%A8%E6%88%B7"><span class="toc-number">3.0.3.</span> <span class="toc-text">Win用户</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11"><span class="toc-number">4.</span> <span class="toc-text">11</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E6%A8%A1%E5%9E%8B%E5%B1%82%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">有关模型层的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E5%9E%8B%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">什么是模型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ORM%E6%A1%86%E6%9E%B6"><span class="toc-number">3.</span> <span class="toc-text">ORM框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.1.</span> <span class="toc-text">模型代码示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%81%E7%A7%BB"><span class="toc-number">3.2.</span> <span class="toc-text">数据库迁移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E7%B1%BB-%E5%88%9B%E5%BB%BA"><span class="toc-number">3.3.</span> <span class="toc-text">模型类-创建</span></a></li></ol></li></ol>
     </div>
   </section>
 
