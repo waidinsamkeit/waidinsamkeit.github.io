@@ -492,6 +492,57 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/05/12/a80/">
+        kubernetes-PvandPvc
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        PV
+简单的叙述
+
+后端服务为NFS-创建PV-Pod调用Pv
+是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。
+PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。此API对象包含存储实现的细节
+即NFS、ISCSI或特定于云供应商存储系统 
+
+静态PV: 集群管理员创建一些PV ,他们带有可供集群用户使用的实际存储的细节。,他...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-05-12</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/05/12/a80/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/05/12/a81/">
         kubernetes-Rbac
       </a>
@@ -925,74 +976,6 @@ kind: Persis...
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/04/a74/">
-        Kubernetes集群资源监控
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        集群资源监控
-监控指标
-节点资源利用率
-节点数
-运行Pod
-
-
-监控平台
-Pod监控
-容器指标
-应用程序
-
-
-
-监控平台搭建方案
-Prometheus+Grafana
-
-部署Prometheusvim configMap.yaml # 类似于配置文件的存储
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prometheus-config
- ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-04</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/04/a74/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1248,7 +1231,7 @@ metadata:
           <li><a class="flat-box"
             title="/categories/Python/" href="/categories/Python/"
             id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
+            ><div class='name'>Python</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Redis/" href="/categories/Redis/"

@@ -22,7 +22,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>Django的URL反向解析 - Random Forest</title>
+  <title>Django如何处理URL请求 - Random Forest</title>
   
     <meta name="keywords" content="Python">
   
@@ -487,7 +487,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
     
       <h1 class="title">
-        Django的URL反向解析
+        Django如何处理URL请求
       </h1>
       <div class='new-meta-box'>
         
@@ -504,6 +504,13 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         
           
             
+  <div class='new-meta-item category'>
+    <a class='notlink'>
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <a class="category-link" href="/categories/Python/">Python</a>
+    </a>
+  </div>
+
 
           
         
@@ -511,7 +518,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
             <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年6月8日</p>
+    <p>发布于：2021年6月10日</p>
   </a>
 </div>
 
@@ -529,70 +536,88 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   
   
-  <h3 id="有关绝对地址和相对地址"><a href="#有关绝对地址和相对地址" class="headerlink" title="有关绝对地址和相对地址"></a>有关绝对地址和相对地址</h3><p>先说一下有关绝对路径和相对路径吧</p>
-<pre><code class="bash">1. 绝对地址
-http://127.0.0.1:8000/api/userlist
-2.相对地址
-/api/userlist = 浏览器会把当前地址栏的协议+地址+端口 + 地址 
-相对地址的标识结果最终为: http://127.0.0.1:8000 + /api/userlist
-3. 没有`/`的相对地址
-api/userlist = 浏览器会根据当前地址栏的地址url的最后一个`/`之前的内容,并且加上该地址进行访问
-如果当前地址栏的地址为http://127.0.0.1:8000/contract/test
-最终结果标识为:http://127.0.0.1:8000/contract/ + api/userlist
+  <blockquote>
+<p><a target="_blank" rel="noopener" href="http://127.0.0.1/apps/django/1">http://127.0.0.1/apps/django/1</a></p>
+</blockquote>
+<ol>
+<li>Django从配置文件中根据<code>ROOT_URLCONF</code>找到主路由文件,也就是我们的主目录下的<code>urls.py</code></li>
+<li>Django找到<code>urls.py</code>中的<code>urlpatterns</code>变量,该内容是一个包含多个路由的数组.</li>
+</ol>
+<pre><code class="python">from django.contrib import admin
+from django.urls import path
+from . import views
+# 项目的主路由配置-HTTP进入请求Django后,优先调用urls
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('apps/django/',views.apps_dijango),
+]
 </code></pre>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><pre><code class="python">def test_url(request):
-    return render(request,'test.html')
-
-def test_url_result(request):
-    return  HttpResponse("welecome i dele ")
+<ol start="3">
+<li>依次匹配<code>urlpatternes</code>中的<code>path</code></li>
+<li>匹配成功-调用对应函数视图</li>
+<li>匹配失败-返回404</li>
+</ol>
+<h2 id="视图函数"><a href="#视图函数" class="headerlink" title="视图函数"></a>视图函数</h2><p>视图函数是一个用来接收浏览器请求(HttpRequest)对象并通过<code>HttpRequest</code>对象返回响应函数。此函数可以接收浏览器请求并根据业务逻辑返回相应的内容.</p>
+<p>语法</p>
+<pre><code class="python"># 第一个参数必须为Request,其他参数可以依次向后写
+def api_tools(request): 
+    return HttpResponse
 </code></pre>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;This is Test Url&lt;/title&gt;
-&lt;/head&gt;
-
-&lt;a href="http://127.0.0.1:8000/test_url_result"&gt;绝对地址&lt;/a&gt;
-&lt;a href="/test_url_result"&gt;带/的相对地址&lt;/a&gt;
-&lt;a href="test_url_result"&gt;不带/的相对地址&lt;/a&gt;
-
-
-&lt;body&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
+<h2 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h2><pre><code class="python">from django.urls import path
+ali = {
+    path(route,views,name=None),
+    path(route2,views.page2)
+}
+参数;
+1. route: 字符串类型,匹配请求路径
+2. views: 指定路径对应视图处理函数的名称,需要与views匹配
+3. name: 为地址起别名,在模板中地址反向解析时使用
 </code></pre>
-<pre><code class="python">urls.py
-path('test/url',views.test_url),
-path('test_url_result',views.test_url_result)
+<h3 id="Path转换器"><a href="#Path转换器" class="headerlink" title="Path转换器"></a>Path转换器</h3><p>语法</p>
+<pre><code class="python">&lt;转换器类型:自定义名&gt;
+path('page/&lt;int:page&gt;',views.page)
+# 以下是视图函数内容
+def test(request,page_num):
+
+    return HttpResponse(page_num)
 </code></pre>
-<h3 id="反向解析"><a href="#反向解析" class="headerlink" title="反向解析"></a>反向解析</h3><p>url反向解析指的是在视图或者模板中,用path定义的名称来动态查找或计算出相应的路由</p>
-<p><code>re_path</code>的语法</p>
-<pre><code class="py">re_path('music',views.music_views,name='music_url')
+<p>作用：若转换器类型匹配到对应类型的数据,则将数据按照关键字传参的方式传递给视图函数。</p>
+<p><strong>转换器类型</strong></p>
+<ul>
+<li><code>str</code>：匹配除了<code>/</code>之外的非空字符串 </li>
+</ul>
+<pre><code class="python">/v1/api/&lt;str:toolsname&gt;
+        匹配
+/v1/api/coretools
 </code></pre>
 <ul>
-<li>根据path中的<code>name</code>关键字传参给url确定了一个卫衣确定的名字,在视图或者模板中,可以通过这个名字反向推断出此url的信息</li>
+<li><code>int</code>:  匹配或任何整数,可以返回一个Int</li>
 </ul>
-<h3 id="模板中通过url标签实现反向解析"><a href="#模板中通过url标签实现反向解析" class="headerlink" title="模板中通过url标签实现反向解析"></a>模板中通过url标签实现反向解析</h3><pre><code class="ht">{% url '别名' %}
-{% url '别名' '参数值1' '参数值2' %}
+<pre><code class="python">/v1/api/&lt;int:page&gt;
+        匹配
+/v1/api/100
 </code></pre>
-<pre><code class="html">index.html
-&lt;a href={%  url 'tr' %}&gt;反向解析&lt;/a&gt;
+<ul>
+<li><code>slug</code>： 匹配任意由ASCII字母或数字以及连字符和下划线组成的短标签</li>
+</ul>
+<pre><code class="python">/v1/api/&lt;slug:sl&gt;
+        匹配
+/v1/api/this-is-user_list
 </code></pre>
-<pre><code class="python">urls.py
-path('test_url_result',views.test_url_result,name='tr')
+<ul>
+<li><code>path</code>：匹配非空字段,包括路径分隔符<code>/</code></li>
+</ul>
+<pre><code class="python">/v1/api/&lt;path:ph&gt;
+        匹配
+/v1/api/a/b/c
 </code></pre>
-<h3 id="视图中通过url反向解析"><a href="#视图中通过url反向解析" class="headerlink" title="视图中通过url反向解析"></a>视图中通过url反向解析</h3><p>在视图中可以进行调用<code>django</code>的<code>reverse</code>方法</p>
-<pre><code class="python">from django.http import HttpResponse,HttpResponseRedirect
-from django.urls import reverse
-def test_url_result(request,age):
-    # 302跳转,当有请求调用test_url_result视图的时候,302到'base'模板中
-    url = reverse('base')
-    return  HttpResponseRedirect(url)
-</code></pre>
-<pre><code class="python">urls.py
-re_path('base',views.base,name='base'),
+<h3 id="re-path"><a href="#re-path" class="headerlink" title="re_path"></a>re_path</h3><p>在url的匹配过程中可以使用正则表达式进行精确匹配</p>
+<p>语法</p>
+<pre><code class="python">from django.urls import re_path
+
+re_path(reg,view,name=xxx)
+# 正则表达式为命名分组模式(?P&lt;name&gt;pattern)匹配提取参数后用关键字传参方式传递给视图函数
 </code></pre>
 
   
@@ -611,7 +636,7 @@ re_path('base',views.base,name='base'),
               
             
               
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/08/a89/>https://blog.micomint.top/2021/06/08/a89/</a></p>
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/10/a86/>https://blog.micomint.top/2021/06/10/a86/</a></p>
               
             
           </blockquote>
@@ -628,10 +653,10 @@ re_path('base',views.base,name='base'),
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-08T14:56:26+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-10T16:32:35+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年6月8日</p>
+    <p>更新于：2021年6月10日</p>
   </a>
 </div>
 
@@ -653,7 +678,7 @@ re_path('base',views.base,name='base'),
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/10/a86/&title=Django如何处理URL请求 - Random Forest&summary="
           
           >
           
@@ -665,7 +690,7 @@ re_path('base',views.base,name='base'),
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/10/a86/&title=Django如何处理URL请求 - Random Forest&summary="
           
           >
           
@@ -677,7 +702,7 @@ re_path('base',views.base,name='base'),
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/08/a89/&title=Django的URL反向解析 - Random Forest&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/10/a86/&title=Django如何处理URL请求 - Random Forest&summary="
           
           >
           
@@ -707,17 +732,17 @@ re_path('base',views.base,name='base'),
   
     <div class="prev-next">
       
-        <a class='prev' href='/2021/06/08/a90/'>
-          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Django的静态文件</p>
-          <p class='content'>什么是静态文件？
-比如网站内部的css、html、音频和视频文件等
-需要配置静态文件的访问路径,即STATIC_URL='/static'
+        <a class='prev' href='/2021/06/10/a88/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Django的设计模式</p>
+          <p class='content'>传统的MVCMVC代表Model-View-Controller(模型-视图-控制器)模式
 
-指定访问静态文件是需要通过/static/xxx或者...</p>
+M(模型层)：主要对数据库层的封装
+V(视图层)：用于向用户展示数据
+C(控制层)：用于处理用户请求...</p>
         </a>
       
       
-        <a class='next' href='/2021/06/04/a87/'>
+        <a class='next' href='/2021/06/10/a87/'>
           <p class='title'>Django的请求与响应<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
           <p class='content'>请求与响应
 请求是指浏览器通过HTTP协议发送给服务端的数据
@@ -767,7 +792,7 @@ GET /user/api/qoqa HTTP/1.1   ---...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%85%B3%E7%BB%9D%E5%AF%B9%E5%9C%B0%E5%9D%80%E5%92%8C%E7%9B%B8%E5%AF%B9%E5%9C%B0%E5%9D%80"><span class="toc-number">1.</span> <span class="toc-text">有关绝对地址和相对地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">反向解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E4%B8%AD%E9%80%9A%E8%BF%87url%E6%A0%87%E7%AD%BE%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">模板中通过url标签实现反向解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E4%B8%AD%E9%80%9A%E8%BF%87url%E5%8F%8D%E5%90%91%E8%A7%A3%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">视图中通过url反向解析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">视图函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">路由配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Path%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">Path转换器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#re-path"><span class="toc-number">2.2.</span> <span class="toc-text">re_path</span></a></li></ol></li></ol>
     </div>
   </section>
 
@@ -786,7 +811,7 @@ GET /user/api/qoqa HTTP/1.1   ---...</p>
 <script>
   window.pdata={}
   pdata.ispage=true;
-  pdata.postTitle="Django的URL反向解析";
+  pdata.postTitle="Django如何处理URL请求";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

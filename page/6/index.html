@@ -493,6 +493,66 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2020/12/17/a44/">
+        SSH禁止root远程登录+提权
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        安全防护策略
+禁止root登录系统
+建立独立账户,使用单独权限
+
+1.0 禁止root登录
+修改sshd配置文件
+
+vim /etc/ssh/sshd_config
+找到 PermitRootLogin
+#PermitRootLogin yes 修改为 PermitRootLogin no
+
+
+注意: 这个时候不要重启你的ssh服务,否则你可能只能通过VNC云客户端登录
+
+2.0 赋予roo...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-12-17</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Linux/">Linux</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/12/17/a44/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/12/14/a43/">
         搭建Leanote个人笔记
       </a>
@@ -958,58 +1018,6 @@ wget ht...
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/27/a2/">
-        大促中的数据库性能影响----第二章
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        哪些会影响服务器性能？究竟哪些东西可以影响到我们服务器的性能呢？
-无非就是：CPU、磁盘IO、内存等等一系列硬件,我们讲讲特殊的
-在研究性能时候,先带大家来了解三个术语
-
-QPS：每秒查询率QPS是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准,简言之就是数据库每秒能查多少数据
-
-TPS: 服务器每秒处理的事务数。TPS包括一条消息入和一条消息出，加上一次用户数据库访问。（业务T...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-27</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/27/a2/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1024,7 +1032,7 @@ TPS: 服务器每秒处理的事务数。TPS包括一条消息入和一条消息
           </a>
         
         <p class="current">
-          6 / 9
+          6 / 10
         </p>
         
           <a class="next" rel="next" href="/page/7/">
@@ -1264,7 +1272,7 @@ TPS: 服务器每秒处理的事务数。TPS包括一条消息入和一条消息
           <li><a class="flat-box"
             title="/categories/Python/" href="/categories/Python/"
             id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(8)</div></a></li>
+            ><div class='name'>Python</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Redis/" href="/categories/Redis/"
