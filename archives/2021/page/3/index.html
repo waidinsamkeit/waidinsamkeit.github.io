@@ -492,6 +492,66 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/03/04/a72/">
+        Kubernetes之持久化存储数据(一)
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        持久化存储-NFS
+Emptydir：是本地存储,Pod重启,数据不存在了
+
+Nfs：网络存储,Pod重启后,数据还是存在的
+
+
+部署NFS服务器
+可以单独设置一台服务器为NFS服务器
+
+yum -y install nfs-utils
+systemctl start nfs
+
+设置挂载目录mkdir /data/k8s_nfs -p
+vim /etc/exports
+/data/k8s_n...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-04</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/04/a72/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/03/03/a71/">
         Ansible部署k8s集群
       </a>
@@ -991,58 +1051,6 @@ redis集群采用P2P模式，是完全去中心化的，不存在中...
       
         <div>
           <a class='readmore' href='/2021/02/19/a63/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/18/a62/">
-        不要在用Kill -9 直接下必杀令了
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-别丢银哈哈哈
-
-[root@bogon ~]# kill -l
- 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
- 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
-11) SIGSEGV ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-18</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/18/a62/'>
             阅读全文
           </a>
         </div>

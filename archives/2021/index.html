@@ -516,6 +516,63 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/10/a91/">
+        Django应用和分布式路由
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        什么是应用
+应用就是在Django项目中一个独立的业务模块,可以包含自己的路由、视图、模板、模型。
+
+创建一个应用
+首先使用startapp创建一个应用
+
+python manage.py startapp monitor
+
+
+在Django配置中安装此应用
+
+settings.py
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'dj...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-10</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/10/a91/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/09/a88/">
         Django的设计模式
       </a>
@@ -956,69 +1013,6 @@ PV是Volume之类的卷插件,但具有独立于适用PV的Pod的生命周期。
       
         <div>
           <a class='readmore' href='/2021/05/12/a80/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/05/12/a81/">
-        kubernetes-Rbac
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-Kubernetes中的基于角色的访问控制
-Role ClusterRole(角色)
-主体如下
-User
-Group
-ServiceAccount
-
-
-
-
-一般选择角色与主体进行绑定
-
-角色当角色可以做什么事情的时候,主体就可以做什么操作
-
-Role：特定的命名空间的访问权限
-Cluster Role: 所有命名空间的访问权限
-
-角色绑定
-roleBinding: 角色绑定到主体
-Clus...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-05-12</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/05/12/a81/'>
             阅读全文
           </a>
         </div>
