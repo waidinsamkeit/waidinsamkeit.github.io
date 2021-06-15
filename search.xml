@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django的ORM字段类型1</title>
+      <link href="2021/06/15/a93/"/>
+      <url>2021/06/15/a93/</url>
+      
+        <content type="html"><![CDATA[<h2 id="模型类字段类型"><a href="#模型类字段类型" class="headerlink" title="模型类字段类型"></a>模型类字段类型</h2><h3 id="BooleanField"><a href="#BooleanField" class="headerlink" title="BooleanField()"></a>BooleanField()</h3><ul><li>数据库类型：<code>tinyint(1)</code></li><li>编程语言中使用True或False表示值</li><li>在数据库中用0或1来表示具体的值</li></ul><h3 id="CharField"><a href="#CharField" class="headerlink" title="CharField()"></a>CharField()</h3><ul><li>数据库类型的<code>Varchar</code></li><li>必须要指定<code>max_length</code>的参数值</li></ul><h3 id="DateField"><a href="#DateField" class="headerlink" title="DateField()"></a>DateField()</h3><ul><li><p>数据库类型的<code>date</code></p></li><li><p>表示日期</p></li><li><p>参数</p><ul><li><code>auto_now</code>: 每次保存对象时,自动设置该字段为当前时间(取值True/False)</li><li><code>auto_now_add</code> : 当对象第一次被创建时自动设置当前时间(取值True/False)</li><li><code>default</code>：设置当前时间(取值：字符串格式的时间”2019-6-1”)</li></ul><blockquote><p>以上参数只能三选一！！！</p></blockquote></li></ul><h3 id="DateTimeField"><a href="#DateTimeField" class="headerlink" title="DateTimeField()"></a>DateTimeField()</h3><ul><li>数据库类型的<code>datetime(6)</code></li><li>表示日期和时间</li><li>参数与<code>DateField</code>一致</li></ul><h3 id="FloatField"><a href="#FloatField" class="headerlink" title="FloatField"></a>FloatField</h3><ul><li>数据库类型的<code>doubel</code></li><li>编程语言中和数据库中都用小数表示值</li></ul><h3 id="DecimalField"><a href="#DecimalField" class="headerlink" title="DecimalField()"></a>DecimalField()</h3><ul><li>数据库类型：<code>decimal(x,y)</code></li><li>编程语言中：使用小数表示该列的值</li><li>在数据库中：使用小数</li><li>参数<ul><li><code>max_digits</code>:位数总数,包括小数点后的位数,该值必须大于等于<code>decimal_places</code></li><li><code>decimal_places</code>：小数点后的数字数量</li></ul></li></ul><h3 id="EmailField"><a href="#EmailField" class="headerlink" title="EmailField()"></a>EmailField()</h3><ul><li>数据库中的<code>varchar</code></li><li>编程语言中和数据库中的字符串</li></ul><h3 id="IntegerField"><a href="#IntegerField" class="headerlink" title="IntegerField()"></a>IntegerField()</h3><ul><li>数据库类型：<code>int</code></li><li>编程语言和数据库中的整数</li></ul><h3 id="ImageField"><a href="#ImageField" class="headerlink" title="ImageField()"></a>ImageField()</h3><ul><li>数据库中类型<code>varchar(100)</code></li><li>作用：在数据库中为了保存图片的路径</li></ul><h3 id="TextField"><a href="#TextField" class="headerlink" title="TextField()"></a>TextField()</h3><ul><li>数据库中的<code>longtext</code></li><li>作用：表示不定长度的字符数据</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的ORM简介</title>
       <link href="2021/06/14/a92/"/>
       <url>2021/06/14/a92/</url>

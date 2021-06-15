@@ -493,6 +493,68 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2020/10/26/a10/">
+        MySQL复制功能介绍
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        MySQL复制功能介绍
+分担数据库的读负载
+对服务器进行水平扩展
+异步复制(无法保证主库和从库的延迟)
+
+复制解决了什么问题？
+不同服务器上的数据分布
+利用二进制日志进行增量备份
+不需要太多带宽
+但是基于行复制 需要大量的带宽
+跨IDC环境下可能有问题 应该进行分批复制
+实现数据读取的负载均衡
+采用非共享架构 增加数据安全性
+减少主库服务器的负载
+数据库之间的故障切换
+
+binlog日志记录...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2020-10-26</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/MYSQL/">MYSQL</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2020/10/26/a10/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2020/10/26/a11/">
         构建Spring Cloud-Eureka
       </a>
@@ -951,57 +1013,6 @@ sed -i '/^SELINUX=/s/enforcing/disabled/...
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/10/26/a20/">
-        Kubernetes-持续集成
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Kubernetes-持续集成// 文章资源来源于https://www.yuque.com/duduniao/k8s/gp8n04 基于此文章进行改进 有问题可以关注原作者.
-必要的前提条件
-你需要使用kubelet get node -o wide 查看你的集群状态信息
-
-[root@kubernetes-master ~]# kubectl get node -o wide
-NAME ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-10-26</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/10/26/a20/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1108,7 +1119,7 @@ NAME ...
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+      <a href="/tags/Ansible/" style="font-size: 16px; color: #8b8b8b">Ansible</a> <a href="/tags/DevOps/" style="font-size: 16px; color: #8b8b8b">DevOps</a> <a href="/tags/Docker/" style="font-size: 18px; color: #7e7e7e">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22px; color: #636363">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 20px; color: #707070">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 16px; color: #8b8b8b">Nacos</a> <a href="/tags/Python/" style="font-size: 22px; color: #636363">Python</a> <a href="/tags/Redis/" style="font-size: 16px; color: #8b8b8b">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
     </div>
   </section>
 

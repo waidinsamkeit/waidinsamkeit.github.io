@@ -493,6 +493,62 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/03/04/a73/">
+        Kubernetes之持久化存储数据(二)
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        持久化存储-Pv与PVC
+PV：持久化存储,对存储资源进行抽象,对外提供可以调用的地方(可以理解成生产者)
+PVC：用于调用,不需要关心内部实现的细节(可以理解成消费者)
+
+实现流程应用部署—-&gt;定义PVC(绑定PV)—-&gt;定义PV(服务器IP或者路径)
+
+根据容量和读写模式进行匹配
+
+部署PV与PVCvim pv.yaml
+apiVersion: v1
+kind: Persis...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-04</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/04/a73/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/03/04/a74/">
         Kubernetes集群资源监控
       </a>
@@ -1020,63 +1076,6 @@ Swap disabled. You MUST disable swap in order for the kubelet to work properly
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/20/a64/">
-        Python模拟RabbitMQ生产者与消费者
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Producer
-# -*- coding: utf-8 -*- 
-# @Time : 2021/2/20 9:19 上午 
-# @Author : Forest
-# @File : Producer.py
-import json
-import pika
-import datetime
-
-#生成消息入口处
-def get_message():
-    for i in range(10): ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-20</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/20/a64/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1183,7 +1182,7 @@ def get_message():
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22.33px; color: #606060">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 20.67px; color: #6c6c6c">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+      <a href="/tags/Ansible/" style="font-size: 16px; color: #8b8b8b">Ansible</a> <a href="/tags/DevOps/" style="font-size: 16px; color: #8b8b8b">DevOps</a> <a href="/tags/Docker/" style="font-size: 18px; color: #7e7e7e">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 22px; color: #636363">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 20px; color: #707070">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 16px; color: #8b8b8b">Nacos</a> <a href="/tags/Python/" style="font-size: 22px; color: #636363">Python</a> <a href="/tags/Redis/" style="font-size: 16px; color: #8b8b8b">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
     </div>
   </section>
 
