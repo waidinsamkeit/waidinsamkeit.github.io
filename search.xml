@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django关于ORM操作</title>
+      <link href="2021/06/15/a95/"/>
+      <url>2021/06/15/a95/</url>
+      
+        <content type="html"><![CDATA[<h2 id="ORM操作"><a href="#ORM操作" class="headerlink" title="ORM操作"></a>ORM操作</h2><p>基本操作包括增删改查(CRUD)即Create、Read、Update、Delete</p><p>ORM CRUD核心-&gt; 模型类.管理器对象</p><h3 id="管理器对象"><a href="#管理器对象" class="headerlink" title="管理器对象"></a>管理器对象</h3><hr><p>每个继承<code>models.Model</code>的模型类,都会有一个<code>object</code>的对象被同样继承下来,这个对象叫管理器对象.</p><p>数据库的增删改查可以通过管理器对象实现</p><pre><code class="python">class Author(models.Model):Author.objects.create() # objects是管理器对象</code></pre><h3 id="Django-Shell"><a href="#Django-Shell" class="headerlink" title="Django Shell"></a>Django Shell</h3><hr><p>在Django中提供了一个交互式的操作项目叫做Django Shell 他能够在交互模式</p><p>中的工程的代码执行相应的操作</p><blockquote><p>注意：代码发生变化的时候,请重新进入Django Shell</p></blockquote><p>启动方式：<code>python manage.py shell</code></p><h3 id="创建数据"><a href="#创建数据" class="headerlink" title="创建数据"></a>创建数据</h3><p>Django ORM使用一种直观的方式把数据库表中的数据表示成Python对象</p><p>创建数据中每一条记录就是创建一个数据对象</p><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><pre><code class="python">Author.objects.create(key=value,key2=value2....)# key表述数据库的列名 values表示值</code></pre><ul><li>成功则返回创建好的实体对象</li><li>失败则抛出异常</li></ul><pre><code class="shell">(D:\an\envs\My_Project) C:\Users\Administrator\Desktop\My_Project&gt;python manage.py shellC:\Users\Administrator\Desktop\My_ProjectPython 3.7.10 (default, Feb 26 2021, 13:13:20) [MSC v.1916 32 bit (Intel)] on win32Type "help", "copyright", "credits" or "license" for more information.(InteractiveConsole)&gt;&gt;&gt; Author.objects.create(Name="beihai",Age=18,Email_addr="12233335@163.com")&gt;&gt;&gt; </code></pre><h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p>创建Auther实例对象,并调用<code>save</code>方法</p><pre><code class="python">obj = Author(Name="随机森林")obj.save()</code></pre><pre><code class="shell">&gt;&gt;&gt; b2 = Author(Name="小橘子",Age=26,Email_addr="sji1@gmail.com")&gt;&gt;&gt; b2.save()</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的ORM字段类型2</title>
       <link href="2021/06/15/a94/"/>
       <url>2021/06/15/a94/</url>
