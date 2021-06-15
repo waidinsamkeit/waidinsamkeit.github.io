@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django的ORM字段类型2</title>
+      <link href="2021/06/15/a94/"/>
+      <url>2021/06/15/a94/</url>
+      
+        <content type="html"><![CDATA[<h2 id="模型类-字段选项"><a href="#模型类-字段选项" class="headerlink" title="模型类-字段选项"></a>模型类-字段选项</h2><ul><li>字段选项：指定创建的列的额外信息</li><li>允许出现多个字段选项,多个选项之间使用<code>,</code>隔开</li></ul><h3 id="primary-key"><a href="#primary-key" class="headerlink" title="primary key"></a>primary key</h3><ul><li>如果设置为<code>True</code>,表示该列为主键,如果指定一个字段为主键,则此数据库不会创建Id字段</li></ul><h3 id="blank"><a href="#blank" class="headerlink" title="blank"></a>blank</h3><ul><li>设置为<code>True</code>的时候,字段可以为空。设置为<code>False</code>的时候字段是必须填写的</li></ul><h3 id="null"><a href="#null" class="headerlink" title="null"></a>null</h3><ul><li>如果设置为<code>True</code>则表示该列允许为空.</li><li>默认的情况下为False,如果不为空的话需要设置<code>default</code>来设置默认值</li></ul><h3 id="default"><a href="#default" class="headerlink" title="default"></a>default</h3><ul><li>设置所在列的默认值,如果字段选项<code>null=False</code>的话建议添加此选项</li></ul><h3 id="db-index"><a href="#db-index" class="headerlink" title="db_index"></a>db_index</h3><ul><li>如果设置为<code>True</code>表示为该列增加索引</li></ul><h3 id="unique"><a href="#unique" class="headerlink" title="unique"></a>unique</h3><ul><li>如果设置为<code>True</code>表示该字段在数据库中的值必须是唯一的(不能重复出现)</li></ul><h3 id="db-column"><a href="#db-column" class="headerlink" title="db_column"></a>db_column</h3><ul><li>指定列名称,如果不指定的话则采用属性名作为列名</li></ul><h3 id="verbose-name"><a href="#verbose-name" class="headerlink" title="verbose_name"></a>verbose_name</h3><ul><li>设置此字段在admin界面上的显示名称</li></ul><h2 id="模型类-Meta类"><a href="#模型类-Meta类" class="headerlink" title="模型类-Meta类"></a>模型类-Meta类</h2><p>使用补<code>Meta</code>类来给模型赋予属性,<code>Meta</code>类下有很多内建的类属性,可对模型类做一些控制</p><pre><code class="python">class Author(models.Model):    name = models.CharField("Name:",max_length=11,default='1',null=False,db_index=True ,unique=True)    age = models.IntegerField("Age:")    email_addr = models.EmailField("Email",max_length=50,null=False)    class Meta:        db_table = 'book' # 可以改变当前模型类对应的表名</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的ORM字段类型1</title>
       <link href="2021/06/15/a93/"/>
       <url>2021/06/15/a93/</url>
