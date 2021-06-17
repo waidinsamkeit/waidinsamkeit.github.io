@@ -526,6 +526,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
         
           
+        
+          
             
               <div class='post-wrapper'>
                 <div class="post post-v3 white-box reveal shadow">
@@ -810,6 +812,80 @@ Pyth...
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
+      <a href="/2021/06/17/a96/">
+        Django查询操作
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        查询操作
+数据库的查询需要使用管理器对象进行
+通过mymodel.objects管理器方法调用查询对象
+
+
+
+
+方法
+说明
+
+
+
+all()
+查询全部记录,返回QuerySet查询对象
+
+
+get()
+查询符合条件的单一记录
+
+
+filter()
+查询符合条件的多条记录
+
+
+exclude()
+查询符合条件外的全部记录
+
+
+all()方法
+
+使用方法：Asset.objects.all()
+...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-17</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/17/a96/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -1294,60 +1370,6 @@ from django.urls import path...
       
         <div>
           <a class='readmore' href='/2021/06/10/a86/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a87/">
-        Django的请求与响应
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        请求与响应
-请求是指浏览器通过HTTP协议发送给服务端的数据
-响应指的是服务端收到响应后做相应处理后再返回给浏览器
-
-请求样例
-GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行
-Host: 127.0.0.1:8000   ---&gt; 请求头
-Connection: keep-alive
-sec-ch-ua: " Not;A Brand";v="99",...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a87/'>
             阅读全文
           </a>
         </div>

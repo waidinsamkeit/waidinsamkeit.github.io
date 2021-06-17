@@ -24,7 +24,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>归档：2021 - Random Forest</title>
+  <title>归档：2021/6 - Random Forest</title>
   
 
   
@@ -492,40 +492,23 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
-      <a href="/2021/03/01/a67/">
-        Kubernete-Pod操作管理集合
+      <a href="/2021/06/10/a87/">
+        Django的请求与响应
       </a>
     </h2>
   
   <div class='md'>
     
       
-        有状态与无状态
-有状态和无状态的区别
-无状态
-认为Pod都是一样的
-没有顺序要求
-不用考虑在哪个Node运行
-随意进行伸缩和扩展
+        请求与响应
+请求是指浏览器通过HTTP协议发送给服务端的数据
+响应指的是服务端收到响应后做相应处理后再返回给浏览器
 
-
-有状态
-有关无状态的因素都需要考虑
-让每个Pod都是独立的,保持Pod启动顺序的唯一性
-唯一的网络标识符,持久化存储数据
-有序化,例如MYSQL主从
-
-
-
-
-
-
- 无头Service
-
-
-ClusterIP：None
-
-部署StatefulSet# 首先构建一...
+请求样例
+GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行
+Host: 127.0.0.1:8000   ---&gt; 请求头
+Connection: keep-alive
+sec-ch-ua: " Not;A Brand";v="99",...
       
     
   </div>
@@ -533,176 +516,7 @@ ClusterIP：None
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time>2021-03-01</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/01/a67/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/01/a66/">
-        Kubernetes-Deployment
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Deployment应用场景
-部署无状态应用Web或者微服务
-管理Pod和ReplicaSet
-部署、滚动升级
-
-Pod资源限制resource: # 调度时候资源配置大小
-  requests:
-  memory: "64Mi"
-  cpu: "250m"
-limits: # Pod的最大值
-  memory: "64Mi"
-  cpu: "250m"
-
-健康检查livenessProbe...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-28</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/01/a66/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/28/a65/">
-        Kubernetes-1.6.2详细部署
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        准备环境
-2 GB or more of RAM per machine (any less will leave little room for your apps 2 CPUs or more
-
-Swap disabled. You MUST disable swap in order for the kubelet to work properly
-
-
-
-注意：服务器CPU为2核心 内...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-28</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/28/a65/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/20/a64/">
-        Python模拟RabbitMQ生产者与消费者
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Producer
-# -*- coding: utf-8 -*- 
-# @Time : 2021/2/20 9:19 上午 
-# @Author : Forest
-# @File : Producer.py
-import json
-import pika
-import datetime
-
-#生成消息入口处
-def get_message():
-    for i in range(10): ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-20</time>
+        <time>2021-06-10</time>
         
           <span class="dot"></span>
           <a class="category-link" href="/categories/Python/">Python</a>
@@ -710,322 +524,7 @@ def get_message():
       </div>
       
         <div>
-          <a class='readmore' href='/2021/02/20/a64/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/19/a63/">
-        Redis集群搭建
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Redis集群搭建Redis单机安装教程本博客都有
-
-Redis主从搭建
-
-Redis哨兵搭建
-
-
-Redis Cluster（Redis集群）简介
-redis是一个开源的key value存储系统，受到了广大互联网公司的青睐。redis3.0版本之前只支持单例模式，在3.0版本及以后才支持集群，我这里用的是redis3.0.0版本；
-redis集群采用P2P模式，是完全去中心化的，不存在中...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Redis/">Redis</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/19/a63/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/18/a62/">
-        不要在用Kill -9 直接下必杀令了
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-别丢银哈哈哈
-
-[root@bogon ~]# kill -l
- 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
- 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
-11) SIGSEGV ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-18</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/18/a62/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/29/a61/">
-        MinBox Logging
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        MinBox Logging     
-MinBox Logging是一款分布式、零侵入式的链路日志分析框架，支持SpringCloud微服务架构下配置使用，内部封装了RestTemplate、OpenFeign两种方式透传链路信息。
-零侵入式MinBox Logging无需使用注解配置采集链路日志，只需要添加依赖后简单配置Minbox Loggin Admin的相关地址或服务名称即可，每次...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-29</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Java/">Java</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/29/a61/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/25/a60/">
-        Python-方法反射
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python-方法反射
- Python3.x
-
-
-引言
-
-什么是反射?
-反射的概念是由Smith在1982年首次提出的，主要是指程序可以访问、检测和修改它本身状态或行为的一种能力（自省）。这一概念的提出很快引发了计算机科学领域关于应用反射性的研究。它首先被程序语言的设计领域所采用,并在Lisp和面向对象方面取得了成绩。
-简而言之 ：反射就是通过字符串的去操作对象中的属性
-反射的方法getat...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/25/a60/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/25/a59/">
-        Jenkins回滚版本
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Jenkins-Build后回滚操作​    就是用于生产业务环节的版本回滚
-
- 例如上线新版本报错…{wode fuck Error！！！}
- 更新新版本有Bug
-
-Jenkins常用shell变量以下变量可用于Shell脚本
-
-BUILD_NUMBER
-当前的内部版本号，例如“ 153”
-BUILD_ID
-当前版本ID，与在1.597+中创​​建的版本的BUILD_NUMBER相同，但对...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/25/a59/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/24/a28/">
-        Prometheus+Grafana监控
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Prometheus
-更新于2021-01-20
-
-Prometheus是最初在SoundCloud上构建的开源系统监视和警报工具包 。自2012年成立以来，许多公司和组织都采用了Prometheus，该项目拥有非常活跃的开发人员和用户社区。现在，它是一个独立的开源项目，并且独立于任何公司进行维护。为了强调这一点并阐明项目的治理结构，Prometheus在2016年加入了 Cloud Nat...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/24/a28/'>
+          <a class='readmore' href='/2021/06/10/a87/'>
             阅读全文
           </a>
         </div>
@@ -1045,21 +544,15 @@ Prometheus是最初在SoundCloud上构建的开源系统监视和警报工具包
       <br>
       <div class="prev-next">
         
-          <a class="prev" rel="prev" href="/archives/2021/page/3/">
+          <a class="prev" rel="prev" href="/archives/2021/06/">
             <section class="post prev white-box shadow" >
               <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
             </section>
           </a>
         
         <p class="current">
-          4 / 5
+          2 / 2
         </p>
-        
-          <a class="next" rel="next" href="/archives/2021/page/5/">
-            <section class="post next white-box shadow">
-              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
         
       </div>
     
