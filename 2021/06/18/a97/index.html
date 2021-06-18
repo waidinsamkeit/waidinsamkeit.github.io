@@ -5,8 +5,6 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -24,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>标签：Python - Random Forest</title>
+  <title>Django的ORM更新操作 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -419,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div id='cover-backstretch'></div>
           
@@ -476,602 +476,241 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <div class="body-wrapper" id="pjax-container">
           
 
-
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-    
-      
-  <section class="post-list">
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a86/">
-        Django如何处理URL请求
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        
-http://127.0.0.1/apps/django/1
 
 
-Django从配置文件中根据ROOT_URLCONF找到主路由文件,也就是我们的主目录下的urls.py
-Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由的数组.
-
-from django.contrib import admin
-from django.urls import path...
-      
-    
-  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Django的ORM更新操作
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2021-06-10</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
         
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月18日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="更新单个数据"><a href="#更新单个数据" class="headerlink" title="更新单个数据"></a>更新单个数据</h2><hr>
+<ul>
+<li>修改单个实体的某些字段值的步骤</li>
+</ul>
+<ol>
+<li>查询：通过<code>get()</code>得到要修改的实体对象</li>
+<li>修改：通过对象的属性方法修改数据</li>
+<li>保存:  通过<code>save()</code>进行保存</li>
+</ol>
+<blockquote>
+<p>进入Django Shell进行操作</p>
+</blockquote>
+<pre><code class="python"># 修改system字段为Ubuntu18.04
+from monitor.models import Asset
+select = Asset.objects.get(id=1)
+select.system="Ubuntu18.04"
+select.save()  # 一定要保存,如果不保存不会commit到数据库中
+</code></pre>
+<h2 id="批量更新数据"><a href="#批量更新数据" class="headerlink" title="批量更新数据"></a>批量更新数据</h2><ul>
+<li>直接调用QuerySet的<code>update</code>属性进行批量修改</li>
+</ul>
+<pre><code class="python"># 更新所有systsm为Windows10的主机系统为Centos7.6
+from monitor.models import Asset
+select = Asset.objects.filter(system__gte='Windows10')
+select.update(system="Centos7.6") 
+</code></pre>
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2021/06/10/a86/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/18/a97/>https://blog.micomint.top/2021/06/18/a97/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-18T15:19:31+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月18日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a87/">
-        Django的请求与响应
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        请求与响应
-请求是指浏览器通过HTTP协议发送给服务端的数据
-响应指的是服务端收到响应后做相应处理后再返回给浏览器
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
 
-请求样例
-GET /user/api/qoqa HTTP/1.1   ---&gt; 起始行
-Host: 127.0.0.1:8000   ---&gt; 请求头
-Connection: keep-alive
-sec-ch-ua: " Not;A Brand";v="99",...
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/18/a97/&title=Django的ORM更新操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/18/a97/&title=Django的ORM更新操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/18/a97/&title=Django的ORM更新操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
       
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a87/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
 </div>
 
-          </div>
+
+
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/05/12/a79/">
-        编写你的第一个Django应用
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        编写你的第一个 Django 应用让我们通过示例来学习。
-通过这个教程，我们将带着你创建一个基本的投票应用程序。
-它将由两部分组成：
-
-一个让人们查看和投票的公共站点。
-一个让你能添加、修改和删除投票的管理站点。
-
-我们假定你已经阅读了 安装 Django。你能知道 Django 已被安装，且安装的是哪个版本，通过在命令提示行输入命令
-python3 -m django --version
-...
-      
-    
+    </div>
   </div>
+
+
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-05-12</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/05/12/a79/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
   
 
-</div>
+  
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2021/06/17/a96/'>
+          <p class='title'>Django查询操作<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>查询操作
+数据库的查询需要使用管理器对象进行
+通过mymodel.objects管理器方法调用查询对象
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/02/20/a64/">
-        Python模拟RabbitMQ生产者与消费者
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Producer
-# -*- coding: utf-8 -*- 
-# @Time : 2021/2/20 9:19 上午 
-# @Author : Forest
-# @File : Producer.py
-import json
-import pika
-import datetime
 
-#生成消息入口处
-def get_message():
-    for i in range(10): ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-02-20</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/02/20/a64/'>
-            阅读全文
-          </a>
-        </div>
+
+
+方法
+说明
+
+
+
+all()
+查询全部记录,返回QuerySet查询对象
+
+
+ge...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/25/a60/">
-        Python-方法反射
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python-方法反射
- Python3.x
-
-
-引言
-
-什么是反射?
-反射的概念是由Smith在1982年首次提出的，主要是指程序可以访问、检测和修改它本身状态或行为的一种能力（自省）。这一概念的提出很快引发了计算机科学领域关于应用反射性的研究。它首先被程序语言的设计领域所采用,并在Lisp和面向对象方面取得了成绩。
-简而言之 ：反射就是通过字符串的去操作对象中的属性
-反射的方法getat...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/25/a60/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/21/a46/">
-        PIP包管理工具使用
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        PIP包管理工具的使用
-方便的管理第三方工具包
-
-
-Mac/Linux用户安装PIPcurl https://bootstrap.pypa.io/get-pip.py | python3
-
-
-设置清华源
-
-pip install pip -U
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-
-安...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-21</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/21/a46/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/21/a45/">
-        Python加密模块
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Hashlib与Hmac加密模块
-任何密码安全都不能脱离加密
-
-加密方式
-单向加密
-单向加密的过程简单的可以理解为只有加密的过程 不能解密.
-
-
-对称加密
-非对称加密
-
-单向加密import hashlib
-xhash = hashlib.md5() # 生成md5对象
-xhash.update('123.com'.encode('utf-8')) # 转换为utf-8编码
-print(xh...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-21</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/21/a45/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/08/a40/">
-        Python-Namespace
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python名称空间
-Python使用叫做命名空间的东西来记录变量的轨迹。命名空间是一个 字典（dictionary），
-它的键就是变量名，它的值就是那些变量的值🛰
-
-简单地了解下Python的四种Name spaceLEGB
-
-local：函数内部的名字空间,一般包括函数的局部变量以及形式参数
-enclosing function：在嵌套函数中外部函数的名称空间,若func2嵌套在fun...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-08</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/08/a40/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/12/03/a38/">
-        Python嵌套函数与匿名函数
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python函数高级用法
-函数的嵌套调用是在”函数调用中再调用其他函数”。也就是说:函数嵌套允许在一个函数中调用另外一个函数。如下：
-
-name = "Forest"
-def change():
-    name = "Forest1"
-
-    def change2():
-        # global name  如果声明了这句，下面的name改的是最外层的全局变层
-        ...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-12-03</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/12/03/a38/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2020/11/24/a31/">
-        Pythonday1-列表
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Python列表相关操作
-长话短说
-列表python基础数据类型之一
-list可以存放各种数据(超大量数据) 可索引、可切片
-列表中的元素
-整形、字符串类型、浮点、列表、元祖、字典、对
+  </article>
 
 
 
-1.0 创建一个listlists = ['uuid',100,True,{'name','uuid'},(22,23)]
-print(lists)
-
-1.1 索引切片主要是说索引切片这个问题
-主要说明...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2020-11-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2020/11/24/a31/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-          <a class="prev" rel="prev" href="/tags/Python/">
-            <section class="post prev white-box shadow" >
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页&nbsp;
-            </section>
-          </a>
-        
-        <p class="current">
-          2 / 3
-        </p>
-        
-          <a class="next" rel="next" href="/tags/Python/page/3/">
-            <section class="post next white-box shadow">
-              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
-        
-      </div>
-    
-  
 
 
-    
-  
+
 </div>
 <aside class='l_side'>
   
@@ -1079,243 +718,19 @@ print(lists)
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 20.67px; color: #6c6c6c">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 22.33px; color: #606060">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(14)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%8D%95%E4%B8%AA%E6%95%B0%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">更新单个数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-number">2.</span> <span class="toc-text">批量更新数据</span></a></li></ol>
     </div>
   </section>
 
@@ -1326,14 +741,15 @@ print(lists)
 </aside>
 
 
+
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的ORM更新操作";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

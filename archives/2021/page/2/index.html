@@ -492,6 +492,60 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/10/a86/">
+        Django如何处理URL请求
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        
+http://127.0.0.1/apps/django/1
+
+
+Django从配置文件中根据ROOT_URLCONF找到主路由文件,也就是我们的主目录下的urls.py
+Django找到urls.py中的urlpatterns变量,该内容是一个包含多个路由的数组.
+
+from django.contrib import admin
+from django.urls import path...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-10</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Python/">Python</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/10/a86/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/10/a87/">
         Django的请求与响应
       </a>
@@ -919,54 +973,6 @@ headers = {
           </div>
         
       
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/25/a78/">
-        Kubernetes-volume
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Volume详解
-容器磁盘上的文件的生命周期是短暂的，这就使得在容器中运行重要应用时会出现一些问题。首先，当容器崩溃时，kubelet 会重启它，但是容器中的文件将丢失——容器以干净的状态（镜像最初的状态）重新启动。其次，在Pod中同时运行多个容器时，这些容器之间通常需要共享文件。Kubernetes 中的Volume抽象就很好的解决了这些问题
-Kubernetes 中的卷有明确的寿命 ——...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/25/a78/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
         
       
     

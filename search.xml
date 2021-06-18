@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django的ORM更新操作</title>
+      <link href="2021/06/18/a97/"/>
+      <url>2021/06/18/a97/</url>
+      
+        <content type="html"><![CDATA[<h2 id="更新单个数据"><a href="#更新单个数据" class="headerlink" title="更新单个数据"></a>更新单个数据</h2><hr><ul><li>修改单个实体的某些字段值的步骤</li></ul><ol><li>查询：通过<code>get()</code>得到要修改的实体对象</li><li>修改：通过对象的属性方法修改数据</li><li>保存:  通过<code>save()</code>进行保存</li></ol><blockquote><p>进入Django Shell进行操作</p></blockquote><pre><code class="python"># 修改system字段为Ubuntu18.04from monitor.models import Assetselect = Asset.objects.get(id=1)select.system="Ubuntu18.04"select.save()  # 一定要保存,如果不保存不会commit到数据库中</code></pre><h2 id="批量更新数据"><a href="#批量更新数据" class="headerlink" title="批量更新数据"></a>批量更新数据</h2><ul><li>直接调用QuerySet的<code>update</code>属性进行批量修改</li></ul><pre><code class="python"># 更新所有systsm为Windows10的主机系统为Centos7.6from monitor.models import Assetselect = Asset.objects.filter(system__gte='Windows10')select.update(system="Centos7.6") </code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django查询操作</title>
       <link href="2021/06/17/a96/"/>
       <url>2021/06/17/a96/</url>

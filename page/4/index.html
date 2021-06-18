@@ -493,6 +493,65 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/03/01/a69/">
+        Kubernete-Ingress网络详解
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        Ingress网络
+NodePort：实现通过IP+端口号进行访问.
+NodePort缺陷：在每个节点上都会起到端口,在访问时候通过任何节点,IP+端口即可实现访问,每个端口只能适用一次。
+
+
+
+Ingress与Pod的关系
+Pod和Ingress通过service进行关联
+Ingress作为统一入口,由Service关联一组Pod
+Ingress需要维护更多地域名
+
+
+使用Ingress
+...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-03-01</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/03/01/a69/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/03/01/a67/">
         Kubernete-Pod操作管理集合
       </a>
@@ -978,55 +1037,6 @@ BUILD_ID
       
         <div>
           <a class='readmore' href='/2021/01/25/a59/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/01/24/a28/">
-        Prometheus+Grafana监控
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Prometheus
-更新于2021-01-20
-
-Prometheus是最初在SoundCloud上构建的开源系统监视和警报工具包 。自2012年成立以来，许多公司和组织都采用了Prometheus，该项目拥有非常活跃的开发人员和用户社区。现在，它是一个独立的开源项目，并且独立于任何公司进行维护。为了强调这一点并阐明项目的治理结构，Prometheus在2016年加入了 Cloud Nat...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-01-24</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Linux/">Linux</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/01/24/a28/'>
             阅读全文
           </a>
         </div>
