@@ -524,8 +524,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   <div class='md'>
     
       
-        F对象和Q对象
-F对象
+        F对象和Q对象F对象
 一个F对象代表数据库中某条记录的字段信息(F对象不会把数据取出来)
 作用
 通常是对数据库中的字段值在不获取的情况下进行操作
@@ -537,7 +536,7 @@ from django.db.models import F
 F('列名')
 
 可以转化成标记的SQL语句
-Asset.objects.all().update(new_price=F("price") +1 ...
+Asset.objects.all().update(new_price=F("price") +1 )...
       
     
   </div>
