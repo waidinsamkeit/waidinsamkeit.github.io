@@ -516,6 +516,62 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/21/a98/">
+        Django的F对象与Q对象
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        F对象和Q对象
+F对象
+一个F对象代表数据库中某条记录的字段信息(F对象不会把数据取出来)
+作用
+通常是对数据库中的字段值在不获取的情况下进行操作
+用于类属性(字段)之间的比较
+
+
+
+from django.db.models import F
+F('列名')
+
+可以转化成标记的SQL语句
+Asset.objects.all().update(new_price=F("price") +1 ...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-21</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/21/a98/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/21/a95/">
         Django关于ORM操作-创建数据
       </a>
@@ -1011,63 +1067,6 @@ api/userlis...
       
         <div>
           <a class='readmore' href='/2021/06/10/a89/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a88/">
-        Django的设计模式
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        传统的MVCMVC代表Model-View-Controller(模型-视图-控制器)模式
-
-M(模型层)：主要对数据库层的封装
-V(视图层)：用于向用户展示数据
-C(控制层)：用于处理用户请求、获取数据、返回结果(重要)
-
-
-作用：降低模块之间的耦合性(解耦)
-
-DJango的MTV模式MTV代表Model-Template-View(模型-模板-视图)模式
-
-M(模型层)：负责与数据库进...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a88/'>
             阅读全文
           </a>
         </div>

@@ -485,6 +485,8 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     
       
         
+      
+        
           <div class='post-wrapper'>
             <div class="post post-v3 white-box reveal shadow">
   
@@ -967,67 +969,6 @@ Helm可以解决那些问题
       
         <div>
           <a class='readmore' href='/2021/03/02/a70/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/03/01/a68/">
-        Kubernete-Secret资源
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        Secret加密数据存在ETCD里面,让Pod容器以挂载Volume的方式进行访问.
-
-创建Secret
-
-apiVersion: v1
-kind: Secret
-metadata: 
-  name: mysecret
-type: Opaque
-date: 
-  username: YWRtaW4=
-  password: MTc2MTE0NjY1MTdBYmM=
-
-
-挂载方式(变量方式)
-...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-03-01</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Kubernetes/">Kubernetes</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/03/01/a68/'>
             阅读全文
           </a>
         </div>
