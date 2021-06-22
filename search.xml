@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Django的聚合查询与原生操作</title>
+      <link href="2021/06/22/a99/"/>
+      <url>2021/06/22/a99/</url>
+      
+        <content type="html"><![CDATA[<h2 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h2><p>​    聚合查询指的是对一个数据表中的一个字段的数据进行部分或者全部进行统计查询，例如查某个表中的平均价格、查询总价格。</p><blockquote><p>反正尽量用ORM吧,这只是一种暂缓之计！</p></blockquote><p>聚合查询可以分为</p><ul><li>整表聚合</li><li>分组聚合</li></ul><h3 id="整表聚合"><a href="#整表聚合" class="headerlink" title="整表聚合"></a>整表聚合</h3><p>​    不带分组的聚合查询是指将全部的数据进行集中统计查询。</p><ul><li>Sum、Avg、Count、Max、Min等</li></ul><pre><code class="python">from django.db.models import *MyModels.objects.aggregate(结果变量名=聚合函数('列'))# 以下是Django Shell的执行结果&gt;&gt;&gt; Asset.objects.aggregate(数据库ID行数=Count('id')){'数据库ID行数': 4}</code></pre><p>返回的结果是以子弹的方式组成的<code>{结果变量名：值}</code></p><h3 id="分组聚合"><a href="#分组聚合" class="headerlink" title="分组聚合"></a>分组聚合</h3><p>​    分组聚合是指通过计算查询结果中每一个对象所关联的对象集合,从而得出总计值,即为查询集的每一项生成聚合。</p><ol><li>通过先用查询结果<code>Mymodels.objects.values</code>查找要分组聚合的列</li></ol><pre><code class="python">from django.db.models import *from apps.monitor.models import AssetMymodels.objects.values('列1','列2')select = Asset.objects.values('id','create_user') # id列和create_user列</code></pre><ol start="2"><li>通过返回结果的<code>QuerySet.annotate</code>方法分组聚合得到分组结果</li></ol><pre><code class="python">QuerySet.annotate(结果变量名=聚合函数('列'))print(select.annotate(myCount=Count('id')))</code></pre><p>分组聚合的返回值为<code>QuerySet</code></p><h2 id="原生数据库操作"><a href="#原生数据库操作" class="headerlink" title="原生数据库操作"></a>原生数据库操作</h2><p>django也可以支持直接使用SQL语句进行查询数据库</p><ul><li>查询：使用<code>MyModels.objects.raw()</code>进行数据库查询操作</li><li>语法：<code>MyModels.objects.raw(SQL语句,拼接参数)</code></li><li>返回值：返回RawQuerySet集合,只支持基础操作</li></ul><p>{ % note bug red, 谨防SQL注入 % }</p><blockquote><p>因为SQL注入可以查出你所有用户的数据</p></blockquote><pre><code class="python">select = Asset.objects.raw('select * from monitor_asset where id =%s',[1 od 1=1])&lt;RawQuerySet: select * from monitor_asset where id=1 or 1=1&gt; </code></pre><p>原理</p><ol><li>如果你不加<code>[拼接参数]</code></li></ol><blockquote><p>那么默认的SQL语句就是 where id =1 or 1=1</p></blockquote><ol start="2"><li>如果加上<code>[拼接参数]</code></li></ol><blockquote><p>那么这个时候你的SQL语句就是 ‘where id=1 or 1=1’</p></blockquote><p>因为int型的话变为字符串的首先会先找第一个int的值</p><pre><code class="sql"> select * from monitor_asset where 'id=1 or 1=1' 相当于第一个int值得话就是 id=1 而不是 id=1 or 1=1</code></pre><h2 id="完全的原生操作"><a href="#完全的原生操作" class="headerlink" title="完全的原生操作"></a>完全的原生操作</h2><p>完全跨过模型类操作数据库-查询/更新/删除</p><ol><li>导入<code>cursor</code>包</li></ol><pre><code class="python">from django.db import connection</code></pre><ol start="2"><li>用创建的<code>cursor</code>类的构造函数创建<code>cursor</code>对象,为了能够保证在出现异常的时候能够释放<code>cursor</code>资源,所以通常用<code>with</code>语句进行操作.</li></ol><pre><code class="python">from django.db import connectionwith connection.cursor() as cur:    cur.execute('SQL','拼接参数')</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的F对象与Q对象</title>
       <link href="2021/06/21/a98/"/>
       <url>2021/06/21/a98/</url>

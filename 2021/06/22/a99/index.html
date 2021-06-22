@@ -5,8 +5,6 @@
   <!-- SEO相关 -->
   
     
-      <meta name="robots" content="noindex,follow">
-    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -24,7 +22,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>标签：Python - Random Forest</title>
+  <title>Django的聚合查询与原生操作 - Random Forest</title>
+  
+    <meta name="keywords" content="Python">
   
 
   
@@ -419,7 +419,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper  search' style="display: ;">
+        <div id="half" class='cover-wrapper post search' style="display: ;">
           
             <div id='cover-backstretch'></div>
           
@@ -476,113 +476,256 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         <div class="body-wrapper" id="pjax-container">
           
 
-
 <div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
   
-    
-      
-  <section class="post-list">
-    
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
+
+
+  
+  <div class="article-meta" id="top">
     
     
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
     
-    <h2 class="article-title" >
-      <a href="/2021/06/22/a99/">
+      <h1 class="title">
         Django的聚合查询与原生操作
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        聚合查询​    聚合查询指的是对一个数据表中的一个字段的数据进行部分或者全部进行统计查询，例如查某个表中的平均价格、查询总价格。
-
-反正尽量用ORM吧,这只是一种暂缓之计！
-
-聚合查询可以分为
-
-整表聚合
-分组聚合
-
-整表聚合​    不带分组的聚合查询是指将全部的数据进行集中统计查询。
-
-Sum、Avg、Count、Max、Min等
-
-from django.db.models impo...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
+      </h1>
+      <div class='new-meta-box'>
         
-        <time>2021-06-22</time>
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' href="/" rel="nofollow">
+    <img no-lazy src="">
+    <p>Rainy City</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年6月22日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
         
       </div>
+    
+  </div>
+
+
+  
+  
+  <h2 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h2><p>​    聚合查询指的是对一个数据表中的一个字段的数据进行部分或者全部进行统计查询，例如查某个表中的平均价格、查询总价格。</p>
+<blockquote>
+<p>反正尽量用ORM吧,这只是一种暂缓之计！</p>
+</blockquote>
+<p>聚合查询可以分为</p>
+<ul>
+<li>整表聚合</li>
+<li>分组聚合</li>
+</ul>
+<h3 id="整表聚合"><a href="#整表聚合" class="headerlink" title="整表聚合"></a>整表聚合</h3><p>​    不带分组的聚合查询是指将全部的数据进行集中统计查询。</p>
+<ul>
+<li>Sum、Avg、Count、Max、Min等</li>
+</ul>
+<pre><code class="python">from django.db.models import *
+MyModels.objects.aggregate(结果变量名=聚合函数('列'))
+
+# 以下是Django Shell的执行结果
+&gt;&gt;&gt; Asset.objects.aggregate(数据库ID行数=Count('id'))
+{'数据库ID行数': 4}
+</code></pre>
+<p>返回的结果是以子弹的方式组成的<code>{结果变量名：值}</code></p>
+<h3 id="分组聚合"><a href="#分组聚合" class="headerlink" title="分组聚合"></a>分组聚合</h3><p>​    分组聚合是指通过计算查询结果中每一个对象所关联的对象集合,从而得出总计值,即为查询集的每一项生成聚合。</p>
+<ol>
+<li>通过先用查询结果<code>Mymodels.objects.values</code>查找要分组聚合的列</li>
+</ol>
+<pre><code class="python">from django.db.models import *
+from apps.monitor.models import Asset
+Mymodels.objects.values('列1','列2')
+select = Asset.objects.values('id','create_user') # id列和create_user列
+</code></pre>
+<ol start="2">
+<li>通过返回结果的<code>QuerySet.annotate</code>方法分组聚合得到分组结果</li>
+</ol>
+<pre><code class="python">QuerySet.annotate(结果变量名=聚合函数('列'))
+print(select.annotate(myCount=Count('id')))
+</code></pre>
+<p>分组聚合的返回值为<code>QuerySet</code></p>
+<h2 id="原生数据库操作"><a href="#原生数据库操作" class="headerlink" title="原生数据库操作"></a>原生数据库操作</h2><p>django也可以支持直接使用SQL语句进行查询数据库</p>
+<ul>
+<li>查询：使用<code>MyModels.objects.raw()</code>进行数据库查询操作</li>
+<li>语法：<code>MyModels.objects.raw(SQL语句,拼接参数)</code></li>
+<li>返回值：返回RawQuerySet集合,只支持基础操作</li>
+</ul>
+<p>{ % note bug red, 谨防SQL注入 % }</p>
+<blockquote>
+<p>因为SQL注入可以查出你所有用户的数据</p>
+</blockquote>
+<pre><code class="python">select = Asset.objects.raw('select * from monitor_asset where id =%s',[1 od 1=1])
+&lt;RawQuerySet: select * from monitor_asset where id=1 or 1=1&gt; 
+</code></pre>
+<p>原理</p>
+<ol>
+<li>如果你不加<code>[拼接参数]</code></li>
+</ol>
+<blockquote>
+<p>那么默认的SQL语句就是 where id =1 or 1=1</p>
+</blockquote>
+<ol start="2">
+<li>如果加上<code>[拼接参数]</code></li>
+</ol>
+<blockquote>
+<p>那么这个时候你的SQL语句就是 ‘where id=1 or 1=1’</p>
+</blockquote>
+<p>因为int型的话变为字符串的首先会先找第一个int的值</p>
+<pre><code class="sql"> select * from monitor_asset where 'id=1 or 1=1'
+ 相当于第一个int值得话就是 id=1 而不是 id=1 or 1=1
+</code></pre>
+<h2 id="完全的原生操作"><a href="#完全的原生操作" class="headerlink" title="完全的原生操作"></a>完全的原生操作</h2><p>完全跨过模型类操作数据库-查询/更新/删除</p>
+<ol>
+<li>导入<code>cursor</code>包</li>
+</ol>
+<pre><code class="python">from django.db import connection
+</code></pre>
+<ol start="2">
+<li>用创建的<code>cursor</code>类的构造函数创建<code>cursor</code>对象,为了能够保证在出现异常的时候能够释放<code>cursor</code>资源,所以通常用<code>with</code>语句进行操作.</li>
+</ol>
+<pre><code class="python">from django.db import connection
+with connection.cursor() as cur:
+    cur.execute('SQL','拼接参数')
+</code></pre>
+
+  
+  
+    
+    <div class='footer'>
       
-        <div>
-          <a class='readmore' href='/2021/06/22/a99/'>
-            阅读全文
-          </a>
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/22/a99/>https://blog.micomint.top/2021/06/22/a99/</a></p>
+              
+            
+          </blockquote>
         </div>
+      
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-22T16:45:45+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年6月22日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
+          
   
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/21/a98/">
-        Django的F对象与Q对象
-      </a>
-    </h2>
-  
-  <div class='md'>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
     
       
-        F对象和Q对象F对象
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/22/a99/&title=Django的聚合查询与原生操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/22/a99/&title=Django的聚合查询与原生操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/22/a99/&title=Django的聚合查询与原生操作 - Random Forest&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2021/06/21/a98/'>
+          <p class='title'>Django的F对象与Q对象<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>F对象和Q对象F对象
 一个F对象代表数据库中某条记录的字段信息(F对象不会把数据取出来)
 作用
 通常是对数据库中的字段值在不获取的情况下进行操作
@@ -590,523 +733,30 @@ from django.db.models impo...
 
 
 
-from django.db.models import F
-F('列名')
-
-可以转化成标记的SQL语句
-Asset.objects.all().update(new_price=F("price") +1 )...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-21</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/21/a98/'>
-            阅读全文
-          </a>
-        </div>
+from d...</p>
+        </a>
       
     </div>
   
+</article>
 
+
+  
+
+  <article class="post white-box reveal shadow" id="comments">
+    <p ct><i class='fas fa-comments'></i> 评论</p>
+    
+    <div id="valine_container" class="valine_thread">
+  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
 </div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/21/a95/">
-        Django关于ORM操作-创建数据
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        ORM操作基本操作包括增删改查(CRUD)即Create、Read、Update、Delete
-ORM CRUD核心-&gt; 模型类.管理器对象
-管理器对象
-每个继承models.Model的模型类,都会有一个object的对象被同样继承下来,这个对象叫管理器对象.
-数据库的增删改查可以通过管理器对象实现
-class Author(models.Model):
-Author.objects...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-21</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/21/a95/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/18/a97/">
-        Django的ORM更新操作
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        更新单个数据
-
-修改单个实体的某些字段值的步骤
-
-
-查询：通过get()得到要修改的实体对象
-修改：通过对象的属性方法修改数据
-保存:  通过save()进行保存
-
-
-进入Django Shell进行操作
-
-# 修改system字段为Ubuntu18.04
-from monitor.models import Asset
-select = Asset.objects.get(id=1)
-se...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-18</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/18/a97/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/17/a96/">
-        Django查询操作
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        查询操作
-数据库的查询需要使用管理器对象进行
-通过mymodel.objects管理器方法调用查询对象
+  </article>
 
 
 
 
-方法
-说明
 
 
-
-all()
-查询全部记录,返回QuerySet查询对象
-
-
-get()
-查询符合条件的单一记录
-
-
-filter()
-查询符合条件的多条记录
-
-
-exclude()
-查询符合条件外的全部记录
-
-
-all()方法
-
-使用方法：Asset.objects.all()
-...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-17</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/17/a96/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/15/a94/">
-        Django的ORM字段类型2
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        模型类-字段选项
-字段选项：指定创建的列的额外信息
-允许出现多个字段选项,多个选项之间使用,隔开
-
-primary key
-如果设置为True,表示该列为主键,如果指定一个字段为主键,则此数据库不会创建Id字段
-
-blank
-设置为True的时候,字段可以为空。设置为False的时候字段是必须填写的
-
-null
-如果设置为True则表示该列允许为空.
-默认的情况下为False,如果不为空的话...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-15</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/15/a94/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/15/a93/">
-        Django的ORM字段类型1
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        模型类字段类型BooleanField()
-数据库类型：tinyint(1)
-编程语言中使用True或False表示值
-在数据库中用0或1来表示具体的值
-
-CharField()
-数据库类型的Varchar
-必须要指定max_length的参数值
-
-DateField()
-数据库类型的date
-
-表示日期
-
-参数
-
-auto_now: 每次保存对象时,自动设置该字段为当前时间(取值True/...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-15</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/15/a93/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/14/a92/">
-        Django的ORM简介
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        有关模型层的介绍
-可以进行回顾Django的MTV模式
-
-MTV介绍
-什么是模型？
-模型是Python中的一个类,它是由django.db.models.Moduel派生出的一个子类
-一个模型类就代表数据库中的一张表
-模型类中的每一个类的属性都代表数据库中的一个字段
-模型是数据交互的接口,是表示和操作数据库的方法和方式
-
-ORM框架
-定义：ORM(Object Relation Mappin...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-14</time>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/14/a92/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a91/">
-        Django应用和分布式路由
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        什么是应用
-应用就是在Django项目中一个独立的业务模块,可以包含自己的路由、视图、模板、模型。
-
-创建一个应用
-首先使用startapp创建一个应用
-
-python manage.py startapp monitor
-
-
-在Django配置中安装此应用
-
-settings.py
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'dj...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a91/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a90/">
-        Django的静态文件
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        什么是静态文件？
-比如网站内部的css、html、音频和视频文件等
-需要配置静态文件的访问路径,即STATIC_URL='/static'
-
-指定访问静态文件是需要通过/static/xxx或者http://127.0.0.1:8000/static/xxx 
-静态文件配置
-配置静态文件的存储路径为STATICFILES_DIRS是保存在服务器端的存储位置
-
-# django请求静态文件的地...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a90/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-        <p class="current">
-          1 / 3
-        </p>
-        
-          <a class="next" rel="next" href="/tags/Python/page/2/">
-            <section class="post next white-box shadow">
-              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
-        
-      </div>
-    
-  
-
-
-    
-  
 </div>
 <aside class='l_side'>
   
@@ -1114,243 +764,19 @@ INSTALLED_APPS = [
     
     
 
-<section class="widget blogger floatable desktop mobile">
-  <div class='content'>
-    
-      
-        <a class='avatar flat-box rectangle' href='/about/'>
-          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Random Forest</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="mailto:ailunbolinkenasi@gmail.com"
-              class="social fas fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/volantis-x/"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fas fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
 
-  
 
-  
-    
-    
-  
-
-  <section class="widget tagcloud floatable desktop mobile">
+  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
     
   <header>
     
-      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
     
   </header>
 
 
     <div class='content'>
-      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 20.67px; color: #6c6c6c">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 22.33px; color: #606060">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
-    </div>
-  </section>
-
-
-  
-
-  
-    
-    
-
-<section class="widget grid floatable desktop mobile">
-  
-  <header>
-    
-      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
-    
-  </header>
-
-
-  <div class='content'>
-    <div class="grid navigation fixed">
-      
-        <a class="flat-box" title="/friends" href="/friends"
-          
-          
-          id="friends">
-          
-            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
-          
-          友链申请
-        </a>
-      
-        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
-          
-            rel="external nofollow noopener noreferrer"
-          
-          
-            target="_blank"
-          
-          id="https:githubcomvolantis-xhexo-theme-volantis">
-          
-            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
-          
-          主题源码
-        </a>
-      
-        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
-          
-          
-          id="https:music163com">
-          
-            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
-          
-          听个音乐
-        </a>
-      
-        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
-          
-          
-          id="https:insmicominttop">
-          
-            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
-          
-          资讯站点
-        </a>
-      
-        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
-          
-          
-          id="https:imagemicominttop">
-          
-            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
-          
-          时光相册
-        </a>
-      
-    </div>
-  </div>
-</section>
-
-  
-
-  
-    
-    
-  
-
-  <section class="widget category floatable desktop">
-    
-  <header>
-    
-      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Ansible/" href="/categories/Ansible/"
-            id="categoriesAnsible"
-            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/DevOps/" href="/categories/DevOps/"
-            id="categoriesDevOps"
-            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Docker/" href="/categories/Docker/"
-            id="categoriesDocker"
-            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
-            id="categoriesElasticsearch"
-            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Java/" href="/categories/Java/"
-            id="categoriesJava"
-            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
-            id="categoriesKubernetes"
-            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Linux/" href="/categories/Linux/"
-            id="categoriesLinux"
-            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MYSQL/" href="/categories/MYSQL/"
-            id="categoriesMYSQL"
-            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Nacos/" href="/categories/Nacos/"
-            id="categoriesNacos"
-            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Python/" href="/categories/Python/"
-            id="categoriesPython"
-            ><div class='name'>Python</div><div class='badge'>(14)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
-            id="categoriesE998BFE9878CE4BA91"
-            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
-        
-      </ul>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.</span> <span class="toc-text">聚合查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E8%A1%A8%E8%81%9A%E5%90%88"><span class="toc-number">1.1.</span> <span class="toc-text">整表聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88"><span class="toc-number">1.2.</span> <span class="toc-text">分组聚合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">原生数据库操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E7%9A%84%E5%8E%9F%E7%94%9F%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">完全的原生操作</span></a></li></ol>
     </div>
   </section>
 
@@ -1361,14 +787,15 @@ INSTALLED_APPS = [
 </aside>
 
 
+
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=false;
-  pdata.postTitle="";
+  pdata.ispage=true;
+  pdata.postTitle="Django的聚合查询与原生操作";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要

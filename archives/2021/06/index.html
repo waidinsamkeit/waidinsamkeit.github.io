@@ -516,6 +516,62 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/22/a99/">
+        Django的聚合查询与原生操作
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        聚合查询​    聚合查询指的是对一个数据表中的一个字段的数据进行部分或者全部进行统计查询，例如查某个表中的平均价格、查询总价格。
+
+反正尽量用ORM吧,这只是一种暂缓之计！
+
+聚合查询可以分为
+
+整表聚合
+分组聚合
+
+整表聚合​    不带分组的聚合查询是指将全部的数据进行集中统计查询。
+
+Sum、Avg、Count、Max、Min等
+
+from django.db.models impo...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-22</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/22/a99/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/21/a98/">
         Django的F对象与Q对象
       </a>
@@ -1013,59 +1069,6 @@ INSTALLED_APPS = [
       
         <div>
           <a class='readmore' href='/2021/06/10/a90/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a89/">
-        Django的URL反向解析
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        有关绝对地址和相对地址先说一下有关绝对路径和相对路径吧
-1. 绝对地址
-http://127.0.0.1:8000/api/userlist
-2.相对地址
-/api/userlist = 浏览器会把当前地址栏的协议+地址+端口 + 地址 
-相对地址的标识结果最终为: http://127.0.0.1:8000 + /api/userlist
-3. 没有`/`的相对地址
-api/userlis...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a89/'>
             阅读全文
           </a>
         </div>
