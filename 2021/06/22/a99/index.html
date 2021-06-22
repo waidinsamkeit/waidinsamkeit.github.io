@@ -572,7 +572,8 @@ print(select.annotate(myCount=Count('id')))
 <li>语法：<code>MyModels.objects.raw(SQL语句,拼接参数)</code></li>
 <li>返回值：返回RawQuerySet集合,只支持基础操作</li>
 </ul>
-<p>{ % note bug red, 谨防SQL注入 % }</p>
+<div class="note bug red"><p>防止SQL注入</p></div>
+
 <blockquote>
 <p>因为SQL注入可以查出你所有用户的数据</p>
 </blockquote>
@@ -643,7 +644,7 @@ with connection.cursor() as cur:
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-22T16:48:45+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-22T16:56:37+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年6月22日</p>
