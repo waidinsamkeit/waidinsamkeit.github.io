@@ -549,7 +549,7 @@ MyModels.objects.aggregate(结果变量名=聚合函数('列'))
 &gt;&gt;&gt; Asset.objects.aggregate(数据库ID行数=Count('id'))
 {'数据库ID行数': 4}
 </code></pre>
-<p>返回的结果是以子弹的方式组成的<code>{结果变量名：值}</code></p>
+<p>返回的结果是以字典的方式组成的<code>{结果变量名：值}</code></p>
 <h3 id="分组聚合"><a href="#分组聚合" class="headerlink" title="分组聚合"></a>分组聚合</h3><p>​    分组聚合是指通过计算查询结果中每一个对象所关联的对象集合,从而得出总计值,即为查询集的每一项生成聚合。</p>
 <ol>
 <li>通过先用查询结果<code>Mymodels.objects.values</code>查找要分组聚合的列</li>
@@ -643,7 +643,7 @@ with connection.cursor() as cur:
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-22T16:45:45+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-22T16:48:45+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年6月22日</p>
