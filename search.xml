@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Admin后台管理内容</title>
+      <link href="2021/06/24/a100/"/>
+      <url>2021/06/24/a100/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Admin管理后台"><a href="#Admin管理后台" class="headerlink" title="Admin管理后台"></a>Admin管理后台</h2><hr><ul><li>Django提供了比较完善的后台管理数据库接口,可以供开发过程中调用和测试使用。</li><li>Django会搜集所有已经注册的模型类,为这些模型类提供数据管理界面。</li></ul><h3 id="创建账号"><a href="#创建账号" class="headerlink" title="创建账号"></a>创建账号</h3><hr><ul><li>创建后台管理账号-该账号为最高权限的账号</li></ul><pre><code class="python">python manage.py createsuperuserUsername (leave blank to use 'administrator'): admin # 用户名Email address: ailunbolinkenasi@gmail.com # 邮箱地址Password: # 输入密码 Superuser created successfully.</code></pre><h3 id="注册自定义模型类"><a href="#注册自定义模型类" class="headerlink" title="注册自定义模型类"></a>注册自定义模型类</h3><ol><li>在应用的<code>admin.py</code>中导入要管理的模型类</li></ol><pre><code class="python">from .models import Asset</code></pre><ol start="2"><li>调用<code>admin.site.register</code>方法进行注册</li></ol><pre><code class="python">admin.site.register(Asset)资产信息</code></pre><h3 id="模型管理器类"><a href="#模型管理器类" class="headerlink" title="模型管理器类"></a>模型管理器类</h3><ul><li>为后台界面添加便于操作的新功能,在<code>admin.py</code>中定义管理器模型类</li></ul><pre><code class="python"># Asset Managerclass AssetView(admin.ModelAdmin):    # Django List view id physics_host ipaddr system create_user    list_display = ['physics_host','ipaddr','system','cpu','memory','create_user','is_active','description'] # 显示那些字段    # control Django list link is change database    list_display_links = ['physics_host'] # 可以通过那个字段修改        list_filter = ['create_user'] # 通过create_user 进行过滤        search_fields = ['physics_host'] # 根据physics_host模糊查询        list_editable = ['physics_host'] # 添加可编辑的列表# 管理后台 admin.site.register(Asset, AssetView) # 绑定AssetView模型类以及Asset模型</code></pre><h3 id="再谈Meta类"><a href="#再谈Meta类" class="headerlink" title="再谈Meta类"></a>再谈Meta类</h3><pre><code class="python">class Meta:    db_table = "asset" # 该模型所用的数据表的名称    verbose_name = "单数名" # 给模型对象一个易于理解的名称用于显示在/admin的管理界面    verbose_name_plural = "复数名" # 该对象复数形式的名称显示在/admin中</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Django的聚合查询与原生操作</title>
       <link href="2021/06/22/a99/"/>
       <url>2021/06/22/a99/</url>

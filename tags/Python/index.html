@@ -502,6 +502,59 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/24/a100/">
+        Admin后台管理内容
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        Admin管理后台
+
+Django提供了比较完善的后台管理数据库接口,可以供开发过程中调用和测试使用。
+Django会搜集所有已经注册的模型类,为这些模型类提供数据管理界面。
+
+创建账号
+
+创建后台管理账号-该账号为最高权限的账号
+
+python manage.py createsuperuser
+Username (leave blank to use 'administrator'): ...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-24</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/24/a100/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/22/a99/">
         Django的聚合查询与原生操作
       </a>
@@ -1001,60 +1054,6 @@ INSTALLED_APPS = [
       
         <div>
           <a class='readmore' href='/2021/06/10/a91/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a90/">
-        Django的静态文件
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        什么是静态文件？
-比如网站内部的css、html、音频和视频文件等
-需要配置静态文件的访问路径,即STATIC_URL='/static'
-
-指定访问静态文件是需要通过/static/xxx或者http://127.0.0.1:8000/static/xxx 
-静态文件配置
-配置静态文件的存储路径为STATICFILES_DIRS是保存在服务器端的存储位置
-
-# django请求静态文件的地...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a90/'>
             阅读全文
           </a>
         </div>
