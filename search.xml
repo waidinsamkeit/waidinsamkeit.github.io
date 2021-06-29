@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>关系映射(一)</title>
+      <link href="2021/06/29/a101/"/>
+      <url>2021/06/29/a101/</url>
+      
+        <content type="html"><![CDATA[<h2 id="什么是关系映射？"><a href="#什么是关系映射？" class="headerlink" title="什么是关系映射？"></a>什么是关系映射？</h2><ul><li>在关系型数据库中,通常不会把所有数据都放在同一张表中,不易于扩展。</li></ul><blockquote><p>常见的关系映射</p></blockquote><ul><li>一对一映射：例如一个身份证对应一个人</li><li>一对多映射：例如一个班级可以有多个学生</li><li>一对多映射：例如一个学生可以报考多个课程,一个课程可由多个学生学习.</li></ul><h3 id="一对一映射-创建"><a href="#一对一映射-创建" class="headerlink" title="一对一映射(创建)"></a>一对一映射(创建)</h3><hr><ul><li>一对一是表示现实事物间存在的一对一的对应关系。</li><li>语法：<code>OneToOneField(类名,on_delete=xxx)</code></li></ul><pre><code class="python">class Asset (models.Model):    create_date = models.DateTimeField(verbose_name="创建日期",auto_now=True)class User(models.Model)    a = models.OneToOneField(Asset,on_delete=1) # on_delete是级联删除的动作</code></pre><h4 id="级联删除"><a href="#级联删除" class="headerlink" title="级联删除"></a><strong>级联删除</strong></h4><p>级联删除，例如员工表中一项数据是部门ID,部门ID是部门表的主键，如果是级联删除，当删除了部门A的时候，会把所有属于部门A的员工都给删除。</p><ul><li><p>级联删除的特殊字段</p><ul><li><code>models.CASCADE</code>：Django模拟SQL约束ON DELETE CASCADE,并删除包含ForeignKey的对象</li></ul><blockquote><p>注意该CASCADE会有限查找是否有关联数据,先删除管理数据,再删除本条数据.</p></blockquote><ul><li><code>models.PROTECT</code>：抛出ProtectedError以阻止被引用对象的删除</li><li><code>SET_NULL</code>：设置ForeignKey为Null,需要指定null=True</li></ul></li></ul><pre><code class="python">from django.db import modelsimport uuid# Create your models here.class UserMit(models.Model):    # id创建为UUID类型,字段命名为user_id    id = models.UUIDField(primary_key=True,default=uuid.uuid4,db_column='user_id')    name = models.CharField(verbose_name="User_name",max_length=20,default="")class UserId(models.Model):    name = models.CharField(verbose_name="Test",max_length=15)    users = models.OneToOneField(UserMit,on_delete=models.CASCADE) # 一对一即users_id 对应 id</code></pre><h3 id="一对一映射-创建数据"><a href="#一对一映射-创建数据" class="headerlink" title="一对一映射(创建数据)"></a>一对一映射(创建数据)</h3><hr><ul><li>无外键约束的模型类<code>UserMit</code></li></ul><pre><code class="python"># 进入Django Shell操作create1 = UserMit.objects.create(name="henan)</code></pre><ul><li>有外键约束的模型类<code>UserId</code></li></ul><pre><code class="python">create2 = UserId.objects.create(name="henan",users=create1) # 通过关联UserMit的实例化对象create4 = UserId.objects.create(uid="henan",users_id="0dbccd1992474d30a4497b05295e807b") # 关联UserMit表中的user_id对应主键</code></pre><h3 id="一对一-查询数据"><a href="#一对一-查询数据" class="headerlink" title="一对一(查询数据)"></a>一对一(查询数据)</h3><hr><h4 id="正向查询"><a href="#正向查询" class="headerlink" title="正向查询"></a>正向查询</h4><ul><li>正向查询：直接通过外键属性查询,则为外键查询    </li></ul><pre><code class="python"># 通过外键绑定的users_id查询用户,接着上面的创建数据来&gt;&gt;&gt; a2.id6&gt;&gt;&gt; a2.users_idUUID('43ff679f-42b2-4334-85a0-b493503d6433')</code></pre><h4 id="反向查询"><a href="#反向查询" class="headerlink" title="反向查询"></a>反向查询</h4><ul><li>没有外键属性的一方,可以调用反向属性查询到关联的另一方</li><li>反向关联的属性为<code>实例对象.引用类名(小写)</code></li><li>当反向引用不存在的时候,则会触发异常</li></ul><blockquote><p>当UserId类中定义了外键约束,则UserMit类中会有一个UserId的反向属性</p></blockquote><pre><code class="python">class UserMit(models.Model):    id = models.UUIDField(primary_key=True,default=uuid.uuid4,db_column='user_id')    name = models.CharField(verbose_name="User_name",max_length=20,default="")class UserId(models.Model):    name = models.CharField(verbose_name="Test",max_length=15)    users = models.OneToOneField(UserMit,on_delete=models.CASCADE)&gt;&gt;&gt;  select1 = UserMit.objects.get(name='wlx')&gt;&gt;&gt; select1.userid.users_idUUID('c443d1b4-0882-42cb-8659-86ccbd1f8d12')</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Admin后台管理内容</title>
       <link href="2021/06/24/a100/"/>
       <url>2021/06/24/a100/</url>

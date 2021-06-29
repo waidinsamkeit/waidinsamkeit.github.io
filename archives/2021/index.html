@@ -500,6 +500,63 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title" >
+      <a href="/2021/06/29/a101/">
+        关系映射(一)
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        什么是关系映射？
+在关系型数据库中,通常不会把所有数据都放在同一张表中,不易于扩展。
+
+
+常见的关系映射
+
+
+一对一映射：例如一个身份证对应一个人
+一对多映射：例如一个班级可以有多个学生
+一对多映射：例如一个学生可以报考多个课程,一个课程可由多个学生学习.
+
+一对一映射(创建)
+
+一对一是表示现实事物间存在的一对一的对应关系。
+语法：OneToOneField(类名,on_delete=xx...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-06-29</time>
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2021/06/29/a101/'>
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
+  
+  
+  
+  
+    
+    <h2 class="article-title" >
       <a href="/2021/06/24/a100/">
         Admin后台管理内容
       </a>
@@ -992,66 +1049,6 @@ ORM框架
       
         <div>
           <a class='readmore' href='/2021/06/14/a92/'>
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow">
-  
-  
-  
-  
-    
-    <h2 class="article-title" >
-      <a href="/2021/06/10/a91/">
-        Django应用和分布式路由
-      </a>
-    </h2>
-  
-  <div class='md'>
-    
-      
-        什么是应用
-应用就是在Django项目中一个独立的业务模块,可以包含自己的路由、视图、模板、模型。
-
-创建一个应用
-首先使用startapp创建一个应用
-
-python manage.py startapp monitor
-
-
-在Django配置中安装此应用
-
-settings.py
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'dj...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time>2021-06-10</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/Python/">Python</a>
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2021/06/10/a91/'>
             阅读全文
           </a>
         </div>
