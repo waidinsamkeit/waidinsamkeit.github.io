@@ -5,6 +5,8 @@
   <!-- SEO相关 -->
   
     
+      <meta name="robots" content="noindex,follow">
+    
   
   <!-- 渲染优化 -->
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -22,9 +24,7 @@
 
   <!-- 页面元数据 -->
   
-  <title>关系映射(一) - Random Forest</title>
-  
-    <meta name="keywords" content="Python">
+  <title>归档：2021/7 - Random Forest</title>
   
 
   
@@ -403,7 +403,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="l_cover">
   
     
-        <div id="half" class='cover-wrapper post search' style="display: ;">
+        <div id="half" class='cover-wrapper  search' style="display: ;">
           
             <div id='cover-backstretch'></div>
           
@@ -461,296 +461,87 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
           
 
 <div class='l_main'>
-  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+	
+		
+  <section class="post-list">
+    
+      
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow">
   
-
-
   
-  <div class="article-meta" id="top">
+  
+  
     
-    
-    
-      <h1 class="title">
+    <h2 class="article-title" >
+      <a href="/2021/07/01/a101/">
         关系映射(一)
-      </h1>
-      <div class='new-meta-box'>
-        
-          
-            
-<div class='new-meta-item author'>
-  <a class='author' href="/" rel="nofollow">
-    <img no-lazy src="">
-    <p>Rainy City</p>
-  </a>
-</div>
+      </a>
+    </h2>
+  
+  <div class='md'>
+    
+      
+        什么是关系映射？
+在关系型数据库中,通常不会把所有数据都放在同一张表中,不易于扩展。
 
-          
-        
-          
-            
 
-          
-        
-          
-            <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2021年6月29日</p>
-  </a>
-</div>
+常见的关系映射
 
-          
-        
-          
-            
 
-          
+一对一映射：例如一个身份证对应一个人
+
+一对多映射：例如一个班级可以有多个学生
+
+一对多映射：例如一个学生可以报考多个课程,一个课程可由多个学生学习.
+
+
+一对一映射(创建)
+
+一对一是表示现实事物间存在的一对一的对应关系。
+
+语法：OneToOneField(类名,on_delet...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time>2021-07-01</time>
         
       </div>
-    
-  </div>
-
-
-  
-  
-  <h2 id="什么是关系映射？"><a href="#什么是关系映射？" class="headerlink" title="什么是关系映射？"></a>什么是关系映射？</h2><ul>
-<li>在关系型数据库中,通常不会把所有数据都放在同一张表中,不易于扩展。</li>
-</ul>
-<blockquote>
-<p>常见的关系映射</p>
-</blockquote>
-<ul>
-<li>一对一映射：例如一个身份证对应一个人</li>
-<li>一对多映射：例如一个班级可以有多个学生</li>
-<li>一对多映射：例如一个学生可以报考多个课程,一个课程可由多个学生学习.</li>
-</ul>
-<h3 id="一对一映射-创建"><a href="#一对一映射-创建" class="headerlink" title="一对一映射(创建)"></a>一对一映射(创建)</h3><hr>
-<ul>
-<li>一对一是表示现实事物间存在的一对一的对应关系。</li>
-<li>语法：<code>OneToOneField(类名,on_delete=xxx)</code></li>
-</ul>
-<pre><code class="python">class Asset (models.Model):
-    create_date = models.DateTimeField(verbose_name="创建日期",auto_now=True)
-class User(models.Model)
-    a = models.OneToOneField(Asset,on_delete=1) # on_delete是级联删除的动作
-</code></pre>
-<h4 id="级联删除"><a href="#级联删除" class="headerlink" title="级联删除"></a><strong>级联删除</strong></h4><p>级联删除，例如员工表中一项数据是部门ID,部门ID是部门表的主键，如果是级联删除，当删除了部门A的时候，会把所有属于部门A的员工都给删除。</p>
-<ul>
-<li><p>级联删除的特殊字段</p>
-<ul>
-<li><code>models.CASCADE</code>：Django模拟SQL约束ON DELETE CASCADE,并删除包含ForeignKey的对象</li>
-</ul>
-<blockquote>
-<p>注意该CASCADE会有限查找是否有关联数据,先删除管理数据,再删除本条数据.</p>
-</blockquote>
-<ul>
-<li><code>models.PROTECT</code>：抛出ProtectedError以阻止被引用对象的删除</li>
-<li><code>SET_NULL</code>：设置ForeignKey为Null,需要指定null=True</li>
-</ul>
-</li>
-</ul>
-<pre><code class="python">from django.db import models
-import uuid
-# Create your models here.
-
-class UserMit(models.Model):
-    # id创建为UUID类型,字段命名为user_id
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4,db_column='user_id')
-    name = models.CharField(verbose_name="User_name",max_length=20,default="")
-
-class UserId(models.Model):
-    name = models.CharField(verbose_name="Test",max_length=15)
-    users = models.OneToOneField(UserMit,on_delete=models.CASCADE) # 一对一即users_id 对应 id
-</code></pre>
-<h3 id="一对一映射-创建数据"><a href="#一对一映射-创建数据" class="headerlink" title="一对一映射(创建数据)"></a>一对一映射(创建数据)</h3><hr>
-<ul>
-<li>无外键约束的模型类<code>UserMit</code></li>
-</ul>
-<pre><code class="python"># 进入Django Shell操作
-create1 = UserMit.objects.create(name="henan)
-</code></pre>
-<ul>
-<li>有外键约束的模型类<code>UserId</code></li>
-</ul>
-<pre><code class="python">create2 = UserId.objects.create(name="henan",users=create1) # 通过关联UserMit的实例化对象
-create4 = UserId.objects.create(uid="henan",users_id="0dbccd1992474d30a4497b05295e807b") # 关联UserMit表中的user_id对应主键
-</code></pre>
-<h3 id="一对一-查询数据"><a href="#一对一-查询数据" class="headerlink" title="一对一(查询数据)"></a>一对一(查询数据)</h3><hr>
-<h4 id="正向查询"><a href="#正向查询" class="headerlink" title="正向查询"></a>正向查询</h4><ul>
-<li>正向查询：直接通过外键属性查询,则为外键查询    </li>
-</ul>
-<pre><code class="python"># 通过外键绑定的users_id查询用户,接着上面的创建数据来
-&gt;&gt;&gt; a2.id
-6
-&gt;&gt;&gt; a2.users_id
-UUID('43ff679f-42b2-4334-85a0-b493503d6433')
-</code></pre>
-<h4 id="反向查询"><a href="#反向查询" class="headerlink" title="反向查询"></a>反向查询</h4><ul>
-<li>没有外键属性的一方,可以调用反向属性查询到关联的另一方</li>
-<li>反向关联的属性为<code>实例对象.引用类名(小写)</code></li>
-<li>当反向引用不存在的时候,则会触发异常</li>
-</ul>
-<blockquote>
-<p>当UserId类中定义了外键约束,则UserMit类中会有一个UserId的反向属性</p>
-</blockquote>
-<pre><code class="python">class UserMit(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4,db_column='user_id')
-    name = models.CharField(verbose_name="User_name",max_length=20,default="")
-
-class UserId(models.Model):
-    name = models.CharField(verbose_name="Test",max_length=15)
-    users = models.OneToOneField(UserMit,on_delete=models.CASCADE)
-&gt;&gt;&gt;  select1 = UserMit.objects.get(name='wlx')
-&gt;&gt;&gt; select1.userid.users_id
-UUID('c443d1b4-0882-42cb-8659-86ccbd1f8d12')
-</code></pre>
-
-  
-  
-    
-    <div class='footer'>
       
-      
-      
-        <div class='copyright'>
-          <blockquote>
-            
-              
-                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
-
-              
-            
-              
-                <p>本文永久链接是：<a href=https://blog.micomint.top/2021/06/29/a101/>https://blog.micomint.top/2021/06/29/a101/</a></p>
-              
-            
-          </blockquote>
+        <div>
+          <a class='readmore' href='/2021/07/01/a101/'>
+            阅读全文
+          </a>
         </div>
       
-      
     </div>
   
-  
-    
 
-
-  <div class='article-meta' id="bottom">
-    <div class='new-meta-box'>
-      
-        
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-06-29T11:25:58+08:00">
-  <a class='notlink'>
-    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年6月29日</p>
-  </a>
 </div>
 
+          </div>
         
       
-        
-          
+    
+  </section>
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Python/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Python</p></a></div>
-
-
-        
-      
-        
-          
-  <div class="new-meta-item share -mob-share-list">
-  <div class="-mob-share-list share-body">
     
-      
-        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://blog.micomint.top/2021/06/29/a101/&title=关系映射(一) - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://blog.micomint.top/2021/06/29/a101/&title=关系映射(一) - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://service.weibo.com/share/share.php?url=https://blog.micomint.top/2021/06/29/a101/&title=关系映射(一) - Random Forest&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload placeholder" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@3/img/placeholder/c617bfd2497fcea598e621413e315c368f8d8e.svg">
-          
-        </a>
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-
-
-        
-      
-    </div>
-  </div>
-
-
-  
   
 
-  
-    <div class="prev-next">
-      
-      
-        <a class='next' href='/2021/06/24/a100/'>
-          <p class='title'>Admin后台管理内容<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-          <p class='content'>Admin管理后台
 
-Django提供了比较完善的后台管理数据库接口,可以供开发过程中调用和测试使用。
-Django会搜集所有已经注册的模型类,为这些模型类提供数据管理界面。
-
-创建账号
-
-创建...</p>
-        </a>
-      
-    </div>
-  
-</article>
-
-
-  
-
-  <article class="post white-box reveal shadow" id="comments">
-    <p ct><i class='fas fa-comments'></i> 评论</p>
-    
-    <div id="valine_container" class="valine_thread">
-  <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
-</div>
-
-  </article>
-
-
-
-
-
-
+	
 </div>
 <aside class='l_side'>
   
@@ -758,19 +549,243 @@ Django会搜集所有已经注册的模型类,为这些模型类提供数据管�
     
     
 
+<section class="widget blogger floatable desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box rectangle' href='/about/'>
+          <img no-lazy src='https://imgur.loukky.com/imgs/2021/02/ee7dc694cf5d54a3.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">Random Forest</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="mailto:ailunbolinkenasi@gmail.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="https://github.com/volantis-x/"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+          
+            <a href="/"
+              class="social fas fa-headphones-alt flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+              
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
 
+  
 
-  <section class="widget toc-wrapper floatable desktop mobile" id="toc-div" >
+  
+    
+    
+  
+
+  <section class="widget tagcloud floatable desktop mobile">
     
   <header>
     
-      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
     
   </header>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是关系映射？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80%E6%98%A0%E5%B0%84-%E5%88%9B%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">一对一映射(创建)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%A7%E8%81%94%E5%88%A0%E9%99%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">级联删除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80%E6%98%A0%E5%B0%84-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.</span> <span class="toc-text">一对一映射(创建数据)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.</span> <span class="toc-text">一对一(查询数据)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.3.1.</span> <span class="toc-text">正向查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.3.2.</span> <span class="toc-text">反向查询</span></a></li></ol></li></ol></li></ol>
+      <a href="/tags/Ansible/" style="font-size: 15.67px; color: #8e8e8e">Ansible</a> <a href="/tags/DevOps/" style="font-size: 15.67px; color: #8e8e8e">DevOps</a> <a href="/tags/Docker/" style="font-size: 17.33px; color: #828282">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java/" style="font-size: 14px; color: #999">Java</a> <a href="/tags/Kubernetes/" style="font-size: 20.67px; color: #6c6c6c">Kubernetes</a> <a href="/tags/Linux/" style="font-size: 24px; color: #555">Linux</a> <a href="/tags/MYSQL/" style="font-size: 19px; color: #777">MYSQL</a> <a href="/tags/Nacos/" style="font-size: 15.67px; color: #8e8e8e">Nacos</a> <a href="/tags/Python/" style="font-size: 22.33px; color: #606060">Python</a> <a href="/tags/Redis/" style="font-size: 15.67px; color: #8e8e8e">Redis</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/spider/" style="font-size: 14px; color: #999">spider</a> <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/" style="font-size: 14px; color: #999">阿里云</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+<section class="widget grid floatable desktop mobile">
+  
+  <header>
+    
+      <i class="fas fa-map-signs fa-fw" aria-hidden="true"></i><span class='name'>站内导航</span>
+    
+  </header>
+
+
+  <div class='content'>
+    <div class="grid navigation fixed">
+      
+        <a class="flat-box" title="/friends" href="/friends"
+          
+          
+          id="friends">
+          
+            <i class="fas fa-file-alt fa-fw" aria-hidden="true"></i>
+          
+          友链申请
+        </a>
+      
+        <a class="flat-box" title="https://github.com/volantis-x/hexo-theme-volantis/" href="https://github.com/volantis-x/hexo-theme-volantis/"
+          
+            rel="external nofollow noopener noreferrer"
+          
+          
+            target="_blank"
+          
+          id="https:githubcomvolantis-xhexo-theme-volantis">
+          
+            <i class="fas fa-file-code fa-fw" aria-hidden="true"></i>
+          
+          主题源码
+        </a>
+      
+        <a class="flat-box" title="https://music.163.com/" target="_blank" rel="noopener" href="https://music.163.com/"
+          
+          
+          id="https:music163com">
+          
+            <i class="fa fa-headphones fa-fw" aria-hidden="true"></i>
+          
+          听个音乐
+        </a>
+      
+        <a class="flat-box" title="https://ins.micomint.top" target="_blank" rel="noopener" href="https://ins.micomint.top"
+          
+          
+          id="https:insmicominttop">
+          
+            <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
+          
+          资讯站点
+        </a>
+      
+        <a class="flat-box" title="https://image.micomint.top" target="_blank" rel="noopener" href="https://image.micomint.top"
+          
+          
+          id="https:imagemicominttop">
+          
+            <i class="fa fa-camera-retro fa-fw" aria-hidden="true"></i>
+          
+          时光相册
+        </a>
+      
+    </div>
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget category floatable desktop">
+    
+  <header>
+    
+      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <ul class="entry navigation">
+        
+          <li><a class="flat-box"
+            title="/categories/Ansible/" href="/categories/Ansible/"
+            id="categoriesAnsible"
+            ><div class='name'>Ansible</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/DevOps/" href="/categories/DevOps/"
+            id="categoriesDevOps"
+            ><div class='name'>DevOps</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Docker/" href="/categories/Docker/"
+            id="categoriesDocker"
+            ><div class='name'>Docker</div><div class='badge'>(5)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Elasticsearch/" href="/categories/Elasticsearch/"
+            id="categoriesElasticsearch"
+            ><div class='name'>Elasticsearch</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Java/" href="/categories/Java/"
+            id="categoriesJava"
+            ><div class='name'>Java</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Kubernetes/" href="/categories/Kubernetes/"
+            id="categoriesKubernetes"
+            ><div class='name'>Kubernetes</div><div class='badge'>(15)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Linux/" href="/categories/Linux/"
+            id="categoriesLinux"
+            ><div class='name'>Linux</div><div class='badge'>(28)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/MYSQL/" href="/categories/MYSQL/"
+            id="categoriesMYSQL"
+            ><div class='name'>MYSQL</div><div class='badge'>(8)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Nacos/" href="/categories/Nacos/"
+            id="categoriesNacos"
+            ><div class='name'>Nacos</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Python/" href="/categories/Python/"
+            id="categoriesPython"
+            ><div class='name'>Python</div><div class='badge'>(14)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Redis/" href="/categories/Redis/"
+            id="categoriesRedis"
+            ><div class='name'>Redis</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
+            id="categoriesSpring-Cloud"
+            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/" href="/categories/%E9%98%BF%E9%87%8C%E4%BA%91/"
+            id="categoriesE998BFE9878CE4BA91"
+            ><div class='name'>阿里云</div><div class='badge'>(1)</div></a></li>
+        
+      </ul>
     </div>
   </section>
 
@@ -781,15 +796,14 @@ Django会搜集所有已经注册的模型类,为这些模型类提供数据管�
 </aside>
 
 
-
 		  
 		  <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <script>
   window.pdata={}
-  pdata.ispage=true;
-  pdata.postTitle="关系映射(一)";
+  pdata.ispage=false;
+  pdata.postTitle="";
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   // header 这里无论是否开启pjax都需要
