@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/linux/</link>
+    <description>Recent content in Linux on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 04 Jul 2022 11:12:08 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker常见的几个问题处理</title>
+      <link>https://tec.mletter.cn/2022/07/04/docker%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html/</link>
+      <pubDate>Mon, 04 Jul 2022 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/07/04/docker%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html/</guid>
+      <description>总结了一下平常Docker常见的错误处理,大概二十几个左右。 Docker迁移存储目录 问题起因 由于公司最开始的服务器在/var/lib/doc</description>
+    </item>
+    
+    <item>
+      <title>Ansible-Playbook</title>
+      <link>https://tec.mletter.cn/2022/04/01/ansible-playbook.html/</link>
+      <pubDate>Fri, 01 Apr 2022 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/04/01/ansible-playbook.html/</guid>
+      <description>playbook是由一个或多个&amp;quot;play&amp;quot;组成的列表 playbook的主要功能在于将预定义的一组主机，装扮成事先通过an</description>
+    </item>
+    
+    <item>
+      <title>Coturn穿透服务器搭建</title>
+      <link>https://tec.mletter.cn/2022/03/20/coturn%E7%A9%BF%E9%80%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/coturn%E7%A9%BF%E9%80%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>yum -y install libevent-devel openssl-devel 1.1下载编译安装coturn git clone https://github.com/coturn/coturn cd coturn ./configure --prefix=/usr/local/coturn make install 1.2查看是否安装成功 which turnserver 1.3配置文件 安装目录位于/usr/local/cotu</description>
+    </item>
+    
+    <item>
+      <title>Elasticsearch&#43;kibana&#43;Logstash部署</title>
+      <link>https://tec.mletter.cn/2022/03/20/elasticsearch-kibana-logstash%E9%83%A8%E7%BD%B2.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/elasticsearch-kibana-logstash%E9%83%A8%E7%BD%B2.html/</guid>
+      <description>1.0 准备条件 准备如下： filebeat-6.3.2 elasticsearch-6.3.2 kibana-6.3.2 logstash-6.3.2 内存3GB以上,elasticsearch这东西太吃内存了,实验环境建议内存给到4G. 官网地址 https://www.elastic.co/cn/elasticsearch/ 如果你嫌弃官网下</description>
+    </item>
+    
+    <item>
+      <title>Nginx优化-常规优化</title>
+      <link>https://tec.mletter.cn/2022/03/20/nginx%E4%BC%98%E5%8C%96-%E5%B8%B8%E8%A7%84%E4%BC%98%E5%8C%96.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/nginx%E4%BC%98%E5%8C%96-%E5%B8%B8%E8%A7%84%E4%BC%98%E5%8C%96.html/</guid>
+      <description>1.1 nginx连接数优化 events { worker_connections 65530; # 设置nginx最大连接,最多为65535 use epoll; # 采用epoll模型，作用于event的I/O异步 } 进程优化 worker_processes 8;</description>
+    </item>
+    
+    <item>
+      <title>Redis主从复制搭建</title>
+      <link>https://tec.mletter.cn/2022/03/20/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>准备环境 192.168.1.100 MASTER 6379 192.168.1.101 SLAVE 6379 脚本每个人的环境不同.可能有的会有问题，按照自己的环境来改和执行 [root@localhost redis]# vim start.sh //就是不想手动敲那么累，全是命令拼凑 #!/bin/bash Redis_home=/usr/local/redis # start dow</description>
+    </item>
+    
+    <item>
+      <title>有关于Nginx跨域问题</title>
+      <link>https://tec.mletter.cn/2022/03/20/%E6%9C%89%E5%85%B3%E4%BA%8Enginx%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/%E6%9C%89%E5%85%B3%E4%BA%8Enginx%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98.html/</guid>
+      <description>项目中使用Nginx服务实现文件的访问，由于和tomcat的接口不是一个域，前端VUE做了图片处理，导致出现跨域问题 location /file { alias /kjc; add_header Access-Control-Allow-Origin *; add_header Access-Control-Allow-Credentials true; }</description>
+    </item>
+    
+    <item>
+      <title>Mongodb主从搭建</title>
+      <link>https://tec.mletter.cn/2022/03/20/mongodb%E4%B8%BB%E4%BB%8E%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Sun, 20 Mar 2022 08:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mongodb%E4%B8%BB%E4%BB%8E%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>Mongodb主从搭建 内存2以上 无特殊要求 主IP：192.168.1.100 从IP：192.168.1.101 准备配置如下，每台服务器都执行</description>
+    </item>
+    
+    <item>
+      <title>SSH漏洞修复-升级openssh</title>
+      <link>https://tec.mletter.cn/2021/03/12/ssh%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D-%E5%8D%87%E7%BA%A7openssh.html/</link>
+      <pubDate>Fri, 12 Mar 2021 09:25:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/03/12/ssh%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D-%E5%8D%87%E7%BA%A7openssh.html/</guid>
+      <description>修复解决漏洞 解决OPenssh7.x以前的绝大多数问题 OpenSSH 命令注入漏洞(CVE-2020-15778) OpenSSH 用户枚举漏洞(CVE-2018-159</description>
+    </item>
+    
+    <item>
+      <title>挂载OSS到ECS服务器</title>
+      <link>https://tec.mletter.cn/2020/12/20/%E6%8C%82%E8%BD%BDoss%E5%88%B0ecs%E6%9C%8D%E5%8A%A1%E5%99%A8.html/</link>
+      <pubDate>Sun, 20 Dec 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/12/20/%E6%8C%82%E8%BD%BDoss%E5%88%B0ecs%E6%9C%8D%E5%8A%A1%E5%99%A8.html/</guid>
+      <description>阿里云 OSS 是对象存储服务，价格也比较便宜，算得上是一个免费的 CDN，我们可以利用 OSSFS 这个工具，将 OSS 挂载到阿里云 ECS 服务器上，可以达到存储、备份的目</description>
+    </item>
+    
+    <item>
+      <title>Linux 误删文件恢复命令及方法</title>
+      <link>https://tec.mletter.cn/2020/12/11/linux-%E8%AF%AF%E5%88%A0%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E5%91%BD%E4%BB%A4%E5%8F%8A%E6%96%B9%E6%B3%95.html/</link>
+      <pubDate>Fri, 11 Dec 2020 09:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/12/11/linux-%E8%AF%AF%E5%88%A0%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E5%91%BD%E4%BB%A4%E5%8F%8A%E6%96%B9%E6%B3%95.html/</guid>
+      <description>为rm -rf 的手残党准备的 注意事项：虽然有软件可以对误删的数据进行恢复，但是完全恢复数据的概率并不是百分百的。 在提醒：适用rm -rf 的时候依旧慎用 e</description>
+    </item>
+    
+    <item>
+      <title>Nginx配置WSS</title>
+      <link>https://tec.mletter.cn/2020/12/07/nginx%E9%85%8D%E7%BD%AEwss.html/</link>
+      <pubDate>Mon, 07 Dec 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/12/07/nginx%E9%85%8D%E7%BD%AEwss.html/</guid>
+      <description>简单了解一下 WebSocket 现在，很多网站为了实现推送技术，所用的技术都是轮询。轮询是在特定的的时间间隔（如每1秒），由浏览器对服务器发出HTTP请求，然</description>
+    </item>
+    
+    <item>
+      <title>Linux Shell 文本处理工具集锦-find篇</title>
+      <link>https://tec.mletter.cn/2020/11/24/linux-shell-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E9%9B%86%E9%94%A6-find%E7%AF%87.html/</link>
+      <pubDate>Tue, 24 Nov 2020 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/11/24/linux-shell-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E9%9B%86%E9%94%A6-find%E7%AF%87.html/</guid>
+      <description>1 查找txt和pdf文件 find . ( -name &amp;#34;*.txt&amp;#34;-o -name &amp;#34;*.pdf&amp;#34;) -print 2 正则方式查找.txt和pdf find . -regex &amp;#34;.*(.txt|.pdf)$&amp;#34; 3 否定参数 查找所有非txt文本 find . ! -name &amp;#34;*.txt&amp;#34; -print 4 指定搜索深度 打印出</description>
+    </item>
+    
+    <item>
+      <title>Mongo部署副本集</title>
+      <link>https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/</link>
+      <pubDate>Mon, 26 Oct 2020 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/</guid>
+      <description>部署副本集 1.0 更改Mongo配置文件 [root@localhost mongo]# vim conf/mongo.conf port=27017 fork=true logpath=/usr/local/mongo/logs/mongodb.log logappend=true dbpath=/usr/local/mongo/data replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo [root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 [root@localhost mongo]# mongo &amp;gt; conf= { &amp;#34;_id&amp;#34;</description>
+    </item>
+    
+    <item>
+      <title>Nacos集群部署</title>
+      <link>https://tec.mletter.cn/2020/10/26/nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2.html/</link>
+      <pubDate>Mon, 26 Oct 2020 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/10/26/nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2.html/</guid>
+      <description>点我进入官网 服务发现和服务运行状况检查 Nacos支持基于DNS和基于RPC（Dubbo / gRPC）的服务发现。服务提供商向本机 ，OpenAP</description>
+    </item>
+    
+  </channel>
+</rss>

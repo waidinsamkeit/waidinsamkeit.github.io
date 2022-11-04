@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="lang-zh-cn">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="keywords" content="Python,Hugo,Hugo Theme,Luna," /><meta name="description" content="不过，抢票软件并非万能，巧coder难为无票之炊，除了技术，你可能还需要一点点运气。 无论采取哪种交通方式，祝大家都能开开心心过年回家，平平安" />
+<meta itemprop="description" content="不过，抢票软件并非万能，巧coder难为无票之炊，除了技术，你可能还需要一点点运气。 无论采取哪种交通方式，祝大家都能开开心心过年回家，平平安" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="12306抢票小助手 - Cameliya" />
+<link href="https://tec.mletter.cn/index.xml" title="12306抢票小助手 - Cameliya" type="application/rss+xml" rel="alternate" />
+<title>12306抢票小助手 - Cameliya</title><link rel="stylesheet" href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k=" /><meta property="og:site_name" content="12306抢票小助手 - Cameliya" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="12306抢票小助手" />
+<meta property="og:description" content="不过，抢票软件并非万能，巧coder难为无票之炊，除了技术，你可能还需要一点点运气。 无论采取哪种交通方式，祝大家都能开开心心过年回家，平平安" />
+<meta property="og:url" content="https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/" /><meta property="article:publisher" content="https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/" /><meta property="article:published_time" content="2021-01-11T15:27:08&#43;08:00" /><meta property="article:modified_time" content="2022-11-03T13:42:18&#43;08:00" /><meta name="theme-color" content="#95C7E0" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="12306抢票小助手 - Cameliya" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Ice_Hazymoon" />
+    <meta name="twitter:creator" content="@Ice_Hazymoon" /><meta name="twitter:title" content="12306抢票小助手 - Cameliya" />
+<meta name="twitter:description" content="不过，抢票软件并非万能，巧coder难为无票之炊，除了技术，你可能还需要一点点运气。 无论采取哪种交通方式，祝大家都能开开心心过年回家，平平安" />
+<meta name="twitter:url" content="https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/" /><meta name="twitter:image" content="" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "12306抢票小助手",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/tec.mletter.cn\/2021\/01\/11\/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html\/"
+  },"genre": "posts","keywords": "Python","wordcount": 1571 ,
+  "url": "https:\/\/tec.mletter.cn\/2021\/01\/11\/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html\/","datePublished": "2021-01-11T15:27:08\u002b08:00","dateModified": "2022-11-03T13:42:18\u002b08:00","author": {
+    "@type": "Person",
+    "name": "Cameliya"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+    
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+        <div class="route-items flex w-full items-center justify-around"><a
+                    title="首页"
+                    data-active-link="/"
+                    href="/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
+                </a><a
+                    title="关于我"
+                    data-active-link="/about/"
+                    href="/about/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
+                </a><a
+                    title="朋友们"
+                    data-active-link="/link/"
+                    href="/link/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
+                </a><a
+                    title="归档"
+                    data-active-link="/archives/"
+                    href="/archives/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
+                </a><a
+                    title="Repo"
+                    data-active-link="/repo/"
+                    href="/repo/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
+                </a><a
+                    title="搜索"
+                    data-active-link="/search/"
+                    href="/search/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span>
+                </a>
+        </div>
+    </nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class="relative flex flex-grow  mt-28 md:mt-20 " id="swup"><style>:root {
+        --font:JetBrainsMono-Medium;
+    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
+    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
+        12306抢票小助手
+    </div>
+</div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="发布于 2021年1月11日 15:27:08"datetime="2021-01-11T15:27:08+08:00">2021年1月11日</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="最后修改于：2022年11月3日 13:42:18"datetime="2022-11-03T13:42:18+08:00">2022年11月3日</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>4 分钟</span>
+            </div></div><div class="mb-3 flex items-center">
+            <i class="eva eva-pricetags-outline mr-1"></i>
+            <span class="mr-3">标签</span><a href="/tags/python" title="Python" class="group mr-2 flex items-center text-sm">
+                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+                    <span class="text-gray-400 group-hover:text-theme">Python</span>
+                </a></div><div class="mb-3 flex items-center">
+            <i class="eva eva-folder-outline mr-1"></i>
+            <span class="mr-3">分类</span><a href="/categories/python" title="Python" class="group flex items-center text-sm">
+                    <span class="text-gray-400 group-hover:text-theme">Python</span>
+                    <span class="mx-0.5 group-last:hidden">,</span>
+                </a></div></div><aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#支持的python版本">支持的Python版本</a></li>
+    <li><a href="#已实现功能">已实现功能</a></li>
+    <li><a href="#依赖库">依赖库</a></li>
+    <li><a href="#部署教程">部署教程</a>
+      <ul>
+        <li><a href="#10-服务启动说明">1.0 服务启动说明</a></li>
+        <li><a href="#11-修改配置文件">1.1 修改配置文件</a></li>
+        <li><a href="#12-筛选cdn">1.2 筛选CDN</a></li>
+        <li><a href="#13-启动服务">1.3 启动服务</a></li>
+      </ul>
+    </li>
+    <li><a href="#cookie以及token获取">Cookie以及Token获取</a></li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="更快的阅读" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        ><p>不过，抢票软件并非万能，巧coder难为无票之炊，除了技术，你可能还需要一点点运气。
+无论采取哪种交通方式，祝大家都能开开心心过年回家，平平安安回来搬砖~</p>
+<ul>
+<li>
+<p><a
+    class="link"
+    href="https://github.com/testerSunshine/12306"target="_blank" rel="noopener">原生项目地址</a
+>
+</p>
+</li>
+<li>
+<p>其实作者已经没有在维护了&hellip;</p>
+</li>
+<li>
+<p>我只是拿剩下的进行了二开</p>
+</li>
+<li>
+<p>多多少少会有些问题..🐷</p>
+</li>
+</ul>
+
+
+<h2 class="group " id="支持的python版本"
+    >支持的Python版本<a href="#%e6%94%af%e6%8c%81%e7%9a%84python%e7%89%88%e6%9c%ac"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<ul>
+<li><input disabled="" type="checkbox"> 2.7.10 - 2.7.15(目前根据作者代码来看已经不支持)</li>
+<li><input checked="" disabled="" type="checkbox"> 3.6 - 3.7.4(推荐)</li>
+<li><input disabled="" type="checkbox"> 2.7.9(不太确定)</li>
+<li><input disabled="" type="checkbox"> 3.8.x(今天测试-不支持)</li>
+</ul>
+
+
+<h2 class="group " id="已实现功能"
+    >已实现功能<a href="#%e5%b7%b2%e5%ae%9e%e7%8e%b0%e5%8a%9f%e8%83%bd"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 自动打码</li>
+<li><input checked="" disabled="" type="checkbox"> 自动登录</li>
+<li><input checked="" disabled="" type="checkbox"> 准点预售和捡漏</li>
+<li><input checked="" disabled="" type="checkbox"> 智能候补</li>
+<li><input checked="" disabled="" type="checkbox"> 邮件通知</li>
+<li><input checked="" disabled="" type="checkbox"> server酱通知</li>
+<li><input checked="" disabled="" type="checkbox"> 短信通知提示(2020-1-11日新增)</li>
+<li><input checked="" disabled="" type="checkbox"> 更新Token参数(优先调用)</li>
+<li><input disabled="" type="checkbox"> 预获取Cookie(待增加)</li>
+<li><input disabled="" type="checkbox"> 设置支付接口<code>(直接调用支付-(这个暂且不太想考虑了...有些不安全))</code></li>
+</ul>
+
+
+<h2 class="group " id="依赖库"
+    >依赖库<a href="#%e4%be%9d%e8%b5%96%e5%ba%93"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<ul>
+<li>验证码目前可以本地识别，需要下载模型，放于项目根目录</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>  git clone https://github.com/testerSunshine/12306model.git <span style="color:#007f7f"># 依赖模型</span>
+</span></span></code></pre></div><ul>
+<li>自托管云打码服务器搭建：<a
+    class="link"
+    href="https://github.com/YinAoXiong/12306_code_server"target="_blank" rel="noopener">12306_code_server</a
+>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="font-weight:bold">version</span>: <span style="color:#0ff;font-weight:bold">&#34;3&#34;</span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">code_12306</span>:
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">image</span>: yinaoxiong/12306_code_server
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff0;font-weight:bold">5002</span>:<span style="color:#ff0;font-weight:bold">80</span> <span style="color:#007f7f">#可以根据需要修改端口</span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">environment</span>:
+</span></span><span style="display:flex;"><span>      - WORKERS=1 <span style="color:#007f7f">#gunicorn works 默认为1可以根据服务器配置自行调整</span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">restart</span>: always
+</span></span></code></pre></div><ul>
+<li>项目依赖<code>[requirements.txt]</code></li>
+<li>Python依赖<code>--with-ssl</code></li>
+</ul>
+
+
+<h2 class="group " id="部署教程"
+    >部署教程<a href="#%e9%83%a8%e7%bd%b2%e6%95%99%e7%a8%8b"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<ul>
+<li>推荐root用户直接安装</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#007f7f"># 这个项目是我自己的</span>
+</span></span><span style="display:flex;"><span>git clone https://gitee.com/lanmy/why_12305.git
+</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">cd</span> why_12305
+</span></span><span style="display:flex;"><span>pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt 
+</span></span></code></pre></div><p><code>关于无法安装tensorflow</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff0;font-weight:bold">1.</span> tensorflow的兼容版本 <span style="color:#ff0;font-weight:bold">1.14.0</span>rc\<span style="color:#ff0;font-weight:bold">1.14.0</span>rc\<span style="color:#ff0;font-weight:bold">1.15.0</span>\<span style="color:#ff0;font-weight:bold">1.15.0</span>rc
+</span></span><span style="display:flex;"><span><span style="color:#ff0;font-weight:bold">2.</span>如果出现以下问题
+</span></span><span style="display:flex;"><span>ERROR: Could not find a version that satisfies the requirement tensorflow==<span style="color:#ff0;font-weight:bold">1.15.0</span>rc
+</span></span><span style="display:flex;"><span>ERROR: No matching distribution found <span style="color:#fff;font-weight:bold">for</span> tensorflow==<span style="color:#ff0;font-weight:bold">1.15.0</span>rc
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 请看我写的支持的Python版本！！！</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff0;font-weight:bold">3.</span>有必要时请更新你的PIP
+</span></span><span style="display:flex;"><span>pip3 install --upgrade pip
+</span></span></code></pre></div><ul>
+<li>安装Docker与Docker-compose</li>
+<li>部署12306_code_server<code>yml文件在上面</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git clone https://gitee.com/lanmy/auto_dev.git
+</span></span><span style="display:flex;"><span>python install_docker.py
+</span></span><span style="display:flex;"><span>mkdir 12305_code
+</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">cd</span> 12305_code
+</span></span></code></pre></div><p><strong>启动code_server</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker-compose up -d 
+</span></span></code></pre></div>
+
+<h3 class="group " id="10-服务启动说明"
+    >1.0 服务启动说明<a href="#10-%e6%9c%8d%e5%8a%a1%e5%90%af%e5%8a%a8%e8%af%b4%e6%98%8e"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<ul>
+<li>筛选CDN</li>
+<li>修改配置文件</li>
+<li>测试配置邮箱<code>我不做了</code></li>
+<li>启动服务</li>
+</ul>
+
+
+<h3 class="group " id="11-修改配置文件"
+    >1.1 修改配置文件<a href="#11-%e4%bf%ae%e6%94%b9%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>vim TickerConfig.py
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 如果你没有抢到票，寄希望于其他人退票后捡漏，则TICKET_TYPE = 2</span>
+</span></span><span style="display:flex;"><span>TICKET_TYPE = <span style="color:#ff0;font-weight:bold">1</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 填入一串你想要抢的车次例如[G2313,G1221]</span>
+</span></span><span style="display:flex;"><span>STATION_TRAINS = [G2313,G1221,G267] 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 出发城市，比如深圳北，就填深圳就搜得到</span>
+</span></span><span style="display:flex;"><span>FROM_STATION = <span style="color:#0ff;font-weight:bold">&#34;北京&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 到达城市 比如深圳北，就填深圳就搜得到</span>
+</span></span><span style="display:flex;"><span>TO_STATION = <span style="color:#0ff;font-weight:bold">&#34;合肥&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 乘车人(list) 多个乘车人ex:</span>
+</span></span><span style="display:flex;"><span>TICKET_PEOPLES = [<span style="color:#0ff;font-weight:bold">&#34;张三,李四&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 设置token,获取Tk方法看最下面</span>
+</span></span><span style="display:flex;"><span>tk = <span style="color:#0ff;font-weight:bold">&#34;ROKCqQNWEh-asdsadSNQOOasxvzvOO4gBA7qZakafm1m0&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># COOKIE_TYPE设置为1或2都有些问题，建议设置为3</span>
+</span></span><span style="display:flex;"><span>COOKIE_TYPE = <span style="color:#ff0;font-weight:bold">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 获取Cookie</span>
+</span></span><span style="display:flex;"><span>RAIL_EXPIRATION = <span style="color:#0ff;font-weight:bold">&#34;xxx&#34;</span>
+</span></span><span style="display:flex;"><span>RAIL_DEVICEID = <span style="color:#0ff;font-weight:bold">&#34;xxx&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 此处设置云打码服务器地址，如果有自建的服务器，可以自行更改</span>
+</span></span><span style="display:flex;"><span>HOST = <span style="color:#0ff;font-weight:bold">&#34;172.16.87.10:5002&#34;</span>
+</span></span><span style="display:flex;"><span>REQ_URL = <span style="color:#0ff;font-weight:bold">&#34;/verify/base64/&#34;</span>
+</span></span><span style="display:flex;"><span>HTTP_TYPE = <span style="color:#0ff;font-weight:bold">&#34;http&#34;</span>
+</span></span></code></pre></div><p><code>**关于无法安装tensorflow**</code>
+车票日期记得写对例如：<code>2021-01-12</code></p>
+
+
+<h3 class="group " id="12-筛选cdn"
+    >1.2 筛选CDN<a href="#12-%e7%ad%9b%e9%80%89cdn"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<p>至此，准备工作已全部完成，启动前请先筛选cdn，这点很重要！</p>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>python3 run.py c
+</span></span></code></pre></div>
+
+<h3 class="group " id="13-启动服务"
+    >1.3 启动服务<a href="#13-%e5%90%af%e5%8a%a8%e6%9c%8d%e5%8a%a1"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>python3 run.py r
+</span></span></code></pre></div><p>成功Log</p>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>车次: G2515 始发车站: 北京 终点站: 宣化北 二等座:有
+</span></span><span style="display:flex;"><span>正在尝试提交订票...
+</span></span><span style="display:flex;"><span>尝试提交订单...
+</span></span><span style="display:flex;"><span>出票成功
+</span></span><span style="display:flex;"><span>排队成功, 当前余票还剩余: 359 张
+</span></span><span style="display:flex;"><span>正在使用自动识别验证码功能
+</span></span><span style="display:flex;"><span>验证码通过,正在提交订单
+</span></span><span style="display:flex;"><span>提交订单成功！
+</span></span><span style="display:flex;"><span>排队等待时间预计还剩 -12 ms	
+</span></span><span style="display:flex;"><span>排队等待时间预计还剩 -6 ms
+</span></span><span style="display:flex;"><span>排队等待时间预计还剩 -7 ms
+</span></span><span style="display:flex;"><span>排队等待时间预计还剩 -4 ms
+</span></span><span style="display:flex;"><span>排队等待时间预计还剩 -4 ms
+</span></span><span style="display:flex;"><span>恭喜您订票成功，订单号为：EB52743573, 请立即打开浏览器登录12306，访问‘未完成订单’，在30分钟内完成支付！
+</span></span></code></pre></div><p><figure
+    
+>
+    <picture class="noscript-hidden"><img
+            
+            data-src="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/a2ece1960b4e54c6710f02182c1f0e05.png"
+            src="/images/outload.svg"data-data-zoomable
+            data-lazyload data-lazyload-blur
+        />
+    </picture>
+    <noscript data-lazyload-noscript>
+        <a class="after:hidden" href="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/a2ece1960b4e54c6710f02182c1f0e05.png" target="_blank" rel="noopener noreferrer">
+            <picture><img
+                    src="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/a2ece1960b4e54c6710f02182c1f0e05.png"/>
+            </picture>
+        </a>
+    </noscript></figure></p>
+
+
+<h2 class="group " id="cookie以及token获取"
+    >Cookie以及Token获取<a href="#cookie%e4%bb%a5%e5%8f%8atoken%e8%8e%b7%e5%8f%96"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<blockquote>
+<p>别再问我怎么获取Cookie了！！！</p>
+</blockquote>
+<ol>
+<li>登录网页版12306官网</li>
+<li>网址旁边有个锁子🔐</li>
+<li>点击锁子&gt;点击Cookie&gt;点击12306.cn</li>
+<li>在<code>12306.cn的Cookie项</code>下面找到<code>RAIL_EXPIRATION</code>和<code>RAIL_DEVICEID</code></li>
+<li>把值复制进去</li>
+</ol>
+<blockquote>
+<p>再有不懂！直接百度🙅‍♀️</p>
+</blockquote>
+<p><strong>Token</strong></p>
+<ol>
+<li>打开12306.cn</li>
+<li>打开开发者工具(F12)</li>
+<li>点击Network选项-&gt;过滤请求类型选择<code>XHR</code></li>
+<li>登录12306,然后返回到开发者工具</li>
+<li>找到<code>uamauthclient</code> -&gt; Headers-&gt;一直往下拉会有tk</li>
+</ol>
+<p><figure
+    
+>
+    <picture class="noscript-hidden"><img
+            
+            data-src="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/09c4fc782cf90910f787bc9cb8a7c9f8.png"
+            src="/images/outload.svg"data-data-zoomable
+            data-lazyload data-lazyload-blur
+        />
+    </picture>
+    <noscript data-lazyload-noscript>
+        <a class="after:hidden" href="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/09c4fc782cf90910f787bc9cb8a7c9f8.png" target="_blank" rel="noopener noreferrer">
+            <picture><img
+                    src="https://cdn.jsdelivr.net/gh/waidinsamkeit/picture@latest/2021/01/11/09c4fc782cf90910f787bc9cb8a7c9f8.png"/>
+            </picture>
+        </a>
+    </noscript></figure></p>
+</section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到 Twitter"
+                href="https://twitter.com/share?&text=%e4%b8%8d%e8%bf%87%ef%bc%8c%e6%8a%a2%e7%a5%a8%e8%bd%af%e4%bb%b6%e5%b9%b6%e9%9d%9e%e4%b8%87%e8%83%bd%ef%bc%8c%e5%b7%a7coder%e9%9a%be%e4%b8%ba%e6%97%a0%e7%a5%a8%e4%b9%8b%e7%82%8a%ef%bc%8c%e9%99%a4%e4%ba%86%e6%8a%80%e6%9c%af%ef%bc%8c%e4%bd%a0%e5%8f%af%e8%83%bd%e8%bf%98%e9%9c%80%e8%a6%81%e4%b8%80%e7%82%b9%e7%82%b9%e8%bf%90%e6%b0%94%e3%80%82%20%e6%97%a0%e8%ae%ba%e9%87%87%e5%8f%96%e5%93%aa%e7%a7%8d%e4%ba%a4%e9%80%9a%e6%96%b9%e5%bc%8f%ef%bc%8c%e7%a5%9d%e5%a4%a7%e5%ae%b6%e9%83%bd%e8%83%bd%e5%bc%80%e5%bc%80%e5%bf%83%e5%bf%83%e8%bf%87%e5%b9%b4%e5%9b%9e%e5%ae%b6%ef%bc%8c%e5%b9%b3%e5%b9%b3%e5%ae%89&url=https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到 Facebook"
+                href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-facebook hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到微博"
+                href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/&title=12306%e6%8a%a2%e7%a5%a8%e5%b0%8f%e5%8a%a9%e6%89%8b&sudaref=tec.mletter.cn"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="复制链接" data-clipboard-text="https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/"></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block">
+                <i title="二维码" class="eva show-qrcode eva-smartphone hover:text-theme"></i>
+                <div
+                    class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"
+                >
+                    <img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://tec.mletter.cn/2021/01/11/12306%E6%8A%A2%E7%A5%A8%E5%B0%8F%E5%8A%A9%E6%89%8B.html/" alt="二维码" />
+                </div>
+            </div></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/2021/01/06/ansible%E6%89%A7%E8%A1%8Cshell%E6%A8%A1%E5%9D%97%E9%97%AE%E9%A2%98.html/"
+            title="Ansible执行Shell模块问题"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>上一篇</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        除特殊声明外，本博客一律使用以下协议进行授权 「
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">署名 - 非商业性使用 - 禁止演绎 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-nd.svg" alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href="/2021/01/25/python-%E6%96%B9%E6%B3%95%E5%8F%8D%E5%B0%84.html/"
+        title="Python-方法反射"
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+        <span>下一篇</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+<div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder">
+    <script src="https://giscus.app/client.js"
+    data-repo="waidinsamkeit/tecoum"
+    data-repo-id="R_kgDOH4NyMg"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOH4NyMs4CRCX2"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading="true"
+    crossorigin="anonymous"
+    data-swup-reload-script
+    async
+>
+</script>
+
+<script data-swup-reload-script>
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onThemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+    
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+</script>
+</div>
+
+        </div>
+    </div>
+</div>
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2020 - 2022</span>
+            <span class="mx-1.5 opacity-50"> | </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a> 驱动</div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://tec.mletter.cn/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://tec.mletter.cn/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>运行时间： </span><b id="run-time-d">0</b>
+    <span class="text-xs">天</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">小时</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">分钟</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">秒</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'zh-cn',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:["github"],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: true ,
+    autoDarkMode: true ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: '密码错误',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: false ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "复制成功",
+            failed: "复制失败，请手动复制",
+            copyCode: "复制代码",
+        },
+        search: {
+            untitled: "无标题",
+            loadFailure: "初始化搜索引擎失败",
+            input: "请输入内容...",
+        },
+        darkMode: {
+            dark: "切换到夜间模式",
+            light: "切换到日间模式"
+        }
+    },creatTime: "2020\/6\/12"}
+</script>
+<script type="text/javascript" src="/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js" defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ&#43;6P7cT&#43;B0YgL4dSqRg="></script><script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('\/sw.js');
+        });
+    }
+</script>
+<script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
+    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
+    function googleTranslateElementInit(){
+        new google.translate.TranslateElement({
+            pageLanguage: 'zh-cn',
+            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
+            autoDisplay:false
+        },'google_translate_element');
+    }
+</script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="返回顶部"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><div id="i18nlist"></div><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

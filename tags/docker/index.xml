@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/docker/</link>
+    <description>Recent content in Docker on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 04 Jul 2022 11:12:08 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker常见的几个问题处理</title>
+      <link>https://tec.mletter.cn/2022/07/04/docker%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html/</link>
+      <pubDate>Mon, 04 Jul 2022 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/07/04/docker%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html/</guid>
+      <description>总结了一下平常Docker常见的错误处理,大概二十几个左右。 Docker迁移存储目录 问题起因 由于公司最开始的服务器在/var/lib/doc</description>
+    </item>
+    
+  </channel>
+</rss>

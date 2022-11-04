@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nginx on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/nginx/</link>
+    <description>Recent content in Nginx on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 07 Dec 2020 11:12:08 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nginx配置WSS</title>
+      <link>https://tec.mletter.cn/2020/12/07/nginx%E9%85%8D%E7%BD%AEwss.html/</link>
+      <pubDate>Mon, 07 Dec 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/12/07/nginx%E9%85%8D%E7%BD%AEwss.html/</guid>
+      <description>简单了解一下 WebSocket 现在，很多网站为了实现推送技术，所用的技术都是轮询。轮询是在特定的的时间间隔（如每1秒），由浏览器对服务器发出HTTP请求，然</description>
+    </item>
+    
+  </channel>
+</rss>

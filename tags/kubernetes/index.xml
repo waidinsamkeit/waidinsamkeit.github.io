@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/kubernetes/</link>
+    <description>Recent content in Kubernetes on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 08 Oct 2022 21:34:32 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes低版本中内存泄漏问题</title>
+      <link>https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/</link>
+      <pubDate>Sat, 08 Oct 2022 21:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/</guid>
+      <description>Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢</description>
+    </item>
+    
+    <item>
+      <title>Kubeadm部署Kubernetes1.22.10</title>
+      <link>https://tec.mletter.cn/2022/09/22/kubeadm%E9%83%A8%E7%BD%B2kubernetes1.22.10.html/</link>
+      <pubDate>Thu, 22 Sep 2022 09:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/09/22/kubeadm%E9%83%A8%E7%BD%B2kubernetes1.22.10.html/</guid>
+      <description>准备工作 兼容的 Linux 主机。Kubernetes 项目为基于 Debian 和 Red Hat 的 Linux 发行版以及那些没有包管理器的发行版提供了通用说明。 每台机器 2 GB 或更多 RAM（</description>
+    </item>
+    
+    <item>
+      <title>dockershim究竟是什么</title>
+      <link>https://tec.mletter.cn/2022/02/13/dockershim%E7%A9%B6%E7%AB%9F%E6%98%AF%E4%BB%80%E4%B9%88.html/</link>
+      <pubDate>Sun, 13 Feb 2022 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/02/13/dockershim%E7%A9%B6%E7%AB%9F%E6%98%AF%E4%BB%80%E4%B9%88.html/</guid>
+      <description>先前了解 参考链接：https://github.com/kubernetes/kubernetes/blob/master/CHANGELO</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes基本存储</title>
+      <link>https://tec.mletter.cn/2022/02/08/kubernetes%E5%9F%BA%E6%9C%AC%E5%AD%98%E5%82%A8.html/</link>
+      <pubDate>Tue, 08 Feb 2022 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/02/08/kubernetes%E5%9F%BA%E6%9C%AC%E5%AD%98%E5%82%A8.html/</guid>
+      <description>本章了解内容 EmptyDir HostPath NFS PV和PVC 生命周期 StorageClass EmptyDir ​ EmptyDir是基础的Volume类型,一个EmptyDir就是Host上的一个空目录。Emp</description>
+    </item>
+    
+    <item>
+      <title>有关于Kubernetes中影响Pod调度的问题</title>
+      <link>https://tec.mletter.cn/2021/12/21/%E6%9C%89%E5%85%B3%E4%BA%8Ekubernetes%E4%B8%AD%E5%BD%B1%E5%93%8Dpod%E8%B0%83%E5%BA%A6%E7%9A%84%E9%97%AE%E9%A2%98.html/</link>
+      <pubDate>Tue, 21 Dec 2021 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/12/21/%E6%9C%89%E5%85%B3%E4%BA%8Ekubernetes%E4%B8%AD%E5%BD%B1%E5%93%8Dpod%E8%B0%83%E5%BA%A6%E7%9A%84%E9%97%AE%E9%A2%98.html/</guid>
+      <description>此问题引出的是生产环境中所有的资源完全充足,但是会出现更新Pod、删除Pod、新建Pod无法调度的情况。 生产环境解决问题办法 找到问题跟原所在</description>
+    </item>
+    
+    <item>
+      <title>关于Kubernetes构建Redis集群</title>
+      <link>https://tec.mletter.cn/2021/07/13/%E5%85%B3%E4%BA%8Ekubernetes%E6%9E%84%E5%BB%BAredis%E9%9B%86%E7%BE%A4.html/</link>
+      <pubDate>Tue, 13 Jul 2021 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/07/13/%E5%85%B3%E4%BA%8Ekubernetes%E6%9E%84%E5%BB%BAredis%E9%9B%86%E7%BE%A4.html/</guid>
+      <description>编写你的Dockerfile FROM centos:8 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added RUN groupadd -r -g 1000 redis &amp;amp;&amp;amp; useradd -r -g redis -u 1000 redis # Redis信息 注意SHA校验 ENV REDIS_VERSION 6.0.8 ENV</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes-离线部署skywalking</title>
+      <link>https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/</link>
+      <pubDate>Wed, 07 Apr 2021 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/</guid>
+      <description>注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes持久化配置文件</title>
+      <link>https://tec.mletter.cn/2021/03/25/kubernetes%E6%8C%81%E4%B9%85%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html/</link>
+      <pubDate>Thu, 25 Mar 2021 09:25:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/03/25/kubernetes%E6%8C%81%E4%B9%85%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html/</guid>
+      <description>ConfigMap了解 描述信息ConfigMap 功能在 Kubernetes1.2 版本中引入，许多应用程序会从配置文件、命令行参数或环境变量中读取配置信息。Confi</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes之持久化存储数据(一)</title>
+      <link>https://tec.mletter.cn/2021/03/04/kubernetes%E4%B9%8B%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E4%B8%80.html/</link>
+      <pubDate>Thu, 04 Mar 2021 09:00:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/03/04/kubernetes%E4%B9%8B%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E4%B8%80.html/</guid>
+      <description>持久化存储-NFS Emptydir：是本地存储,Pod重启,数据不存在了 Nfs：网络存储,Pod重启后,数据还是存在的 部署NFS服务器 可以单</description>
+    </item>
+    
+    <item>
+      <title>Kubernete-Helm包管理工具</title>
+      <link>https://tec.mletter.cn/2021/03/02/kubernete-helm%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7.html/</link>
+      <pubDate>Tue, 02 Mar 2021 08:40:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/03/02/kubernete-helm%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7.html/</guid>
+      <description>概念 Helm是一个Kubernetes的包管理工具,就像Linux下的包管理工具,可以很方便的将之前打包好的yaml文件部署到Kuberne</description>
+    </item>
+    
+    <item>
+      <title>Kubernete-Pod操作管理</title>
+      <link>https://tec.mletter.cn/2021/03/01/kubernete-pod%E6%93%8D%E4%BD%9C%E7%AE%A1%E7%90%86.html/</link>
+      <pubDate>Mon, 01 Mar 2021 08:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/03/01/kubernete-pod%E6%93%8D%E4%BD%9C%E7%AE%A1%E7%90%86.html/</guid>
+      <description>有状态和无状态的区别 无状态 认为Pod都是一样的 没有顺序要求 不用考虑在哪个Node运行 随意进行伸缩和扩展 有状态 有关无状态的因素都需要考虑 让每个</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes-Deployment</title>
+      <link>https://tec.mletter.cn/2021/02/28/kubernetes-deployment.html/</link>
+      <pubDate>Sun, 28 Feb 2021 21:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/02/28/kubernetes-deployment.html/</guid>
+      <description>Deployment应用场景 部署无状态应用Web或者微服务 管理Pod和ReplicaSet 部署、滚动升级 Pod资源限制 resource: # 调度时候资源配置大</description>
+    </item>
+    
+    <item>
+      <title>kubernetes-Rbac</title>
+      <link>https://tec.mletter.cn/2020/04/07/kubernetes-rbac.html/</link>
+      <pubDate>Tue, 07 Apr 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/04/07/kubernetes-rbac.html/</guid>
+      <description>Kubernetes中的基于角色的访问控制 Role ClusterRole(角色) 主体如下 User Group ServiceAccount 一般选择角色与主体进行绑定 角色 当角色可以做什么事情的</description>
+    </item>
+    
+    <item>
+      <title>kubernetes-部署NACOS</title>
+      <link>https://tec.mletter.cn/2020/04/07/kubernetes-%E9%83%A8%E7%BD%B2nacos.html/</link>
+      <pubDate>Tue, 07 Apr 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/04/07/kubernetes-%E9%83%A8%E7%BD%B2nacos.html/</guid>
+      <description>简单安装使用 最新版本应该是1.4.1 git clone https://github.com/nacos-group/nacos-k8s.git 简单使用 如果你使用简单方式快速启动,请注意这是没有使用持久化卷的,可能存在数据丢失风险:!!! cd nacos-k8s</description>
+    </item>
+    
+    <item>
+      <title>kubernetes-卷的概念</title>
+      <link>https://tec.mletter.cn/2020/04/07/kubernetes-%E5%8D%B7%E7%9A%84%E6%A6%82%E5%BF%B5.html/</link>
+      <pubDate>Tue, 07 Apr 2020 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2020/04/07/kubernetes-%E5%8D%B7%E7%9A%84%E6%A6%82%E5%BF%B5.html/</guid>
+      <description>PersistentVolume 是由管理员设置的存储,他是集群的一部分。就像节点是集群中的资源一样,PV也是集群中的资源。 PV是Volume之类的卷插件,但具有独立于适用</description>
+    </item>
+    
+  </channel>
+</rss>

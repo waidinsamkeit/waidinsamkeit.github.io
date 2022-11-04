@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/redis/</link>
+    <description>Recent content in Redis on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 24 Mar 2022 11:34:32 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis缓存击穿、雪崩、穿透</title>
+      <link>https://tec.mletter.cn/2022/03/24/redis%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%9B%AA%E5%B4%A9%E7%A9%BF%E9%80%8F.html/</link>
+      <pubDate>Thu, 24 Mar 2022 11:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/24/redis%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%9B%AA%E5%B4%A9%E7%A9%BF%E9%80%8F.html/</guid>
+      <description>缓存穿透 简单地就是用户请求透过redis直接进入到mysql当中进行查询，通常是一个不存在的key,在数据库查询为null。每次请求落在数据</description>
+    </item>
+    
+    <item>
+      <title>Redis主从复制搭建</title>
+      <link>https://tec.mletter.cn/2022/03/20/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>准备环境 192.168.1.100 MASTER 6379 192.168.1.101 SLAVE 6379 脚本每个人的环境不同.可能有的会有问题，按照自己的环境来改和执行 [root@localhost redis]# vim start.sh //就是不想手动敲那么累，全是命令拼凑 #!/bin/bash Redis_home=/usr/local/redis # start dow</description>
+    </item>
+    
+    <item>
+      <title>Redis集群搭建</title>
+      <link>https://tec.mletter.cn/2021/02/19/redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Fri, 19 Feb 2021 11:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/02/19/redis%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>Redis Cluster（Redis集群）简介 redis是一个开源的key value存储系统，受到了广大互联网公司的青睐。redis3.0版本之前只</description>
+    </item>
+    
+    <item>
+      <title>Redis哨兵模式搭建</title>
+      <link>https://tec.mletter.cn/2021/01/04/redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E6%90%AD%E5%BB%BA.html/</link>
+      <pubDate>Mon, 04 Jan 2021 09:21:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2021/01/04/redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E6%90%AD%E5%BB%BA.html/</guid>
+      <description>哨兵模式简介 主从切换技术的方法是：当主服务器宕机后，需要手动把一台从服务器切换为主服务器，这就需要人工干预，费事费力，还会造成一段时间内服务</description>
+    </item>
+    
+  </channel>
+</rss>

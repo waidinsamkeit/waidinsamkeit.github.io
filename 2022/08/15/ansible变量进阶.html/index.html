@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="lang-zh-cn">
+    <head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="keywords" content="Ansible,Hugo,Hugo Theme,Luna," /><meta name="description" content="1.0 Ansible怎么定义变量 通过playbook中的play进行变量的定义 通过inventory主机清单进行变量定义 通过执行playbook" />
+<meta itemprop="description" content="1.0 Ansible怎么定义变量 通过playbook中的play进行变量的定义 通过inventory主机清单进行变量定义 通过执行playbook" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<meta itemprop="name" content="Ansible变量进阶 - Cameliya" />
+<link href="https://tec.mletter.cn/index.xml" title="Ansible变量进阶 - Cameliya" type="application/rss+xml" rel="alternate" />
+<title>Ansible变量进阶 - Cameliya</title><link rel="stylesheet" href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k=" /><meta property="og:site_name" content="Ansible变量进阶 - Cameliya" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Ansible变量进阶" />
+<meta property="og:description" content="1.0 Ansible怎么定义变量 通过playbook中的play进行变量的定义 通过inventory主机清单进行变量定义 通过执行playbook" />
+<meta property="og:url" content="https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/" /><meta property="article:publisher" content="https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/" /><meta property="article:published_time" content="2022-08-15T18:00:32&#43;08:00" /><meta property="article:modified_time" content="2022-08-16T20:01:19&#43;08:00" /><meta name="theme-color" content="#95C7E0" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Ansible变量进阶 - Cameliya" />
+<meta name="apple-mobile-web-app-status-bar-style" content="white" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Ice_Hazymoon" />
+    <meta name="twitter:creator" content="@Ice_Hazymoon" /><meta name="twitter:title" content="Ansible变量进阶 - Cameliya" />
+<meta name="twitter:description" content="1.0 Ansible怎么定义变量 通过playbook中的play进行变量的定义 通过inventory主机清单进行变量定义 通过执行playbook" />
+<meta name="twitter:url" content="https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/" /><meta name="twitter:image" content="" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
+<link href="/icon.png" rel="Bookmark" />
+<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ansible变量进阶",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https:\/\/tec.mletter.cn\/2022\/08\/15\/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html\/"
+  },"genre": "posts","keywords": "Ansible","wordcount": 571 ,
+  "url": "https:\/\/tec.mletter.cn\/2022\/08\/15\/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html\/","datePublished": "2022-08-15T18:00:32\u002b08:00","dateModified": "2022-08-16T20:01:19\u002b08:00","author": {
+    "@type": "Person",
+    "name": "Cameliya"
+  },"description": ""
+}
+</script>
+
+
+    </head>
+    
+    <body class="dark:bg-darkBg dark:text-darkText">
+        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
+            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
+        <div class="route-items flex w-full items-center justify-around"><a
+                    title="首页"
+                    data-active-link="/"
+                    href="/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
+                </a><a
+                    title="关于我"
+                    data-active-link="/about/"
+                    href="/about/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
+                </a><a
+                    title="朋友们"
+                    data-active-link="/link/"
+                    href="/link/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
+                </a><a
+                    title="归档"
+                    data-active-link="/archives/"
+                    href="/archives/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
+                </a><a
+                    title="Repo"
+                    data-active-link="/repo/"
+                    href="/repo/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
+                </a><a
+                    title="搜索"
+                    data-active-link="/search/"
+                    href="/search/"
+                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
+                >
+                    <i
+                        class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
+                    ></i>
+                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span>
+                </a>
+        </div>
+    </nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
+    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
+</div>
+</header>
+<main class="relative flex flex-grow  mt-28 md:mt-20 " id="swup"><style>:root {
+        --font:JetBrainsMono-Medium;
+    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
+    <div class="relative h-full">
+        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
+    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
+        Ansible变量进阶
+    </div>
+</div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
+    <div>
+        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+            <i class="eva eva-clock-outline mr-1"></i>
+            <span>
+                <time
+                    title="发布于 2022年8月15日 18:00:32"datetime="2022-08-15T18:00:32+08:00">2022年8月15日</time
+                >
+            </span>
+        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                    <i class="eva eva-edit-2-outline mr-1"></i>
+                    <span>
+                        <time
+                            title="最后修改于：2022年8月16日 20:01:19"datetime="2022-08-16T20:01:19+08:00">2022年8月16日</time
+                        >
+                    </span>
+                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
+                <i class="eva eva-flag-outline mr-1"></i>
+                <span>2 分钟</span>
+            </div></div><div class="mb-3 flex items-center">
+            <i class="eva eva-pricetags-outline mr-1"></i>
+            <span class="mr-3">标签</span><a href="/tags/ansible" title="Ansible" class="group mr-2 flex items-center text-sm">
+                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+                    <span class="text-gray-400 group-hover:text-theme">Ansible</span>
+                </a></div><div class="mb-3 flex items-center">
+            <i class="eva eva-folder-outline mr-1"></i>
+            <span class="mr-3">分类</span><a href="/categories/ansible" title="Ansible" class="group flex items-center text-sm">
+                    <span class="text-gray-400 group-hover:text-theme">Ansible</span>
+                    <span class="mx-0.5 group-last:hidden">,</span>
+                </a></div></div><aside
+            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
+        >
+            <header>
+                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1>
+            </header>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#10-ansible怎么定义变量">1.0 Ansible怎么定义变量</a>
+      <ul>
+        <li><a href="#101-通过playbook中的vars定义变量">1.0.1 通过Playbook中的vars定义变量</a></li>
+        <li><a href="#102-通过定义变量文件进行使用">1.0.2 通过定义变量文件进行使用</a></li>
+        <li><a href="#103-通过编辑inventory主机清单进定义">1.0.3 通过编辑<code>inventory</code>主机清单进定义</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="更快的阅读" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
+            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
+        >
+
+<h2 class="group " id="10-ansible怎么定义变量"
+    >1.0 Ansible怎么定义变量<a href="#10-ansible%e6%80%8e%e4%b9%88%e5%ae%9a%e4%b9%89%e5%8f%98%e9%87%8f"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h2>
+
+<ul>
+<li>通过<code>playbook</code>中的<code>play</code>进行变量的定义</li>
+<li>通过<code>inventory</code>主机清单进行变量定义</li>
+<li>通过执行<code>playbook</code>的时候增加<code>-e</code>选项进行定义</li>
+</ul>
+
+
+<h3 class="group " id="101-通过playbook中的vars定义变量"
+    >1.0.1 通过Playbook中的vars定义变量<a href="#101-%e9%80%9a%e8%bf%87playbook%e4%b8%ad%e7%9a%84vars%e5%ae%9a%e4%b9%89%e5%8f%98%e9%87%8f"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<ul>
+<li>在<code>Playbook</code>中通过写入<code>vars</code>语法定义变量</li>
+<li>通过<code>{{变量名}}</code>进行引用!</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="font-weight:bold">hosts</span>: test
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">remote_user</span>: root
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">vars</span>: 
+</span></span><span style="display:flex;"><span>    - <span style="font-weight:bold">httpd_package</span>: httpd
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">tasks</span>:
+</span></span><span style="display:flex;"><span>    - <span style="font-weight:bold">name</span>: Install DepencyEnvorment
+</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">yum</span>:
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">name</span>: {{httpd_package}}
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">state</span>: present
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">update_cache</span>: <span style="color:#fff;font-weight:bold">yes</span>
+</span></span></code></pre></div>
+
+<h3 class="group " id="102-通过定义变量文件进行使用"
+    >1.0.2 通过定义变量文件进行使用<a href="#102-%e9%80%9a%e8%bf%87%e5%ae%9a%e4%b9%89%e5%8f%98%e9%87%8f%e6%96%87%e4%bb%b6%e8%bf%9b%e8%a1%8c%e4%bd%bf%e7%94%a8"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<ul>
+<li>定义一个名字为<code>public_vars.yaml</code>的变量配置文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>depence: [<span style="color:#0ff;font-weight:bold">&#39;openssl-devel&#39;</span>,<span style="color:#0ff;font-weight:bold">&#39;pcre-devel&#39;</span>,<span style="color:#0ff;font-weight:bold">&#39;zlib-devel&#39;</span>]
+</span></span></code></pre></div><blockquote>
+<p>注意: 当你引用了变量文件中的变量,请在读取变量的时候增加双引号<code>&quot;&quot;</code></p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="font-weight:bold">hosts</span>: test
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">remote_user</span>: root
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">vars_files</span>: 
+</span></span><span style="display:flex;"><span>    - ./public_vars.yaml
+</span></span><span style="display:flex;"><span>    - ./public_vars2.yaml <span style="color:#007f7f"># 如果是多个变量的话</span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">tasks</span>:
+</span></span><span style="display:flex;"><span>    - <span style="font-weight:bold">name</span>: <span style="color:#0ff;font-weight:bold">&#34;Install De&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">yum</span>: 
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">name</span>: <span style="color:#0ff;font-weight:bold">&#34;{{depence}}&#34;</span> <span style="color:#007f7f"># 通过双引号去引入变量内容,不然会报错</span>
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">state</span>: present
+</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">update_cache</span>: <span style="color:#fff;font-weight:bold">no</span>
+</span></span></code></pre></div>
+
+<h3 class="group " id="103-通过编辑inventory主机清单进定义"
+    >1.0.3 通过编辑<code>inventory</code>主机清单进定义<a href="#103-%e9%80%9a%e8%bf%87%e7%bc%96%e8%be%91inventory%e4%b8%bb%e6%9c%ba%e6%b8%85%e5%8d%95%e8%bf%9b%e5%ae%9a%e4%b9%89"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h3>
+
+<ul>
+<li>这种方法一般用的很少</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[test]
+</span></span><span style="display:flex;"><span>10.1.6.205
+</span></span><span style="display:flex;"><span>[test:vars]
+</span></span><span style="display:flex;"><span>file_name=group_sys
+</span></span></code></pre></div><blockquote>
+<p>官方推荐的方法: 在项目目录中创建两个变量目录<code>host_vars</code>和<code>group_vars</code></p>
+</blockquote>
+
+
+<h4 class="group " id="group_vars"
+    >group_vars<a href="#group_vars"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir host_vars; mkdir group_vars
+</span></span></code></pre></div><p>创建一个同名文件,用于写入变量内容</p>
+<blockquote>
+<p>必须与hosts清单中的组名保持一致,如果不同名会报错。但是如果你想要多个配置文件使用同一个组中的变量,只需要在<code>group_vars/all</code>新建一个<code>all</code>文件,所有组可用!</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[root@bogon ~]<span style="color:#007f7f"># cat group_vars/test </span>
+</span></span><span style="display:flex;"><span>file_name: group_sys
+</span></span></code></pre></div>
+
+<h4 class="group " id="host_vars"
+    >host_vars<a href="#host_vars"
+        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
+></h4>
+
+<ul>
+<li>在<code>host_vars</code>中创建一个文件,文件名与<code>inventory</code>清单中的主机名称要保持完全一致,如果是IP地址,则创建相同IP地址的文件即可</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>vim host_vars/10.1.6.205
+</span></span><span style="display:flex;"><span>[root@bogon ~]<span style="color:#007f7f"># cat host_vars/10.1.6.205 </span>
+</span></span><span style="display:flex;"><span>file_name: group_sys
+</span></span></code></pre></div></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到 Twitter"
+                href="https://twitter.com/share?&text=1.0%20Ansible%e6%80%8e%e4%b9%88%e5%ae%9a%e4%b9%89%e5%8f%98%e9%87%8f%20%e9%80%9a%e8%bf%87playbook%e4%b8%ad%e7%9a%84play%e8%bf%9b%e8%a1%8c%e5%8f%98%e9%87%8f%e7%9a%84%e5%ae%9a%e4%b9%89%20%e9%80%9a%e8%bf%87inventory%e4%b8%bb%e6%9c%ba%e6%b8%85%e5%8d%95%e8%bf%9b%e8%a1%8c%e5%8f%98%e9%87%8f%e5%ae%9a%e4%b9%89%20%e9%80%9a%e8%bf%87%e6%89%a7%e8%a1%8cplaybook&url=https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-twitter hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到 Facebook"
+                href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><i class="eva eva-facebook hover:text-theme"></i
+            ></a><a
+                class="mr-4 inline-flex h-5 w-5 items-center"
+                title="分享到微博"
+                href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/&title=Ansible%e5%8f%98%e9%87%8f%e8%bf%9b%e9%98%b6&sudaref=tec.mletter.cn"
+                target="_blank"
+                rel="noopener noreferrer"
+            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="复制链接" data-clipboard-text="https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/"></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block">
+                <i title="二维码" class="eva show-qrcode eva-smartphone hover:text-theme"></i>
+                <div
+                    class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"
+                >
+                    <img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://tec.mletter.cn/2022/08/15/ansible%E5%8F%98%E9%87%8F%E8%BF%9B%E9%98%B6.html/" alt="二维码" />
+                </div>
+            </div></div>
+<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
+    <div>
+        <a
+            href="/2022/07/20/mysql%E5%85%A8%E9%9D%A2%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF-%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9.html/"
+            title="MySQL全面优化思路-基础内容"
+            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+                <i class="eva eva-chevron-left-outline"></i>
+            </span>
+            <span>上一篇</span>
+        </a>
+    </div><div class="hidden items-center text-xs xl:flex">
+        除特殊声明外，本博客一律使用以下协议进行授权 「
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">署名 - 非商业性使用 - 禁止演绎 4.0</a>
+        」
+    </div>
+    <div class="flex items-center text-sm xl:hidden">
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">
+            <img src="/Cc-by-nc-nd.svg" alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class="w-24" />
+        </a>
+    </div>
+
+    <a
+        href="/2022/08/25/%E6%9C%AC%E7%AB%99%E5%8D%B3%E5%B0%86%E5%90%8C%E6%AD%A5%E8%85%BE%E8%AE%AF%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA.html/"
+        title="本站即将同步腾讯开发者社区"
+        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
+        <span>下一篇</span>
+        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
+            <i class="eva eva-chevron-right-outline"></i>
+        </span>
+    </a>
+</div>
+<div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder">
+    <script src="https://giscus.app/client.js"
+    data-repo="waidinsamkeit/tecoum"
+    data-repo-id="R_kgDOH4NyMg"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOH4NyMs4CRCX2"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading="true"
+    crossorigin="anonymous"
+    data-swup-reload-script
+    async
+>
+</script>
+
+<script data-swup-reload-script>
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onThemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+    
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+</script>
+</div>
+
+        </div>
+    </div>
+</div>
+</div>
+                </main><footer>
+    <div
+        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
+    >
+        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
+            <span class="">© 2020 - 2022</span>
+            <span class="mx-1.5 opacity-50"> | </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a> 驱动</div>
+
+        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://tec.mletter.cn/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
+                    <span>RSS</span>
+                </a><a data-no-swup href="https://tec.mletter.cn/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
+                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
+                    <span>Sitemap</span>
+                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
+    <span>运行时间： </span><b id="run-time-d">0</b>
+    <span class="text-xs">天</span>
+    <b id="run-time-h">0</b>
+    <span class="text-xs">小时</span>
+    <b id="run-time-m">0</b>
+    <span class="text-xs">分钟</span>
+    <b id="run-time-s">0</b>
+    <span class="text-xs">秒</span>
+</div>
+</div>
+
+    <script type="text/javascript">
+window.__theme = {
+    cdn: '',
+    pjax: true ,
+    isServer: false ,
+    $version:"",
+    lang: 'zh-cn',
+    imageZoom: true ,
+    lazyload: true ,
+    bionicReading: {
+        enabled: true ,
+        skipLinks: false ,
+        autoBionic: false ,
+        excludeWords:[],
+        excludeClasses:["github"],
+        excludeNodeNames:[],
+    },
+    katex: true ,
+    search: true ,
+    backtop: true ,
+    pangu: true ,
+    autoDarkMode: true ,
+    googleAnalytics:false,
+    hugoEncrypt: {
+        wrongPasswordText: '密码错误',
+        userStorage:window['sessionStorage'],
+    },
+    console: {
+        enabled: false ,
+        leftColor: '#dd6065',
+        rightColor: '#feb462',
+        leftText: 'Hugo Theme Luna',
+        rightText: 'Powered by Hugo ❤ Luna',
+    },
+    assets: {
+        error_svg: "\/images\/error.svg",
+        search_svg: "\/images\/search.svg",
+    },
+    i18n: {
+        copy: {
+            success: "复制成功",
+            failed: "复制失败，请手动复制",
+            copyCode: "复制代码",
+        },
+        search: {
+            untitled: "无标题",
+            loadFailure: "初始化搜索引擎失败",
+            input: "请输入内容...",
+        },
+        darkMode: {
+            dark: "切换到夜间模式",
+            light: "切换到日间模式"
+        }
+    },creatTime: "2020\/6\/12"}
+</script>
+<script type="text/javascript" src="/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js" defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ&#43;6P7cT&#43;B0YgL4dSqRg="></script><script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('\/sw.js');
+        });
+    }
+</script>
+<script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
+    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
+    function googleTranslateElementInit(){
+        new google.translate.TranslateElement({
+            pageLanguage: 'zh-cn',
+            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
+            autoDisplay:false
+        },'google_translate_element');
+    }
+</script>
+
+
+
+
+
+<script>
+    
+    
+</script>
+
+<script data-swup-reload-script>
+    
+    
+</script>
+</footer>
+</div>
+        </div><a
+        href="#nav"
+        title="返回顶部"
+        id="back-top"
+        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
+    >
+        <div class="relative">
+            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
+                <i class="eva eva-arrow-upward-outline"></i>
+            </div>
+            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
+                <circle
+                    transform="rotate(-90, 27 , 27)"
+                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
+                    cx="27"
+                    cy="27"
+                    r="25"
+                    fill="none"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke="var(--theme)"
+                />
+            </svg>
+        </div>
+    </a><div id="i18nlist"></div><noscript>
+    <style>
+        .dark-mode-switch,
+        #run-time,
+        #bionicReading,
+        .noscript-hidden,
+        [data-clipboard-text],
+        [data-lazyload] {
+            display: none;
+        }
+        #back-top {
+            opacity: 1;
+        }
+        .noscript-show {
+            display: initial;
+        }
+    </style>
+</noscript>
+</body>
+</html>

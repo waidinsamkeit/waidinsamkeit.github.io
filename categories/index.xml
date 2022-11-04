@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Cameliya</title>
+    <link>https://tec.mletter.cn/categories/</link>
+    <description>Recent content in Categories on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 08 Oct 2022 21:34:32 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes</title>
+      <link>https://tec.mletter.cn/categories/kubernetes/</link>
+      <pubDate>Sat, 08 Oct 2022 21:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ansible</title>
+      <link>https://tec.mletter.cn/categories/ansible/</link>
+      <pubDate>Mon, 29 Aug 2022 18:00:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/ansible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>声明</title>
+      <link>https://tec.mletter.cn/categories/%E5%A3%B0%E6%98%8E/</link>
+      <pubDate>Thu, 25 Aug 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/%E5%A3%B0%E6%98%8E/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MYSQL</title>
+      <link>https://tec.mletter.cn/categories/mysql/</link>
+      <pubDate>Wed, 20 Jul 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://tec.mletter.cn/categories/docker/</link>
+      <pubDate>Mon, 04 Jul 2022 11:12:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://tec.mletter.cn/categories/redis/</link>
+      <pubDate>Thu, 24 Mar 2022 11:34:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://tec.mletter.cn/categories/linux/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Django</title>
+      <link>https://tec.mletter.cn/categories/django/</link>
+      <pubDate>Tue, 22 Feb 2022 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/django/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://tec.mletter.cn/categories/python/</link>
+      <pubDate>Sun, 28 Nov 2021 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Elasticsearch</title>
+      <link>https://tec.mletter.cn/categories/elasticsearch/</link>
+      <pubDate>Tue, 29 Dec 2020 14:21:32 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/categories/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

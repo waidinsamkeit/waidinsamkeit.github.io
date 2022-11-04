@@ -1,1 +1,0 @@
-# waidinsamkeit.github.io
