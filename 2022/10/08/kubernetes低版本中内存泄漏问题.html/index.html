@@ -1,686 +1,78 @@
-<!DOCTYPE html>
-<html lang="zh-cn" class="lang-zh-cn">
-    <head><meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="keywords" content="Kubernetes,Hugo,Hugo Theme,Luna," /><meta name="description" content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢" />
-<meta itemprop="description" content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<meta itemprop="name" content="Kubernetes低版本中内存泄漏问题 - Cameliya" />
-<link href="https://tec.mletter.cn/index.xml" title="Kubernetes低版本中内存泄漏问题 - Cameliya" type="application/rss+xml" rel="alternate" />
-<title>Kubernetes低版本中内存泄漏问题 - Cameliya</title><link rel="stylesheet" href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k=" /><meta property="og:site_name" content="Kubernetes低版本中内存泄漏问题 - Cameliya" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Kubernetes低版本中内存泄漏问题" />
-<meta property="og:description" content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢" />
-<meta property="og:url" content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" /><meta property="article:publisher" content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" /><meta property="article:published_time" content="2022-10-08T21:34:32&#43;08:00" /><meta property="article:modified_time" content="2022-11-03T13:46:11&#43;08:00" /><meta name="theme-color" content="#95C7E0" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Kubernetes低版本中内存泄漏问题 - Cameliya" />
-<meta name="apple-mobile-web-app-status-bar-style" content="white" />
-<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Ice_Hazymoon" />
-    <meta name="twitter:creator" content="@Ice_Hazymoon" /><meta name="twitter:title" content="Kubernetes低版本中内存泄漏问题 - Cameliya" />
-<meta name="twitter:description" content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢" />
-<meta name="twitter:url" content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" /><meta name="twitter:image" content="" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
-<link href="/icon.png" rel="Bookmark" />
-<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Kubernetes低版本中内存泄漏问题",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https:\/\/tec.mletter.cn\/2022\/10\/08\/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html\/"
-  },"genre": "posts","keywords": "Kubernetes","wordcount": 2818 ,
-  "url": "https:\/\/tec.mletter.cn\/2022\/10\/08\/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html\/","datePublished": "2022-10-08T21:34:32\u002b08:00","dateModified": "2022-11-03T13:46:11\u002b08:00","author": {
-    "@type": "Person",
-    "name": "Cameliya"
-  },"description": ""
-}
-</script>
-
-
-    </head>
-    
-    <body class="dark:bg-darkBg dark:text-darkText">
-        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
-            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
-        <div class="route-items flex w-full items-center justify-around"><a
-                    title="首页"
-                    data-active-link="/"
-                    href="/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
-                </a><a
-                    title="关于我"
-                    data-active-link="/about/"
-                    href="/about/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
-                </a><a
-                    title="朋友们"
-                    data-active-link="/link/"
-                    href="/link/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
-                </a><a
-                    title="归档"
-                    data-active-link="/archives/"
-                    href="/archives/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
-                </a><a
-                    title="Repo"
-                    data-active-link="/repo/"
-                    href="/repo/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
-                </a><a
-                    title="搜索"
-                    data-active-link="/search/"
-                    href="/search/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span>
-                </a>
-        </div>
-    </nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
-    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
-</div>
-</header>
-<main class="relative flex flex-grow  mt-28 md:mt-20 " id="swup"><style>:root {
-        --font:JetBrainsMono-Medium;
-    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
-    <div class="relative h-full">
-        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
-    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
-        Kubernetes低版本中内存泄漏问题
-    </div>
-</div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
-    <div>
-        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-            <i class="eva eva-clock-outline mr-1"></i>
-            <span>
-                <time
-                    title="发布于 2022年10月8日 21:34:32"datetime="2022-10-08T21:34:32+08:00">2022年10月8日</time
-                >
-            </span>
-        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                    <i class="eva eva-edit-2-outline mr-1"></i>
-                    <span>
-                        <time
-                            title="最后修改于：2022年11月3日 13:46:11"datetime="2022-11-03T13:46:11+08:00">2022年11月3日</time
-                        >
-                    </span>
-                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                <i class="eva eva-flag-outline mr-1"></i>
-                <span>6 分钟</span>
-            </div></div><div class="mb-3 flex items-center">
-            <i class="eva eva-pricetags-outline mr-1"></i>
-            <span class="mr-3">标签</span><a href="/tags/kubernetes" title="Kubernetes" class="group mr-2 flex items-center text-sm">
-                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
-                    <span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
-                </a></div><div class="mb-3 flex items-center">
-            <i class="eva eva-folder-outline mr-1"></i>
-            <span class="mr-3">分类</span><a href="/categories/kubernetes" title="Kubernetes" class="group flex items-center text-sm">
-                    <span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
-                    <span class="mx-0.5 group-last:hidden">,</span>
-                </a></div></div><aside
-            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
-        >
-            <header>
-                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1>
-            </header>
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#kubernetes中cgroup泄漏问题">Kubernetes中Cgroup泄漏问题</a></li>
-    <li><a href="#故障表现">故障表现</a></li>
-    <li><a href="#服务器配置信息">服务器配置信息</a></li>
-    <li><a href="#问题原因1">问题原因1</a></li>
-    <li><a href="#问题原因2">问题原因2</a></li>
-    <li><a href="#解决方案">解决方案</a>
-      <ul>
-        <li><a href="#解决方案一">解决方案一</a></li>
-        <li><a href="#解决方案2">解决方案2</a></li>
-        <li><a href="#解决方案3">解决方案3</a></li>
-        <li><a href="#影响范围">影响范围</a></li>
-      </ul>
-    </li>
-    <li><a href="#大概得原理理解">大概得原理理解</a>
-      <ul>
-        <li><a href="#keme是什么">keme是什么?</a></li>
-        <li><a href="#cgroup与kmem机制">cgroup与kmem机制</a></li>
-        <li><a href="#docker与k8s使用kmem">docker与k8s使用kmem</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-        </aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="更快的阅读" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
-            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
-        >
-
-<h2 class="group " id="kubernetes中cgroup泄漏问题"
-    >Kubernetes中Cgroup泄漏问题<a href="#kubernetes%e4%b8%adcgroup%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<p>Cgorup文档: <a
-    class="link"
-    href="https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt"target="_blank" rel="noopener">https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt</a
->
-</p>
-<p>绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢，还没有表现出来而已。</p>
-<p>一个pod可能泄漏两个memory cgroup数量配额。即使pod百分之百发生泄漏， 那也需要一个节点销毁过三万多个pod之后，才会造成后续pod创建失败。</p>
-<p>一旦表现出来，这个节点就彻底不可用了，必须重启才能恢复。</p>
-
-
-<h2 class="group " id="故障表现"
-    >故障表现<a href="#%e6%95%85%e9%9a%9c%e8%a1%a8%e7%8e%b0"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<ul>
-<li>该内容的故障信息已经提交给Github: <a
-    class="link"
-    href="https://github.com/kubernetes/kubernetes/issues/112940"target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/issues/112940</a
->
-</li>
-</ul>
-<p>我在服务器中更新Pod出现如下错误 <code>cannot allocate memory</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>unable to ensure pod container exists: failed to create container <span style="color:#fff;font-weight:bold">for</span> [kubepods burstable podd5dafc96-2bcd-40db-90fd-c75758746a7a] : mkdir /sys/fs/cgroup/memory/kubepods/burstable/podd5dafc96-2bcd-40db-90fd-c75758746a7a: cannot allocate memory
-</span></span></code></pre></div><p>使用<code>dmesg</code>查看系统日志的错误内容信息</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>SLUB: Unable to allocate memory on node -1
-</span></span></code></pre></div>
-
-<h2 class="group " id="服务器配置信息"
-    >服务器配置信息<a href="#%e6%9c%8d%e5%8a%a1%e5%99%a8%e9%85%8d%e7%bd%ae%e4%bf%a1%e6%81%af"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<ul>
-<li>操作系统: <code>CentOS Linux release 7.9.2009 (Core)</code></li>
-<li>系统内核: <code>3.10.0-1160.el7.x86_64</code></li>
-<li>Kubernetes: <code>1.17.9</code></li>
-<li>dockerVersion: <code>20.10.7</code></li>
-</ul>
-
-
-<h2 class="group " id="问题原因1"
-    >问题原因1<a href="#%e9%97%ae%e9%a2%98%e5%8e%9f%e5%9b%a01"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<p>Kubernetes在1.9版本开启了对kmem的支持,因此 1.9以后的所有版本都有该问题，但必须搭配3.x内核的机器才会出问题。一旦出现会导致新 pod 无法创建，已有 pod不受影响，但pod 漂移到有问题的节点就会失败，直接影响业务稳定性。因为是内存泄露，直接重启机器可以暂时解决，但还会再次出现。
-cgroup的kmem account特性在3.x 内核上有内存泄露问题，如果开启了kmem account特性会导致可分配内存越来越少，直到无法创建新 pod 或节点异常。</p>
-<ol>
-<li>kmem account 是cgroup 的一个扩展，全称CONFIG_MEMCG_KMEM，属于机器默认配置，本身没啥问题，只是该特性在 3.10 的内核上存在漏洞有内存泄露问题，4.x的内核修复了这个问题。</li>
-<li>因为 kmem account 是 cgroup 的扩展能力，因此runc、docker、k8s 层面也进行了该功能的支持，即默认都打开了kmem 属性。</li>
-<li>因为3.10 的内核已经明确提示 kmem 是实验性质，我们仍然使用该特性，所以这其实不算内核的问题，是 k8s 兼容问题。</li>
-</ol>
-
-
-<h2 class="group " id="问题原因2"
-    >问题原因2<a href="#%e9%97%ae%e9%a2%98%e5%8e%9f%e5%9b%a02"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<p>memcg是 Linux 内核中用于管理 cgroup 内存的模块，整个生命周期应该是跟随 cgroup 的，但是在低版本内核中<code>(已知3.10)</code>，一旦给某个 memory cgroup 开启 kmem accounting 中的 memory.kmem.limit_in_bytes 就可能会导致不能彻底删除 memcg 和对应的 cssid，也就是说应用即使已经删除了 cgroup (/sys/fs/cgroup/memory 下对应的 cgroup 目录已经删除), 但在内核中没有释放 cssid，导致内核认为的 cgroup 的数量实际数量不一致，我们也无法得知内核认为的 cgroup 数量是多少。
-这个问题可能会导致创建容器失败，因为创建容器为其需要创建 cgroup 来做隔离，而低版本内核有个限制：允许创建的 cgroup 最大数量写死为 65535，如果节点上经常创建和销毁大量容器导致创建很多 cgroup，删除容器但没有彻底删除 cgroup 造成泄露(真实数量我们无法得知)，到达 65535 后再创建容器就会报创建 cgroup 失败并报错 no space left on device，使用 kubernetes 最直观的感受就是 pod 创建之后无法启动成功。</p>
-
-
-<h2 class="group " id="解决方案"
-    >解决方案<a href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<p>目前官方给出的解决方案如下:</p>
-<ol>
-<li>kernel upgrade to 4.0+: <strong><a
-    class="link"
-    href="https://github.com/kubernetes/kubernetes/issues/61937#issuecomment-377585452"target="_blank" rel="noopener">application crash due to k8s 1.9.x open the kernel memory accounting by default #61937 (comment)</a
->
-</strong></li>
-<li>rebuild the kubelet with nokmem args. See <strong><a
-    class="link"
-    href="https://github.com/kubernetes/kubernetes/issues/96701#issuecomment-911061574"target="_blank" rel="noopener">Failed to create container, mkdir /sys/fs/cgroup/memory/kubepods/besteffort/pod98211fca-b27e-4316-b1ae-c0d27925aa84: cannot allocate memory #96701 (comment)</a
->
-</strong></li>
-<li>Set cgroup.memory=nokmem in grub: see <strong><a
-    class="link"
-    href="https://github.com/kubernetes/kubernetes/issues/61937#issuecomment-567042968"target="_blank" rel="noopener">application crash due to k8s 1.9.x open the kernel memory accounting by default #61937 (comment)</a
->
-</strong></li>
-</ol>
-
-
-<h3 class="group " id="解决方案一"
-    >解决方案一<a href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e4%b8%80"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<ul>
-<li>感谢提供的解决方案: <a
-    class="link"
-    href="https://cloud.tencent.com/developer/article/1739289"target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1739289</a
->
-</li>
-<li><a
-    class="link"
-    href="https://github.com/torvalds/linux/commit/d6e0b7fa11862433773d986b5f995ffdf47ce672"target="_blank" rel="noopener">https://github.com/torvalds/linux/commit/d6e0b7fa11862433773d986b5f995ffdf47ce672</a
->
-</li>
-<li><a
-    class="link"
-    href="https://support.mesosphere.com/s/article/Critical-Issue-KMEM-MSPH-2018-0006"target="_blank" rel="noopener">https://support.mesosphere.com/s/article/Critical-Issue-KMEM-MSPH-2018-0006</a
->
-</li>
-</ul>
-<p>这种方式的缺点是：</p>
-<ul>
-<li>1、要升级所有节点，节点重启的话已有 pod 肯定要漂移，如果节点规模很大，这个升级操作会很繁琐，业务部门也会有意见，要事先沟通。</li>
-<li>2、这个问题归根结底是软件兼容问题，3.x 自己都说了不成熟，不建议你使用该特性，k8s、docker却 还要开启这个属性，那就不是内核的责任，因为我们是云上机器，想替换4.x 内核需要虚机团队做足够的测试和评审，因此这是个长期方案，不能立刻解决问题。</li>
-<li>3、已有业务在 3.x 运行正常，不代表可以在 4.x 也运行正常，即全量升级内核之前需要做足够的测试，尤其是有些业务需求对os做过定制。</li>
-</ul>
-
-
-<h3 class="group " id="解决方案2"
-    >解决方案2<a href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%882"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>修改虚机启动的引导项 grub 中的<code>cgroup.memory=nokmem</code>，让机器启动时直接禁用 cgroup的 kmem 属性</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim /etc/default/grub
-</span></span><span style="display:flex;"><span>GRUB_TIMEOUT=<span style="color:#ff0;font-weight:bold">5</span>
-</span></span><span style="display:flex;"><span>GRUB_DISTRIBUTOR=<span style="color:#0ff;font-weight:bold">&#34;</span><span style="color:#fff;font-weight:bold">$(</span>sed <span style="color:#0ff;font-weight:bold">&#39;s, release .*$,,g&#39;</span> /etc/system-release<span style="color:#fff;font-weight:bold">)</span><span style="color:#0ff;font-weight:bold">&#34;</span>
-</span></span><span style="display:flex;"><span>GRUB_DEFAULT=saved
-</span></span><span style="display:flex;"><span>GRUB_DISABLE_SUBMENU=<span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>GRUB_TERMINAL_OUTPUT=<span style="color:#0ff;font-weight:bold">&#34;console&#34;</span>
-</span></span><span style="display:flex;"><span>GRUB_CMDLINE_LINUX=<span style="color:#0ff;font-weight:bold">&#34;crashkernel=auto spectre_v2=retpoline rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet cgroup.memory=nokmem&#34;</span>
-</span></span><span style="display:flex;"><span>GRUB_DISABLE_RECOVERY=<span style="color:#0ff;font-weight:bold">&#34;true&#34;</span>
-</span></span></code></pre></div><p>更改完成后你需要生成一下新的cgroup配置.</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
-</span></span><span style="display:flex;"><span>reboot <span style="color:#007f7f"># 重启服务器</span>
-</span></span></code></pre></div>
-
-<h3 class="group " id="解决方案3"
-    >解决方案3<a href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%883"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>如果你想在Kubernetes中禁用该属性。issue 中一般建议修改 kubelet代码并重新编译。</p>
-<p>对于v1.13及其之前版本的kubelet，需要手动替换以下两个函数。</p>
-<p><code>vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/memory.go</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">func</span> EnableKernelMemoryAccounting(path <span style="color:#fff;font-weight:bold">string</span>) <span style="color:#fff;font-weight:bold">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">return</span> <span style="color:#fff;font-weight:bold">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">func</span> setKernelMemory(path <span style="color:#fff;font-weight:bold">string</span>, kernelMemoryLimit <span style="color:#fff;font-weight:bold">int64</span>) <span style="color:#fff;font-weight:bold">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">return</span> <span style="color:#fff;font-weight:bold">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>重新编译并替换 <code>kubelet</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make WHAT=cmd/kubelet GOFLAGS=-v GOGCFLAGS=<span style="color:#0ff;font-weight:bold">&#34;-N -l&#34;</span>
-</span></span></code></pre></div><p>对于v1.14及其之后版本的kubelet,通过添加BUILDTAGS来禁止 kmem accounting.</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>make BUILDTAGS=<span style="color:#0ff;font-weight:bold">&#34;nokmem&#34;</span> WHAT=cmd/kubelet GOFLAGS=-v GOGCFLAGS=<span style="color:#0ff;font-weight:bold">&#34;-N -l&#34;</span>
-</span></span></code></pre></div><p>遇到1.16 版本的BUILDTAGS=”nokmem“编译出来的 let 还是有问题，还是通过修改代码的方式使其生效</p>
-<p><code>vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">package</span> fs
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#0ff;font-weight:bold">&#34;errors&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">func</span> EnableKernelMemoryAccounting(path <span style="color:#fff;font-weight:bold">string</span>) <span style="color:#fff;font-weight:bold">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">return</span> <span style="color:#fff;font-weight:bold">nil</span>
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">func</span> setKernelMemory(path <span style="color:#fff;font-weight:bold">string</span>, kernelMemoryLimit <span style="color:#fff;font-weight:bold">int64</span>) <span style="color:#fff;font-weight:bold">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#fff;font-weight:bold">return</span> errors.New(<span style="color:#0ff;font-weight:bold">&#34;kernel memory accounting disabled in this runc build&#34;</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>编译前，可以编辑下文件 hack/lib/version.sh，将 <code>KUBE_GIT_TREE_STATE=&quot;dirty&quot;</code> 改为 <code>KUBE_GIT_TREE_STATE=&quot;clean&quot;</code>，确保版本号干净。</p>
-
-
-<h3 class="group " id="影响范围"
-    >影响范围<a href="#%e5%bd%b1%e5%93%8d%e8%8c%83%e5%9b%b4"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>k8s在1.9版本开启了对kmem的支持，因此1.9以后的所有版本都有该问题,但必须搭配 3.x内核的机器才会出问题。一旦出现会导致新pod无法创建,已有 pod不受影响，但pod 漂移到有问题的节点就会失败，直接影响业务稳定性。因为是内存泄露，直接重启机器可以暂时解决，但还会再次出现。</p>
-
-
-<h2 class="group " id="大概得原理理解"
-    >大概得原理理解<a href="#%e5%a4%a7%e6%a6%82%e5%be%97%e5%8e%9f%e7%90%86%e7%90%86%e8%a7%a3"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-
-
-<h3 class="group " id="keme是什么"
-    >keme是什么?<a href="#keme%e6%98%af%e4%bb%80%e4%b9%88"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>kmem是Cgroup的一个扩展，全称CONFIG_MEMCG_KMEM，属于机器默认配置。</p>
-<p>内核内存与用户内存：</p>
-<p>内核内存：专用于Linux内核系统服务使用，是不可swap的，因而这部分内存非常宝贵的。但现实中存在很多针对内核内存资源的攻击，如不断地fork新进程从而耗尽系统资源，即所谓的“fork bomb”。</p>
-<p>为了防止这种攻击，社区中提议通过linux内核限制 cgroup中的kmem 容量，从而限制恶意进程的行为，即kernel memory accounting机制。</p>
-<p>使用如下命令查看KMEM是否打开：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /boot/config-<span style="color:#0ff;font-weight:bold">`</span>uname -r<span style="color:#0ff;font-weight:bold">`</span>|grep CONFIG_MEMCG
-</span></span><span style="display:flex;"><span>CONFIG_MEMCG=y
-</span></span><span style="display:flex;"><span>CONFIG_MEMCG_SWAP=y
-</span></span><span style="display:flex;"><span>CONFIG_MEMCG_SWAP_ENABLED=y
-</span></span><span style="display:flex;"><span>CONFIG_MEMCG_KMEM=y
-</span></span></code></pre></div>
-
-<h3 class="group " id="cgroup与kmem机制"
-    >cgroup与kmem机制<a href="#cgroup%e4%b8%8ekmem%e6%9c%ba%e5%88%b6"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>使用 cgroup 限制内存时，我们不但需要限制对用户内存的使用，也需要限制对内核内存的使用。kernel memory accounting 机制为 cgroup 的内存限制增加了 stack pages（例如新进程创建）、slab pages(SLAB/SLUB分配器使用的内存)、sockets memory pressure、tcp memory pressure等，以保证 kernel memory 不被滥用。</p>
-<p>当你开启了kmem 机制，具体体现在 memory.kmem.limit_in_bytes 这个文件上：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>/sys/fs/cgroup/memory/kubepods/pod632f736f-5ef2-11ea-ad9e-fa163e35f5d4/memory.kmem.limit_in_bytes
-</span></span></code></pre></div><p>实际使用中，我们一般将 memory.kmem.limit_in_bytes 设置成大于 memory.limit_in_bytes，从而只限制应用的总内存使用。</p>
-
-
-<h3 class="group " id="docker与k8s使用kmem"
-    >docker与k8s使用kmem<a href="#docker%e4%b8%8ek8s%e4%bd%bf%e7%94%a8kmem"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>以上描述都是cgroup层面即机器层面，但是 runc 和 docker 发现有这个属性之后，在后来的版本中也支持了 kmem ，k8s 发现 docker支持，也在 1.9 版本开始支持。</p>
-<p>1.9版本及之后，kubelet 才开启 kmem 属性</p>
-<p>kubelet 的这部分代码位于：</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>https://github.com/kubernetes/kubernetes/blob/release-1.12/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/memory.go#L70-L106
-</span></span></code></pre></div><p>对于k8s、docker 而言，kmem 属性属于正常迭代和优化，至于3.x的内核上存在 bug 不能兼容，不是k8s 关心的问题。但 issue 中不断有人反馈，因此在 k8s 1.14 版本的 kubelet 中，增加了一个编译选项 make BUILDTAGS=&ldquo;nokmem&rdquo;，就可以编译 kubelet 时就禁用 kmem，避免掉这个问题。而1.8 到1.14 中间的版本，只能选择更改 kubelet 的代码。</p>
-</section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Twitter"
-                href="https://twitter.com/share?&text=Kubernetes%e4%b8%adCgroup%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98%20Cgorup%e6%96%87%e6%a1%a3:%20https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt%20%e7%bb%9d%e5%a4%a7%e5%a4%9a%e6%95%b0%e7%9a%84kubernetes%e9%9b%86%e7%be%a4%e9%83%bd%e6%9c%89%e8%bf%99%e4%b8%aa%e9%9a%90%e6%82%a3%e3%80%82%e5%8f%aa%e4%b8%8d%e8%bf%87%e4%b8%80%e8%88%ac%e6%83%85%e5%86%b5%e4%b8%8b%ef%bc%8c%e6%b3%84%e6%bc%8f%e5%be%97%e6%af%94%e8%be%83%e6%85%a2&url=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-twitter hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Facebook"
-                href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-facebook hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到微博"
-                href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/&title=Kubernetes%e4%bd%8e%e7%89%88%e6%9c%ac%e4%b8%ad%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98&sudaref=tec.mletter.cn"
-                target="_blank"
-                rel="noopener noreferrer"
-            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="复制链接" data-clipboard-text="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block">
-                <i title="二维码" class="eva show-qrcode eva-smartphone hover:text-theme"></i>
-                <div
-                    class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"
-                >
-                    <img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" alt="二维码" />
-                </div>
-            </div></div>
-<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
-    <div>
-        <a
-            href="/2022/09/22/kubeadm%E9%83%A8%E7%BD%B2kubernetes1.22.10.html/"
-            title="Kubeadm部署Kubernetes1.22.10"
-            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
-            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-                <i class="eva eva-chevron-left-outline"></i>
-            </span>
-            <span>上一篇</span>
-        </a>
-    </div><div class="hidden items-center text-xs xl:flex">
-        除特殊声明外，本博客一律使用以下协议进行授权 「
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">署名 - 非商业性使用 - 禁止演绎 4.0</a>
-        」
-    </div>
-    <div class="flex items-center text-sm xl:hidden">
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">
-            <img src="/Cc-by-nc-nd.svg" alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class="w-24" />
-        </a>
-    </div>
-
-    <a
-        href=""
-        title=""
-        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText">
-        <span>下一篇</span>
-        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-            <i class="eva eva-chevron-right-outline"></i>
-        </span>
-    </a>
-</div>
-<div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder">
-    <script src="https://giscus.app/client.js"
-    data-repo="waidinsamkeit/tecoum"
-    data-repo-id="R_kgDOH4NyMg"
-    data-category="Announcements"
-    data-category-id="DIC_kwDOH4NyMs4CRCX2"
-    data-mapping="title"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="light"
-    data-lang="zh-CN"
-    data-loading="true"
-    crossorigin="anonymous"
-    data-swup-reload-script
-    async
->
-</script>
-
-<script data-swup-reload-script>
-    (function () {
-        addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
-            handler();
-        });
-        window.addEventListener("onThemeChange", handler);
-
-        function handler() {
-            if (document.documentElement.dataset.scheme === "light") {
-                setGiscusTheme('light');
-            } else {
-                setGiscusTheme('dark');
-            }
-        }
-    })();
-    
-    function setGiscusTheme(theme) {
-        let giscus = document.querySelector("iframe.giscus-frame");
-        if (giscus) {
-            giscus.contentWindow.postMessage(
-                {
-                    giscus: {
-                        setConfig: {
-                            theme: theme,
-                        },
-                    },
-                },
-                "https://giscus.app"
-            );
-        }
-    }
-</script>
-</div>
-
-        </div>
-    </div>
-</div>
-</div>
-                </main><footer>
-    <div
-        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
-    >
-        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
-            <span class="">© 2020 - 2022</span>
-            <span class="mx-1.5 opacity-50"> | </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a> 驱动</div>
-
-        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://tec.mletter.cn/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
-                    <span>RSS</span>
-                </a><a data-no-swup href="https://tec.mletter.cn/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
-                    <span>Sitemap</span>
-                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
-    <span>运行时间： </span><b id="run-time-d">0</b>
-    <span class="text-xs">天</span>
-    <b id="run-time-h">0</b>
-    <span class="text-xs">小时</span>
-    <b id="run-time-m">0</b>
-    <span class="text-xs">分钟</span>
-    <b id="run-time-s">0</b>
-    <span class="text-xs">秒</span>
-</div>
-</div>
-
-    <script type="text/javascript">
-window.__theme = {
-    cdn: '',
-    pjax: true ,
-    isServer: false ,
-    $version:"",
-    lang: 'zh-cn',
-    imageZoom: true ,
-    lazyload: true ,
-    bionicReading: {
-        enabled: true ,
-        skipLinks: false ,
-        autoBionic: false ,
-        excludeWords:[],
-        excludeClasses:["github"],
-        excludeNodeNames:[],
-    },
-    katex: true ,
-    search: true ,
-    backtop: true ,
-    pangu: true ,
-    autoDarkMode: true ,
-    googleAnalytics:false,
-    hugoEncrypt: {
-        wrongPasswordText: '密码错误',
-        userStorage:window['sessionStorage'],
-    },
-    console: {
-        enabled: false ,
-        leftColor: '#dd6065',
-        rightColor: '#feb462',
-        leftText: 'Hugo Theme Luna',
-        rightText: 'Powered by Hugo ❤ Luna',
-    },
-    assets: {
-        error_svg: "\/images\/error.svg",
-        search_svg: "\/images\/search.svg",
-    },
-    i18n: {
-        copy: {
-            success: "复制成功",
-            failed: "复制失败，请手动复制",
-            copyCode: "复制代码",
-        },
-        search: {
-            untitled: "无标题",
-            loadFailure: "初始化搜索引擎失败",
-            input: "请输入内容...",
-        },
-        darkMode: {
-            dark: "切换到夜间模式",
-            light: "切换到日间模式"
-        }
-    },creatTime: "2020\/6\/12"}
-</script>
-<script type="text/javascript" src="/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js" defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ&#43;6P7cT&#43;B0YgL4dSqRg="></script><script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('\/sw.js');
-        });
-    }
-</script>
-<script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
-    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
-    function googleTranslateElementInit(){
-        new google.translate.TranslateElement({
-            pageLanguage: 'zh-cn',
-            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
-            autoDisplay:false
-        },'google_translate_element');
-    }
-</script>
-
-
-
-
-
-<script>
-    
-    
-</script>
-
-<script data-swup-reload-script>
-    
-    
-</script>
-</footer>
-</div>
-        </div><a
-        href="#nav"
-        title="返回顶部"
-        id="back-top"
-        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
-    >
-        <div class="relative">
-            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
-                <i class="eva eva-arrow-upward-outline"></i>
-            </div>
-            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
-                <circle
-                    transform="rotate(-90, 27 , 27)"
-                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
-                    cx="27"
-                    cy="27"
-                    r="25"
-                    fill="none"
-                    stroke-width="4"
-                    stroke-linecap="round"
-                    stroke="var(--theme)"
-                />
-            </svg>
-        </div>
-    </a><div id="i18nlist"></div><noscript>
-    <style>
-        .dark-mode-switch,
-        #run-time,
-        #bionicReading,
-        .noscript-hidden,
-        [data-clipboard-text],
-        [data-lazyload] {
-            display: none;
-        }
-        #back-top {
-            opacity: 1;
-        }
-        .noscript-show {
-            display: initial;
-        }
-    </style>
-</noscript>
-</body>
-</html>
+<!doctype html><html lang=zh-cn class=lang-zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=keywords content="Kubernetes,Kubernetes问题解决,Hugo,Hugo Theme,Luna,"><meta name=description content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢"><meta itemprop=description content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢"><meta http-equiv=x-ua-compatible content="ie=edge"><meta itemprop=name content="Kubernetes低版本中内存泄漏问题 - Cameliya"><link href=https://tec.mletter.cn/index.xml title="Kubernetes低版本中内存泄漏问题 - Cameliya" type=application/rss+xml rel=alternate><title>Kubernetes低版本中内存泄漏问题 - Cameliya</title><link rel=stylesheet href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k="><meta property="og:site_name" content="Kubernetes低版本中内存泄漏问题 - Cameliya"><meta property="og:type" content="article"><meta property="og:title" content="Kubernetes低版本中内存泄漏问题"><meta property="og:description" content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢"><meta property="og:url" content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"><meta property="article:publisher" content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"><meta property="article:published_time" content="2022-10-08T21:34:32+08:00"><meta property="article:modified_time" content="2022-11-08T23:03:43+08:00"><meta name=theme-color content="#95C7E0"><meta name=mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="Kubernetes低版本中内存泄漏问题 - Cameliya"><meta name=apple-mobile-web-app-status-bar-style content="white"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content="@Ice_Hazymoon"><meta name=twitter:creator content="@Ice_Hazymoon"><meta name=twitter:title content="Kubernetes低版本中内存泄漏问题 - Cameliya"><meta name=twitter:description content="Kubernetes中Cgroup泄漏问题 Cgorup文档: https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt 绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢"><meta name=twitter:url content="https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/"><meta name=twitter:image content><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=manifest href=/manifest.json><link href=/icon.png rel="shortcut icon"><link href=/icon.png rel=bookmark><link rel=apple-touch-icon href=/icon.png><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes低版本中内存泄漏问题","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/tec.mletter.cn\/2022\/10\/08\/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html\/"},"genre":"posts","keywords":"Kubernetes, Kubernetes问题解决","wordcount":2824,"url":"https:\/\/tec.mletter.cn\/2022\/10\/08\/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html\/","datePublished":"2022-10-08T21:34:32\u002b08:00","dateModified":"2022-11-08T23:03:43\u002b08:00","author":{"@type":"Person","name":"Cameliya"},"description":""}</script></head><body class="dark:bg-darkBg dark:text-darkText"><div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id=nav class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10"><div class="route-items flex w-full items-center justify-around"><a title=首页 data-active-link=/ href=/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
+</a><a title=关于我 data-active-link=/about/ href=/about/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
+</a><a title=朋友们 data-active-link=/link/ href=/link/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
+</a><a title=归档 data-active-link=/archives/ href=/archives/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
+</a><a title=Repo data-active-link=/repo/ href=/repo/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
+</a><a title=搜索 data-active-link=/search/ href=/search/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span></a></div></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none"><i class="eva eva-moon opacity-20 dark:opacity-70"></i></div></header><main class="relative flex flex-grow mt-28 md:mt-20" id=swup><style>:root{--font:JetBrains Mono}</style><div class="type-posts layout- w-full"><div class="relative h-full"><div class="relative h-full"><div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class=relative><div><div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">Kubernetes低版本中内存泄漏问题</div></div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10"><div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-clock-outline mr-1"></i>
+<span><time title="发布于 2022年10月8日 21:34:32" datetime=2022-10-08T21:34:32+08:00>2022年10月8日</time></span></div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-edit-2-outline mr-1"></i>
+<span><time title="最后修改于：2022年11月8日 23:03:43" datetime=2022-11-08T23:03:43+08:00>2022年11月8日</time></span></span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-flag-outline mr-1"></i>
+<span>6 分钟</span></div></div><div class="mb-3 flex items-center"><i class="eva eva-pricetags-outline mr-1"></i>
+<span class=mr-3>标签</span><a href=/tags/kubernetes title=Kubernetes class="group mr-2 flex items-center text-sm">
+<i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+<span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
+</a><a href=/tags/kubernetes%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3 title=Kubernetes问题解决 class="group mr-2 flex items-center text-sm"><i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+<span class="text-gray-400 group-hover:text-theme">Kubernetes问题解决</span></a></div><div class="mb-3 flex items-center"><i class="eva eva-folder-outline mr-1"></i>
+<span class=mr-3>分类</span><a href=/categories/kubernetes title=Kubernetes class="group flex items-center text-sm">
+<span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
+<span class="mx-0.5 group-last:hidden">,</span></a></div></div><aside class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4"><header><h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1></header><nav id=TableOfContents><ul><li><a href=#kubernetes中cgroup泄漏问题>Kubernetes中Cgroup泄漏问题</a></li><li><a href=#故障表现>故障表现</a></li><li><a href=#服务器配置信息>服务器配置信息</a></li><li><a href=#问题原因1>问题原因1</a></li><li><a href=#问题原因2>问题原因2</a></li><li><a href=#解决方案>解决方案</a><ul><li><a href=#解决方案一>解决方案一</a></li><li><a href=#解决方案2>解决方案2</a></li><li><a href=#解决方案3>解决方案3</a></li><li><a href=#影响范围>影响范围</a></li></ul></li><li><a href=#大概得原理理解>大概得原理理解</a><ul><li><a href=#keme是什么>keme是什么?</a></li><li><a href=#cgroup与kmem机制>cgroup与kmem机制</a></li><li><a href=#docker与k8s使用kmem>docker与k8s使用kmem</a></li></ul></li></ul></nav></aside><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title=更快的阅读 id=bionicReading class="absolute right-0 top-0 cursor-pointer p-3"><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="10811"><path d="M480 192c-19.2.0-32-12.8-32-32V32c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4.0-19.2.0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2.0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4zM76.8 864l83.2 83.2L627.2 480 544 396.8 76.8 864zM992 576H864c-19.2.0-32-12.8-32-32s12.8-32 32-32h128c19.2.0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4.0-19.2.0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8.0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zm-512 0c-6.4.0-19.2.0-25.6-6.4l-96-96c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4.0-19.2.0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"/><path d="M544 640c-6.4.0-19.2.0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"/></svg></i><h2 class=group id=kubernetes中cgroup泄漏问题>Kubernetes中Cgroup泄漏问题<a href=#kubernetes%e4%b8%adcgroup%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><p>Cgorup文档: <a class=link href=https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt target=_blank rel=noopener>https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt</a></p><p>绝大多数的kubernetes集群都有这个隐患。只不过一般情况下，泄漏得比较慢，还没有表现出来而已。</p><p>一个pod可能泄漏两个memory cgroup数量配额。即使pod百分之百发生泄漏， 那也需要一个节点销毁过三万多个pod之后，才会造成后续pod创建失败。</p><p>一旦表现出来，这个节点就彻底不可用了，必须重启才能恢复。</p><h2 class=group id=故障表现>故障表现<a href=#%e6%95%85%e9%9a%9c%e8%a1%a8%e7%8e%b0><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><ul><li>该内容的故障信息已经提交给Github: <a class=link href=https://github.com/kubernetes/kubernetes/issues/112940 target=_blank rel=noopener>https://github.com/kubernetes/kubernetes/issues/112940</a></li></ul><p>我在服务器中更新Pod出现如下错误 <code>cannot allocate memory</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>unable to ensure pod container exists: failed to create container <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>[</span>kubepods burstable podd5dafc96-2bcd-40db-90fd-c75758746a7a<span style=color:#ff79c6>]</span> : mkdir /sys/fs/cgroup/memory/kubepods/burstable/podd5dafc96-2bcd-40db-90fd-c75758746a7a: cannot allocate memory
+</span></span></code></pre></div><p>使用<code>dmesg</code>查看系统日志的错误内容信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>SLUB: Unable to allocate memory on node -1
+</span></span></code></pre></div><h2 class=group id=服务器配置信息>服务器配置信息<a href=#%e6%9c%8d%e5%8a%a1%e5%99%a8%e9%85%8d%e7%bd%ae%e4%bf%a1%e6%81%af><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><ul><li>操作系统: <code>CentOS Linux release 7.9.2009 (Core)</code></li><li>系统内核: <code>3.10.0-1160.el7.x86_64</code></li><li>Kubernetes: <code>1.17.9</code></li><li>dockerVersion: <code>20.10.7</code></li></ul><h2 class=group id=问题原因1>问题原因1<a href=#%e9%97%ae%e9%a2%98%e5%8e%9f%e5%9b%a01><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><p>Kubernetes在1.9版本开启了对kmem的支持,因此 1.9以后的所有版本都有该问题，但必须搭配3.x内核的机器才会出问题。一旦出现会导致新 pod 无法创建，已有 pod不受影响，但pod 漂移到有问题的节点就会失败，直接影响业务稳定性。因为是内存泄露，直接重启机器可以暂时解决，但还会再次出现。
+cgroup的kmem account特性在3.x 内核上有内存泄露问题，如果开启了kmem account特性会导致可分配内存越来越少，直到无法创建新 pod 或节点异常。</p><ol><li>kmem account 是cgroup 的一个扩展，全称CONFIG_MEMCG_KMEM，属于机器默认配置，本身没啥问题，只是该特性在 3.10 的内核上存在漏洞有内存泄露问题，4.x的内核修复了这个问题。</li><li>因为 kmem account 是 cgroup 的扩展能力，因此runc、docker、k8s 层面也进行了该功能的支持，即默认都打开了kmem 属性。</li><li>因为3.10 的内核已经明确提示 kmem 是实验性质，我们仍然使用该特性，所以这其实不算内核的问题，是 k8s 兼容问题。</li></ol><h2 class=group id=问题原因2>问题原因2<a href=#%e9%97%ae%e9%a2%98%e5%8e%9f%e5%9b%a02><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><p>memcg是 Linux 内核中用于管理 cgroup 内存的模块，整个生命周期应该是跟随 cgroup 的，但是在低版本内核中<code>(已知3.10)</code>，一旦给某个 memory cgroup 开启 kmem accounting 中的 memory.kmem.limit_in_bytes 就可能会导致不能彻底删除 memcg 和对应的 cssid，也就是说应用即使已经删除了 cgroup (/sys/fs/cgroup/memory 下对应的 cgroup 目录已经删除), 但在内核中没有释放 cssid，导致内核认为的 cgroup 的数量实际数量不一致，我们也无法得知内核认为的 cgroup 数量是多少。
+这个问题可能会导致创建容器失败，因为创建容器为其需要创建 cgroup 来做隔离，而低版本内核有个限制：允许创建的 cgroup 最大数量写死为 65535，如果节点上经常创建和销毁大量容器导致创建很多 cgroup，删除容器但没有彻底删除 cgroup 造成泄露(真实数量我们无法得知)，到达 65535 后再创建容器就会报创建 cgroup 失败并报错 no space left on device，使用 kubernetes 最直观的感受就是 pod 创建之后无法启动成功。</p><h2 class=group id=解决方案>解决方案<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><p>目前官方给出的解决方案如下:</p><ol><li>kernel upgrade to 4.0+: <strong><a class=link href=https://github.com/kubernetes/kubernetes/issues/61937#issuecomment-377585452 target=_blank rel=noopener>application crash due to k8s 1.9.x open the kernel memory accounting by default #61937 (comment)</a></strong></li><li>rebuild the kubelet with nokmem args. See <strong><a class=link href=https://github.com/kubernetes/kubernetes/issues/96701#issuecomment-911061574 target=_blank rel=noopener>Failed to create container, mkdir /sys/fs/cgroup/memory/kubepods/besteffort/pod98211fca-b27e-4316-b1ae-c0d27925aa84: cannot allocate memory #96701 (comment)</a></strong></li><li>Set cgroup.memory=nokmem in grub: see <strong><a class=link href=https://github.com/kubernetes/kubernetes/issues/61937#issuecomment-567042968 target=_blank rel=noopener>application crash due to k8s 1.9.x open the kernel memory accounting by default #61937 (comment)</a></strong></li></ol><h3 class=group id=解决方案一>解决方案一<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e4%b8%80><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><ul><li>感谢提供的解决方案: <a class=link href=https://cloud.tencent.com/developer/article/1739289 target=_blank rel=noopener>https://cloud.tencent.com/developer/article/1739289</a></li><li><a class=link href=https://github.com/torvalds/linux/commit/d6e0b7fa11862433773d986b5f995ffdf47ce672 target=_blank rel=noopener>https://github.com/torvalds/linux/commit/d6e0b7fa11862433773d986b5f995ffdf47ce672</a></li><li><a class=link href=https://support.mesosphere.com/s/article/Critical-Issue-KMEM-MSPH-2018-0006 target=_blank rel=noopener>https://support.mesosphere.com/s/article/Critical-Issue-KMEM-MSPH-2018-0006</a></li></ul><p>这种方式的缺点是：</p><ul><li>1、要升级所有节点，节点重启的话已有 pod 肯定要漂移，如果节点规模很大，这个升级操作会很繁琐，业务部门也会有意见，要事先沟通。</li><li>2、这个问题归根结底是软件兼容问题，3.x 自己都说了不成熟，不建议你使用该特性，k8s、docker却 还要开启这个属性，那就不是内核的责任，因为我们是云上机器，想替换4.x 内核需要虚机团队做足够的测试和评审，因此这是个长期方案，不能立刻解决问题。</li><li>3、已有业务在 3.x 运行正常，不代表可以在 4.x 也运行正常，即全量升级内核之前需要做足够的测试，尤其是有些业务需求对os做过定制。</li></ul><h3 class=group id=解决方案2>解决方案2<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%882><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>修改虚机启动的引导项 grub 中的<code>cgroup.memory=nokmem</code>，让机器启动时直接禁用 cgroup的 kmem 属性</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>vim /etc/default/grub
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#8be9fd;font-style:italic>GRUB_TIMEOUT</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>5</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>GRUB_DISTRIBUTOR</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>$(</span>sed <span style=color:#f1fa8c>&#39;s, release .*$,,g&#39;</span> /etc/system-release<span style=color:#ff79c6>)</span><span style=color:#f1fa8c>&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>GRUB_DEFAULT</span><span style=color:#ff79c6>=</span>saved
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#8be9fd;font-style:italic>GRUB_DISABLE_SUBMENU</span><span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span><span style=color:#8be9fd;font-style:italic>GRUB_TERMINAL_OUTPUT</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;console&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span><span style=color:#8be9fd;font-style:italic>GRUB_CMDLINE_LINUX</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;crashkernel=auto spectre_v2=retpoline rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet cgroup.memory=nokmem&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span><span style=color:#8be9fd;font-style:italic>GRUB_DISABLE_RECOVERY</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;true&#34;</span>
+</span></span></code></pre></div><p>更改完成后你需要生成一下新的cgroup配置.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>/usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>reboot <span style=color:#6272a4># 重启服务器</span>
+</span></span></code></pre></div><h3 class=group id=解决方案3>解决方案3<a href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%883><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>如果你想在Kubernetes中禁用该属性。issue 中一般建议修改 kubelet代码并重新编译。</p><p>对于v1.13及其之前版本的kubelet，需要手动替换以下两个函数。</p><p><code>vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/memory.go</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>EnableKernelMemoryAccounting</span>(path <span style=color:#8be9fd>string</span>) <span style=color:#8be9fd>error</span> {
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>}
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>setKernelMemory</span>(path <span style=color:#8be9fd>string</span>, kernelMemoryLimit <span style=color:#8be9fd>int64</span>) <span style=color:#8be9fd>error</span> {
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span>}
+</span></span></code></pre></div><p>重新编译并替换 <code>kubelet</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>make <span style=color:#8be9fd;font-style:italic>WHAT</span><span style=color:#ff79c6>=</span>cmd/kubelet <span style=color:#8be9fd;font-style:italic>GOFLAGS</span><span style=color:#ff79c6>=</span>-v <span style=color:#8be9fd;font-style:italic>GOGCFLAGS</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-N -l&#34;</span>
+</span></span></code></pre></div><p>对于v1.14及其之后版本的kubelet,通过添加BUILDTAGS来禁止 kmem accounting.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>make <span style=color:#8be9fd;font-style:italic>BUILDTAGS</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;nokmem&#34;</span> <span style=color:#8be9fd;font-style:italic>WHAT</span><span style=color:#ff79c6>=</span>cmd/kubelet <span style=color:#8be9fd;font-style:italic>GOFLAGS</span><span style=color:#ff79c6>=</span>-v <span style=color:#8be9fd;font-style:italic>GOGCFLAGS</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-N -l&#34;</span>
+</span></span></code></pre></div><p>遇到1.16 版本的BUILDTAGS=”nokmem“编译出来的 let 还是有问题，还是通过修改代码的方式使其生效</p><p><code>vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span><span style=color:#ff79c6>package</span> fs
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span><span style=color:#ff79c6>import</span> (
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span>    <span style=color:#f1fa8c>&#34;errors&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span>)
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>EnableKernelMemoryAccounting</span>(path <span style=color:#8be9fd>string</span>) <span style=color:#8be9fd>error</span> {
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span>}
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>setKernelMemory</span>(path <span style=color:#8be9fd>string</span>, kernelMemoryLimit <span style=color:#8be9fd>int64</span>) <span style=color:#8be9fd>error</span> {
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span>    <span style=color:#ff79c6>return</span> errors.<span style=color:#50fa7b>New</span>(<span style=color:#f1fa8c>&#34;kernel memory accounting disabled in this runc build&#34;</span>)
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span>}
+</span></span></code></pre></div><p>编译前，可以编辑下文件 hack/lib/version.sh，将 <code>KUBE_GIT_TREE_STATE="dirty"</code> 改为 <code>KUBE_GIT_TREE_STATE="clean"</code>，确保版本号干净。</p><h3 class=group id=影响范围>影响范围<a href=#%e5%bd%b1%e5%93%8d%e8%8c%83%e5%9b%b4><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>k8s在1.9版本开启了对kmem的支持，因此1.9以后的所有版本都有该问题,但必须搭配 3.x内核的机器才会出问题。一旦出现会导致新pod无法创建,已有 pod不受影响，但pod 漂移到有问题的节点就会失败，直接影响业务稳定性。因为是内存泄露，直接重启机器可以暂时解决，但还会再次出现。</p><h2 class=group id=大概得原理理解>大概得原理理解<a href=#%e5%a4%a7%e6%a6%82%e5%be%97%e5%8e%9f%e7%90%86%e7%90%86%e8%a7%a3><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><h3 class=group id=keme是什么>keme是什么?<a href=#keme%e6%98%af%e4%bb%80%e4%b9%88><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>kmem是Cgroup的一个扩展，全称CONFIG_MEMCG_KMEM，属于机器默认配置。</p><p>内核内存与用户内存：</p><p>内核内存：专用于Linux内核系统服务使用，是不可swap的，因而这部分内存非常宝贵的。但现实中存在很多针对内核内存资源的攻击，如不断地fork新进程从而耗尽系统资源，即所谓的“fork bomb”。</p><p>为了防止这种攻击，社区中提议通过linux内核限制 cgroup中的kmem 容量，从而限制恶意进程的行为，即kernel memory accounting机制。</p><p>使用如下命令查看KMEM是否打开：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>cat /boot/config-<span style=color:#f1fa8c>`</span>uname -r<span style=color:#f1fa8c>`</span>|grep CONFIG_MEMCG
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#8be9fd;font-style:italic>CONFIG_MEMCG</span><span style=color:#ff79c6>=</span>y
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>CONFIG_MEMCG_SWAP</span><span style=color:#ff79c6>=</span>y
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>CONFIG_MEMCG_SWAP_ENABLED</span><span style=color:#ff79c6>=</span>y
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#8be9fd;font-style:italic>CONFIG_MEMCG_KMEM</span><span style=color:#ff79c6>=</span>y
+</span></span></code></pre></div><h3 class=group id=cgroup与kmem机制>cgroup与kmem机制<a href=#cgroup%e4%b8%8ekmem%e6%9c%ba%e5%88%b6><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>使用 cgroup 限制内存时，我们不但需要限制对用户内存的使用，也需要限制对内核内存的使用。kernel memory accounting 机制为 cgroup 的内存限制增加了 stack pages（例如新进程创建）、slab pages(SLAB/SLUB分配器使用的内存)、sockets memory pressure、tcp memory pressure等，以保证 kernel memory 不被滥用。</p><p>当你开启了kmem 机制，具体体现在 memory.kmem.limit_in_bytes 这个文件上：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>/sys/fs/cgroup/memory/kubepods/pod632f736f-5ef2-11ea-ad9e-fa163e35f5d4/memory.kmem.limit_in_bytes
+</span></span></code></pre></div><p>实际使用中，我们一般将 memory.kmem.limit_in_bytes 设置成大于 memory.limit_in_bytes，从而只限制应用的总内存使用。</p><h3 class=group id=docker与k8s使用kmem>docker与k8s使用kmem<a href=#docker%e4%b8%8ek8s%e4%bd%bf%e7%94%a8kmem><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>以上描述都是cgroup层面即机器层面，但是 runc 和 docker 发现有这个属性之后，在后来的版本中也支持了 kmem ，k8s 发现 docker支持，也在 1.9 版本开始支持。</p><p>1.9版本及之后，kubelet 才开启 kmem 属性</p><p>kubelet 的这部分代码位于：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>https://github.com/kubernetes/kubernetes/blob/release-1.12/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/memory.go#L70-L106
+</span></span></code></pre></div><p>对于k8s、docker 而言，kmem 属性属于正常迭代和优化，至于3.x的内核上存在 bug 不能兼容，不是k8s 关心的问题。但 issue 中不断有人反馈，因此在 k8s 1.14 版本的 kubelet 中，增加了一个编译选项 make BUILDTAGS=&ldquo;nokmem&rdquo;，就可以编译 kubelet 时就禁用 kmem，避免掉这个问题。而1.8 到1.14 中间的版本，只能选择更改 kubelet 的代码。</p></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Twitter" href="https://twitter.com/share?&text=Kubernetes%e4%b8%adCgroup%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98%20Cgorup%e6%96%87%e6%a1%a3:%20https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt%20%e7%bb%9d%e5%a4%a7%e5%a4%9a%e6%95%b0%e7%9a%84kubernetes%e9%9b%86%e7%be%a4%e9%83%bd%e6%9c%89%e8%bf%99%e4%b8%aa%e9%9a%90%e6%82%a3%e3%80%82%e5%8f%aa%e4%b8%8d%e8%bf%87%e4%b8%80%e8%88%ac%e6%83%85%e5%86%b5%e4%b8%8b%ef%bc%8c%e6%b3%84%e6%bc%8f%e5%be%97%e6%af%94%e8%be%83%e6%85%a2&url=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-twitter hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Facebook" href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-facebook hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title=分享到微博 href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/&title=Kubernetes%e4%bd%8e%e7%89%88%e6%9c%ac%e4%b8%ad%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98&sudaref=tec.mletter.cn" target=_blank rel="noopener noreferrer"><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"><path d="M456.991736 557.336482c-107.598583.0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583.0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185.0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185.0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535zm93.090909-91.881936c-14.507674.0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682"/><path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683"/><path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152.0 500.514758.0 686.696576S235.749705 1024 527.112161 1024s527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439c-205.525383.0-372.363636-112.434474-372.363636-251.466352s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684"/><path d="M1021.582054 423.140496c-3.626919.0-6.044864.0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348.0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566.0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665.0 187.390791 84.628099 187.390791 187.390791.0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685"/><path d="M1146.106257 473.917355c-2.417946.0-6.044864.0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397.0-153.539552-126.942149-280.481701-281.690673-280.481701-20.552538.0-37.478158-16.92562-37.478158-37.478158S816.056671.0 836.609209.0c197.062574.0 356.646989 159.584416 356.646989 356.646989.0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686"/></svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title=复制链接 data-clipboard-text=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block"><i title=二维码 class="eva show-qrcode eva-smartphone hover:text-theme"></i><div class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"><img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tec.mletter.cn/2022/10/08/kubernetes%E4%BD%8E%E7%89%88%E6%9C%AC%E4%B8%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98.html/" alt=二维码></div></div></div><div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl"><div><a href=/2022/09/22/kubeadm%E9%83%A8%E7%BD%B2kubernetes1.22.10.html/ title=Kubeadm部署Kubernetes1.22.10 class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText" style=visibility:visible><span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-left-outline"></i></span>
+<span>上一篇</span></a></div><div class="hidden items-center text-xs xl:flex">除特殊声明外，本博客一律使用以下协议进行授权 「
+<a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme>署名 - 非商业性使用 - 禁止演绎 4.0</a>
+」</div><div class="flex items-center text-sm xl:hidden"><a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme><img src=/Cc-by-nc-nd.svg alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class=w-24></a></div><a href title class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"><span>下一篇</span>
+<span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-right-outline"></i></span></a></div><div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder"><script src=https://giscus.app/client.js data-repo=waidinsamkeit/tecoum data-repo-id=R_kgDOH4NyMg data-category=Announcements data-category-id=DIC_kwDOH4NyMs4CRCX2 data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-theme=light data-lang=zh-CN data-loading=true crossorigin=anonymous data-swup-reload-script async></script><script data-swup-reload-script>(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onThemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})();function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}</script></div></div></div></div></div></main><footer><div class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"><div class="mb-2 flex items-center justify-between text-center md:mb-0"><span>© 2020 - 2022</span>
+<span class="mx-1.5 opacity-50">| </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://github.com/Ice-Hazymoon/hugo-theme-luna target=_blank rel="noopener noreferrer">Luna</a> 驱动</div><div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block">| </span><a data-no-swup href=https://tec.mletter.cn/index.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082zm351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298.002 32.978-15.31 31.99-33.58zm288.498.576c-16.788-467.64-393.05-846.104-862.974-862.974C78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-.002 32.658-14.948 32.01-33.008z" p-id="3092"/></svg></span><span>RSS</span>
+</a><a data-no-swup href=https://tec.mletter.cn/sitemap.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822.0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822.0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512.0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778.0 659.91.0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822.0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067.0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822.0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823.0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"/></svg></span><span>Sitemap</span></a><div id=google_translate_element class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id=run-time class="mt-2 flex-grow text-right md:mt-0"><span>运行时间： </span><b id=run-time-d>0</b>
+<span class=text-xs>天</span>
+<b id=run-time-h>0</b>
+<span class=text-xs>小时</span>
+<b id=run-time-m>0</b>
+<span class=text-xs>分钟</span>
+<b id=run-time-s>0</b>
+<span class=text-xs>秒</span></div></div><script type=text/javascript>window.__theme={cdn:"",pjax:!0,isServer:!1,$version:"",lang:"zh-cn",imageZoom:!0,lazyload:!0,bionicReading:{enabled:!0,skipLinks:!1,autoBionic:!1,excludeWords:[],excludeClasses:["github"],excludeNodeNames:[]},katex:!0,search:!0,backtop:!0,pangu:!0,autoDarkMode:!0,googleAnalytics:!1,hugoEncrypt:{wrongPasswordText:"密码错误",userStorage:window.sessionStorage},console:{enabled:!1,leftColor:"#dd6065",rightColor:"#feb462",leftText:"Hugo Theme Luna",rightText:"Powered by Hugo ❤ Luna"},assets:{error_svg:"/images/error.svg",search_svg:"/images/search.svg"},i18n:{copy:{success:"复制成功",failed:"复制失败，请手动复制",copyCode:"复制代码"},search:{untitled:"无标题",loadFailure:"初始化搜索引擎失败",input:"请输入内容..."},darkMode:{dark:"切换到夜间模式",light:"切换到日间模式"}},creatTime:"2020/6/12"}</script><script type=text/javascript src=/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ+6P7cT+B0YgL4dSqRg="></script><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")})</script>
+<script type=text/javascript src=/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type=text/javascript>window.translateelement_styles="/sass/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:"zh-cn",includedLanguages:"af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi",autoDisplay:!1},"google_translate_element")}</script>
+<script></script><script data-swup-reload-script></script></footer></div></div><a href=#nav title=返回顶部 id=back-top class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"><div class=relative><div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl"><i class="eva eva-arrow-upward-outline"></i></div><svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet"><circle transform="rotate(-90, 27 , 27)" style="stroke-dasharray:157,157;stroke-dashoffset:157" cx="27" cy="27" r="25" fill="none" stroke-width="4" stroke-linecap="round" stroke="var(--theme)"/></svg></div></a><div id=i18nlist></div><noscript><style>.dark-mode-switch,#run-time,#bionicReading,.noscript-hidden,[data-clipboard-text],[data-lazyload]{display:none}#back-top{opacity:1}.noscript-show{display:initial}</style></noscript></body></html>

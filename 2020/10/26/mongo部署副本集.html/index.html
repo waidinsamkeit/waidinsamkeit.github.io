@@ -1,619 +1,106 @@
-<!DOCTYPE html>
-<html lang="zh-cn" class="lang-zh-cn">
-    <head><meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="keywords" content="Linux,Mongo,Hugo,Hugo Theme,Luna," /><meta name="description" content="部署副本集 1.0 更改Mongo配置文件 [root@localhost mongo]# vim conf/mongo.conf port=27017 fork=true logpath=/usr/local/mongo/logs/mongodb.log logappend=true dbpath=/usr/local/mongo/data replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo [root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 [root@localhost mongo]# mongo &amp;gt; conf= { &amp;#34;_id&amp;#34;" />
-<meta itemprop="description" content="部署副本集 1.0 更改Mongo配置文件 [root@localhost mongo]# vim conf/mongo.conf port=27017 fork=true logpath=/usr/local/mongo/logs/mongodb.log logappend=true dbpath=/usr/local/mongo/data replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo [root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 [root@localhost mongo]# mongo &amp;gt; conf= { &amp;#34;_id&amp;#34;" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<meta itemprop="name" content="Mongo部署副本集 - Cameliya" />
-<link href="https://tec.mletter.cn/index.xml" title="Mongo部署副本集 - Cameliya" type="application/rss+xml" rel="alternate" />
-<title>Mongo部署副本集 - Cameliya</title><link rel="stylesheet" href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k=" /><meta property="og:site_name" content="Mongo部署副本集 - Cameliya" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Mongo部署副本集" />
-<meta property="og:description" content="部署副本集 1.0 更改Mongo配置文件 [root@localhost mongo]# vim conf/mongo.conf port=27017 fork=true logpath=/usr/local/mongo/logs/mongodb.log logappend=true dbpath=/usr/local/mongo/data replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo [root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 [root@localhost mongo]# mongo &amp;gt; conf= { &amp;#34;_id&amp;#34;" />
-<meta property="og:url" content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" /><meta property="article:publisher" content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" /><meta property="article:published_time" content="2020-10-26T15:27:08&#43;08:00" /><meta property="article:modified_time" content="2022-03-21T13:45:00&#43;08:00" /><meta name="theme-color" content="#95C7E0" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Mongo部署副本集 - Cameliya" />
-<meta name="apple-mobile-web-app-status-bar-style" content="white" />
-<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Ice_Hazymoon" />
-    <meta name="twitter:creator" content="@Ice_Hazymoon" /><meta name="twitter:title" content="Mongo部署副本集 - Cameliya" />
-<meta name="twitter:description" content="部署副本集 1.0 更改Mongo配置文件 [root@localhost mongo]# vim conf/mongo.conf port=27017 fork=true logpath=/usr/local/mongo/logs/mongodb.log logappend=true dbpath=/usr/local/mongo/data replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo [root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 [root@localhost mongo]# mongo &amp;gt; conf= { &amp;#34;_id&amp;#34;" />
-<meta name="twitter:url" content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" /><meta name="twitter:image" content="" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
-<link href="/icon.png" rel="Bookmark" />
-<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Mongo部署副本集",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https:\/\/tec.mletter.cn\/2020\/10\/26\/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html\/"
-  },"genre": "posts","keywords": "Linux, Mongo","wordcount": 621 ,
-  "url": "https:\/\/tec.mletter.cn\/2020\/10\/26\/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html\/","datePublished": "2020-10-26T15:27:08\u002b08:00","dateModified": "2022-03-21T13:45:00\u002b08:00","author": {
-    "@type": "Person",
-    "name": "Cameliya"
-  },"description": ""
-}
-</script>
-
-
-    </head>
-    
-    <body class="dark:bg-darkBg dark:text-darkText">
-        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
-            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
-        <div class="route-items flex w-full items-center justify-around"><a
-                    title="首页"
-                    data-active-link="/"
-                    href="/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
-                </a><a
-                    title="关于我"
-                    data-active-link="/about/"
-                    href="/about/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
-                </a><a
-                    title="朋友们"
-                    data-active-link="/link/"
-                    href="/link/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
-                </a><a
-                    title="归档"
-                    data-active-link="/archives/"
-                    href="/archives/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
-                </a><a
-                    title="Repo"
-                    data-active-link="/repo/"
-                    href="/repo/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
-                </a><a
-                    title="搜索"
-                    data-active-link="/search/"
-                    href="/search/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span>
-                </a>
-        </div>
-    </nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
-    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
-</div>
-</header>
-<main class="relative flex flex-grow  mt-28 md:mt-20 " id="swup"><style>:root {
-        --font:JetBrainsMono-Medium;
-    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
-    <div class="relative h-full">
-        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
-    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
-        Mongo部署副本集
-    </div>
-</div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
-    <div>
-        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-            <i class="eva eva-clock-outline mr-1"></i>
-            <span>
-                <time
-                    title="发布于 2020年10月26日 15:27:08"datetime="2020-10-26T15:27:08+08:00">2020年10月26日</time
-                >
-            </span>
-        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                    <i class="eva eva-edit-2-outline mr-1"></i>
-                    <span>
-                        <time
-                            title="最后修改于：2022年3月21日 13:45:00"datetime="2022-03-21T13:45:00+08:00">2022年3月21日</time
-                        >
-                    </span>
-                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                <i class="eva eva-flag-outline mr-1"></i>
-                <span>2 分钟</span>
-            </div></div><div class="mb-3 flex items-center">
-            <i class="eva eva-pricetags-outline mr-1"></i>
-            <span class="mr-3">标签</span><a href="/tags/linux" title="Linux" class="group mr-2 flex items-center text-sm">
-                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
-                    <span class="text-gray-400 group-hover:text-theme">Linux</span>
-                </a><a href="/tags/mongo" title="Mongo" class="group mr-2 flex items-center text-sm">
-                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
-                    <span class="text-gray-400 group-hover:text-theme">Mongo</span>
-                </a></div><div class="mb-3 flex items-center">
-            <i class="eva eva-folder-outline mr-1"></i>
-            <span class="mr-3">分类</span><a href="/categories/linux" title="Linux" class="group flex items-center text-sm">
-                    <span class="text-gray-400 group-hover:text-theme">Linux</span>
-                    <span class="mx-0.5 group-last:hidden">,</span>
-                </a></div></div><aside
-            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
-        >
-            <header>
-                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1>
-            </header>
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#部署副本集">部署副本集</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-    <li><a href="#开启安全验证">开启安全验证</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-        </aside><div class="border-b bg-blue-100 bg-opacity-20 p-6 dark:border-darkBorder dark:bg-darkBg md:px-10">
-            <time
-                datetime="2022-03-21T13:45:00+08:00"
-                >文章最后编辑于: <span class="mx-1 font-bold">228</span> 天前，文中所描述的信息可能已发生改变</time
-            >
-        </div><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="更快的阅读" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
-            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
-        >
-
-<h2 class="group " id="部署副本集"
-    >部署副本集<a href="#%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-
-
-<h4 class="group " id="10-更改mongo配置文件"
-    >1.0 更改Mongo配置文件<a href="#10-%e6%9b%b4%e6%94%b9mongo%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># vim conf/mongo.conf</span>
-</span></span><span style="display:flex;"><span>port=<span style="color:#ff0;font-weight:bold">27017</span>
-</span></span><span style="display:flex;"><span>fork=<span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>logpath=/usr/local/mongo/logs/mongodb.log
-</span></span><span style="display:flex;"><span>logappend=<span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>dbpath=/usr/local/mongo/data
-</span></span><span style="display:flex;"><span>replSet=rs0 <span style="color:#007f7f"># 加入副本集名称,此名称要一致</span>
-</span></span></code></pre></div><p><strong>启动Mongo</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># mongod -f conf/mongo.conf </span>
-</span></span></code></pre></div>
-
-<h4 class="group " id="11-主mongo配置"
-    >1.1 主Mongo配置<a href="#11-%e4%b8%bbmongo%e9%85%8d%e7%bd%ae"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>[root@localhost mongo]# mongo
-</span></span><span style="display:flex;"><span>&gt; conf=
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>    &#34;_id&#34; : &#34;rs0&#34;,
-</span></span><span style="display:flex;"><span>    &#34;members&#34; : [
-</span></span><span style="display:flex;"><span>        { &#34;_id&#34; : 0, &#34;host&#34; : &#34;172.17.100.193:27017&#34; },
-</span></span><span style="display:flex;"><span>        { &#34;_id&#34; : 1, &#34;host&#34; : &#34;172.17.100.191:27017&#34; }
-</span></span><span style="display:flex;"><span>        ]
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span># 填写mongo的ip地址即可
-</span></span><span style="display:flex;"><span>&gt; rs.initiate(conf) # 初始化副本集
-</span></span><span style="display:flex;"><span>{ &#34;ok&#34; : 1 } # 如果出现ok1则表示成功
-</span></span></code></pre></div>
-
-<h4 class="group " id="12-副本集更新"
-    >1.2 副本集更新<a href="#12-%e5%89%af%e6%9c%ac%e9%9b%86%e6%9b%b4%e6%96%b0"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#007f7f"># 向副本集中添加成员</span>
-</span></span><span style="display:flex;"><span>rs.add(<span style="color:#0ff;font-weight:bold">&#34;172.17.100.191:27017&#34;</span>)
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 从副本集中删除成员</span>
-</span></span><span style="display:flex;"><span>rs.remove(<span style="color:#0ff;font-weight:bold">&#34;172.17.100.191:27017&#34;</span>)
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 向副本集中添加仲裁</span>
-</span></span><span style="display:flex;"><span>rs.addArb(<span style="color:#0ff;font-weight:bold">&#34;172.17.100.191:27017&#34;</span>)
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 向副本集中添加备份节点</span>
-</span></span><span style="display:flex;"><span>rs.add({<span style="color:#0ff;font-weight:bold">&#34;_id&#34;</span>:3,<span style="color:#0ff;font-weight:bold">&#34;host&#34;</span>:<span style="color:#0ff;font-weight:bold">&#34;172.17.100.191:27017&#34;</span>,<span style="color:#0ff;font-weight:bold">&#34;priority&#34;</span>:0,<span style="color:#0ff;font-weight:bold">&#34;hidden&#34;</span>:true})  // _id请依次递增
-</span></span></code></pre></div>
-
-<h4 class="group " id="14-更新副本集优先级"
-    >1.4 更新副本集优先级<a href="#14-%e6%9b%b4%e6%96%b0%e5%89%af%e6%9c%ac%e9%9b%86%e4%bc%98%e5%85%88%e7%ba%a7"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cfg = rs.conf()
-</span></span><span style="display:flex;"><span>cfg.members[0].priority = <span style="color:#ff0;font-weight:bold">5</span>  <span style="color:#007f7f">#  设置权重为5</span>
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># members[0]里面填写你要更改的节点数字 id是1就写1 是2就设置2</span>
-</span></span><span style="display:flex;"><span>rs.reconfig(cfg) <span style="color:#007f7f"># 重新加载配置</span>
-</span></span></code></pre></div>
-
-<h4 class="group " id="15-查看副本集状态"
-    >1.5 查看副本集状态<a href="#15-%e6%9f%a5%e7%9c%8b%e5%89%af%e6%9c%ac%e9%9b%86%e7%8a%b6%e6%80%81"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rs0:PRIMARY&gt; rs.status()
-</span></span></code></pre></div>
-
-<h4 class="group " id="16-查看副本集的配置信息"
-    >1.6 查看副本集的配置信息<a href="#16-%e6%9f%a5%e7%9c%8b%e5%89%af%e6%9c%ac%e9%9b%86%e7%9a%84%e9%85%8d%e7%bd%ae%e4%bf%a1%e6%81%af"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rs0:PRIMARY&gt; rs.conf()
-</span></span></code></pre></div>
-
-<h4 class="group " id="17-查看节点复制信息"
-    >1.7 查看节点复制信息<a href="#17-%e6%9f%a5%e7%9c%8b%e8%8a%82%e7%82%b9%e5%a4%8d%e5%88%b6%e4%bf%a1%e6%81%af"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rs0:PRIMARY&gt; db.printSlaveReplicationInfo()
-</span></span></code></pre></div>
-
-<h4 class="group " id="18-插入测试数据"
-    >1.8 插入测试数据<a href="#18-%e6%8f%92%e5%85%a5%e6%b5%8b%e8%af%95%e6%95%b0%e6%8d%ae"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rs0:PRIMARY&gt; <span style="color:#fff;font-weight:bold">for</span>(var i=0;i&lt;10000;i++){db.customer.insert({<span style="color:#0ff;font-weight:bold">&#34;name&#34;</span>:<span style="color:#0ff;font-weight:bold">&#34;user&#34;</span>+i})}
-</span></span><span style="display:flex;"><span>WriteResult({ <span style="color:#0ff;font-weight:bold">&#34;nInserted&#34;</span> : <span style="color:#ff0;font-weight:bold">1</span> })
-</span></span><span style="display:flex;"><span>rs0:PRIMARY&gt; db.customer.count()
-</span></span><span style="display:flex;"><span><span style="color:#ff0;font-weight:bold">10000</span>
-</span></span><span style="display:flex;"><span><span style="color:#007f7f">#  在Secondary上查看客户数据是否已经同步：</span>
-</span></span><span style="display:flex;"><span>rs0:SECONDARY&gt; rs.slaveOk()
-</span></span><span style="display:flex;"><span>rs0:SECONDARY&gt; db.customer.count()
-</span></span><span style="display:flex;"><span><span style="color:#ff0;font-weight:bold">10000</span>
-</span></span></code></pre></div>
-
-<h2 class="group " id="开启安全验证"
-    >开启安全验证<a href="#%e5%bc%80%e5%90%af%e5%ae%89%e5%85%a8%e9%aa%8c%e8%af%81"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h2>
-
-<blockquote>
-<p>先停止从上面的mongo然后在停止主上面的mongo</p>
-</blockquote>
-<ul>
-<li>在master上进行操作</li>
-</ul>
-
-
-<h4 class="group " id="20-创建用户"
-    >2.0 创建用户<a href="#20-%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>rs0:PRIMARY&gt; use admin
-</span></span><span style="display:flex;"><span>rs0:PRIMARY&gt; db.createUser({user: <span style="color:#0ff;font-weight:bold">&#39;root&#39;</span>, pwd: <span style="color:#0ff;font-weight:bold">&#39;123.com&#39;</span>, roles: [<span style="color:#0ff;font-weight:bold">&#39;root&#39;</span>]}) 
-</span></span><span style="display:flex;"><span><span style="color:#007f7f">#  创建root用户并且给予root权限,密码为123.com</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#007f7f"># 例如对某个库授权</span>
-</span></span><span style="display:flex;"><span>rs0:PRIMARY&gt; use <span style="color:#fff;font-weight:bold">test</span>
-</span></span><span style="display:flex;"><span>rs0:PRIMARY&gt; db.createUser({user:<span style="color:#0ff;font-weight:bold">&#34;admin&#34;</span>,pwd:<span style="color:#0ff;font-weight:bold">&#34;admin&#34;</span>,roles:[{role:<span style="color:#0ff;font-weight:bold">&#34;readWrite&#34;</span>,db:<span style="color:#0ff;font-weight:bold">&#34;test&#34;</span>}]})
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># role角色具体可以看官网的分配权限</span>
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># db: 指定授权的库</span>
-</span></span></code></pre></div>
-
-<h4 class="group " id="21-创建秘钥文件"
-    >2.1 创建秘钥文件<a href="#21-%e5%88%9b%e5%bb%ba%e7%a7%98%e9%92%a5%e6%96%87%e4%bb%b6"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># openssl rand -base64 666 &gt; /usr/local/mongo/keyfile</span>
-</span></span></code></pre></div><p>将生成的keyFile文件拷贝到其他节点服务器上，并修改文件的操作权限为 600</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#007f7f"># 更新启动配置文件,master上配置</span>
-</span></span><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># vim conf/mongo.conf </span>
-</span></span><span style="display:flex;"><span>auth=<span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>oplogSize=<span style="color:#ff0;font-weight:bold">100</span>
-</span></span><span style="display:flex;"><span>keyFile=/usr/local/mongo/keyfile
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#007f7f"># 更新启动配置文件,slave上配置</span>
-</span></span><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># vim conf/mongo.conf </span>
-</span></span><span style="display:flex;"><span>oplogSize=<span style="color:#ff0;font-weight:bold">100</span>
-</span></span><span style="display:flex;"><span>keyFile=/usr/local/mongo/keyfile
-</span></span></code></pre></div>
-
-<h4 class="group " id="22-启动副本集"
-    >2.2 启动副本集<a href="#22-%e5%90%af%e5%8a%a8%e5%89%af%e6%9c%ac%e9%9b%86"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h4>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># mongod -f /usr/local/mongo/conf/mongo.conf</span>
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 先开master</span>
-</span></span><span style="display:flex;"><span>[root@localhost mongo]<span style="color:#007f7f"># mongod -f /usr/local/mongo/conf/mongo.conf </span>
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 然后再从上开启服务,不加auth认证</span>
-</span></span></code></pre></div></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Twitter"
-                href="https://twitter.com/share?&text=%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86%201.0%20%e6%9b%b4%e6%94%b9Mongo%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%20[root@localhost%20mongo]#%20vim%20conf/mongo.conf%20port=27017%20fork=true%20logpath=/usr/local/mongo/logs/mongodb.log%20logappend=true%20dbpath=/usr/local/mongo/data%20replSet=rs0%20#%20%e5%8a%a0%e5%85%a5%e5%89%af%e6%9c%ac%e9%9b%86%e5%90%8d%e7%a7%b0,%e6%ad%a4%e5%90%8d%e7%a7%b0%e8%a6%81%e4%b8%80%e8%87%b4%20%e5%90%af%e5%8a%a8Mongo%20[root@localhost%20mongo]#%20mongod%20-f%20conf/mongo.conf%201.1%20%e4%b8%bbMongo%e9%85%8d%e7%bd%ae%20[root@localhost%20mongo]#%20mongo%20&amp;gt;%20conf=%20%7b%20&amp;#34;_id&amp;#34;&url=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-twitter hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Facebook"
-                href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-facebook hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到微博"
-                href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/&title=Mongo%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86&sudaref=tec.mletter.cn"
-                target="_blank"
-                rel="noopener noreferrer"
-            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="复制链接" data-clipboard-text="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block">
-                <i title="二维码" class="eva show-qrcode eva-smartphone hover:text-theme"></i>
-                <div
-                    class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"
-                >
-                    <img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" alt="二维码" />
-                </div>
-            </div></div>
-<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
-    <div>
-        <a
-            href="/2020/10/26/nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2.html/"
-            title="Nacos集群部署"
-            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
-            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-                <i class="eva eva-chevron-left-outline"></i>
-            </span>
-            <span>上一篇</span>
-        </a>
-    </div><div class="hidden items-center text-xs xl:flex">
-        除特殊声明外，本博客一律使用以下协议进行授权 「
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">署名 - 非商业性使用 - 禁止演绎 4.0</a>
-        」
-    </div>
-    <div class="flex items-center text-sm xl:hidden">
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">
-            <img src="/Cc-by-nc-nd.svg" alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class="w-24" />
-        </a>
-    </div>
-
-    <a
-        href="/2020/11/24/linux-shell-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E9%9B%86%E9%94%A6-find%E7%AF%87.html/"
-        title="Linux Shell 文本处理工具集锦-find篇"
-        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
-        <span>下一篇</span>
-        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-            <i class="eva eva-chevron-right-outline"></i>
-        </span>
-    </a>
-</div>
-<div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder">
-    <script src="https://giscus.app/client.js"
-    data-repo="waidinsamkeit/tecoum"
-    data-repo-id="R_kgDOH4NyMg"
-    data-category="Announcements"
-    data-category-id="DIC_kwDOH4NyMs4CRCX2"
-    data-mapping="title"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="light"
-    data-lang="zh-CN"
-    data-loading="true"
-    crossorigin="anonymous"
-    data-swup-reload-script
-    async
->
-</script>
-
-<script data-swup-reload-script>
-    (function () {
-        addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
-            handler();
-        });
-        window.addEventListener("onThemeChange", handler);
-
-        function handler() {
-            if (document.documentElement.dataset.scheme === "light") {
-                setGiscusTheme('light');
-            } else {
-                setGiscusTheme('dark');
-            }
-        }
-    })();
-    
-    function setGiscusTheme(theme) {
-        let giscus = document.querySelector("iframe.giscus-frame");
-        if (giscus) {
-            giscus.contentWindow.postMessage(
-                {
-                    giscus: {
-                        setConfig: {
-                            theme: theme,
-                        },
-                    },
-                },
-                "https://giscus.app"
-            );
-        }
-    }
-</script>
-</div>
-
-        </div>
-    </div>
-</div>
-</div>
-                </main><footer>
-    <div
-        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
-    >
-        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
-            <span class="">© 2020 - 2022</span>
-            <span class="mx-1.5 opacity-50"> | </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a> 驱动</div>
-
-        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://tec.mletter.cn/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
-                    <span>RSS</span>
-                </a><a data-no-swup href="https://tec.mletter.cn/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
-                    <span>Sitemap</span>
-                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
-    <span>运行时间： </span><b id="run-time-d">0</b>
-    <span class="text-xs">天</span>
-    <b id="run-time-h">0</b>
-    <span class="text-xs">小时</span>
-    <b id="run-time-m">0</b>
-    <span class="text-xs">分钟</span>
-    <b id="run-time-s">0</b>
-    <span class="text-xs">秒</span>
-</div>
-</div>
-
-    <script type="text/javascript">
-window.__theme = {
-    cdn: '',
-    pjax: true ,
-    isServer: false ,
-    $version:"",
-    lang: 'zh-cn',
-    imageZoom: true ,
-    lazyload: true ,
-    bionicReading: {
-        enabled: true ,
-        skipLinks: false ,
-        autoBionic: false ,
-        excludeWords:[],
-        excludeClasses:["github"],
-        excludeNodeNames:[],
-    },
-    katex: true ,
-    search: true ,
-    backtop: true ,
-    pangu: true ,
-    autoDarkMode: true ,
-    googleAnalytics:false,
-    hugoEncrypt: {
-        wrongPasswordText: '密码错误',
-        userStorage:window['sessionStorage'],
-    },
-    console: {
-        enabled: false ,
-        leftColor: '#dd6065',
-        rightColor: '#feb462',
-        leftText: 'Hugo Theme Luna',
-        rightText: 'Powered by Hugo ❤ Luna',
-    },
-    assets: {
-        error_svg: "\/images\/error.svg",
-        search_svg: "\/images\/search.svg",
-    },
-    i18n: {
-        copy: {
-            success: "复制成功",
-            failed: "复制失败，请手动复制",
-            copyCode: "复制代码",
-        },
-        search: {
-            untitled: "无标题",
-            loadFailure: "初始化搜索引擎失败",
-            input: "请输入内容...",
-        },
-        darkMode: {
-            dark: "切换到夜间模式",
-            light: "切换到日间模式"
-        }
-    },creatTime: "2020\/6\/12"}
-</script>
-<script type="text/javascript" src="/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js" defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ&#43;6P7cT&#43;B0YgL4dSqRg="></script><script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('\/sw.js');
-        });
-    }
-</script>
-<script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
-    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
-    function googleTranslateElementInit(){
-        new google.translate.TranslateElement({
-            pageLanguage: 'zh-cn',
-            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
-            autoDisplay:false
-        },'google_translate_element');
-    }
-</script>
-
-
-
-
-
-<script>
-    
-    
-</script>
-
-<script data-swup-reload-script>
-    
-    
-</script>
-</footer>
-</div>
-        </div><a
-        href="#nav"
-        title="返回顶部"
-        id="back-top"
-        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
-    >
-        <div class="relative">
-            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
-                <i class="eva eva-arrow-upward-outline"></i>
-            </div>
-            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
-                <circle
-                    transform="rotate(-90, 27 , 27)"
-                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
-                    cx="27"
-                    cy="27"
-                    r="25"
-                    fill="none"
-                    stroke-width="4"
-                    stroke-linecap="round"
-                    stroke="var(--theme)"
-                />
-            </svg>
-        </div>
-    </a><div id="i18nlist"></div><noscript>
-    <style>
-        .dark-mode-switch,
-        #run-time,
-        #bionicReading,
-        .noscript-hidden,
-        [data-clipboard-text],
-        [data-lazyload] {
-            display: none;
-        }
-        #back-top {
-            opacity: 1;
-        }
-        .noscript-show {
-            display: initial;
-        }
-    </style>
-</noscript>
-</body>
-</html>
+<!doctype html><html lang=zh-cn class=lang-zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=keywords content="Linux,Mongo,Hugo,Hugo Theme,Luna,"><meta name=description content="部署副本集 1.0 更改Mongo配置文件 1[root@localhost mongo]# vim conf/mongo.conf 2port=27017 3fork=true 4logpath=/usr/local/mongo/logs/mongodb.log 5logappend=true 6dbpath=/usr/local/mongo/data 7replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo 1[root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 1[root@localhost mongo]# mongo 2&amp;gt; conf= 3 {"><meta itemprop=description content="部署副本集 1.0 更改Mongo配置文件 1[root@localhost mongo]# vim conf/mongo.conf 2port=27017 3fork=true 4logpath=/usr/local/mongo/logs/mongodb.log 5logappend=true 6dbpath=/usr/local/mongo/data 7replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo 1[root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 1[root@localhost mongo]# mongo 2&amp;gt; conf= 3 {"><meta http-equiv=x-ua-compatible content="ie=edge"><meta itemprop=name content="Mongo部署副本集 - Cameliya"><link href=https://tec.mletter.cn/index.xml title="Mongo部署副本集 - Cameliya" type=application/rss+xml rel=alternate><title>Mongo部署副本集 - Cameliya</title><link rel=stylesheet href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k="><meta property="og:site_name" content="Mongo部署副本集 - Cameliya"><meta property="og:type" content="article"><meta property="og:title" content="Mongo部署副本集"><meta property="og:description" content="部署副本集 1.0 更改Mongo配置文件 1[root@localhost mongo]# vim conf/mongo.conf 2port=27017 3fork=true 4logpath=/usr/local/mongo/logs/mongodb.log 5logappend=true 6dbpath=/usr/local/mongo/data 7replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo 1[root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 1[root@localhost mongo]# mongo 2&amp;gt; conf= 3 {"><meta property="og:url" content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"><meta property="article:publisher" content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"><meta property="article:published_time" content="2020-10-26T15:27:08+08:00"><meta property="article:modified_time" content="2022-03-21T13:45:00+08:00"><meta name=theme-color content="#95C7E0"><meta name=mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="Mongo部署副本集 - Cameliya"><meta name=apple-mobile-web-app-status-bar-style content="white"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content="@Ice_Hazymoon"><meta name=twitter:creator content="@Ice_Hazymoon"><meta name=twitter:title content="Mongo部署副本集 - Cameliya"><meta name=twitter:description content="部署副本集 1.0 更改Mongo配置文件 1[root@localhost mongo]# vim conf/mongo.conf 2port=27017 3fork=true 4logpath=/usr/local/mongo/logs/mongodb.log 5logappend=true 6dbpath=/usr/local/mongo/data 7replSet=rs0 # 加入副本集名称,此名称要一致 启动Mongo 1[root@localhost mongo]# mongod -f conf/mongo.conf 1.1 主Mongo配置 1[root@localhost mongo]# mongo 2&amp;gt; conf= 3 {"><meta name=twitter:url content="https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/"><meta name=twitter:image content><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=manifest href=/manifest.json><link href=/icon.png rel="shortcut icon"><link href=/icon.png rel=bookmark><link rel=apple-touch-icon href=/icon.png><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Mongo部署副本集","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/tec.mletter.cn\/2020\/10\/26\/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html\/"},"genre":"posts","keywords":"Linux, Mongo","wordcount":631,"url":"https:\/\/tec.mletter.cn\/2020\/10\/26\/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html\/","datePublished":"2020-10-26T15:27:08\u002b08:00","dateModified":"2022-03-21T13:45:00\u002b08:00","author":{"@type":"Person","name":"Cameliya"},"description":""}</script></head><body class="dark:bg-darkBg dark:text-darkText"><div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id=nav class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10"><div class="route-items flex w-full items-center justify-around"><a title=首页 data-active-link=/ href=/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
+</a><a title=关于我 data-active-link=/about/ href=/about/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
+</a><a title=朋友们 data-active-link=/link/ href=/link/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
+</a><a title=归档 data-active-link=/archives/ href=/archives/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
+</a><a title=Repo data-active-link=/repo/ href=/repo/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
+</a><a title=搜索 data-active-link=/search/ href=/search/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span></a></div></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none"><i class="eva eva-moon opacity-20 dark:opacity-70"></i></div></header><main class="relative flex flex-grow mt-28 md:mt-20" id=swup><style>:root{--font:JetBrains Mono}</style><div class="type-posts layout- w-full"><div class="relative h-full"><div class="relative h-full"><div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class=relative><div><div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">Mongo部署副本集</div></div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10"><div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-clock-outline mr-1"></i>
+<span><time title="发布于 2020年10月26日 15:27:08" datetime=2020-10-26T15:27:08+08:00>2020年10月26日</time></span></div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-edit-2-outline mr-1"></i>
+<span><time title="最后修改于：2022年3月21日 13:45:00" datetime=2022-03-21T13:45:00+08:00>2022年3月21日</time></span></span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-flag-outline mr-1"></i>
+<span>2 分钟</span></div></div><div class="mb-3 flex items-center"><i class="eva eva-pricetags-outline mr-1"></i>
+<span class=mr-3>标签</span><a href=/tags/linux title=Linux class="group mr-2 flex items-center text-sm">
+<i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+<span class="text-gray-400 group-hover:text-theme">Linux</span>
+</a><a href=/tags/mongo title=Mongo class="group mr-2 flex items-center text-sm"><i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+<span class="text-gray-400 group-hover:text-theme">Mongo</span></a></div><div class="mb-3 flex items-center"><i class="eva eva-folder-outline mr-1"></i>
+<span class=mr-3>分类</span><a href=/categories/linux title=Linux class="group flex items-center text-sm">
+<span class="text-gray-400 group-hover:text-theme">Linux</span>
+<span class="mx-0.5 group-last:hidden">,</span></a></div></div><aside class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4"><header><h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1></header><nav id=TableOfContents><ul><li><a href=#部署副本集>部署副本集</a><ul><li></li></ul></li><li><a href=#开启安全验证>开启安全验证</a><ul><li></li></ul></li></ul></nav></aside><div class="border-b bg-blue-100 bg-opacity-20 p-6 dark:border-darkBorder dark:bg-darkBg md:px-10"><time datetime=2022-03-21T13:45:00+08:00>文章最后编辑于: <span class="mx-1 font-bold">233</span> 天前，文中所描述的信息可能已发生改变</time></div><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title=更快的阅读 id=bionicReading class="absolute right-0 top-0 cursor-pointer p-3"><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="10811"><path d="M480 192c-19.2.0-32-12.8-32-32V32c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4.0-19.2.0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2.0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4zM76.8 864l83.2 83.2L627.2 480 544 396.8 76.8 864zM992 576H864c-19.2.0-32-12.8-32-32s12.8-32 32-32h128c19.2.0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4.0-19.2.0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8.0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zm-512 0c-6.4.0-19.2.0-25.6-6.4l-96-96c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4.0-19.2.0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"/><path d="M544 640c-6.4.0-19.2.0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"/></svg></i><h2 class=group id=部署副本集>部署副本集<a href=#%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><h4 class=group id=10-更改mongo配置文件>1.0 更改Mongo配置文件<a href=#10-%e6%9b%b4%e6%94%b9mongo%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># vim conf/mongo.conf</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#8be9fd;font-style:italic>port</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>27017</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>fork</span><span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>logpath</span><span style=color:#ff79c6>=</span>/usr/local/mongo/logs/mongodb.log
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#8be9fd;font-style:italic>logappend</span><span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span><span style=color:#8be9fd;font-style:italic>dbpath</span><span style=color:#ff79c6>=</span>/usr/local/mongo/data
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span><span style=color:#8be9fd;font-style:italic>replSet</span><span style=color:#ff79c6>=</span>rs0 <span style=color:#6272a4># 加入副本集名称,此名称要一致</span>
+</span></span></code></pre></div><p><strong>启动Mongo</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># mongod -f conf/mongo.conf </span>
+</span></span></code></pre></div><h4 class=group id=11-主mongo配置>1.1 主Mongo配置<a href=#11-%e4%b8%bbmongo%e9%85%8d%e7%bd%ae><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span>[root@localhost mongo]# mongo
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span>&gt; conf=
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span>    {
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span>    &#34;_id&#34; : &#34;rs0&#34;,
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span>    &#34;members&#34; : [
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span>        { &#34;_id&#34; : 0, &#34;host&#34; : &#34;172.17.100.193:27017&#34; },
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span>        { &#34;_id&#34; : 1, &#34;host&#34; : &#34;172.17.100.191:27017&#34; }
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span>        ]
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span>    }
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span># 填写mongo的ip地址即可
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span>&gt; rs.initiate(conf) # 初始化副本集
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span><span>{ &#34;ok&#34; : 1 } # 如果出现ok1则表示成功
+</span></span></code></pre></div><h4 class=group id=12-副本集更新>1.2 副本集更新<a href=#12-%e5%89%af%e6%9c%ac%e9%9b%86%e6%9b%b4%e6%96%b0><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span><span style=color:#6272a4># 向副本集中添加成员</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span>rs.add<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;172.17.100.191:27017&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span> 
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span><span style=color:#6272a4># 从副本集中删除成员</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span>rs.remove<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;172.17.100.191:27017&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span> 
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span><span style=color:#6272a4># 向副本集中添加仲裁</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span>rs.addArb<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;172.17.100.191:27017&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span> 
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span><span style=color:#6272a4># 向副本集中添加备份节点</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span>rs.add<span style=color:#ff79c6>({</span><span style=color:#f1fa8c>&#34;_id&#34;</span>:3,<span style=color:#f1fa8c>&#34;host&#34;</span>:<span style=color:#f1fa8c>&#34;172.17.100.191:27017&#34;</span>,<span style=color:#f1fa8c>&#34;priority&#34;</span>:0,<span style=color:#f1fa8c>&#34;hidden&#34;</span>:true<span style=color:#ff79c6>})</span>  // _id请依次递增
+</span></span></code></pre></div><h4 class=group id=14-更新副本集优先级>1.4 更新副本集优先级<a href=#14-%e6%9b%b4%e6%96%b0%e5%89%af%e6%9c%ac%e9%9b%86%e4%bc%98%e5%85%88%e7%ba%a7><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#8be9fd;font-style:italic>cfg</span> <span style=color:#ff79c6>=</span> rs.conf<span style=color:#ff79c6>()</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>cfg.members<span style=color:#ff79c6>[</span>0<span style=color:#ff79c6>]</span>.priority <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>5</span>  <span style=color:#6272a4>#  设置权重为5</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#6272a4># members[0]里面填写你要更改的节点数字 id是1就写1 是2就设置2</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span>rs.reconfig<span style=color:#ff79c6>(</span>cfg<span style=color:#ff79c6>)</span> <span style=color:#6272a4># 重新加载配置</span>
+</span></span></code></pre></div><h4 class=group id=15-查看副本集状态>1.5 查看副本集状态<a href=#15-%e6%9f%a5%e7%9c%8b%e5%89%af%e6%9c%ac%e9%9b%86%e7%8a%b6%e6%80%81><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>rs0:PRIMARY&gt; rs.status<span style=color:#ff79c6>()</span>
+</span></span></code></pre></div><h4 class=group id=16-查看副本集的配置信息>1.6 查看副本集的配置信息<a href=#16-%e6%9f%a5%e7%9c%8b%e5%89%af%e6%9c%ac%e9%9b%86%e7%9a%84%e9%85%8d%e7%bd%ae%e4%bf%a1%e6%81%af><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>rs0:PRIMARY&gt; rs.conf<span style=color:#ff79c6>()</span>
+</span></span></code></pre></div><h4 class=group id=17-查看节点复制信息>1.7 查看节点复制信息<a href=#17-%e6%9f%a5%e7%9c%8b%e8%8a%82%e7%82%b9%e5%a4%8d%e5%88%b6%e4%bf%a1%e6%81%af><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>rs0:PRIMARY&gt; db.printSlaveReplicationInfo<span style=color:#ff79c6>()</span>
+</span></span></code></pre></div><h4 class=group id=18-插入测试数据>1.8 插入测试数据<a href=#18-%e6%8f%92%e5%85%a5%e6%b5%8b%e8%af%95%e6%95%b0%e6%8d%ae><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>rs0:PRIMARY&gt; <span style=color:#ff79c6>for</span><span style=color:#ff79c6>(</span>var <span style=color:#8be9fd;font-style:italic>i</span><span style=color:#ff79c6>=</span>0;i&lt;10000;i++<span style=color:#ff79c6>){</span>db.customer.insert<span style=color:#ff79c6>({</span><span style=color:#f1fa8c>&#34;name&#34;</span>:<span style=color:#f1fa8c>&#34;user&#34;</span>+i<span style=color:#ff79c6>})}</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>WriteResult<span style=color:#ff79c6>({</span> <span style=color:#f1fa8c>&#34;nInserted&#34;</span> : <span style=color:#bd93f9>1</span> <span style=color:#ff79c6>})</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>rs0:PRIMARY&gt; db.customer.count<span style=color:#ff79c6>()</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#bd93f9>10000</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#6272a4>#  在Secondary上查看客户数据是否已经同步：</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span>rs0:SECONDARY&gt; rs.slaveOk<span style=color:#ff79c6>()</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span>rs0:SECONDARY&gt; db.customer.count<span style=color:#ff79c6>()</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span><span style=color:#bd93f9>10000</span>
+</span></span></code></pre></div><h2 class=group id=开启安全验证>开启安全验证<a href=#%e5%bc%80%e5%90%af%e5%ae%89%e5%85%a8%e9%aa%8c%e8%af%81><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h2><blockquote><p>先停止从上面的mongo然后在停止主上面的mongo</p></blockquote><ul><li>在master上进行操作</li></ul><h4 class=group id=20-创建用户>2.0 创建用户<a href=#20-%e5%88%9b%e5%bb%ba%e7%94%a8%e6%88%b7><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>rs0:PRIMARY&gt; use admin
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>rs0:PRIMARY&gt; db.createUser<span style=color:#ff79c6>({</span>user: <span style=color:#f1fa8c>&#39;root&#39;</span>, pwd: <span style=color:#f1fa8c>&#39;123.com&#39;</span>, roles: <span style=color:#ff79c6>[</span><span style=color:#f1fa8c>&#39;root&#39;</span><span style=color:#ff79c6>]})</span> 
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#6272a4>#  创建root用户并且给予root权限,密码为123.com</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#6272a4># 例如对某个库授权</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>rs0:PRIMARY&gt; use <span style=color:#8be9fd;font-style:italic>test</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>rs0:PRIMARY&gt; db.createUser<span style=color:#ff79c6>({</span>user:<span style=color:#f1fa8c>&#34;admin&#34;</span>,pwd:<span style=color:#f1fa8c>&#34;admin&#34;</span>,roles:<span style=color:#ff79c6>[{</span>role:<span style=color:#f1fa8c>&#34;readWrite&#34;</span>,db:<span style=color:#f1fa8c>&#34;test&#34;</span><span style=color:#ff79c6>}]})</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#6272a4># role角色具体可以看官网的分配权限</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#6272a4># db: 指定授权的库</span>
+</span></span></code></pre></div><h4 class=group id=21-创建秘钥文件>2.1 创建秘钥文件<a href=#21-%e5%88%9b%e5%bb%ba%e7%a7%98%e9%92%a5%e6%96%87%e4%bb%b6><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># openssl rand -base64 666 &gt; /usr/local/mongo/keyfile</span>
+</span></span></code></pre></div><p>将生成的keyFile文件拷贝到其他节点服务器上，并修改文件的操作权限为 600</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#6272a4># 更新启动配置文件,master上配置</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># vim conf/mongo.conf </span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>auth</span><span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>oplogSize</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>100</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#8be9fd;font-style:italic>keyFile</span><span style=color:#ff79c6>=</span>/usr/local/mongo/keyfile
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#6272a4># 更新启动配置文件,slave上配置</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># vim conf/mongo.conf </span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>oplogSize</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>100</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#8be9fd;font-style:italic>keyFile</span><span style=color:#ff79c6>=</span>/usr/local/mongo/keyfile
+</span></span></code></pre></div><h4 class=group id=22-启动副本集>2.2 启动副本集<a href=#22-%e5%90%af%e5%8a%a8%e5%89%af%e6%9c%ac%e9%9b%86><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># mongod -f /usr/local/mongo/conf/mongo.conf</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#6272a4># 先开master</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#ff79c6>[</span>root@localhost mongo<span style=color:#ff79c6>]</span><span style=color:#6272a4># mongod -f /usr/local/mongo/conf/mongo.conf </span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#6272a4># 然后再从上开启服务,不加auth认证</span>
+</span></span></code></pre></div></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Twitter" href="https://twitter.com/share?&text=%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86%201.0%20%e6%9b%b4%e6%94%b9Mongo%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%201[root@localhost%20mongo]#%20vim%20conf/mongo.conf%202port=27017%203fork=true%204logpath=/usr/local/mongo/logs/mongodb.log%205logappend=true%206dbpath=/usr/local/mongo/data%207replSet=rs0%20#%20%e5%8a%a0%e5%85%a5%e5%89%af%e6%9c%ac%e9%9b%86%e5%90%8d%e7%a7%b0,%e6%ad%a4%e5%90%8d%e7%a7%b0%e8%a6%81%e4%b8%80%e8%87%b4%20%e5%90%af%e5%8a%a8Mongo%201[root@localhost%20mongo]#%20mongod%20-f%20conf/mongo.conf%201.1%20%e4%b8%bbMongo%e9%85%8d%e7%bd%ae%201[root@localhost%20mongo]#%20mongo%202&amp;gt;%20conf=%203%20%7b&url=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-twitter hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Facebook" href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-facebook hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title=分享到微博 href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/&title=Mongo%e9%83%a8%e7%bd%b2%e5%89%af%e6%9c%ac%e9%9b%86&sudaref=tec.mletter.cn" target=_blank rel="noopener noreferrer"><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"><path d="M456.991736 557.336482c-107.598583.0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583.0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185.0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185.0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535zm93.090909-91.881936c-14.507674.0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682"/><path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683"/><path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152.0 500.514758.0 686.696576S235.749705 1024 527.112161 1024s527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439c-205.525383.0-372.363636-112.434474-372.363636-251.466352s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684"/><path d="M1021.582054 423.140496c-3.626919.0-6.044864.0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348.0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566.0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665.0 187.390791 84.628099 187.390791 187.390791.0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685"/><path d="M1146.106257 473.917355c-2.417946.0-6.044864.0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397.0-153.539552-126.942149-280.481701-281.690673-280.481701-20.552538.0-37.478158-16.92562-37.478158-37.478158S816.056671.0 836.609209.0c197.062574.0 356.646989 159.584416 356.646989 356.646989.0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686"/></svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title=复制链接 data-clipboard-text=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block"><i title=二维码 class="eva show-qrcode eva-smartphone hover:text-theme"></i><div class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"><img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tec.mletter.cn/2020/10/26/mongo%E9%83%A8%E7%BD%B2%E5%89%AF%E6%9C%AC%E9%9B%86.html/" alt=二维码></div></div></div><div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl"><div><a href=/2020/10/26/nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2.html/ title=Nacos集群部署 class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText" style=visibility:visible><span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-left-outline"></i></span>
+<span>上一篇</span></a></div><div class="hidden items-center text-xs xl:flex">除特殊声明外，本博客一律使用以下协议进行授权 「
+<a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme>署名 - 非商业性使用 - 禁止演绎 4.0</a>
+」</div><div class="flex items-center text-sm xl:hidden"><a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme><img src=/Cc-by-nc-nd.svg alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class=w-24></a></div><a href=/2020/11/24/linux-shell-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7%E9%9B%86%E9%94%A6-find%E7%AF%87.html/ title="Linux Shell 文本处理工具集锦-find篇" class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText" style=visibility:visible><span>下一篇</span>
+<span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-right-outline"></i></span></a></div><div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder"><script src=https://giscus.app/client.js data-repo=waidinsamkeit/tecoum data-repo-id=R_kgDOH4NyMg data-category=Announcements data-category-id=DIC_kwDOH4NyMs4CRCX2 data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-theme=light data-lang=zh-CN data-loading=true crossorigin=anonymous data-swup-reload-script async></script><script data-swup-reload-script>(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onThemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})();function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}</script></div></div></div></div></div></main><footer><div class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"><div class="mb-2 flex items-center justify-between text-center md:mb-0"><span>© 2020 - 2022</span>
+<span class="mx-1.5 opacity-50">| </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://github.com/Ice-Hazymoon/hugo-theme-luna target=_blank rel="noopener noreferrer">Luna</a> 驱动</div><div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block">| </span><a data-no-swup href=https://tec.mletter.cn/index.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082zm351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298.002 32.978-15.31 31.99-33.58zm288.498.576c-16.788-467.64-393.05-846.104-862.974-862.974C78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-.002 32.658-14.948 32.01-33.008z" p-id="3092"/></svg></span><span>RSS</span>
+</a><a data-no-swup href=https://tec.mletter.cn/sitemap.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822.0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822.0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512.0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778.0 659.91.0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822.0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067.0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822.0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823.0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"/></svg></span><span>Sitemap</span></a><div id=google_translate_element class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id=run-time class="mt-2 flex-grow text-right md:mt-0"><span>运行时间： </span><b id=run-time-d>0</b>
+<span class=text-xs>天</span>
+<b id=run-time-h>0</b>
+<span class=text-xs>小时</span>
+<b id=run-time-m>0</b>
+<span class=text-xs>分钟</span>
+<b id=run-time-s>0</b>
+<span class=text-xs>秒</span></div></div><script type=text/javascript>window.__theme={cdn:"",pjax:!0,isServer:!1,$version:"",lang:"zh-cn",imageZoom:!0,lazyload:!0,bionicReading:{enabled:!0,skipLinks:!1,autoBionic:!1,excludeWords:[],excludeClasses:["github"],excludeNodeNames:[]},katex:!0,search:!0,backtop:!0,pangu:!0,autoDarkMode:!0,googleAnalytics:!1,hugoEncrypt:{wrongPasswordText:"密码错误",userStorage:window.sessionStorage},console:{enabled:!1,leftColor:"#dd6065",rightColor:"#feb462",leftText:"Hugo Theme Luna",rightText:"Powered by Hugo ❤ Luna"},assets:{error_svg:"/images/error.svg",search_svg:"/images/search.svg"},i18n:{copy:{success:"复制成功",failed:"复制失败，请手动复制",copyCode:"复制代码"},search:{untitled:"无标题",loadFailure:"初始化搜索引擎失败",input:"请输入内容..."},darkMode:{dark:"切换到夜间模式",light:"切换到日间模式"}},creatTime:"2020/6/12"}</script><script type=text/javascript src=/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ+6P7cT+B0YgL4dSqRg="></script><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")})</script>
+<script type=text/javascript src=/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type=text/javascript>window.translateelement_styles="/sass/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:"zh-cn",includedLanguages:"af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi",autoDisplay:!1},"google_translate_element")}</script>
+<script></script><script data-swup-reload-script></script></footer></div></div><a href=#nav title=返回顶部 id=back-top class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"><div class=relative><div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl"><i class="eva eva-arrow-upward-outline"></i></div><svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet"><circle transform="rotate(-90, 27 , 27)" style="stroke-dasharray:157,157;stroke-dashoffset:157" cx="27" cy="27" r="25" fill="none" stroke-width="4" stroke-linecap="round" stroke="var(--theme)"/></svg></div></a><div id=i18nlist></div><noscript><style>.dark-mode-switch,#run-time,#bionicReading,.noscript-hidden,[data-clipboard-text],[data-lazyload]{display:none}#back-top{opacity:1}.noscript-show{display:initial}</style></noscript></body></html>

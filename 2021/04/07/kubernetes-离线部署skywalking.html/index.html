@@ -1,738 +1,256 @@
-<!DOCTYPE html>
-<html lang="zh-cn" class="lang-zh-cn">
-    <head><meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="keywords" content="Kubernetes,Hugo,Hugo Theme,Luna," /><meta name="description" content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式" />
-<meta itemprop="description" content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<meta itemprop="name" content="Kubernetes-离线部署skywalking - Cameliya" />
-<link href="https://tec.mletter.cn/index.xml" title="Kubernetes-离线部署skywalking - Cameliya" type="application/rss+xml" rel="alternate" />
-<title>Kubernetes-离线部署skywalking - Cameliya</title><link rel="stylesheet" href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k=" /><meta property="og:site_name" content="Kubernetes-离线部署skywalking - Cameliya" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="Kubernetes-离线部署skywalking" />
-<meta property="og:description" content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式" />
-<meta property="og:url" content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" /><meta property="article:publisher" content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" /><meta property="article:published_time" content="2021-04-07T11:12:08&#43;08:00" /><meta property="article:modified_time" content="2022-02-15T14:48:04&#43;08:00" /><meta name="theme-color" content="#95C7E0" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Kubernetes-离线部署skywalking - Cameliya" />
-<meta name="apple-mobile-web-app-status-bar-style" content="white" />
-<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Ice_Hazymoon" />
-    <meta name="twitter:creator" content="@Ice_Hazymoon" /><meta name="twitter:title" content="Kubernetes-离线部署skywalking - Cameliya" />
-<meta name="twitter:description" content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式" />
-<meta name="twitter:url" content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" /><meta name="twitter:image" content="" /><link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /><link rel="manifest" href="/manifest.json" /><link href="/icon.png" rel="shortcut icon" />
-<link href="/icon.png" rel="Bookmark" />
-<link rel="apple-touch-icon" href="/icon.png" /><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Kubernetes-离线部署skywalking",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https:\/\/tec.mletter.cn\/2021\/04\/07\/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html\/"
-  },"genre": "posts","keywords": "Kubernetes","wordcount": 891 ,
-  "url": "https:\/\/tec.mletter.cn\/2021\/04\/07\/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html\/","datePublished": "2021-04-07T11:12:08\u002b08:00","dateModified": "2022-02-15T14:48:04\u002b08:00","author": {
-    "@type": "Person",
-    "name": "Cameliya"
-  },"description": ""
-}
-</script>
-
-
-    </head>
-    
-    <body class="dark:bg-darkBg dark:text-darkText">
-        <div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl">
-            <div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id="nav" class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10">
-        <div class="route-items flex w-full items-center justify-around"><a
-                    title="首页"
-                    data-active-link="/"
-                    href="/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
-                </a><a
-                    title="关于我"
-                    data-active-link="/about/"
-                    href="/about/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
-                </a><a
-                    title="朋友们"
-                    data-active-link="/link/"
-                    href="/link/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
-                </a><a
-                    title="归档"
-                    data-active-link="/archives/"
-                    href="/archives/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
-                </a><a
-                    title="Repo"
-                    data-active-link="/repo/"
-                    href="/repo/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
-                </a><a
-                    title="搜索"
-                    data-active-link="/search/"
-                    href="/search/"
-                    class=" relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"
-                >
-                    <i
-                        class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"
-                    ></i>
-                    <span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span>
-                </a>
-        </div>
-    </nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none">
-    <i class="eva eva-moon opacity-20 dark:opacity-70"></i>
-</div>
-</header>
-<main class="relative flex flex-grow  mt-28 md:mt-20 " id="swup"><style>:root {
-        --font:JetBrainsMono-Medium;
-    }</style><div class="type-posts layout- w-full"><div class="relative h-full">
-    <div class="relative h-full">
-        <div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class="relative"><div>
-    <div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">
-        Kubernetes-离线部署skywalking
-    </div>
-</div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10">
-    <div>
-        <div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-            <i class="eva eva-clock-outline mr-1"></i>
-            <span>
-                <time
-                    title="发布于 2021年4月7日 11:12:08"datetime="2021-04-07T11:12:08+08:00">2021年4月7日</time
-                >
-            </span>
-        </div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                    <i class="eva eva-edit-2-outline mr-1"></i>
-                    <span>
-                        <time
-                            title="最后修改于：2022年2月15日 14:48:04"datetime="2022-02-15T14:48:04+08:00">2022年2月15日</time
-                        >
-                    </span>
-                </span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full">
-                <i class="eva eva-flag-outline mr-1"></i>
-                <span>2 分钟</span>
-            </div></div><div class="mb-3 flex items-center">
-            <i class="eva eva-pricetags-outline mr-1"></i>
-            <span class="mr-3">标签</span><a href="/tags/kubernetes" title="Kubernetes" class="group mr-2 flex items-center text-sm">
-                    <i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
-                    <span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
-                </a></div><div class="mb-3 flex items-center">
-            <i class="eva eva-folder-outline mr-1"></i>
-            <span class="mr-3">分类</span><a href="/categories/kubernetes" title="Kubernetes" class="group flex items-center text-sm">
-                    <span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
-                    <span class="mx-0.5 group-last:hidden">,</span>
-                </a></div></div><aside
-            class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4 "
-        >
-            <header>
-                <h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1>
-            </header>
-            <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#在线部署chartmuseum">在线部署chartmuseum</a></li>
-        <li><a href="#下载skywalking包">下载Skywalking包</a></li>
-        <li><a href="#添加elasticsearch仓库">添加elasticsearch仓库</a></li>
-        <li><a href="#上传本地helm">上传本地Helm</a></li>
-        <li><a href="#部署skywalking">部署skywalking</a></li>
-        <li><a href="#准备离线镜像">准备离线镜像</a></li>
-        <li><a href="#helm中的elasticsearch可能会存在问题">Helm中的Elasticsearch可能会存在问题</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-        </aside><div class="border-b bg-blue-100 bg-opacity-20 p-6 dark:border-darkBorder dark:bg-darkBg md:px-10">
-            <time
-                datetime="2022-02-15T14:48:04+08:00"
-                >文章最后编辑于: <span class="mx-1 font-bold">262</span> 天前，文中所描述的信息可能已发生改变</time
-            >
-        </div><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title="更快的阅读" id="bionicReading" class="absolute right-0 top-0 cursor-pointer p-3"
-            ><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10811" ><path d="M480 192c-19.2 0-32-12.8-32-32v-128c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4 0-19.2 0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2 0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4z m-83.2-160l83.2 83.2 467.2-467.2-83.2-83.2-467.2 467.2zM992 576h-128c-19.2 0-32-12.8-32-32s12.8-32 32-32h128c19.2 0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4 0-19.2 0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8 0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zM256 288c-6.4 0-19.2 0-25.6-6.4L134.4 185.6c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4 0-19.2 0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l96 96c12.8 12.8 12.8 32 0 44.8 0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"></path><path d="M544 640c-6.4 0-19.2 0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4 0-51.2s32-12.8 44.8 0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"></path></svg></i
-        ><blockquote>
-<p>注意：请各位记住把所有离线包全拿到本地&hellip;..</p>
-</blockquote>
-
-
-<h3 class="group " id="在线部署chartmuseum"
-    >在线部署chartmuseum<a href="#%e5%9c%a8%e7%ba%bf%e9%83%a8%e7%bd%b2chartmuseum"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<p>直接使用最简单的 docker run 方式，使用local 本地存储方式，通过 -v 映射到宿主机 /opt/charts
-更多支持安装方式见官网</p>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir /opt/charts
-</span></span><span style="display:flex;"><span>docker run -d <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  -p 8080:8080 <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  -e DEBUG=<span style="color:#ff0;font-weight:bold">1</span> <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  -e STORAGE=<span style="color:#fff;font-weight:bold">local</span> <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  -e STORAGE_LOCAL_ROOTDIR=/charts <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  -v /opt/charts:/charts <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  chartmuseum/chartmuseum:latest
-</span></span></code></pre></div>
-
-<h3 class="group " id="下载skywalking包"
-    >下载Skywalking包<a href="#%e4%b8%8b%e8%bd%bdskywalking%e5%8c%85"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/apache/skywalking-kubernetes.git
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 更换仓库</span>
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">cd</span> skywalking-kubernetes-master/chart/skywalking/
-</span></span><span style="display:flex;"><span>vim Chats.yaml
-</span></span><span style="display:flex;"><span>dependencies:
-</span></span><span style="display:flex;"><span>  - name: elasticsearch
-</span></span><span style="display:flex;"><span>    version: ~7.12.1  <span style="color:#007f7f"># 官网的版本号为7.5.1 最新的elastic版本为7.12.1</span>
-</span></span><span style="display:flex;"><span>    repository: http://localhost:8080 <span style="color:#007f7f"># 修改为你本地的Repo地址</span>
-</span></span><span style="display:flex;"><span>    condition: elasticsearch.enabled
-</span></span></code></pre></div>
-
-<h3 class="group " id="添加elasticsearch仓库"
-    >添加elasticsearch仓库<a href="#%e6%b7%bb%e5%8a%a0elasticsearch%e4%bb%93%e5%ba%93"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add elastic https://helm.elastic.co
-</span></span><span style="display:flex;"><span>helm pull elastic/elasticsearch  <span style="color:#007f7f"># 把elasticsearch内容拉下来</span>
-</span></span></code></pre></div>
-
-<h3 class="group " id="上传本地helm"
-    >上传本地Helm<a href="#%e4%b8%8a%e4%bc%a0%e6%9c%ac%e5%9c%b0helm"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<blockquote>
-<p>以防万一请先安装helmpush插件</p>
-<p><a
-    class="link"
-    href="https://github.com/chartmuseum/helm-push"target="_blank" rel="noopener">https://github.com/chartmuseum/helm-push</a
->
-</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add chartmuseum http://localhost:8080
-</span></span><span style="display:flex;"><span>curl --data-binary <span style="color:#0ff;font-weight:bold">&#34;@elasticsearch-7.12.1.tgz&#34;</span> http://localhost:8080/api/charts
-</span></span><span style="display:flex;"><span>helm push /root/skywalking-kubernetes-master/chart/skywalking/ chartmuseum
-</span></span><span style="display:flex;"><span>helm repo update <span style="color:#007f7f"># 更新仓库</span>
-</span></span></code></pre></div><p><strong>你可以尝试搜索一下</strong></p>
-<blockquote>
-<p>保证仓库中存在elasticsarch和skywalking</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>[root@k-master1 ~]<span style="color:#007f7f"># helm search repo</span>
-</span></span><span style="display:flex;"><span>NAME                            CHART VERSION   APP VERSION     DESCRIPTION                                       
-</span></span><span style="display:flex;"><span>chartmuseum/elasticsearch       7.12.1          7.12.1          Official Elastic helm chart <span style="color:#fff;font-weight:bold">for</span> Elasticsearch     
-</span></span><span style="display:flex;"><span>chartmuseum/skywalking          4.0.0                           Apache SkyWalking APM System
-</span></span></code></pre></div>
-
-<h3 class="group " id="部署skywalking"
-    >部署skywalking<a href="#%e9%83%a8%e7%bd%b2skywalking"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">cd</span> skywalking-kubernetes/chart
-</span></span><span style="display:flex;"><span>helm dep up skywalking
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># change the release name according to your scenario</span>
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">export</span> SKYWALKING_RELEASE_NAME=skywalking
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># change the namespace according to your scenario</span>
-</span></span><span style="display:flex;"><span><span style="color:#fff;font-weight:bold">export</span> SKYWALKING_RELEASE_NAMESPACE=default
-</span></span><span style="display:flex;"><span>helm install <span style="color:#0ff;font-weight:bold">&#34;</span><span style="color:#0ff;font-weight:bold">${</span>SKYWALKING_RELEASE_NAME<span style="color:#0ff;font-weight:bold">}</span><span style="color:#0ff;font-weight:bold">&#34;</span> skywalking -n <span style="color:#0ff;font-weight:bold">&#34;</span><span style="color:#0ff;font-weight:bold">${</span>SKYWALKING_RELEASE_NAMESPACE<span style="color:#0ff;font-weight:bold">}</span><span style="color:#0ff;font-weight:bold">&#34;</span> <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  --set oap.image.tag=8.1.0-es7 <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  --set oap.storageType=elasticsearch7 <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  --set ui.image.tag=8.1.0 <span style="color:#0ff;font-weight:bold">\
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold"></span>  --set elasticsearch.imageTag=7.5.1
-</span></span><span style="display:flex;"><span>helm uninstall skywalking <span style="color:#007f7f"># 卸载skywalking</span>
-</span></span></code></pre></div>
-
-<h3 class="group " id="准备离线镜像"
-    >准备离线镜像<a href="#%e5%87%86%e5%a4%87%e7%a6%bb%e7%ba%bf%e9%95%9c%e5%83%8f"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>busybox:1.30
-</span></span><span style="display:flex;"><span>docker.elastic.co/elasticsearch/elasticsearch:7.5.1
-</span></span><span style="display:flex;"><span>apache/skywalking-oap-server:8.1.0-es7
-</span></span><span style="display:flex;"><span>apache/skywalking-ui:8.1.0
-</span></span><span style="display:flex;"><span>chartmuseum/chartmuseum:latest
-</span></span><span style="display:flex;"><span><span style="color:#007f7f"># 然后打包 上传....就OK</span>
-</span></span></code></pre></div>
-
-<h3 class="group " id="helm中的elasticsearch可能会存在问题"
-    >Helm中的Elasticsearch可能会存在问题<a href="#helm%e4%b8%ad%e7%9a%84elasticsearch%e5%8f%af%e8%83%bd%e4%bc%9a%e5%ad%98%e5%9c%a8%e9%97%ae%e9%a2%98"
-        ><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a
-></h3>
-
-<blockquote>
-<p>你们也可以用我的这个elasticsearch配置 注意修改PVC</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="font-weight:bold">kind</span>: StatefulSet
-</span></span><span style="display:flex;"><span><span style="font-weight:bold">apiVersion</span>: apps/v1
-</span></span><span style="display:flex;"><span><span style="font-weight:bold">metadata</span>:
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">name</span>: elasticsearch-master
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">namespace</span>: default
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">labels</span>:
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">app</span>: elasticsearch-master
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">app.kubernetes.io/managed-by</span>: Helm
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">chart</span>: elasticsearch
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">heritage</span>: Helm
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">release</span>: skywalking
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">annotations</span>:
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">esMajorVersion</span>: <span style="color:#0ff;font-weight:bold">&#39;7&#39;</span>
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">meta.helm.sh/release-name</span>: skywalking
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">meta.helm.sh/release-namespace</span>: default
-</span></span><span style="display:flex;"><span><span style="font-weight:bold">spec</span>:
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">replicas</span>: <span style="color:#ff0;font-weight:bold">3</span>
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">selector</span>:
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">matchLabels</span>:
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">app</span>: elasticsearch-master
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">template</span>:
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">metadata</span>:
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">name</span>: elasticsearch-master
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">creationTimestamp</span>: <span style="color:#fff;font-weight:bold">null</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">labels</span>:
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">app</span>: elasticsearch-master
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">chart</span>: elasticsearch
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">heritage</span>: Helm
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">release</span>: skywalking
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">spec</span>:
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">initContainers</span>:
-</span></span><span style="display:flex;"><span>        - <span style="font-weight:bold">name</span>: configure-sysctl
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">image</span>: <span style="color:#0ff;font-weight:bold">&#39;docker.elastic.co/elasticsearch/elasticsearch:7.5.1&#39;</span>
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">command</span>:
-</span></span><span style="display:flex;"><span>            - sysctl
-</span></span><span style="display:flex;"><span>            - <span style="color:#0ff;font-weight:bold">&#39;-w&#39;</span>
-</span></span><span style="display:flex;"><span>            - vm.max_map_count=262144
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">resources</span>: {}
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">terminationMessagePath</span>: /dev/termination-log
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">terminationMessagePolicy</span>: File
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">imagePullPolicy</span>: IfNotPresent
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">securityContext</span>:
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">privileged</span>: <span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">runAsUser</span>: <span style="color:#ff0;font-weight:bold">0</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">containers</span>:
-</span></span><span style="display:flex;"><span>        - <span style="font-weight:bold">name</span>: elasticsearch
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">image</span>: <span style="color:#0ff;font-weight:bold">&#39;docker.elastic.co/elasticsearch/elasticsearch:7.5.1&#39;</span>
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">ports</span>:
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: http
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">containerPort</span>: <span style="color:#ff0;font-weight:bold">9200</span>
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">protocol</span>: TCP
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: transport
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">containerPort</span>: <span style="color:#ff0;font-weight:bold">9300</span>
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">protocol</span>: TCP
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">volumeMounts</span>:
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: datadir
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">mountPath</span>: /usr/share/elasticsearch/data
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">env</span>:
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: node.name
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">valueFrom</span>:
-</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">fieldRef</span>:
-</span></span><span style="display:flex;"><span>                  <span style="font-weight:bold">apiVersion</span>: v1
-</span></span><span style="display:flex;"><span>                  <span style="font-weight:bold">fieldPath</span>: metadata.name
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: cluster.initial_master_nodes
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: &gt;-<span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                </span>                elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2,
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: discovery.seed_hosts
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: elasticsearch-master-headless
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: cluster.name
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: elasticsearch
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: network.host
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: <span style="color:#ff0;font-weight:bold">0.0.0.0</span>
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: ES_JAVA_OPTS
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: <span style="color:#0ff;font-weight:bold">&#39;-Xmx1g -Xms1g&#39;</span>
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: node.data
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: <span style="color:#0ff;font-weight:bold">&#39;true&#39;</span>
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: node.ingest
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: <span style="color:#0ff;font-weight:bold">&#39;true&#39;</span>
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">name</span>: node.master
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">value</span>: <span style="color:#0ff;font-weight:bold">&#39;true&#39;</span>
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">resources</span>:
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">limits</span>:
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">cpu</span>: <span style="color:#0ff;font-weight:bold">&#39;1&#39;</span>
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">memory</span>: 2Gi
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">requests</span>:
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">cpu</span>: 100m
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">memory</span>: 2Gi
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">readinessProbe</span>:
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">exec</span>:
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">command</span>:
-</span></span><span style="display:flex;"><span>                - sh
-</span></span><span style="display:flex;"><span>                - <span style="color:#0ff;font-weight:bold">&#39;-c&#39;</span>
-</span></span><span style="display:flex;"><span>                - &gt;<span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  #!/usr/bin/env bash -e
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  # If the node is starting up wait for the cluster to be ready
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  (request params: &#39;wait_for_status=green&amp;timeout=1s&#39; )
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  # Once it has started only check that the node itself is
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  responding
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  START_FILE=/tmp/.es_start_file
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  http () {
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      local path=&#34;${1}&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      if [ -n &#34;${ELASTIC_USERNAME}&#34; ] &amp;&amp; [ -n &#34;${ELASTIC_PASSWORD}&#34; ]; then
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                        BASIC_AUTH=&#34;-u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      else
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                        BASIC_AUTH=&#39;&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      fi
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      curl -XGET -s -k --fail ${BASIC_AUTH} http://127.0.0.1:9200${path}
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  }
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  if [ -f &#34;${START_FILE}&#34; ]; then
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      echo &#39;Elasticsearch is already running, lets check the node is healthy and there are master nodes available&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      http &#34;/_cluster/health?timeout=0s&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  else
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      echo &#39;Waiting for elasticsearch cluster to become cluster to be ready (request params: &#34;wait_for_status=green&amp;timeout=1s&#34; )&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      if http &#34;/_cluster/health?wait_for_status=green&amp;timeout=1s&#34; ; then
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                          touch ${START_FILE}
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                          exit 0
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      else
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                          echo &#39;Cluster is not yet ready (request params: &#34;wait_for_status=green&amp;timeout=1s&#34; )&#39;
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                          exit 1
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                      fi
-</span></span></span><span style="display:flex;"><span><span style="color:#0ff;font-weight:bold">                  fi</span>                  
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">initialDelaySeconds</span>: <span style="color:#ff0;font-weight:bold">10</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">timeoutSeconds</span>: <span style="color:#ff0;font-weight:bold">5</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">periodSeconds</span>: <span style="color:#ff0;font-weight:bold">10</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">successThreshold</span>: <span style="color:#ff0;font-weight:bold">3</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">failureThreshold</span>: <span style="color:#ff0;font-weight:bold">3</span>
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">terminationMessagePath</span>: /dev/termination-log
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">terminationMessagePolicy</span>: File
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">imagePullPolicy</span>: IfNotPresent
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">securityContext</span>:
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">capabilities</span>:
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">drop</span>:
-</span></span><span style="display:flex;"><span>                - ALL
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">runAsUser</span>: <span style="color:#ff0;font-weight:bold">1000</span>
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">runAsNonRoot</span>: <span style="color:#fff;font-weight:bold">true</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">restartPolicy</span>: Always
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">terminationGracePeriodSeconds</span>: <span style="color:#ff0;font-weight:bold">120</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">dnsPolicy</span>: ClusterFirst
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">securityContext</span>:
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">runAsUser</span>: <span style="color:#ff0;font-weight:bold">1000</span>
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">fsGroup</span>: <span style="color:#ff0;font-weight:bold">1000</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">affinity</span>:
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">podAntiAffinity</span>:
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">requiredDuringSchedulingIgnoredDuringExecution</span>:
-</span></span><span style="display:flex;"><span>            - <span style="font-weight:bold">labelSelector</span>:
-</span></span><span style="display:flex;"><span>                <span style="font-weight:bold">matchExpressions</span>:
-</span></span><span style="display:flex;"><span>                  - <span style="font-weight:bold">key</span>: app
-</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">operator</span>: In
-</span></span><span style="display:flex;"><span>                    <span style="font-weight:bold">values</span>:
-</span></span><span style="display:flex;"><span>                      - elasticsearch-master
-</span></span><span style="display:flex;"><span>              <span style="font-weight:bold">topologyKey</span>: kubernetes.io/hostname
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">schedulerName</span>: default-scheduler
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">volumeClaimTemplates</span>:
-</span></span><span style="display:flex;"><span>    - <span style="font-weight:bold">metadata</span>:
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">name</span>: datadir
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">annotations</span>:
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">volume.beta.kubernetes.io/storage-class</span>: <span style="color:#0ff;font-weight:bold">&#34;managed-nfs-storage-class&#34;</span>
-</span></span><span style="display:flex;"><span>      <span style="font-weight:bold">spec</span>:
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">accessModes</span>: [<span style="color:#0ff;font-weight:bold">&#34;ReadWriteMany&#34;</span>]
-</span></span><span style="display:flex;"><span>        <span style="font-weight:bold">resources</span>:
-</span></span><span style="display:flex;"><span>          <span style="font-weight:bold">requests</span>:
-</span></span><span style="display:flex;"><span>            <span style="font-weight:bold">storage</span>: 10Gi
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">serviceName</span>: elasticsearch-master-headless
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">podManagementPolicy</span>: Parallel
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">updateStrategy</span>:
-</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">type</span>: RollingUpdate
-</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">revisionHistoryLimit</span>: <span style="color:#ff0;font-weight:bold">10</span>
-</span></span></code></pre></div></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Twitter"
-                href="https://twitter.com/share?&text=%e6%b3%a8%e6%84%8f%ef%bc%9a%e8%af%b7%e5%90%84%e4%bd%8d%e8%ae%b0%e4%bd%8f%e6%8a%8a%e6%89%80%e6%9c%89%e7%a6%bb%e7%ba%bf%e5%8c%85%e5%85%a8%e6%8b%bf%e5%88%b0%e6%9c%ac%e5%9c%b0&amp;hellip;..%20%e5%9c%a8%e7%ba%bf%e9%83%a8%e7%bd%b2chartmuseum%20%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8%e6%9c%80%e7%ae%80%e5%8d%95%e7%9a%84%20docker%20run%20%e6%96%b9%e5%bc%8f%ef%bc%8c%e4%bd%bf%e7%94%a8local%20%e6%9c%ac%e5%9c%b0%e5%ad%98%e5%82%a8%e6%96%b9%e5%bc%8f&url=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-twitter hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到 Facebook"
-                href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ><i class="eva eva-facebook hover:text-theme"></i
-            ></a><a
-                class="mr-4 inline-flex h-5 w-5 items-center"
-                title="分享到微博"
-                href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/&title=Kubernetes-%e7%a6%bb%e7%ba%bf%e9%83%a8%e7%bd%b2skywalking&sudaref=tec.mletter.cn"
-                target="_blank"
-                rel="noopener noreferrer"
-            ><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"> <path d="M456.991736 557.336482c-107.598583 0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583 0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185 0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185 0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535z m93.090909-91.881936c-14.507674 0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682" ></path> <path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683" ></path> <path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152 0 500.514758 0 686.696576s235.749705 337.303424 527.112161 337.303424 527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439C275.645809 959.924439 108.807556 847.489965 108.807556 708.458087s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684" ></path> <path d="M1021.582054 423.140496c-3.626919 0-6.044864 0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348 0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566 0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665 0 187.390791 84.628099 187.390791 187.390791 0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685" ></path> <path d="M1146.106257 473.917355c-2.417946 0-6.044864 0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397C1118.299882 201.898465 991.357733 74.956316 836.609209 74.956316c-20.552538 0-37.478158-16.92562-37.478158-37.478158S816.056671 0 836.609209 0c197.062574 0 356.646989 159.584416 356.646989 356.646989 0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686" ></path> </svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title="复制链接" data-clipboard-text="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block">
-                <i title="二维码" class="eva show-qrcode eva-smartphone hover:text-theme"></i>
-                <div
-                    class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"
-                >
-                    <img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" alt="二维码" />
-                </div>
-            </div></div>
-<div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl">
-    <div>
-        <a
-            href="/2021/03/25/kubernetes%E6%8C%81%E4%B9%85%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html/"
-            title="Kubernetes持久化配置文件"
-            class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
-            <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-                <i class="eva eva-chevron-left-outline"></i>
-            </span>
-            <span>上一篇</span>
-        </a>
-    </div><div class="hidden items-center text-xs xl:flex">
-        除特殊声明外，本博客一律使用以下协议进行授权 「
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">署名 - 非商业性使用 - 禁止演绎 4.0</a>
-        」
-    </div>
-    <div class="flex items-center text-sm xl:hidden">
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener noreferrer" class="text-theme">
-            <img src="/Cc-by-nc-nd.svg" alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class="w-24" />
-        </a>
-    </div>
-
-    <a
-        href="/2021/07/13/%E5%85%B3%E4%BA%8Ekubernetes%E6%9E%84%E5%BB%BAredis%E9%9B%86%E7%BE%A4.html/"
-        title="关于Kubernetes构建Redis集群"
-        class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText"style="visibility: visible;">
-        <span>下一篇</span>
-        <span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100">
-            <i class="eva eva-chevron-right-outline"></i>
-        </span>
-    </a>
-</div>
-<div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder">
-    <script src="https://giscus.app/client.js"
-    data-repo="waidinsamkeit/tecoum"
-    data-repo-id="R_kgDOH4NyMg"
-    data-category="Announcements"
-    data-category-id="DIC_kwDOH4NyMs4CRCX2"
-    data-mapping="title"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="light"
-    data-lang="zh-CN"
-    data-loading="true"
-    crossorigin="anonymous"
-    data-swup-reload-script
-    async
->
-</script>
-
-<script data-swup-reload-script>
-    (function () {
-        addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
-            handler();
-        });
-        window.addEventListener("onThemeChange", handler);
-
-        function handler() {
-            if (document.documentElement.dataset.scheme === "light") {
-                setGiscusTheme('light');
-            } else {
-                setGiscusTheme('dark');
-            }
-        }
-    })();
-    
-    function setGiscusTheme(theme) {
-        let giscus = document.querySelector("iframe.giscus-frame");
-        if (giscus) {
-            giscus.contentWindow.postMessage(
-                {
-                    giscus: {
-                        setConfig: {
-                            theme: theme,
-                        },
-                    },
-                },
-                "https://giscus.app"
-            );
-        }
-    }
-</script>
-</div>
-
-        </div>
-    </div>
-</div>
-</div>
-                </main><footer>
-    <div
-        class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"
-    >
-        <div class="mb-2 flex items-center justify-between text-center md:mb-0">
-            <span class="">© 2020 - 2022</span>
-            <span class="mx-1.5 opacity-50"> | </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href="https://github.com/Ice-Hazymoon/hugo-theme-luna" target="_blank" rel="noopener noreferrer">Luna</a> 驱动</div>
-
-        <div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block"> | </span><a data-no-swup href="https://tec.mletter.cn/index.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082z m351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298 0.002 32.978-15.31 31.99-33.58z m288.498 0.576C943.19155 459.354 566.92955 80.89 97.00555 64.02 78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93 0.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-0.002 32.658-14.948 32.01-33.008z" p-id="3092"></path></svg></span>
-                    <span>RSS</span>
-                </a><a data-no-swup href="https://tec.mletter.cn/sitemap.xml" target="_blank" class="mr-1.5 hover:text-theme">
-                    <span class=" md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822 0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822 0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512 0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778 0 659.91 0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822 0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067 0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822 0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823 0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"></path></svg></span>
-                    <span>Sitemap</span>
-                </a><div id="google_translate_element" class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id="run-time" class="mt-2 flex-grow text-right md:mt-0">
-    <span>运行时间： </span><b id="run-time-d">0</b>
-    <span class="text-xs">天</span>
-    <b id="run-time-h">0</b>
-    <span class="text-xs">小时</span>
-    <b id="run-time-m">0</b>
-    <span class="text-xs">分钟</span>
-    <b id="run-time-s">0</b>
-    <span class="text-xs">秒</span>
-</div>
-</div>
-
-    <script type="text/javascript">
-window.__theme = {
-    cdn: '',
-    pjax: true ,
-    isServer: false ,
-    $version:"",
-    lang: 'zh-cn',
-    imageZoom: true ,
-    lazyload: true ,
-    bionicReading: {
-        enabled: true ,
-        skipLinks: false ,
-        autoBionic: false ,
-        excludeWords:[],
-        excludeClasses:["github"],
-        excludeNodeNames:[],
-    },
-    katex: true ,
-    search: true ,
-    backtop: true ,
-    pangu: true ,
-    autoDarkMode: true ,
-    googleAnalytics:false,
-    hugoEncrypt: {
-        wrongPasswordText: '密码错误',
-        userStorage:window['sessionStorage'],
-    },
-    console: {
-        enabled: false ,
-        leftColor: '#dd6065',
-        rightColor: '#feb462',
-        leftText: 'Hugo Theme Luna',
-        rightText: 'Powered by Hugo ❤ Luna',
-    },
-    assets: {
-        error_svg: "\/images\/error.svg",
-        search_svg: "\/images\/search.svg",
-    },
-    i18n: {
-        copy: {
-            success: "复制成功",
-            failed: "复制失败，请手动复制",
-            copyCode: "复制代码",
-        },
-        search: {
-            untitled: "无标题",
-            loadFailure: "初始化搜索引擎失败",
-            input: "请输入内容...",
-        },
-        darkMode: {
-            dark: "切换到夜间模式",
-            light: "切换到日间模式"
-        }
-    },creatTime: "2020\/6\/12"}
-</script>
-<script type="text/javascript" src="/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js" defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ&#43;6P7cT&#43;B0YgL4dSqRg="></script><script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('\/sw.js');
-        });
-    }
-</script>
-<script type="text/javascript" src="/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js" defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type="text/javascript">
-    window.translateelement_styles = "\/sass\/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";
-    function googleTranslateElementInit(){
-        new google.translate.TranslateElement({
-            pageLanguage: 'zh-cn',
-            includedLanguages: 'af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi',
-            autoDisplay:false
-        },'google_translate_element');
-    }
-</script>
-
-
-
-
-
-<script>
-    
-    
-</script>
-
-<script data-swup-reload-script>
-    
-    
-</script>
-</footer>
-</div>
-        </div><a
-        href="#nav"
-        title="返回顶部"
-        id="back-top"
-        class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"
-    >
-        <div class="relative">
-            <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl">
-                <i class="eva eva-arrow-upward-outline"></i>
-            </div>
-            <svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet">
-                <circle
-                    transform="rotate(-90, 27 , 27)"
-                    style="stroke-dasharray: 157, 157; stroke-dashoffset: 157;"
-                    cx="27"
-                    cy="27"
-                    r="25"
-                    fill="none"
-                    stroke-width="4"
-                    stroke-linecap="round"
-                    stroke="var(--theme)"
-                />
-            </svg>
-        </div>
-    </a><div id="i18nlist"></div><noscript>
-    <style>
-        .dark-mode-switch,
-        #run-time,
-        #bionicReading,
-        .noscript-hidden,
-        [data-clipboard-text],
-        [data-lazyload] {
-            display: none;
-        }
-        #back-top {
-            opacity: 1;
-        }
-        .noscript-show {
-            display: initial;
-        }
-    </style>
-</noscript>
-</body>
-</html>
+<!doctype html><html lang=zh-cn class=lang-zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=keywords content="Kubernetes,Hugo,Hugo Theme,Luna,"><meta name=description content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式"><meta itemprop=description content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式"><meta http-equiv=x-ua-compatible content="ie=edge"><meta itemprop=name content="Kubernetes-离线部署skywalking - Cameliya"><link href=https://tec.mletter.cn/index.xml title="Kubernetes-离线部署skywalking - Cameliya" type=application/rss+xml rel=alternate><title>Kubernetes-离线部署skywalking - Cameliya</title><link rel=stylesheet href="/main.29594d247b49d7f1eb16caed945a5e452f0cfb34b2ed9524d0c235a8ab276fc9.css" integrity="sha256-KVlNJHtJ1/HrFsrtlFpeRS8M+zSy7ZUk0MI1qKsnb8k="><meta property="og:site_name" content="Kubernetes-离线部署skywalking - Cameliya"><meta property="og:type" content="article"><meta property="og:title" content="Kubernetes-离线部署skywalking"><meta property="og:description" content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式"><meta property="og:url" content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"><meta property="article:publisher" content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"><meta property="article:published_time" content="2021-04-07T11:12:08+08:00"><meta property="article:modified_time" content="2022-02-15T14:48:04+08:00"><meta name=theme-color content="#95C7E0"><meta name=mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="Kubernetes-离线部署skywalking - Cameliya"><meta name=apple-mobile-web-app-status-bar-style content="white"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content="@Ice_Hazymoon"><meta name=twitter:creator content="@Ice_Hazymoon"><meta name=twitter:title content="Kubernetes-离线部署skywalking - Cameliya"><meta name=twitter:description content="注意：请各位记住把所有离线包全拿到本地&amp;hellip;.. 在线部署chartmuseum 直接使用最简单的 docker run 方式，使用local 本地存储方式"><meta name=twitter:url content="https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/"><meta name=twitter:image content><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=manifest href=/manifest.json><link href=/icon.png rel="shortcut icon"><link href=/icon.png rel=bookmark><link rel=apple-touch-icon href=/icon.png><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes-离线部署skywalking","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/tec.mletter.cn\/2021\/04\/07\/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html\/"},"genre":"posts","keywords":"Kubernetes","wordcount":1075,"url":"https:\/\/tec.mletter.cn\/2021\/04\/07\/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html\/","datePublished":"2021-04-07T11:12:08\u002b08:00","dateModified":"2022-02-15T14:48:04\u002b08:00","author":{"@type":"Person","name":"Cameliya"},"description":""}</script></head><body class="dark:bg-darkBg dark:text-darkText"><div class="relative mx-auto shadow-lg md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><div class="main flex flex-col justify-between bg-white dark:bg-darkFg"><header class="fixed z-10 backdrop-blur-md bg-white/80 dark:bg-darkFg mx-auto w-full md:max-w-4xl xl:max-w-4xl 2xl:max-w-4xl"><nav id=nav class="navbar top-0 z-10 flex items-center border-b px-5 py-6 dark:border-darkBorder md:px-10"><div class="route-items flex w-full items-center justify-around"><a title=首页 data-active-link=/ href=/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-home flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">首页</span>
+</a><a title=关于我 data-active-link=/about/ href=/about/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-heart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">关于我</span>
+</a><a title=朋友们 data-active-link=/link/ href=/link/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-people flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">朋友们</span>
+</a><a title=归档 data-active-link=/archives/ href=/archives/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-bar-chart flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">归档</span>
+</a><a title=Repo data-active-link=/repo/ href=/repo/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-smartphone-outline flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">Repo</span>
+</a><a title=搜索 data-active-link=/search/ href=/search/ class="relative flex cursor-pointer flex-col items-center text-gray-700 transition duration-150 ease-[ease]"><i class="eva eva-search flex h-8 w-8 items-center justify-center text-3xl leading-none text-gray-500 transition duration-150 ease-[ease] dark:text-darkTextPlaceholder"></i>
+<span class="mt-1 block text-xs text-gray-400 dark:text-darkText sm:text-sm md:hidden">搜索</span></a></div></nav><div class="dark-mode-switch absolute right-0 top-0 z-10 cursor-pointer pr-2 pt-2 text-xl leading-none"><i class="eva eva-moon opacity-20 dark:opacity-70"></i></div></header><main class="relative flex flex-grow mt-28 md:mt-20" id=swup><style>:root{--font:JetBrains Mono}</style><div class="type-posts layout- w-full"><div class="relative h-full"><div class="relative h-full"><div class="page-view-article flex h-full flex-col bg-white dark:bg-darkFg"><div class=relative><div><div class="-mb-2 w-full p-6 pb-0 text-3xl md:px-10">Kubernetes-离线部署skywalking</div></div></div><div class="article-info border-b p-6 pb-3 text-sm dark:border-darkBorder md:px-10"><div><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-clock-outline mr-1"></i>
+<span><time title="发布于 2021年4月7日 11:12:08" datetime=2021-04-07T11:12:08+08:00>2021年4月7日</time></span></div><span class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-edit-2-outline mr-1"></i>
+<span><time title="最后修改于：2022年2月15日 14:48:04" datetime=2022-02-15T14:48:04+08:00>2022年2月15日</time></span></span><div class="mb-3 mr-4 inline-flex items-center sm:rounded-full"><i class="eva eva-flag-outline mr-1"></i>
+<span>3 分钟</span></div></div><div class="mb-3 flex items-center"><i class="eva eva-pricetags-outline mr-1"></i>
+<span class=mr-3>标签</span><a href=/tags/kubernetes title=Kubernetes class="group mr-2 flex items-center text-sm">
+<i class="mr-1 text-gray-400 group-hover:text-theme">#</i>
+<span class="text-gray-400 group-hover:text-theme">Kubernetes</span></a></div><div class="mb-3 flex items-center"><i class="eva eva-folder-outline mr-1"></i>
+<span class=mr-3>分类</span><a href=/categories/kubernetes title=Kubernetes class="group flex items-center text-sm">
+<span class="text-gray-400 group-hover:text-theme">Kubernetes</span>
+<span class="mx-0.5 group-last:hidden">,</span></a></div></div><aside class="toc border-b border-gray-300 px-5 py-5 dark:border-darkBorder md:px-10 2xl:fixed 2xl:top-10 2xl:m-0 2xl:-ml-72 2xl:w-72 2xl:border-none 2xl:p-0 2xl:py-4 2xl:pr-4"><header><h1 class="mb-3 text-2xl font-bold 2xl:mb-4">文章目录</h1></header><nav id=TableOfContents><ul><li><ul><li><a href=#在线部署chartmuseum>在线部署chartmuseum</a></li><li><a href=#下载skywalking包>下载Skywalking包</a></li><li><a href=#添加elasticsearch仓库>添加elasticsearch仓库</a></li><li><a href=#上传本地helm>上传本地Helm</a></li><li><a href=#部署skywalking>部署skywalking</a></li><li><a href=#准备离线镜像>准备离线镜像</a></li><li><a href=#helm中的elasticsearch可能会存在问题>Helm中的Elasticsearch可能会存在问题</a></li></ul></li></ul></nav></aside><div class="border-b bg-blue-100 bg-opacity-20 p-6 dark:border-darkBorder dark:bg-darkBg md:px-10"><time datetime=2022-02-15T14:48:04+08:00>文章最后编辑于: <span class="mx-1 font-bold">267</span> 天前，文中所描述的信息可能已发生改变</time></div><section class="article-content typo relative flex-grow px-6 py-5 md:px-10"><i title=更快的阅读 id=bionicReading class="absolute right-0 top-0 cursor-pointer p-3"><svg class="w-4 h-4 fill-current text-gray-400" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="10811"><path d="M480 192c-19.2.0-32-12.8-32-32V32c0-19.2 12.8-32 32-32s32 12.8 32 32v128c0 19.2-12.8 32-32 32zM160 1024c-6.4.0-19.2.0-25.6-6.4l-128-128c0-6.4-6.4-19.2-6.4-25.6s6.4-19.2 6.4-25.6l512-512c12.8-6.4 38.4-6.4 51.2.0l128 128c0 6.4 6.4 19.2 6.4 25.6s-6.4 19.2-6.4 25.6l-512 512c-6.4 6.4-19.2 6.4-25.6 6.4zM76.8 864l83.2 83.2L627.2 480 544 396.8 76.8 864zM992 576H864c-19.2.0-32-12.8-32-32s12.8-32 32-32h128c19.2.0 32 12.8 32 32s-12.8 32-32 32zM768 288c-6.4.0-19.2.0-25.6-6.4-12.8-12.8-12.8-32 0-44.8l96-96c12.8-12.8 32-12.8 44.8.0s12.8 32 0 44.8l-96 96c0 6.4-12.8 6.4-19.2 6.4zm-512 0c-6.4.0-19.2.0-25.6-6.4l-96-96c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 12.8-12.8 12.8-19.2 12.8zM864 896c-6.4.0-19.2.0-25.6-6.4l-96-96c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8.0l96 96c12.8 12.8 12.8 32 0 44.8.0 6.4-12.8 6.4-19.2 6.4z" p-id="10812"/><path d="M544 640c-6.4.0-19.2.0-25.6-6.4l-128-128c-6.4-12.8-6.4-38.4.0-51.2s32-12.8 44.8.0l128 128c12.8 12.8 12.8 38.4 6.4 51.2-6.4 6.4-19.2 6.4-25.6 6.4z" p-id="10813"/></svg></i><blockquote><p>注意：请各位记住把所有离线包全拿到本地&mldr;..</p></blockquote><h3 class=group id=在线部署chartmuseum>在线部署chartmuseum<a href=#%e5%9c%a8%e7%ba%bf%e9%83%a8%e7%bd%b2chartmuseum><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><p>直接使用最简单的 docker run 方式，使用local 本地存储方式，通过 -v 映射到宿主机 /opt/charts
+更多支持安装方式见官网</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>mkdir /opt/charts
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>docker run -d <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#f1fa8c></span>  -p 8080:8080 <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span><span style=color:#f1fa8c></span>  -e <span style=color:#8be9fd;font-style:italic>DEBUG</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span> <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span><span style=color:#f1fa8c></span>  -e <span style=color:#8be9fd;font-style:italic>STORAGE</span><span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span><span style=color:#f1fa8c></span>  -e <span style=color:#8be9fd;font-style:italic>STORAGE_LOCAL_ROOTDIR</span><span style=color:#ff79c6>=</span>/charts <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span><span style=color:#f1fa8c></span>  -v /opt/charts:/charts <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span><span style=color:#f1fa8c></span>  chartmuseum/chartmuseum:latest
+</span></span></code></pre></div><h3 class=group id=下载skywalking包>下载Skywalking包<a href=#%e4%b8%8b%e8%bd%bdskywalking%e5%8c%85><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>git clone https://github.com/apache/skywalking-kubernetes.git
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span><span style=color:#6272a4># 更换仓库</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span><span style=color:#8be9fd;font-style:italic>cd</span> skywalking-kubernetes-master/chart/skywalking/
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span>vim Chats.yaml
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span>dependencies:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span>  - name: elasticsearch
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span>    version: ~7.12.1  <span style=color:#6272a4># 官网的版本号为7.5.1 最新的elastic版本为7.12.1</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span>    repository: http://localhost:8080 <span style=color:#6272a4># 修改为你本地的Repo地址</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span><span>    condition: elasticsearch.enabled
+</span></span></code></pre></div><h3 class=group id=添加elasticsearch仓库>添加elasticsearch仓库<a href=#%e6%b7%bb%e5%8a%a0elasticsearch%e4%bb%93%e5%ba%93><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>helm repo add elastic https://helm.elastic.co
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>helm pull elastic/elasticsearch  <span style=color:#6272a4># 把elasticsearch内容拉下来</span>
+</span></span></code></pre></div><h3 class=group id=上传本地helm>上传本地Helm<a href=#%e4%b8%8a%e4%bc%a0%e6%9c%ac%e5%9c%b0helm><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><blockquote><p>以防万一请先安装helmpush插件</p><p><a class=link href=https://github.com/chartmuseum/helm-push target=_blank rel=noopener>https://github.com/chartmuseum/helm-push</a></p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>helm repo add chartmuseum http://localhost:8080
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>curl --data-binary <span style=color:#f1fa8c>&#34;@elasticsearch-7.12.1.tgz&#34;</span> http://localhost:8080/api/charts
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>helm push /root/skywalking-kubernetes-master/chart/skywalking/ chartmuseum
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span>helm repo update <span style=color:#6272a4># 更新仓库</span>
+</span></span></code></pre></div><p><strong>你可以尝试搜索一下</strong></p><blockquote><p>保证仓库中存在elasticsarch和skywalking</p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span><span style=color:#ff79c6>[</span>root@k-master1 ~<span style=color:#ff79c6>]</span><span style=color:#6272a4># helm search repo</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>NAME                            CHART VERSION   APP VERSION     DESCRIPTION                                       
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>chartmuseum/elasticsearch       7.12.1          7.12.1          Official Elastic helm chart <span style=color:#ff79c6>for</span> Elasticsearch     
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span>chartmuseum/skywalking          4.0.0                           Apache SkyWalking APM System
+</span></span></code></pre></div><h3 class=group id=部署skywalking>部署skywalking<a href=#%e9%83%a8%e7%bd%b2skywalking><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span><span style=color:#8be9fd;font-style:italic>cd</span> skywalking-kubernetes/chart
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span>helm dep up skywalking
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span><span style=color:#6272a4># change the release name according to your scenario</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span><span style=color:#8be9fd;font-style:italic>export</span> <span style=color:#8be9fd;font-style:italic>SKYWALKING_RELEASE_NAME</span><span style=color:#ff79c6>=</span>skywalking
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span><span style=color:#6272a4># change the namespace according to your scenario</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span><span style=color:#8be9fd;font-style:italic>export</span> <span style=color:#8be9fd;font-style:italic>SKYWALKING_RELEASE_NAMESPACE</span><span style=color:#ff79c6>=</span>default
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span><span>helm install <span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>SKYWALKING_RELEASE_NAME</span><span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span> skywalking -n <span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>SKYWALKING_RELEASE_NAMESPACE</span><span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span><span><span style=color:#f1fa8c></span>  --set oap.image.tag<span style=color:#ff79c6>=</span>8.1.0-es7 <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span><span><span style=color:#f1fa8c></span>  --set oap.storageType<span style=color:#ff79c6>=</span>elasticsearch7 <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span><span style=color:#f1fa8c></span>  --set ui.image.tag<span style=color:#ff79c6>=</span>8.1.0 <span style=color:#f1fa8c>\
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span><span><span style=color:#f1fa8c></span>  --set elasticsearch.imageTag<span style=color:#ff79c6>=</span>7.5.1
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span><span>helm uninstall skywalking <span style=color:#6272a4># 卸载skywalking</span>
+</span></span></code></pre></div><h3 class=group id=准备离线镜像>准备离线镜像<a href=#%e5%87%86%e5%a4%87%e7%a6%bb%e7%ba%bf%e9%95%9c%e5%83%8f><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span>busybox:1.30
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span>docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span>apache/skywalking-oap-server:8.1.0-es7
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span>apache/skywalking-ui:8.1.0
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span><span>chartmuseum/chartmuseum:latest
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span><span><span style=color:#6272a4># 然后打包 上传....就OK</span>
+</span></span></code></pre></div><h3 class=group id=helm中的elasticsearch可能会存在问题>Helm中的Elasticsearch可能会存在问题<a href=#helm%e4%b8%ad%e7%9a%84elasticsearch%e5%8f%af%e8%83%bd%e4%bc%9a%e5%ad%98%e5%9c%a8%e9%97%ae%e9%a2%98><i class="eva eva-link ml-3 align-middle text-theme opacity-0 transition ease-in-out group-hover:opacity-100"></i></a></h3><blockquote><p>你们也可以用我的这个elasticsearch配置 注意修改PVC</p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span><span><span style=color:#ff79c6>kind</span>: StatefulSet
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span><span><span style=color:#ff79c6>apiVersion</span>: apps/v1
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span><span><span style=color:#ff79c6>metadata</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span><span>  <span style=color:#ff79c6>name</span>: elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span><span>  <span style=color:#ff79c6>namespace</span>: default
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span><span>  <span style=color:#ff79c6>labels</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span><span>    <span style=color:#ff79c6>app</span>: elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span><span>    <span style=color:#ff79c6>app.kubernetes.io/managed-by</span>: Helm
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span><span>    <span style=color:#ff79c6>chart</span>: elasticsearch
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span><span>    <span style=color:#ff79c6>heritage</span>: Helm
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span><span>    <span style=color:#ff79c6>release</span>: skywalking
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span><span>  <span style=color:#ff79c6>annotations</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span><span>    <span style=color:#ff79c6>esMajorVersion</span>: <span style=color:#f1fa8c>&#39;7&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span><span>    <span style=color:#ff79c6>meta.helm.sh/release-name</span>: skywalking
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span><span>    <span style=color:#ff79c6>meta.helm.sh/release-namespace</span>: default
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span><span><span style=color:#ff79c6>spec</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span><span>  <span style=color:#ff79c6>replicas</span>: <span style=color:#bd93f9>3</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span><span>  <span style=color:#ff79c6>selector</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span><span>    <span style=color:#ff79c6>matchLabels</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span><span>      <span style=color:#ff79c6>app</span>: elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span><span>  <span style=color:#ff79c6>template</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span><span>    <span style=color:#ff79c6>metadata</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span><span>      <span style=color:#ff79c6>name</span>: elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span><span>      <span style=color:#ff79c6>creationTimestamp</span>: <span style=color:#ff79c6>null</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span><span>      <span style=color:#ff79c6>labels</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span><span>        <span style=color:#ff79c6>app</span>: elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span><span>        <span style=color:#ff79c6>chart</span>: elasticsearch
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span><span>        <span style=color:#ff79c6>heritage</span>: Helm
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span><span>        <span style=color:#ff79c6>release</span>: skywalking
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span><span>    <span style=color:#ff79c6>spec</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span><span>      <span style=color:#ff79c6>initContainers</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span><span>        - <span style=color:#ff79c6>name</span>: configure-sysctl
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span><span>          <span style=color:#ff79c6>image</span>: <span style=color:#f1fa8c>&#39;docker.elastic.co/elasticsearch/elasticsearch:7.5.1&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span><span>          <span style=color:#ff79c6>command</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span><span>            - sysctl
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span><span>            - <span style=color:#f1fa8c>&#39;-w&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span><span>            - vm.max_map_count=262144
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span><span>          <span style=color:#ff79c6>resources</span>: {}
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span><span>          <span style=color:#ff79c6>terminationMessagePath</span>: /dev/termination-log
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span><span>          <span style=color:#ff79c6>terminationMessagePolicy</span>: File
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span><span>          <span style=color:#ff79c6>imagePullPolicy</span>: IfNotPresent
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span><span>          <span style=color:#ff79c6>securityContext</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span><span>            <span style=color:#ff79c6>privileged</span>: <span style=color:#ff79c6>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span><span>            <span style=color:#ff79c6>runAsUser</span>: <span style=color:#bd93f9>0</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span><span>      <span style=color:#ff79c6>containers</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span><span>        - <span style=color:#ff79c6>name</span>: elasticsearch
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span><span>          <span style=color:#ff79c6>image</span>: <span style=color:#f1fa8c>&#39;docker.elastic.co/elasticsearch/elasticsearch:7.5.1&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span><span>          <span style=color:#ff79c6>ports</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span><span>            - <span style=color:#ff79c6>name</span>: http
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span><span>              <span style=color:#ff79c6>containerPort</span>: <span style=color:#bd93f9>9200</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span><span>              <span style=color:#ff79c6>protocol</span>: TCP
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span><span>            - <span style=color:#ff79c6>name</span>: transport
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span><span>              <span style=color:#ff79c6>containerPort</span>: <span style=color:#bd93f9>9300</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span><span>              <span style=color:#ff79c6>protocol</span>: TCP
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span><span>          <span style=color:#ff79c6>volumeMounts</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span><span>            - <span style=color:#ff79c6>name</span>: datadir
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span><span>              <span style=color:#ff79c6>mountPath</span>: /usr/share/elasticsearch/data
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span><span>          <span style=color:#ff79c6>env</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span><span>            - <span style=color:#ff79c6>name</span>: node.name
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span><span>              <span style=color:#ff79c6>valueFrom</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span><span>                <span style=color:#ff79c6>fieldRef</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span><span>                  <span style=color:#ff79c6>apiVersion</span>: v1
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span><span>                  <span style=color:#ff79c6>fieldPath</span>: metadata.name
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span><span>            - <span style=color:#ff79c6>name</span>: cluster.initial_master_nodes
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span><span>              <span style=color:#ff79c6>value</span>: &gt;-<span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span><span><span style=color:#f1fa8c>                </span>                elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2,
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span><span>            - <span style=color:#ff79c6>name</span>: discovery.seed_hosts
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span><span>              <span style=color:#ff79c6>value</span>: elasticsearch-master-headless
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span><span>            - <span style=color:#ff79c6>name</span>: cluster.name
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span><span>              <span style=color:#ff79c6>value</span>: elasticsearch
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span><span>            - <span style=color:#ff79c6>name</span>: network.host
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span><span>              <span style=color:#ff79c6>value</span>: <span style=color:#bd93f9>0.0.0.0</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span><span>            - <span style=color:#ff79c6>name</span>: ES_JAVA_OPTS
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span><span>              <span style=color:#ff79c6>value</span>: <span style=color:#f1fa8c>&#39;-Xmx1g -Xms1g&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span><span>            - <span style=color:#ff79c6>name</span>: node.data
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span><span>              <span style=color:#ff79c6>value</span>: <span style=color:#f1fa8c>&#39;true&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span><span>            - <span style=color:#ff79c6>name</span>: node.ingest
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span><span>              <span style=color:#ff79c6>value</span>: <span style=color:#f1fa8c>&#39;true&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span><span>            - <span style=color:#ff79c6>name</span>: node.master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span><span>              <span style=color:#ff79c6>value</span>: <span style=color:#f1fa8c>&#39;true&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span><span>          <span style=color:#ff79c6>resources</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span><span>            <span style=color:#ff79c6>limits</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span><span>              <span style=color:#ff79c6>cpu</span>: <span style=color:#f1fa8c>&#39;1&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span><span>              <span style=color:#ff79c6>memory</span>: 2Gi
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span><span>            <span style=color:#ff79c6>requests</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span><span>              <span style=color:#ff79c6>cpu</span>: 100m
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span><span>              <span style=color:#ff79c6>memory</span>: 2Gi
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span><span>          <span style=color:#ff79c6>readinessProbe</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span><span>            <span style=color:#ff79c6>exec</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span><span>              <span style=color:#ff79c6>command</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span><span>                - sh
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span><span>                - <span style=color:#f1fa8c>&#39;-c&#39;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span><span>                - &gt;<span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span><span><span style=color:#f1fa8c>                  #!/usr/bin/env bash -e
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span><span><span style=color:#f1fa8c>                  # If the node is starting up wait for the cluster to be ready
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span><span><span style=color:#f1fa8c>                  (request params: &#39;wait_for_status=green&amp;timeout=1s&#39; )
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span><span><span style=color:#f1fa8c>                  # Once it has started only check that the node itself is
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span><span><span style=color:#f1fa8c>                  responding
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span><span><span style=color:#f1fa8c>                  START_FILE=/tmp/.es_start_file
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span><span><span style=color:#f1fa8c>                  http () {
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span><span><span style=color:#f1fa8c>                      local path=&#34;${1}&#34;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span><span><span style=color:#f1fa8c>                      if [ -n &#34;${ELASTIC_USERNAME}&#34; ] &amp;&amp; [ -n &#34;${ELASTIC_PASSWORD}&#34; ]; then
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span><span><span style=color:#f1fa8c>                        BASIC_AUTH=&#34;-u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}&#34;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span><span><span style=color:#f1fa8c>                      else
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span><span><span style=color:#f1fa8c>                        BASIC_AUTH=&#39;&#39;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span><span><span style=color:#f1fa8c>                      fi
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span><span><span style=color:#f1fa8c>                      curl -XGET -s -k --fail ${BASIC_AUTH} http://127.0.0.1:9200${path}
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span><span><span style=color:#f1fa8c>                  }
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span><span><span style=color:#f1fa8c>
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span><span><span style=color:#f1fa8c>                  if [ -f &#34;${START_FILE}&#34; ]; then
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span><span><span style=color:#f1fa8c>                      echo &#39;Elasticsearch is already running, lets check the node is healthy and there are master nodes available&#39;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span><span><span style=color:#f1fa8c>                      http &#34;/_cluster/health?timeout=0s&#34;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span><span><span style=color:#f1fa8c>                  else
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span><span><span style=color:#f1fa8c>                      echo &#39;Waiting for elasticsearch cluster to become cluster to be ready (request params: &#34;wait_for_status=green&amp;timeout=1s&#34; )&#39;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span><span><span style=color:#f1fa8c>                      if http &#34;/_cluster/health?wait_for_status=green&amp;timeout=1s&#34; ; then
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span><span><span style=color:#f1fa8c>                          touch ${START_FILE}
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span><span><span style=color:#f1fa8c>                          exit 0
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span><span><span style=color:#f1fa8c>                      else
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span><span><span style=color:#f1fa8c>                          echo &#39;Cluster is not yet ready (request params: &#34;wait_for_status=green&amp;timeout=1s&#34; )&#39;
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span><span><span style=color:#f1fa8c>                          exit 1
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span><span><span style=color:#f1fa8c>                      fi
+</span></span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span><span><span style=color:#f1fa8c>                  fi</span>                  
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span><span>            <span style=color:#ff79c6>initialDelaySeconds</span>: <span style=color:#bd93f9>10</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span><span>            <span style=color:#ff79c6>timeoutSeconds</span>: <span style=color:#bd93f9>5</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span><span>            <span style=color:#ff79c6>periodSeconds</span>: <span style=color:#bd93f9>10</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span><span>            <span style=color:#ff79c6>successThreshold</span>: <span style=color:#bd93f9>3</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span><span>            <span style=color:#ff79c6>failureThreshold</span>: <span style=color:#bd93f9>3</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span><span>          <span style=color:#ff79c6>terminationMessagePath</span>: /dev/termination-log
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span><span>          <span style=color:#ff79c6>terminationMessagePolicy</span>: File
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span><span>          <span style=color:#ff79c6>imagePullPolicy</span>: IfNotPresent
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span><span>          <span style=color:#ff79c6>securityContext</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span><span>            <span style=color:#ff79c6>capabilities</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span><span>              <span style=color:#ff79c6>drop</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span><span>                - ALL
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span><span>            <span style=color:#ff79c6>runAsUser</span>: <span style=color:#bd93f9>1000</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span><span>            <span style=color:#ff79c6>runAsNonRoot</span>: <span style=color:#ff79c6>true</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span><span>      <span style=color:#ff79c6>restartPolicy</span>: Always
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">144</span><span>      <span style=color:#ff79c6>terminationGracePeriodSeconds</span>: <span style=color:#bd93f9>120</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">145</span><span>      <span style=color:#ff79c6>dnsPolicy</span>: ClusterFirst
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">146</span><span>      <span style=color:#ff79c6>securityContext</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">147</span><span>        <span style=color:#ff79c6>runAsUser</span>: <span style=color:#bd93f9>1000</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">148</span><span>        <span style=color:#ff79c6>fsGroup</span>: <span style=color:#bd93f9>1000</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">149</span><span>      <span style=color:#ff79c6>affinity</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">150</span><span>        <span style=color:#ff79c6>podAntiAffinity</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">151</span><span>          <span style=color:#ff79c6>requiredDuringSchedulingIgnoredDuringExecution</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">152</span><span>            - <span style=color:#ff79c6>labelSelector</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">153</span><span>                <span style=color:#ff79c6>matchExpressions</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">154</span><span>                  - <span style=color:#ff79c6>key</span>: app
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">155</span><span>                    <span style=color:#ff79c6>operator</span>: In
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">156</span><span>                    <span style=color:#ff79c6>values</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">157</span><span>                      - elasticsearch-master
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">158</span><span>              <span style=color:#ff79c6>topologyKey</span>: kubernetes.io/hostname
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">159</span><span>      <span style=color:#ff79c6>schedulerName</span>: default-scheduler
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">160</span><span>  <span style=color:#ff79c6>volumeClaimTemplates</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">161</span><span>    - <span style=color:#ff79c6>metadata</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">162</span><span>        <span style=color:#ff79c6>name</span>: datadir
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">163</span><span>        <span style=color:#ff79c6>annotations</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">164</span><span>          <span style=color:#ff79c6>volume.beta.kubernetes.io/storage-class</span>: <span style=color:#f1fa8c>&#34;managed-nfs-storage-class&#34;</span>
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">165</span><span>      <span style=color:#ff79c6>spec</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">166</span><span>        <span style=color:#ff79c6>accessModes</span>: [<span style=color:#f1fa8c>&#34;ReadWriteMany&#34;</span>]
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">167</span><span>        <span style=color:#ff79c6>resources</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">168</span><span>          <span style=color:#ff79c6>requests</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">169</span><span>            <span style=color:#ff79c6>storage</span>: 10Gi
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">170</span><span>  <span style=color:#ff79c6>serviceName</span>: elasticsearch-master-headless
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">171</span><span>  <span style=color:#ff79c6>podManagementPolicy</span>: Parallel
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">172</span><span>  <span style=color:#ff79c6>updateStrategy</span>:
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">173</span><span>    <span style=color:#ff79c6>type</span>: RollingUpdate
+</span></span><span style=display:flex><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">174</span><span>  <span style=color:#ff79c6>revisionHistoryLimit</span>: <span style=color:#bd93f9>10</span>
+</span></span></code></pre></div></section><div class="px-6 pb-5 pt-4 text-center text-xl text-gray-500 md:px-10 md:pb-10 md:pt-14 flex items-center justify-center"><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Twitter" href="https://twitter.com/share?&text=%e6%b3%a8%e6%84%8f%ef%bc%9a%e8%af%b7%e5%90%84%e4%bd%8d%e8%ae%b0%e4%bd%8f%e6%8a%8a%e6%89%80%e6%9c%89%e7%a6%bb%e7%ba%bf%e5%8c%85%e5%85%a8%e6%8b%bf%e5%88%b0%e6%9c%ac%e5%9c%b0&amp;hellip;..%20%e5%9c%a8%e7%ba%bf%e9%83%a8%e7%bd%b2chartmuseum%20%e7%9b%b4%e6%8e%a5%e4%bd%bf%e7%94%a8%e6%9c%80%e7%ae%80%e5%8d%95%e7%9a%84%20docker%20run%20%e6%96%b9%e5%bc%8f%ef%bc%8c%e4%bd%bf%e7%94%a8local%20%e6%9c%ac%e5%9c%b0%e5%ad%98%e5%82%a8%e6%96%b9%e5%bc%8f&url=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-twitter hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title="分享到 Facebook" href="https://www.facebook.com/sharer.php?u=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" target=_blank rel="noopener noreferrer"><i class="eva eva-facebook hover:text-theme"></i></a><a class="mr-4 inline-flex h-5 w-5 items-center" title=分享到微博 href="https://service.weibo.com/share/share.php?url=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/&title=Kubernetes-%e7%a6%bb%e7%ba%bf%e9%83%a8%e7%bd%b2skywalking&sudaref=tec.mletter.cn" target=_blank rel="noopener noreferrer"><svg class="inline-block h-5 w-5 fill-current hover:text-theme" viewBox="0 0 1193 1024" xmlns="http://www.w3.org/2000/svg" p-id="2681" width="200" height="200"><path d="M456.991736 557.336482c-107.598583.0-194.644628 74.956316-194.644629 166.838252s87.046045 166.838253 194.644629 166.838253c107.598583.0 194.644628-74.956316 194.644628-166.838253s-87.046045-166.838253-194.644628-166.838252zM391.707202 822.101535c-36.269185.0-66.493506-27.806375-66.493507-62.866588s29.015348-62.866588 66.493507-62.866588c36.269185.0 66.493506 27.806375 66.493506 62.866588S427.976387 822.101535 391.707202 822.101535zm93.090909-91.881936c-14.507674.0-26.597403-12.089728-26.597403-26.597403s12.089728-26.597403 26.597403-26.597403 26.597403 12.089728 26.597403 26.597403-12.089728 26.597403-26.597403 26.597403zM239.376623 281.690673C97.9268 394.125148-18.134593 600.859504 30.224321 661.308146c32.642267 41.105077 59.239669-19.343566 124.524203-89.46399 30.224321-32.642267 77.374262-54.403778 122.106258-90.672964 20.552538-16.92562 197.062574-35.060213 230.913813-35.060212 97.9268-99.135773 114.85242-207.943329 74.956316-258.720189-48.358914-59.239669-201.898465-16.92562-343.348288 94.299882z" p-id="2682"/><path d="M808.802834 560.9634C906.729634 461.827627 911.565525 377.199528 870.460449 326.422668c-47.149941-60.448642-211.570248-32.642267-351.811098 78.583235" p-id="2683"/><path d="M605.695396 353.020071c-14.507674 8.46281-25.38843 12.089728-29.015349 7.253837-1.208973-2.417946-1.208973-6.044864 1.208973-9.671783-16.92562-1.208973-33.85124-1.208973-50.776859-1.208973C235.749705 349.393152.0 500.514758.0 686.696576S235.749705 1024 527.112161 1024s527.112161-151.121606 527.11216-337.303424c0-170.465171-194.644628-309.497048-448.528925-333.676505zM481.171192 959.924439c-205.525383.0-372.363636-112.434474-372.363636-251.466352s166.838253-251.466352 372.363636-251.466351 372.363636 112.434475 372.363637 251.466351-166.838253 251.466352-372.363637 251.466352z" p-id="2684"/><path d="M1021.582054 423.140496c-3.626919.0-6.044864.0-9.671782-1.208973-18.134593-4.835891-29.015348-24.179457-22.970485-42.31405 2.417946-7.253837 3.626919-16.92562 3.626919-29.015348.0-65.284534-53.194805-119.688312-119.688312-119.688312-19.343566.0-33.85124-15.716647-33.851239-33.851239s15.716647-33.85124 33.851239-33.85124c103.971665.0 187.390791 84.628099 187.390791 187.390791.0 18.134593-2.417946 33.85124-6.044864 48.358914-4.835891 14.507674-18.134593 24.179457-32.642267 24.179457z" p-id="2685"/><path d="M1146.106257 473.917355c-2.417946.0-6.044864.0-8.46281-1.208972-20.552538-4.835891-32.642267-25.38843-27.806375-45.940969 6.044864-24.179457 8.46281-47.149941 8.46281-71.329397.0-153.539552-126.942149-280.481701-281.690673-280.481701-20.552538.0-37.478158-16.92562-37.478158-37.478158S816.056671.0 836.609209.0c197.062574.0 356.646989 159.584416 356.646989 356.646989.0 29.015348-3.626919 59.239669-10.880755 88.255018-3.626919 18.134593-19.343566 29.015348-36.269186 29.015348z" p-id="2686"/></svg></a><i class="eva eva-copy mr-4 cursor-pointer hover:text-theme" title=复制链接 data-clipboard-text=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/></i><div class="group h-5 w-5 relative hidden cursor-pointer sm:inline-block"><i title=二维码 class="eva show-qrcode eva-smartphone hover:text-theme"></i><div class="qrcode-wrapper p-2 pointer-events-none absolute left-2/4 bottom-10 h-32 w-32 -translate-x-1/2 overflow-hidden rounded border border-gray-300 bg-white opacity-0 transition duration-300 ease-[ease] group-hover:opacity-100"><img class="h-full w-full" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tec.mletter.cn/2021/04/07/kubernetes-%E7%A6%BB%E7%BA%BF%E9%83%A8%E7%BD%B2skywalking.html/" alt=二维码></div></div></div><div class="border-b dark:border-darkBorder"></div><div class="flex justify-between px-2 py-4 text-xl md:px-6 md:text-2xl"><div><a href=/2021/03/25/kubernetes%E6%8C%81%E4%B9%85%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html/ title=Kubernetes持久化配置文件 class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText" style=visibility:visible><span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-left-outline"></i></span>
+<span>上一篇</span></a></div><div class="hidden items-center text-xs xl:flex">除特殊声明外，本博客一律使用以下协议进行授权 「
+<a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme>署名 - 非商业性使用 - 禁止演绎 4.0</a>
+」</div><div class="flex items-center text-sm xl:hidden"><a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh target=_blank rel="noopener noreferrer" class=text-theme><img src=/Cc-by-nc-nd.svg alt="署名 - 非商业性使用 - 禁止演绎 4.0" title="署名 - 非商业性使用 - 禁止演绎 4.0" class=w-24></a></div><a href=/2021/07/13/%E5%85%B3%E4%BA%8Ekubernetes%E6%9E%84%E5%BB%BAredis%E9%9B%86%E7%BE%A4.html/ title=关于Kubernetes构建Redis集群 class="invisible flex cursor-pointer items-center text-gray-500 transition duration-300 ease-[ease] hover:text-theme dark:text-darkTextPlaceholder dark:hover:text-darkText" style=visibility:visible><span>下一篇</span>
+<span class="flex items-center text-5xl opacity-70 dark:bg-opacity-100"><i class="eva eva-chevron-right-outline"></i></span></a></div><div class="border-t py-6 px-6 md:px-8 dark:border-darkBorder"><script src=https://giscus.app/client.js data-repo=waidinsamkeit/tecoum data-repo-id=R_kgDOH4NyMg data-category=Announcements data-category-id=DIC_kwDOH4NyMs4CRCX2 data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-theme=light data-lang=zh-CN data-loading=true crossorigin=anonymous data-swup-reload-script async></script><script data-swup-reload-script>(function(){addEventListener("message",t=>{if(event.origin!=="https://giscus.app")return;e()}),window.addEventListener("onThemeChange",e);function e(){setGiscusTheme(document.documentElement.dataset.scheme==="light"?"light":"dark")}})();function setGiscusTheme(e){let t=document.querySelector("iframe.giscus-frame");t&&t.contentWindow.postMessage({giscus:{setConfig:{theme:e}}},"https://giscus.app")}</script></div></div></div></div></div></main><footer><div class="com-footer flex flex-col items-center border-t py-4 px-4 text-sm leading-none text-gray-600 dark:border-darkBorder dark:text-darkTextPlaceholder md:flex-row md:justify-between"><div class="mb-2 flex items-center justify-between text-center md:mb-0"><span>© 2020 - 2022</span>
+<span class="mx-1.5 opacity-50">| </span>由 <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> <span class="text-xs opacity-70">❤</span> <a data-no-swup class="mx-1 font-bold hover:text-theme" href=https://github.com/Ice-Hazymoon/hugo-theme-luna target=_blank rel="noopener noreferrer">Luna</a> 驱动</div><div class="flex items-center"><span class="noscript-hidden mx-1.5 hidden opacity-50 md:block">| </span><a data-no-swup href=https://tec.mletter.cn/index.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887361919" class="mr-0.5 w-96 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="3091"><path d="M320.16155 831.918c0 70.738-57.344 128.082-128.082 128.082S63.99955 902.656 63.99955 831.918s57.344-128.082 128.082-128.082 128.08 57.346 128.08 128.082zm351.32 94.5c-16.708-309.2-264.37-557.174-573.9-573.9C79.31155 351.53 63.99955 366.21 63.99955 384.506v96.138c0 16.83 12.98 30.944 29.774 32.036 223.664 14.568 402.946 193.404 417.544 417.544 1.094 16.794 15.208 29.774 32.036 29.774h96.138c18.298.002 32.978-15.31 31.99-33.58zm288.498.576c-16.788-467.64-393.05-846.104-862.974-862.974C78.94555 63.372 63.99955 77.962 63.99955 96.032v96.136c0 17.25 13.67 31.29 30.906 31.998 382.358 15.678 689.254 322.632 704.93 704.93.706 17.236 14.746 30.906 31.998 30.906h96.136c18.068-.002 32.658-14.948 32.01-33.008z" p-id="3092"/></svg></span><span>RSS</span>
+</a><a data-no-swup href=https://tec.mletter.cn/sitemap.xml target=_blank class="mr-1.5 hover:text-theme"><span class="md:hidden lg:inline"><svg t="1650887940556" class="mr-0.5 w-3 fill-current text-inherit inline-block align-top" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="6291"><path d="M950.044 625.778h-68.266v-56.89c0-45.51-39.822-85.332-85.334-85.332h-256v-85.334h68.267c39.822.0 73.956-34.133 73.956-73.955V130.844c0-39.822-34.134-73.955-73.956-73.955H415.29c-39.822.0-73.956 34.133-73.956 73.955v193.423c0 39.822 34.134 73.955 73.956 73.955h68.267v85.334h-256c-45.512.0-85.334 39.822-85.334 85.333v56.889H73.956C34.133 625.778.0 659.91.0 699.733v193.423c0 39.822 34.133 73.955 73.956 73.955h193.422c39.822.0 73.955-34.133 73.955-73.955V699.733c0-39.822-34.133-73.955-73.955-73.955H199.11v-56.89c0-17.066 11.378-28.444 28.445-28.444h568.888c17.067.0 28.445 11.378 28.445 28.445v56.889h-68.267c-39.822.0-73.955 34.133-73.955 73.955v193.423c0 39.822 34.133 73.955 73.955 73.955h193.422c39.823.0 73.956-34.133 73.956-73.955V699.733c0-39.822-34.133-73.955-73.956-73.955z" p-id="6292"/></svg></span><span>Sitemap</span></a><div id=google_translate_element class="overflow-hidden rounded border dark:border-darkBorder"></div></div><div id=run-time class="mt-2 flex-grow text-right md:mt-0"><span>运行时间： </span><b id=run-time-d>0</b>
+<span class=text-xs>天</span>
+<b id=run-time-h>0</b>
+<span class=text-xs>小时</span>
+<b id=run-time-m>0</b>
+<span class=text-xs>分钟</span>
+<b id=run-time-s>0</b>
+<span class=text-xs>秒</span></div></div><script type=text/javascript>window.__theme={cdn:"",pjax:!0,isServer:!1,$version:"",lang:"zh-cn",imageZoom:!0,lazyload:!0,bionicReading:{enabled:!0,skipLinks:!1,autoBionic:!1,excludeWords:[],excludeClasses:["github"],excludeNodeNames:[]},katex:!0,search:!0,backtop:!0,pangu:!0,autoDarkMode:!0,googleAnalytics:!1,hugoEncrypt:{wrongPasswordText:"密码错误",userStorage:window.sessionStorage},console:{enabled:!1,leftColor:"#dd6065",rightColor:"#feb462",leftText:"Hugo Theme Luna",rightText:"Powered by Hugo ❤ Luna"},assets:{error_svg:"/images/error.svg",search_svg:"/images/search.svg"},i18n:{copy:{success:"复制成功",failed:"复制失败，请手动复制",copyCode:"复制代码"},search:{untitled:"无标题",loadFailure:"初始化搜索引擎失败",input:"请输入内容..."},darkMode:{dark:"切换到夜间模式",light:"切换到日间模式"}},creatTime:"2020/6/12"}</script><script type=text/javascript src=/ts/main.d998cc128d05a53ba8ba4e84d7afd172616467ee8fedc4fe0746202f8752a918.js defer integrity="sha256-2ZjMEo0FpTuouk6E16/RcmFkZ+6P7cT+B0YgL4dSqRg="></script><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")})</script>
+<script type=text/javascript src=/translate-google.ecd37c3cc8f7e1b08910201dd0d9fc3e5f4b1395fb8ebead3141b931f036f777.js defer integrity="sha256-7NN8PMj34bCJECAd0Nn8Pl9LE5X7jr6tMUG5MfA293c="></script><script type=text/javascript>window.translateelement_styles="/sass/translateelement.min.c65796c6c3e4d48c75f72776948be83c5c448d1c5cc466b996b00657c558d28a.css";function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:"zh-cn",includedLanguages:"af,ga,sq,it,ar,ja,az,kn,eu,ko,bn,la,be,lv,bg,lt,ca,mk,zh-CN,ms,zh-TW,mt,hr,no,cs,fa,da,pl,nl,pt,en,ro,eo,ru,et,sr,tl,sk,fi,sl,fr,es,gl,sw,ka,sv,de,ta,el,te,gu,th,ht,tr,iw,uk,hi,ur,hu,vi,is,cy,id,yi",autoDisplay:!1},"google_translate_element")}</script>
+<script></script><script data-swup-reload-script></script></footer></div></div><a href=#nav title=返回顶部 id=back-top class="fixed right-6 bottom-9 z-10 translate-y-3 scale-90 cursor-pointer rounded-full bg-white opacity-0 transition duration-300 ease-[ease] dark:bg-darkBgAccent sm:scale-100"><div class=relative><div class="absolute left-0 top-0 flex h-full w-full items-center justify-center text-xl"><i class="eva eva-arrow-upward-outline"></i></div><svg id="svg" width="54" height="54" viewBox="0 0 54 54" preserveAspectRatio="xMinYMin meet"><circle transform="rotate(-90, 27 , 27)" style="stroke-dasharray:157,157;stroke-dashoffset:157" cx="27" cy="27" r="25" fill="none" stroke-width="4" stroke-linecap="round" stroke="var(--theme)"/></svg></div></a><div id=i18nlist></div><noscript><style>.dark-mode-switch,#run-time,#bionicReading,.noscript-hidden,[data-clipboard-text],[data-lazyload]{display:none}#back-top{opacity:1}.noscript-show{display:initial}</style></noscript></body></html>
