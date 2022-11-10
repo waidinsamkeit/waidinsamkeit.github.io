@@ -1,1 +1,83 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MYSQL on Cameliya</title><link>https://tec.mletter.cn/categories/mysql/</link><description>Recent content in MYSQL on Cameliya</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 20 Jul 2022 15:27:08 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/categories/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL全面优化思路-基础内容</title><link>https://tec.mletter.cn/2022/07/20/mysql%E5%85%A8%E9%9D%A2%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF-%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9.html/</link><pubDate>Wed, 20 Jul 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/07/20/mysql%E5%85%A8%E9%9D%A2%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF-%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9.html/</guid><description>MySQL性能优化-优化思路 大概的优化思路分为以下几个内容 PS: 优化是有风险的,如果你要优化就要变更。 硬件层面优化 系统层面优化 MySQL版本选择</description></item><item><title>数据库表关系之-多对多关系</title><link>https://tec.mletter.cn/2022/06/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E5%85%B3%E7%B3%BB%E4%B9%8B-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.html/</link><pubDate>Sat, 25 Jun 2022 13:04:03 +0800</pubDate><guid>https://tec.mletter.cn/2022/06/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E5%85%B3%E7%B3%BB%E4%B9%8B-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.html/</guid><description>本章内容针对tortoise-orm进行多对多关系的数据分析 Access表ER图 role角色表 简单的多对多关系介绍 如上ER图中看到了我们的三</description></item><item><title>MySQL常用存储引擎之InnoDB</title><link>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Binnodb.html/</link><pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Binnodb.html/</guid><description>MySQL5.5以后版本的默认存储引擎 支持事物的ACID特性 Innodb使用表空间存储 innodb_file_per_table (如果此参数为ON) 则会创建一个独立的表空间:tab</description></item><item><title>MySQL常用存储引擎之MyISAM</title><link>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Bmyisam.html/</link><pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Bmyisam.html/</guid><description>MySQL5.5版本之前的默认存储引擎就是MyISAM 系统表 临时表(查询优化器建立的临时表) MyISAM存储引擎表由MYD和MYI组成 MyI</description></item><item><title>MySQL的事务属性</title><link>https://tec.mletter.cn/2022/03/20/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%B1%9E%E6%80%A7.html/</link><pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%B1%9E%E6%80%A7.html/</guid><description>1.0 什么是事务 1.事务：事务是数据库系统区别于其他一切文件系统的重要特性之一 2.事务是一组具有原子性的SQL语句,或是一个独立的工作单元 1.1 My</description></item><item><title>MySQL复制功能介绍</title><link>https://tec.mletter.cn/2022/03/20/mysql%E5%A4%8D%E5%88%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.html/</link><pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/mysql%E5%A4%8D%E5%88%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.html/</guid><description>分担数据库的读负载 对服务器进行水平扩展 异步复制(无法保证主库和从库的延迟) 复制解决了什么问题？ 不同服务器上的数据分布 利用二进制日志进行增量备</description></item><item><title>探讨一下大促销当中数据库可能出现的问题</title><link>https://tec.mletter.cn/2022/03/20/%E6%8E%A2%E8%AE%A8%E4%B8%80%E4%B8%8B%E5%A4%A7%E4%BF%83%E9%94%80%E5%BD%93%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html/</link><pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/%E6%8E%A2%E8%AE%A8%E4%B8%80%E4%B8%8B%E5%A4%A7%E4%BF%83%E9%94%80%E5%BD%93%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html/</guid><description>究竟哪些东西可以影响到我们服务器的性能呢？ 无非就是：CPU、磁盘IO、内存等等一系列硬件 在研究性能时候,先带大家来了解三个术语 QPS: 每秒查询率Q</description></item><item><title>MySQL8.0安装</title><link>https://tec.mletter.cn/2022/03/20/mysql8.0%E5%AE%89%E8%A3%85.html/</link><pubDate>Sun, 20 Mar 2022 08:27:08 +0800</pubDate><guid>https://tec.mletter.cn/2022/03/20/mysql8.0%E5%AE%89%E8%A3%85.html/</guid><description>1.0 下载安装包 下载地址 1# 下载官方的mysql8.0 2wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm 3rpm -ivh mysql80-community-release-el7-3.noarch.rp 4yum install mysql-community-server # 安装mysql8.0 1.1 服务启动 1systemctl start mysqld # 启动mysql 2systemctl stop mysqld # 停止mysql</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MYSQL on Cameliya</title>
+    <link>https://tec.mletter.cn/categories/mysql/</link>
+    <description>Recent content in MYSQL on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 20 Jul 2022 15:27:08 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL全面优化思路-基础内容</title>
+      <link>https://tec.mletter.cn/2022/07/20/mysql%E5%85%A8%E9%9D%A2%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF-%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9.html/</link>
+      <pubDate>Wed, 20 Jul 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/07/20/mysql%E5%85%A8%E9%9D%A2%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF-%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9.html/</guid>
+      <description>MySQL性能优化-优化思路 大概的优化思路分为以下几个内容 PS: 优化是有风险的,如果你要优化就要变更。 硬件层面优化 系统层面优化 MySQL版本选择</description>
+    </item>
+    
+    <item>
+      <title>数据库表关系之-多对多关系</title>
+      <link>https://tec.mletter.cn/2022/06/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E5%85%B3%E7%B3%BB%E4%B9%8B-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.html/</link>
+      <pubDate>Sat, 25 Jun 2022 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/06/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E5%85%B3%E7%B3%BB%E4%B9%8B-%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.html/</guid>
+      <description>本章内容针对tortoise-orm进行多对多关系的数据分析 Access表ER图 role角色表 简单的多对多关系介绍 如上ER图中看到了我们的三</description>
+    </item>
+    
+    <item>
+      <title>MySQL常用存储引擎之InnoDB</title>
+      <link>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Binnodb.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Binnodb.html/</guid>
+      <description>MySQL5.5以后版本的默认存储引擎 支持事物的ACID特性 Innodb使用表空间存储 innodb_file_per_table (如果此参数为ON) 则会创建一个独立的表空间:tab</description>
+    </item>
+    
+    <item>
+      <title>MySQL常用存储引擎之MyISAM</title>
+      <link>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Bmyisam.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mysql%E5%B8%B8%E7%94%A8%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E4%B9%8Bmyisam.html/</guid>
+      <description>MySQL5.5版本之前的默认存储引擎就是MyISAM 系统表 临时表(查询优化器建立的临时表) MyISAM存储引擎表由MYD和MYI组成 MyI</description>
+    </item>
+    
+    <item>
+      <title>MySQL的事务属性</title>
+      <link>https://tec.mletter.cn/2022/03/20/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%B1%9E%E6%80%A7.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mysql%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%B1%9E%E6%80%A7.html/</guid>
+      <description>1.0 什么是事务 1.事务：事务是数据库系统区别于其他一切文件系统的重要特性之一 2.事务是一组具有原子性的SQL语句,或是一个独立的工作单元 1.1 My</description>
+    </item>
+    
+    <item>
+      <title>MySQL复制功能介绍</title>
+      <link>https://tec.mletter.cn/2022/03/20/mysql%E5%A4%8D%E5%88%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mysql%E5%A4%8D%E5%88%B6%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.html/</guid>
+      <description>分担数据库的读负载 对服务器进行水平扩展 异步复制(无法保证主库和从库的延迟) 复制解决了什么问题？ 不同服务器上的数据分布 利用二进制日志进行增量备</description>
+    </item>
+    
+    <item>
+      <title>探讨一下大促销当中数据库可能出现的问题</title>
+      <link>https://tec.mletter.cn/2022/03/20/%E6%8E%A2%E8%AE%A8%E4%B8%80%E4%B8%8B%E5%A4%A7%E4%BF%83%E9%94%80%E5%BD%93%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html/</link>
+      <pubDate>Sun, 20 Mar 2022 15:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/%E6%8E%A2%E8%AE%A8%E4%B8%80%E4%B8%8B%E5%A4%A7%E4%BF%83%E9%94%80%E5%BD%93%E4%B8%AD%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html/</guid>
+      <description>究竟哪些东西可以影响到我们服务器的性能呢？ 无非就是：CPU、磁盘IO、内存等等一系列硬件 在研究性能时候,先带大家来了解三个术语 QPS: 每秒查询率Q</description>
+    </item>
+    
+    <item>
+      <title>MySQL8.0安装</title>
+      <link>https://tec.mletter.cn/2022/03/20/mysql8.0%E5%AE%89%E8%A3%85.html/</link>
+      <pubDate>Sun, 20 Mar 2022 08:27:08 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/03/20/mysql8.0%E5%AE%89%E8%A3%85.html/</guid>
+      <description>1.0 下载安装包 下载地址 1# 下载官方的mysql8.0 2wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm 3rpm -ivh mysql80-community-release-el7-3.noarch.rp 4yum install mysql-community-server # 安装mysql8.0 1.1 服务启动 1systemctl start mysqld # 启动mysql 2systemctl stop mysqld # 停止mysql</description>
+    </item>
+    
+  </channel>
+</rss>

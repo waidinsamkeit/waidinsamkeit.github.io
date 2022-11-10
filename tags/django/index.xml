@@ -1,1 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Django on Cameliya</title><link>https://tec.mletter.cn/tags/django/</link><description>Recent content in Django on Cameliya</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 22 Feb 2022 13:04:03 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/django/index.xml" rel="self" type="application/rss+xml"/><item><title>Django实现调用腾讯云短信接口</title><link>https://tec.mletter.cn/2022/02/22/django%E5%AE%9E%E7%8E%B0%E8%B0%83%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3.html/</link><pubDate>Tue, 22 Feb 2022 13:04:03 +0800</pubDate><guid>https://tec.mletter.cn/2022/02/22/django%E5%AE%9E%E7%8E%B0%E8%B0%83%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3.html/</guid><description>腾讯云短信接口 注册 登录 具体怎么注册腾讯云接口看下面的文章吧 腾讯云接口注册 1.0 安装SDK 1pip3 install qcloudsms_py 2conda install qcloudsms_py 1.1 编写发送短信接口 我的环境是基于django</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Django on Cameliya</title>
+    <link>https://tec.mletter.cn/tags/django/</link>
+    <description>Recent content in Django on Cameliya</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 22 Feb 2022 13:04:03 +0800</lastBuildDate><atom:link href="https://tec.mletter.cn/tags/django/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Django实现调用腾讯云短信接口</title>
+      <link>https://tec.mletter.cn/2022/02/22/django%E5%AE%9E%E7%8E%B0%E8%B0%83%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3.html/</link>
+      <pubDate>Tue, 22 Feb 2022 13:04:03 +0800</pubDate>
+      
+      <guid>https://tec.mletter.cn/2022/02/22/django%E5%AE%9E%E7%8E%B0%E8%B0%83%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%8E%A5%E5%8F%A3.html/</guid>
+      <description>腾讯云短信接口 注册 登录 具体怎么注册腾讯云接口看下面的文章吧 腾讯云接口注册 1.0 安装SDK 1pip3 install qcloudsms_py 2conda install qcloudsms_py 1.1 编写发送短信接口 我的环境是基于django</description>
+    </item>
+    
+  </channel>
+</rss>
