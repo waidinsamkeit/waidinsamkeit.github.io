@@ -1,7 +1,8 @@
 # 关于
 
-{{< admonition type=tip title="这是我个人开发的个人社区项目(H2os/有氧社区)" open=false >}}
+{{< admonition type=tip title="这是我个人开发的个人社区项目(H2os/有氧社区)" open=true >}}
 - 项目地址: https://gitee.com/brave_heart_one/h2os/tree/development/
+- 项目开发进度: 10%...
 {{< /admonition >}}
 
 ## 友情链接申请

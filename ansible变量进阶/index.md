@@ -1,4 +1,4 @@
-# Ansible变量进阶
+# Ansible-vars
 
 ## 1.0 Ansible怎么定义变量
 - 通过`playbook`中的`play`进行变量的定义
