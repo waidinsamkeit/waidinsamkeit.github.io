@@ -1,15 +1,16 @@
 # 关于
 
-{{< admonition type=tip title="这是我个人开发的个人社区项目(H2os/有氧社区)" open=true >}}
+{{< admonition type=tip title="个人项目(可点开)" open=false >}}
 - 项目地址: https://gitee.com/brave_heart_one/h2os/tree/development/
 - 项目开发进度: 10%...
 {{< /admonition >}}
 
+
 ## 友情链接申请
 - 友情链接我研究研究怎么放得下
 
-{{< figure src="https://source.unsplash.com/random/1000x500" title="来自 Unsplash 的随机图片" >}}
- 
+## 一张随机图片
+{{< image src="https://api.ixiaowai.cn/gqapi/gqapi.php" caption="来自 Unsplash 的随机图片" src_s="https://api.ixiaowai.cn/gqapi/gqapi.php" src_l="https://api.ixiaowai.cn/gqapi/gqapi.php" >}}
 
 ## 一些我常用的技术栈
 - Linux: 熟悉`Centos、RedHat`系列,基于`Rocky Linux`的分支正在进行学习.
